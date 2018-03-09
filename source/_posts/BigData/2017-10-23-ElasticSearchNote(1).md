@@ -38,6 +38,7 @@ PUT /_index/_type/_id/_create
 
 // 局部更新文档
 POST /_index/_type/_id/_update
+<!-- more -->
 {"doc":{[Some Key:Value]}} 或者 {"script":[SomeGroovyScript]}
 
 // 检索任意多个文档

@@ -38,6 +38,7 @@ public class BloomFilter<E> {
         for (int index : indexes) {
             bf.set(index);
         }
+<!-- more -->
     }
 
     public boolean contains(E obj) {

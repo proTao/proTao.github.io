@@ -40,6 +40,8 @@ https://api.example.com
 https://example.org/api/
 ```
 
+<!-- more -->
+
 ## 三、版本（Versioning）
 
 应该将API的版本号放入URL。

@@ -38,6 +38,7 @@ sudo apt install git
 一款跨平台的Markdown编辑器。下载链接：<https://bitbucket.org/rhiokim/haroopad-download/downloads/haroopad-v0.13.1-x64.deb>
 四十兆多一点，比我在windows上用的MarkdownEditor.exe大了不少，不过这个代价换来的是更强的预览功能，导出PDF功能，自定义主题和字体大小，代码提示与折叠，同步滚动，甚至是Vim模式（虽然这个我没用到...)。
 使用`sudo dpkg -i haroopad.deb`来安装，安装之后调整一下配置，可配置向不多，编辑主题我选择的是solarized light，预览主题选择的是default，其他的根据自己喜好调整即可。
+<!-- more -->
 
 ## 截图工具
 有一些很好的截图工具但是需要另外下载，其实在Ubuntu内自带一个很好的截图工具就叫“截图”（汗）。我试了一下，这个工具完全满足我的需要了，然后添加到启动器中方便使用。

@@ -38,6 +38,7 @@ description:
 
 还是先去官网（http://www-eu.apache.org/dist/hbase/）下载hbase的安装包，有stable是稳定版本。另外还可以下载到源码和md5校验文件，源码可以阅读或者手动编译，MD5校验是否有坏位。
 还是使用`tar zxvf hbase-x.y.z.tar.gz -C /usr/local`安装到/usr/local文件夹下，使用mv命令重命名，使用chown命令确认权限，这些和前面安装Hadoop大同小异，不再赘述。
+<!-- more -->
 上述步骤完成后同样`sudo vim /etc/profile`修改系统变量：
 ```shell
 #base environment

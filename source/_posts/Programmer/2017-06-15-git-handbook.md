@@ -38,6 +38,7 @@ Git 还保存了提交的历史记录。这也是为什么大多数提交记录�
 ```bash
 git branch xxx
 git checkout xxx
+<!-- more -->
 git checkout -b xxx # 等于上面两条命令的结合
 ```
 

@@ -7,7 +7,11 @@ fun(){
 	    if test -f $file
 	    then
 	        echo $file 是文件
-		sed -i 's/public\/img/img/g' $file
+		# 替换图片路径
+		# sed -i 's/public\/img/img/g' $file
+
+		# 40行前面添加标记
+		sed -i 'N;40a<!-- more -->' $file
 	    fi
 	    if test -d $file
 	    then

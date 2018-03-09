@@ -38,6 +38,7 @@ description:
 - 类似于HDFS，计算的守护进程也是主从结构：JobTracker和TaskTracker。JobT负责分配节点监控运行等任务，TaskTrakcer管理各个任务在各自从节点上的执行情况。每个节点上只有一个TaskT，但是每个TaskT可以生成多个JVM来并行处理map或red任务。
 - Namenode和JobTracker分别驻留在两台服务器上，每个从节点均驻留Namenode和Tasktracker。
 
+<!-- more -->
 ## 2.4 基于Web的集群用户界面
 - Name通过端口50070提供集群HDFS的常规视图报告。
 

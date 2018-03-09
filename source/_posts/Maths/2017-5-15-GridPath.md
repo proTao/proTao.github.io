@@ -38,6 +38,7 @@ description:
 这十个值分别是1,9,36,84,126,126,84,36,9,1，而如果把这个计算过程写下来的话，我们会发现这不就是杨辉三角嘛！
 ![这里写图片描述](http://img.blog.csdn.net/20170422011612519?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY29va2llWlo=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 						---（图片来自百度，侵删）---
+<!-- more -->
 						
 杨辉三角形可以用来解释二项式定理：
 > $(u+r)^m=u^m+C(m,1)u^{m-1}r+C(m,2)u^{m-2}r^2+……+r^m$

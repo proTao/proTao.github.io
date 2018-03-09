@@ -38,6 +38,7 @@ public class TestJava {
     }
 
     public static void showHelp(CmdLineParser parser){
+<!-- more -->
         System.out.println("LDA [options ...] [arguments...]");
         parser.printUsage(System.out);
     }

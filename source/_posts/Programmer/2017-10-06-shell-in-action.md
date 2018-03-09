@@ -38,6 +38,7 @@ done
 
 **知识点2**：字符串操作
 
+<!-- more -->
 ![](/img/shellstr1.png)
 ![](/img/shellstr2.png)
 

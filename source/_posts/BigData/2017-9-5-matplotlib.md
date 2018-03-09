@@ -38,6 +38,7 @@ plt.show()
 
 ## 进阶
 
+<!-- more -->
 ```python
 import numpy as np
 import matplotlib as mpl

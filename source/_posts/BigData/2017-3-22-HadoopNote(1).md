@@ -38,6 +38,7 @@ java是1.7版本，官网下载，解压，使用`sudo vim /etc/profile`[^profil
 
 ```shell
 	#java environment
+<!-- more -->
 	export JAVA_HOME=/usr/lib/jvm/java7
 	export CLASSPATH=.:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar
 	export PATH=${JAVA_HOME}/bin:$PATH
