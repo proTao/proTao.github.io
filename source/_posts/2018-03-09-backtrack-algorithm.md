@@ -9,3 +9,10 @@ tags: algroithm
 
 ---《数据结构》(严蔚敏)
 
+
+beautiful arrange中用到了cache
+
+题目进阶：
+permutation
+letterpermutaion
+permutation2
