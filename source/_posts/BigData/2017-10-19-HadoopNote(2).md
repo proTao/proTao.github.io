@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-10-19
 title: Hadoop笔记（二）
 category: 大数据
 tags: 

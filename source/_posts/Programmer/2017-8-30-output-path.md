@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-8-30
 title: 输出绝对路径
 category: 程序员的玩具
 tags: 

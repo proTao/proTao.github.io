@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-7-1
 title: 信息论基础
 category: 数学
 tags: 

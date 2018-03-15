@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-3-23
 title: HBase初探（一）
 category: 大数据
 tags: 

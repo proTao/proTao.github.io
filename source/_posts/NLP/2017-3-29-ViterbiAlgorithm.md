@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-3-29
 title: HMM模型之二————Viterbi算法
 
 category: 

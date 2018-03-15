@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-4-12
 title: HMM模型（三）——Baum-Walch算法
 category: 自然语言处理
 tags: 

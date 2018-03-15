@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-10-06
 title: 边学边用shell军刀
 category: 程序员的玩具
 tags: tools

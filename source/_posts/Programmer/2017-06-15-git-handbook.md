@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-06-15
 title: 我的git学习笔记
 category: 程序员的玩具
 tags: tools

@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-7-2
 title: 数据的平滑方法
 category: 自然语言处理
 tags: nlp

@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-5-15
 title: 组合数学之方格路径
 category: 数学
 tags: maths

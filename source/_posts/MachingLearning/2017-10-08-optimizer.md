@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-10-8
 title: 深度学习优化算法
 category: 机器学习
 tags: 

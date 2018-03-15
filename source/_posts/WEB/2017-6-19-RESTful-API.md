@@ -1,12 +1,14 @@
 ---
 layout: post
+date: 2017-6-19
 title: RESTful API 设计指南
 category: WEB
 tags: web
 keywords: RESTful 
 description: 
 ---
-# RESTful API 设计指南
+
+
 转载自: <http://www.ruanyifeng.com/blog/2014/05/restful_api.html>
 作者： [阮一峰](http://www.ruanyifeng.com)
 

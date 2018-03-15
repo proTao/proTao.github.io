@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-6-24
 title: 字符集与字符编码问题
 category: python
 tags:

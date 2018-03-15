@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-6-15
 title: Ubuntu装机
 category: 程序员的玩具
 tags: 

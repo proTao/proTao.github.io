@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-08-25
 title: hadoop实战
 category: 读书笔记
 tags: 

@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-6-6
 title: 日期正则表达式
 category: 程序员的玩具
 tags: tools

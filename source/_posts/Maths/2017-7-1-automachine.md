@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-7-1
 title: 形式语言与自动机基础
 category: 数学
 tags: maths

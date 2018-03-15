@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-7-1
 title: 基于词向量和LSTM的情感判别
 category: 自然语言处理
 tags: nlp

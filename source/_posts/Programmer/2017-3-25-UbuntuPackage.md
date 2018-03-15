@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2017-3-25
 title: Ubuntu包管理
 category: 程序员的玩具
 tags: 
