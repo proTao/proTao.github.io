@@ -13,6 +13,25 @@ tags: algorithm
 - 关键变量: path,用path很简洁，但是一个影响思路的地方就是“回溯在哪里”这个问题变得模糊了，因为回溯出现在下层函数返回上层函数过程中，局部变量作为函数环境的自动恢复，如果把path设置为全局变量，那么就需要在进入函数前和返回函数后手动改变全局变量，那样的话思路就会清晰
 - 关键方法：在草稿纸上找一个测试用例画出递归树能够很好的理清思路
 
+## 套路代码结构
+
+def function():
+    # initial some environment
+    # the environment can use global variable to save or just put it as function parameter
+
+    # def deeper(path, (environment)):
+        # return condition
+        for all possible sub situation:
+            # change environment
+
+            # try to go deeper
+            deeper(new_path, (environment))
+
+            # recover the enviroment
+
+    deeper(initial_path)
+    return
+
 beautiful arrange中用到了cache
 
 题目进阶：
