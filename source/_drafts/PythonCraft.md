@@ -20,7 +20,7 @@ for i in reversed(range(10)):
     print(i)
 ```
 
-### yield from
+### 协程
 暂时可能不会用到这个吧。。。
 
 ### python的字典
@@ -68,3 +68,28 @@ stu1 = Student("tom")
 4. f = operator.methodcaller("getName", Student("tom"));f(Student); # f是一个有参函数执行器，参数是一个对象实例，接受一个类，执行类成员函数
 5. getattr(stu1, "getName") #得到对象的方法，直接执行就行 
 
+
+### scipy.stats
+统计模块
+目前我用到的就是scipy.stats.binom.pmf，用来计算PMF，参数是（k，n，p）,都可以接受array-like的参数，对参数进行广播。
+
+
+### bisect有序列表
+
+### copy拷贝对象
+
+### 区分函数作用于与闭包
+参考[Python五个知识点搞定作用域](python.jobbole.com/86465)
+```python
+a = 1
+def f1():
+    print(a)
+
+def f2():
+    a = 2
+    f1()
+
+f2() # output:1
+```
+
+关键是函数在未执行之前，作用域已经形成了，作用域链也生成了。

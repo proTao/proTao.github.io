@@ -15,6 +15,8 @@ tags: algorithm
 
 ## 套路代码结构
 
+
+```python
 def function():
     # initial some environment
     # the environment can use global variable to save or just put it as function parameter
@@ -32,6 +34,8 @@ def function():
     deeper(initial_path)
     return
 
+```
+
 beautiful arrange中用到了cache
 
 题目进阶：
@@ -47,7 +51,8 @@ permutation2
 77 Combinations
 526 BeautifulArrange
 22 Generate Parentheses（在这里备忘录技巧没有特别突出的改进，只是提供一种思路）
-```
+
+``` python
 In [1]: from timeit import timeit
 
 # 然后把两个函数定义出来

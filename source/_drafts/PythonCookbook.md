@@ -223,7 +223,7 @@ it2 = iter(it1)
 # 其实it1和it2是同一个对象的两个引用
 
 ```
-enumerate、zip、reversed和其他一些内置函数会返回迭代器。生成器（无论来自生成器函数还是生成器表达式）是一种创建迭代器的简单方法。注意下面的代码中，a不是一个元组，a是一个生成器对象。
+enumerate、zip、reversed和其他一些内置函数会返回迭代器。生成器（无论来自生成器函数还是生成器表达式）是一种创建迭代器的简单方法。注意下面的代码中，a不是一个元组，a是一个生成器对象。生成器表达式是列表推倒式的生成器版本，看起来像列表推导式，但是它返回的是一个生成器对象而不是列表对象。
 ```
 a = (for i in range(10))
 ```
@@ -301,7 +301,7 @@ for i in l:
 ```
 
 3. 使用生成器创建新的迭代模式
-一个函数中需要有一个 yield 语句即可将其转换为一个生成器。跟普通函数不同的是,生成器只能用于迭代操作。为了使用这个函数,你可以用 for 循环迭代它或者使用其他接受一个可迭代对象的函数 (比如 sum() , list() 等)。
+一个函数中需要有一个 yield 语句即可将其转换为一个*生成器*`。为了使用这个函数,你可以用 for 循环迭代它或者使用其他接受一个可迭代对象的函数 (比如 sum() , list() 等)。一个函数中需要有一个 yield 语句即可将其转换为一个生成器。跟普通函数不同的是,生成器只能用于迭代操作。
 ```python
 def myrange(start, stop, increment):
     x = start
@@ -344,6 +344,75 @@ for rr in reversed(Countdown(30)):
 for rr in Countdown(30):
     print(rr)
 ```
+
+6. 带有外部状态的生成器函数
+我们定义了一个类，类中实现了__iter__魔术方法。我们可以对该对象使用for循环遍历，但是如果不用for循环，要先用iter()全局方法将这个对象转化为迭代器，这也就告诉我们，实现了__iter__的类不是迭代器，而是可迭代对象。而for in循环会自动将可迭代对象转化为迭代器并通过next方法遍历。(这可以通过dis包反编译出的指令看出来)。实现了__next__的才是迭代器。
+而生成器就是一个普通的python函数，它特殊的地方在于函数体中没有return关键字，函数的返回值是一个生成器对象。当执行生成器函数时它返回的是一个生成器对象，此时函数体中的代码并不会执行，只有显示或隐示地调用返回的对象的next方法的时候才会真正执行里面的代码。
+生成器在Python中是一个非常强大的编程结构，可以用更少地中间变量写流式代码，此外，相比其它容器对象它更能节省内存和CPU，当然它可以用更少的代码来实现相似的功能。
+
+参考：[完全理解 Python 迭代对象、迭代器、生成器](http://python.jobbole.com/87805/)
+
+7. 迭代器切片
+刚接触到python的人最先接触到的python的特性应该就是切片，对于迭代器的话不能用常规的内存容器上的切片方式。
+可以使用`itertools.islice()`，接收参数(对象，开始，终止，步长)。迭代器和生成器不能使用标准的切片操作,因为它们的长度事先我们并不知道 (并且也没有实现索引)。函数 islice() 返回一个可以生成指定元素的迭代器,它通过遍历并丢弃直到切片开始索引位置的所有元素。然后才开始一个个的返回元素,并直到切片结束索引位置。这里要着重强调的一点是 islice() 会消耗掉传入的迭代器中的数据。
+
+8. 跳过可迭代对象的开始部分
+使用`itertools.dropwhile()`，使用时,你给它传递一个函数对象和一个可迭代对象。返回在第一次函数对象返回False处，返回该位置后面的**所有**元素。
+
+9. 排列组合的迭代
+在刷leetcode的时候自己实现过排列组合生成器了，也看到了python solution中别人用到了这几个工具函数。
+这里只提一下相关的工具函数：在`itertools`包中的`combinations`,`permutations`,`combinations_with_replacement`，其中组合函数允许传入一个额外参数表示需要几个元素的组合。
+另外，如果只需要排列组合可能数目的话`scipy.special.perm`和`scipy.special.comb`。
+
+10. 对序列进行带索引值的迭代
+内置的`enumerate`。
+注意：通常可以优雅的替代计数器
+
+11. 同时迭代多个序列
+zip啦。
+
+注意1：一旦其中某个序列到底结尾,迭代宣告结束。如果想遍历到最长序列，使用`itertools.zip_longest`。
+注意2：返回的是迭代器。
+注意3：可以接受多于两个的列表。
+
+12. 不同集合元素上的迭代：`itertools.chain`
+使用 chain() 的一个常见场景是当你想对不同的集合中所有元素执行某些操作的时候。
+itertools.chain() 接受一个或多个可迭代对象最为输入参数。然后创建一个迭代器,依次连续的返回每个可迭代对象中的元素。这种方式要比先将序列合并再迭代要
+高效的多。
+
+13. 创建数据处理管道
+通过生成器
+
+
+14. 展开嵌套的序列
+注意 yield from 语句,它将 yield 操作代理到父生成器上去。语句 yield from it 简单的返回生成器 it 所产生的所有值。
+
+```python
+from collections import Iterable
+
+def flatten(items, ignore_types=(str, bytes)):
+    for x in items:
+        if isinstance(x, Iterable) and not isinstance(x, ignore_types):
+            yield from flatten(x)
+        else:
+            yield x
+
+items = [1, 2, [3, 4, [5, 6], 7], 8]
+# Produces 1 2 3 4 5 6 7 8
+for x in flatten(items):
+print(x)
+```
+要注意的一点是, yield from 在涉及到基于协程和生成器的并发编程中扮演着更加重要的角色。
+
+
+15. 顺序迭代合并后的排序迭代对象
+`heap.merge`
+heapq.merge 可迭代特性意味着它不会立马读取所有序列。这就意味着你可以在非常长的序列中使用它,而不会有太大的开销。它仅仅是检查所有序列的开始部分并返回最小的那个,这个过程一直会持续直到所有输入序列中的元素都被遍历完。
+
+16. 使用迭代器代替while无限循环
+iter 函数一个鲜为人知的特性是它接受一个可选的 callable 对象和一个标记 (结尾) 值作为输入参数。当以这种方式使用的时候,它会创建一个迭代器,这个迭代器会不断调用 callable 对象直到返回值和标记值相等为止。这种特殊的方法对于一些特定的会被重复调用的函数很有效果,比如涉及到 I/O调用的函数。举例来讲,如果你想从套接字或文件中以数据块的方式读取数据,通常你得要不断重复的执行 read() 或 recv() ,并在后面紧跟一个文件结尾测试来决定是否终止。
+
+
 
 ## 第七章 函数
 
@@ -459,7 +528,7 @@ for i in funcs:
 ```python
 points = [ (1, 2), (3, 4), (5, 6), (7, 8) ]
 
-import mat
+import math
 def distance(p1, p2):
     x1, y1 = p1
     x2, y2 = p2
@@ -486,10 +555,284 @@ f(name="张勇涛",age="24")
 ```
 
 10. 带额外状态信息的回调函数
-
+其实就是闭包的应用，通过闭包保存状态。
 
 
 11. 内联回调函数
-
+没太看懂
 
 12. 访问闭包中定义的变量
+通常来讲,闭包的内部变量对于外界来讲是完全隐藏的。但是,你可以通过编写访问函数并将其作为函数属性绑定到闭包上来实现这个目的。
+```python
+def sample():
+    n = 0
+
+    # Closure function
+    def func():
+        print('n=', n)
+
+    # Accessor methods for n
+    def get_n():
+        return n
+
+    def set_n(value):
+        nonlocal n
+        n = value
+        # Attach as function attributes
+        
+    func.get_n = get_n
+    func.set_n = set_n
+
+    return func
+```
+nonlocal 声明可以让我们编写函数来修改内部变量的值。其次,函数属性允许我们用一种很简单的方式将访问方法绑定到闭包函数上,这个跟实例方法很像 (尽管并没有定义任何类)。
+
+```python
+import sys
+class ClosureInstance:
+    def __init__(self, locals=None):
+        if locals is None:
+            locals = sys._getframe(1).f_locals
+            # Update instance dictionary with callables
+            self.__dict__.update((key,value) for key, value in locals.items() if callable(value))
+            
+        # Redirect special methods
+        def __len__(self):
+            return self.__dict__['__len__']()
+            
+# Example use
+def Stack():
+    items = []
+    def push(item):
+        items.append(item)
+    def pop():
+        return items.pop()
+    def __len__():
+        return len(items)
+              
+    return ClosureInstance()
+```
+闭包的方案运行起来要快大概 8%,大部分原因是因为对实例变量的简化访问,闭包更快是因为不会涉及到额外的 self 变量。
+
+
+
+## 第八章 类与对象
+
+1. 改变对象的字符串显示
+自定义`__repr__()` 和`__str__()`通常是很好的习惯,因为它能简化调试和实例输出。例如,如果仅仅只是打印输出或日志输出某个实例,那么程序员会看到实例更加详细与有用的信息。
+__repr__()生成的文本字符串标准做法是需要让eval(repr(x))==x为真。
+如果__str__()没有被定义,那么就会使用__repr__()来代替输出。
+
+2. 自定义字符串的格式化
+如果format时传入对象，会默认执行对象的__format__方法，如果在__format__函数中提供参数，那么在格式化字符串时可以通过冒号传入参数
+
+
+```python
+class A:
+    def __init__(self, val):
+        self.val = val
+
+    def __repr__(self):
+        return str(self.val)
+
+    def __str__(self):
+        return "this is my class A"
+
+    def __format__(self,par):
+        return "A({}) with parameter {}".format(self.val,par)
+
+print("{:hello}".format(A(1)))
+```
+
+3. 让对象支持上下文管理协议
+为了让一个对象兼容`with`语句,你需要实现`__enter__`和`__exit__`方法。
+编写上下文管理器的主要原理是你的代码会放到`with`语句块中执行。 当出现 with 语句的时候，对象的`__enter__()`方法被触发，它返回的值(如果有的话)会被赋值给`as`声明的变量。然后，`with`语句块里面的代码开始执行。最后，`__exit__()`方法被触发进行清理工作。
+在需要管理一些资源比如文件、网络连接和锁的编程环境中，使用上下文管理器是很普遍的。 这些资源的一个主要特征是它们必须被手动的关闭或释放来确保程序的正确运行。 
+若果想要支持迭代的with语句，在自定义类中维护一个列表，用该列表存放当前“进入”的对象
+
+4. 创建大量对象时节省内存方法
+对于主要是用来当成简单的数据结构的类而言，你可以通过给类添加`__slots__`属性来极大的减少实例所占的内存。当你定义`__slots__`后，Python就会为实例使用一种更加紧凑的内部表示。实例通过一个很小的固定大小的数组来构建，而不是为每个实例定义一个字典，这跟元组或列表很类似。`在`__slots__`中列出的属性名在内部被映射到这个数组的指定小标上。
+尽管slots看上去是一个很有用的特性，很多时候你还是得减少对它的使用冲动。Python的很多特性都依赖于普通的基于字典的实现。另外，定义了slots后的类不再支持一些普通类特性了，比如多继承。大多数情况下，你应该只在那些经常被使用到的用作数据结构的类上定义`slots`(如在程序中需要创建某个类的几百万个实例对象)。
+关于`__slots__`的一个常见误区是它可以作为一个封装工具来防止用户给实例增加新的属性。
+尽管使用slots可以达到这样的目的，但是这个并不是它的初衷。`__slots__`更多的是用来作为一个内存优化工具。
+
+5. 在类中封装属性名
+第一个约定是任何以单下划线_开头的名字都应该是内部实现。类似的，模块级别函数比如`sys._getframe()`在使用的时候就得加倍小心了。
+使用双下划线开始会导致访问名称变成其他形式。这样重命名的目的是就是继承:这种属性通过继承是无法被覆盖的。
+大多数而言，你应该让你的非公共名称以单下划线开头。但是，如果你清楚你的代码会涉及到子类， 并且有些内部属性应该在子类中隐藏起来，那么才考虑使用双下划线方案。
+还有一点要注意的是，有时候你定义的一个变量和某个保留关键字冲突，这时候可以使用单下划线作为后缀。
+
+6. 创建可管理的属性
+
+```python
+class Person:
+    def __init__(self, first_name):
+    	# 这里直接调用first_name的setter方法了
+        self.first_name = first_name
+
+    # 将first_name注册为property，并声明下面的函数是getter方法
+    @property
+    def first_name(self):
+        return self._first_name
+
+    # 对已注册的属性设置setter方法
+    @first_name.setter
+    def first_name(self, value):
+        if not isinstance(value, str):
+            raise TypeError('Expected a string')
+        self._first_name = value
+
+    # 对已注册的属性设置del方法
+    @first_name.deleter
+    def first_name(self):
+        raise AttributeError("Can't delete attribute")
+
+# 另一种方式
+```
+一个property属性其实就是一系列相关绑定方法的集合。如果你去查看拥有property的类， 就会发现property本身的fget、fset和fdel属性就是类里面的普通方法。
+只有当你确实需要对attribute执行其他额外的操作的时候才应该使用到property。比如上面的例子就是再删除的时候禁止删除，在setter的时候进行类型检查。不要写这种没有做任何其他额外操作的property。 首先，它会让你的代码变得很臃肿，并且还会迷惑阅读者。 其次，它还会让你的程序运行起来变慢很多。 最后，这样的设计并没有带来任何的好处。
+
+Properties还是一种定义动态计算attribute的方法。 这种类型的attributes并不会被实际的存储，而是在需要的时候计算出来。
+
+```python
+import math
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+
+    @property
+    def area(self):
+        return math.pi * self.radius ** 2
+
+    @property
+    def diameter(self):
+        return self.radius * 2
+
+    @property
+    def perimeter(self):
+        return 2 * math.pi * self.radius
+```
+
+没有setter方法，所以无法被重新赋值。
+
+7. 调用父类方法
+假设B的父类是A，使用super().method()要比使用A.method()更优雅一些，另外避免了多继承的时候的重复调用父类方法。
+对于你定义的每一个类，Python会计算出一个所谓的方法解析顺序(MRO)列表(通过对象的__mro__方法查看)。 这个MRO列表就是一个简单的所有基类的线性顺序表。而这个MRO列表的构造是通过一个*C3线性化算法*来实现的。当你使用 super() 函数时，Python会在MRO列表上继续搜索下一个类。 只要每个重定义的方法统一使用 super() 并只调用它一次， 那么控制流最终会遍历完整个MRO列表，每个方法也只会被调用一次。
+
+```python
+# 想重现一下super方法，但是失败了
+class Base(object):
+    def __init__(self):
+        print("enter Base")
+        print(self.su())
+        print("leave Base")
+    def su(self):
+        print("object is {}, class is {}, mro is {}".format(self.__class__.__name__, self.__classname() ,self.__class__.mro()))
+        
+    def __classname(self):
+        return "BASE"
+
+class A(Base):
+    def __init__(self):
+        print("enter A")
+        print(self.su())
+        super().__init__()
+        print("leave A")
+    def __classname(self):
+        return "A"
+    def su(self):
+        print("object is {}, class is {}, mro is {}".format(self.__class__.__name__, self.__classname() ,self.__class__.mro()))
+   
+    
+class B(Base):
+    def __init__(self):
+        print("enter B")
+        print(self.su())
+        super().__init__()
+        print("leave B")
+    def __classname(self):
+        return "B"
+    def su(self):
+        print("object is {}, class is {}, mro is {}".format(self.__class__.__name__, self.__classname() ,self.__class__.mro()))
+  
+
+class C(A, B):
+    def __init__(self):
+        print("enter C")
+        print(self.su())
+        super().__init__()
+        print("leave C")
+    def __classname(self):
+        return "C"
+    
+    def su(self):
+        print("object is {}, class is {}, mro is {}".format(self.__class__.__name__, self.__classname() ,self.__class__.mro()))
+        
+    
+        
+```
+
+8. 子类中扩展property
+super方法那里没有看明白
+
+9. 创建新的类或实例属性
+使用描述器，后续详细研究
+
+10. 使用延迟计算属性
+使用描述器类，后续详细研究
+
+11. 简化数据结构的初始化
+在一个基类中写一个公用的init函数
+```python
+
+class Structure1:
+    # Class variable that specifies expected fields
+    _fields = []
+
+    def __init__(self, *args):
+        if len(args) != len(self._fields):
+            raise TypeError('Expected {} arguments'.format(len(self._fields)))
+        # Set the arguments
+        for name, value in zip(self._fields, args):
+            setattr(self, name, value)
+```
+在上面的实现中我们使用了 setattr() 函数类设置属性值， 你可能不想用这种方式，而是想直接更新实例字典。尽管这也可以正常工作，但是当定义子类的时候问题就来了。 当一个子类定义了 __slots__ 或者通过property(或描述器)来包装某个属性， 那么直接访问实例字典就不起作用了。我们上面使用 setattr() 会显得更通用些，因为它也适用于子类情况。
+缺点是在IDE中显示帮助函数不友好，因为看init函数只知道参数是args和kwargs，完全没有其他的信息，这一点在后面9.16节得到解决。
+
+12. 定义接口或者抽象基类
+抽象基类的一个主要用途是在代码中检查某些类是否为特定类型，实现了特定接口。
+```python
+from abc import ABCMeta, abstractmethod
+
+class IStream(metaclass=ABCMeta):
+    @abstractmethod
+    def read(self, maxbytes=-1):
+        pass
+
+    @abstractmethod
+    def write(self, data):
+        pass
+```
+标准库中有很多用到抽象基类的地方。collections 模块定义了很多跟容器和迭代器(序列、映射、集合等)有关的抽象基类。 numbers 库定义了跟数字对象(整数、浮点数、有理数等)有关的基类。io 库定义了很多跟I/O操作相关的基类。
+
+13. 实现数据模型的类型约束
+使用描述器，跳过
+
+14. 实现自定义容器
+你想实现一个自定义的类来**模拟内置的容器类**功能，比如列表和字典。但是你不确定到底要实现哪些方法。collections 定义了很多抽象基类，当你想自定义容器类的时候它们会非常有用。 比如你想让你的类支持迭代，那就让你的类继承 collections.Iterable 即可。
+这个接着12小节“定义接口或者抽象基类”的内容，
+
+
+---
+
+1. [知乎：怎样才算是精通python](https://www.zhihu.com/question/19794855/answer/129270643)
+2. [Python格式化字符串](http://python.jobbole.com/85319/)
+3. [Python3.5 协程究竟是个啥](http://python.jobbole.com/86481/)
+4. [python多重继承新算法C3介绍](http://www.jb51.net/article/55748.htm)
+5. [Python: 你不知道的 super](http://python.jobbole.com/86787/)
+6. [python的类变量与实例变量以及__dict__属性](https://www.cnblogs.com/duanv/p/5947525.html)
+7. [详解Python中 __get__和__getattr__和__getattribute__的区别](http://www.jb51.net/article/86749.htm)
+8. [Python黑魔法————描述器](http://python.jobbole.com/85176/)
+9. [Python中的classmethod和staticmethod有什么具体用途](https://www.zhihu.com/question/20021164)
+10. [如何理解python装饰器](https://www.zhihu.com/question/26930016)
+11. [详解python的装饰器](https://www.cnblogs.com/cicaday/p/python-decorator.html)
