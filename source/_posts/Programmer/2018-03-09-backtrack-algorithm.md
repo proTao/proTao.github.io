@@ -102,3 +102,6 @@ use cache 0.20065379500000063
 10 正则匹配问题中本来想先构造一个自动机，然后去匹配字符串，但是步骤是先要用Thompson构造一个小西格玛NFA，然后转换为DFA，然后再规约为最小DFA，太复杂了，索性用比较直接的回溯吧
 有几个题可以有动态规划解决，回来需要重新思考：正则表达式匹配，131 Palindrome Partition
 python中list自己append自己后是什么
+
+参考：
+[Python 与尾递归优化](https://aisk.me/python-and-tail-call-optimization/)
