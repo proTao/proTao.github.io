@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2018-04-28
-title: Spark笔记（三）
+title: Spark笔记（二）
 category: 大数据
 tags:
 - bigdata
@@ -132,7 +132,35 @@ expect eof
 ```
 ### IDE集成Sbt环境
 
+安装scala插件没啥问题，好像我之前就已经安装好了，但是大仙sbt只能用0.13版本的。而我外部独立安装过的sbt是1.1版本的，不知道会用什么冲突。再加上需求不是特别强烈，而且开一个ideal也太慢了，先配置成这样就行。
+
 参考
 1. [配置IntelliJ IDEA 13的SBT和Scala开发环境](http://debugo.com/idea-scala-ide/)
 2. [使用Intellij Idea编写Spark应用程序（Scala+SBT）](使用Intellij Idea编写Spark应用程序（Scala+SBT）_厦大数据库实验室博客.html)
 
+### Sbt-assembly插件
+安装sbt-assembly插件：在project下新建文件plugins.sbt
+```scala
+resolvers += Resolver.url("bintray-sbt-plugins", url("http://dl.bintray.com/sbt/sbt-plugin-releases"))(Resolver.ivyStylePatterns)
+
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.5")
+```
+
+执行sbt命令出现问题：
+```scala
+/home/protao/work/CRS/A1D/build.sbt:1: error: not found: object AssemblyKeys
+import AssemblyKeys._
+       ^
+/home/protao/work/CRS/A1D/build.sbt:3: error: not found: value assemblySettings
+assemblySettings
+^
+```
+
+删除掉出问题的两句，执行`sbt package`，可以成功更新下载了，不过又出现问题：`[error] (update) sbt.librarymanagement.ResolveException: download failed: org.scala-lang#scala-library;2.10.4!scala-library.jar`，我直接改了一下scalaVersion，改成2.11.8，这个版本我之前在本地测试并打包到集群都是没有问题的。然后出现了版本冲突，为啥会这样我在写到这里的时候还不知道，也没想法解决，我就又把scala版本改回去了，然后尝试用sbt打包，竟然又好了。
+
+参考：
+
+1. [unresolved dependency: com.eed3si9n#sbt-assembly;0.13.0: not found](https://stackoverflow.com/questions/43337085/unresolved-dependency-com-eed3si9nsbt-assembly0-13-0-not-found)
+2. [KafkaUtils class not found in Spark streaming](https://stackoverflow.com/questions/27710887/kafkautils-class-not-found-in-spark-streaming)
+3. [使用sbtt assembly构建spark项目](https://blog.csdn.net/strongyoung88/article/details/52267898)
+4. [数据流基本问题——矩估计（一）](https://blog.csdn.net/dm_ustc/article/details/46011557)

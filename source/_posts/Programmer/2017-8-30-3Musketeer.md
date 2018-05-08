@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2017-8-30
-title: 输出绝对路径
+title: Linux三剑客笔记(1) 
 category: 程序员的玩具
 tags: 
 - tools
@@ -11,6 +11,9 @@ tags:
 keywords: 
 description: 
 ---
+
+> 初极狭，才通人。
+
 
 ```shell
 ls | sed "s:^:`pwd`/:" | tr "\n" ":" | grep :

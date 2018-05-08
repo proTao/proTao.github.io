@@ -36,6 +36,8 @@ def function():
 
 ```
 
+<!-- more -->
+
 beautiful arrange中用到了cache
 
 题目进阶：
