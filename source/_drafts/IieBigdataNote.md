@@ -23,7 +23,7 @@ spark-submit命令后有错.
 使用yarn logs -applicationId application_1521425076696_0157查看yarn日志
 发现是配置文件中kafka topic配置的问题，这部分是由马卫师兄直接生成的所有省份的日志
 
-
+<!-- more -->
 
 * * *
 
@@ -268,17 +268,125 @@ TODO
 
 任务分解
 - [x] 监控flume的运行，将失败的进程重启
-- [ ] 设置定时任务
+- [x] 设置定时任务
 
 
 进程监控脚本
 ```bash
 #!/bin/bash
 
+# 需要手动设置的参数
+if [[ $# != 3 ]]
+then
+	echo 参数数目不正确
+	echo 三个参数为: 1.flume agent数目；2. 省份全拼；3. 省份短码
+	exit 1
+fi
+agent_num=$1
+province=$2
+short_code=$3
+
+
+
+# set environment
+function setEnvironment
+{
+	source /etc/profile
+	JAVA_HOME="/opt/apps/java/jdk1.7.0_80"
+	HADOOP_COMMON_LIB_NATIVE_DIR=/opt/apps/flume/hadoop/lib/native
+	HDFS_CONF_DIR=/opt/apps/flume/hadoop/etc/hadoop
+	HADOOP_HDFS_HOME=/opt/apps/flume/hadoop
+	HADOOP_CONF_DIR=/opt/apps/flume/hadoop/etc/hadoop
+	HADOOP_OPTS=-Djava.library.path=/opt/apps/flume/hadoop/lib:/opt/apps/flume/hadoop/lib/native
+	HADOOP_HOME=/opt/apps/flume/hadoop
+	PATH=/usr/lib64/qt-3.3/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/apps/java/jdk1.7.0_80/bin:/opt/apps/flume/bin:/opt/apps/flume/hadoop/sbin:/opt/apps/flume/hadoop/bin:.:/home/cdn/bin:/opt/apps/java/jdk1.7.0_80/bin:/opt/apps/flume/bin:/opt/apps/flume/hadoop/sbin:/opt/apps/flume/hadoop/bin:.
+	FLUME_HOME=/opt/apps/flume
+	export JAVA_HOME HADOOP_COMMON_LIB_NATIVE_DIR HDFS_CONF_DIR HADOOP_HDFS_HOME HADOOP_CONF_DIR HADOOP_OPTS HADOOP_HOME PATH FLUME_HOME
+	#env
+}
+
+function getpid()
+{
+	# $1: flume agent name
+	pid_res=`ps aux | grep $1 | grep -v grep | awk '{print $2}'`
+	return $pid_res
+}
+
+function isInArray
+{
+	# $1 被检索元素
+	# $2 被检索字符串列表(不是数组)
+	# return : 存在返回0，否则返回1
+        for i in $2
+        do
+                if [[ $i == $1 ]]
+                then
+                        return 0
+                fi
+        done
+        return 1
+}
+
+function showLocalState
+{
+	declare -a queue_state
+	i=0
+	for folder in `ls -d /data2/flume_source/spool/$province/hdfs* | cut -d / -f 6`
+	do
+	        queue_state[$i]=`ls -a /data2/flume_source/spool/$province/$folder/*.hdfs 2>/dev/null | wc -l`
+		i=$((i+1))
+	done
+
+	echo
+	echo "当前本地待上传文件数量"
+	echo ${queue_state[*]}
+	echo
+}
+
+
+echo
+echo "============================`date`================================"
+echo 
+
+setEnvironment
+showLocalState
+
+# 自动设置的参数
+declare -a  prefix_array
+for i in `seq 1 $agent_num`
+do
+	prefix_array[$((i-1))]=a$i
+done
+date=`date +%Y%m%d`
+still_running=`/opt/apps/flume/hadoop/bin/hdfs dfs -ls hdfs://hadoop-master01-crs2:8020/coll_data/dns/$province$short_code/$date/*.tmp | grep -o "a[1-9]" | xargs`
+
+
+echo "All Flume Agent :" ${prefix_array[*]}
+echo "Still Running :" $still_running
+echo ""
+
+for prefix in ${prefix_array[@]}
+do
+	isInArray $prefix "$still_running"
+	if [[ $? == 1 ]]
+	then
+		agent_name=${prefix:0:1}3${prefix:1:1}
+		echo "restart agent of $agent_name"
+		pid=`ps aux | grep $agent_name | grep -v grep | awk '{print $2}'`
+		echo pid of $agent_name is $pid
+		kill $pid
+		echo "/opt/apps/flume/bin/start-flume-$province-only-hdfs${prefix:1:1}.sh"
+		/opt/apps/flume/bin/start-flume-$province-only-hdfs${prefix:1:1}.sh
+		echo ""
+	fi
+done
+
+
 ```
 
 第一个子任务：脚本没什么问题，函数数组传参时遇到了一些问题，整理到博客《Bash笔记中》。
 第二个字任务：耽误了不少时间，原因在于第一点是cron表达式第一个设置的是分钟数，我以为是秒数了，crontab会自动报错。后来在博客中看到cron最小执行时间单位是分钟。还有就是crontab执行的时候内部环境和外部环境不同，一些环境变量需要重新设置，这部分我写在setEnvironment函数中了。另外，检查crontab的日志很重要，这部分日志在`/var/log/cron`。
+但是最后我发现在业务集群中只靠`/etc/profile`无法导入全部环境变量比如很多有关hadoop的路径都没有，使得flume-ng起不来，最后使用笨方法，手动执行env，将crontab需要的环境变量硬编码到脚本里，再用source生效。
 
 参考：
 1. [在线Crontab表达式执行时间验证](http://www.atool.org/crontab.php)
@@ -300,8 +408,174 @@ User cdn
 - 日期：20180509
 
 任务分解：
-- [ ] 需要在服务器写一个脚本，类似于之前写的，去每天跑应该执行的任务
+- [x] 需要在服务器写一个脚本，类似于之前写的，去每天跑应该执行的任务
+
+脚本没啥难的，但是还是用了快一天的时间。这里对任务计时的方法和之前不一样了，之前是用time命令，这次是用yarn中的日志，从日志里面匹配出开始和结束的时间戳，然后转换为运行时间。精确度的话取前十位精确到秒就行。
+
+```bash
+#!/bin/bash
+
+function getRunningTime
+{
+	# $1 applicationId
+	python getRunningTime.py ` yarn application -status $1 | grep --color=auto -E -o " [0-9]{13}" | xargs`
+}
+
+
+function randomExec
+{
+	# $1 : which batch process : Pre / A1D / A2D / A2HB2 / B1 / A1H
+	# $2 : province
+	# $3 : date
+	# 功能：执行批处理任务并生成日志
+	echo $*
+
+	# random choose parameters
+	if [[ $1 == A1D ]]||[[ $1 == A2D ]]||[[ $1 == A2HB2 ]]||[[ $1 == A1H ]]
+	then
+		# m emory : 10 ~ 18
+		# e xecutors : 25 ~ 30
+		# c ores : 3 ~ 4
+		# p arallelism : 100 ~ 240
+		m_base=10
+		e_base=25
+		c_base=3
+		p_base=100
+		m_delta=$((RANDOM%9))
+		e_delta=$((RANDOM%6))
+		c_delta=$((RANDOM%2))
+		p_delta=$((RANDOM%130))
+	else
+		# m emory : 10 ~ 18
+		# e xecutors : 60 ~ 120
+		# c ores : 2 ~ 4
+		# p arallelism : 280 ~ 450
+		m_base=10
+		e_base=60
+		c_base=2
+		p_base=280
+		m_delta=$((RANDOM%9))
+		e_delta=$((RANDOM%60))
+		c_delta=$((RANDOM%3))
+		p_delta=$((RANDOM%170))
+	fi
+
+	# generate temporary config file
+	if [[ $1 == A1D ]]||[[ $1 == A2D ]]||[[ $1 == A2HB2 ]]||[[ $1 == A1H ]]
+	then
+		cp ./DataCheck-DW.xml ./$2-$3.xml
+	else
+		sed -e s/'PROVINCE'/$province/ -e s/'DATE'/$date/ -e s/'SHORTCODE'/$short_code/ source/template.xml > ./$2-$3.xml
+	fi
+
+
+	# submit spark job
+	echo   "spark-submit --master yarn-cluster --driver-memory 1g --num-executors $((e_base+e_delta)) --executor-memory $((m_base+m_delta))g  --executor-cores $((c_base+c_delta)) --conf spark.default.parallelism=$((p_base+p_delta)) --files $2-$3.xml --class cn.ac.iie.iaa.SparkSecBatch$1  CRS-SecBatch-$1-assembly-1.0.jar $2-$3.xml $2 $3 > $2-$3.log 2&>1"
+
+	spark-submit --master yarn-cluster --driver-memory 1g --num-executors $((e_base+e_delta)) --executor-memory $((m_base+m_delta))g  --executor-cores $((c_base+c_delta)) --conf spark.default.parallelism=$((p_base+p_delta)) --files $2-$3.xml --class cn.ac.iie.iaa.SparkSecBatch$1  CRS-SecBatch-$1-assembly-1.0.jar $2-$3.xml $2 $3 > $2-$3.log 2>&1
+
+	# delete temporary config file
+#	rm $2-$3.xml
+
+	mv ./$2-$3.log log/
+}
+
+function BatchProcess
+{
+	# $1 : folder name
+	# $2 : province
+	# $3 : date
+	echo $1表处理，开始于 `date +"(%y-%m-%d) %H:%M:%S"`
+	cd /home/cdn/workspace/zhangyongtao/$1
+	tablename=`echo $1 | tr -d "_"`
+	randomExec $tablename $2 $3
+	echo $1表处理，结束于 `date +"(%y-%m-%d) %H:%M:%S"`
+	echo ----------------------------------------------
+}
+
+province=$1
+date=$2
+long_code=`python /home/cdn/workspace/zhangyongtao/Pre/script/code.py $province | cut -d ' ' -f 2`
+short_code=`python /home/cdn/workspace/zhangyongtao/Pre/script/code.py $province | cut -d ' ' -f 3`
+folders=("Pre" "A1_D" "A1_H" "A2_D" "A2H_B2" "B1")
+echo "=============================`date`================================="
+echo $*
+for i in ${folders[@]}
+do
+	BatchProcess $i $province $date
+done
+```
+
+
+* * *
+
+日期：20180514
+
+任务分解：
+
 - [ ] 定时删除脚本产生的日志
+- [x] 优化flume监控脚本
+- [x] 监控upload脚本（暂时取消该任务）
+- [x] 优化定时批处理脚本
+- [ ] 自动进行任务分配？？（给自己的任务）
+- [ ] 青海省的flumeagent起得太多了？？？（目前来看不是大问题，写完upload监控再说）
+
+1. 完成对flume监控脚本的优化，抽象出变量，方便在不同机器上进行部署。另外增加监控当前剩余文件数的功能，方便调试。
+2. 完善定时批处理脚本：任务名修改；增加对数据量大小的数据收集；统一成功失败的日志输出格式。
+
+
+* * *
+
+日期：20180517
+
+- [x] 定时删除脚本产生的日志
+- [ ] 优化定时批处理脚本
+
+任务分解：
+```bash
+/home/cdn/workspace/yjyj/upload*.log {
+	daily
+	nocompress
+	notifempty
+	rotate 3
+	dateext
+	olddir /home/cdn/workspace/yjyj/oldlog
+	size 6M
+}
+```
+
+1. 对日志的定时清理我选择使用logrotate服务，在使用脚本put到hdfs上的机器上部署logrotate任务即可。这里所谓的部署也只是新增指定格式的logrotate配置，然后logrotate会定时执行。如上述代码所示，表示每天执行、不进行压缩、忽略空文件、保存三个轮转旧文件、自动添加日期后缀、旧文件存放到指定文件夹、对指定大小以下的日志不予处理。目前已经在甘肃广东江西山西的ftp上进行配置
+2. 对输出日志的统一管理
+
+
+上传文件配置情况
+
+日志统一存放于：`home/cdn/workspace/yjyj`
+日志轮转配置：daily，10M
+
+| 省份 | 大小 | 上传方式 | logrotate | 并发数 |
+| ---- | ---- | ----- | ------ | ---- |
+| 甘肃391 | 1.3T | put | 是 | 6 |
+| 广东200 | 2.5T | put | 是 | 3 |
+| 江西791 | 2.3T | put |  是 | 6 |
+| 青海971 | 0.3T | flume |  否 | 6 |
+| 山西351 | 1.8T | put | 是 | 6 |
+| 天津220 | 0.8T | flume |  否 | 6 |
+| 宁夏951 | | flume | 否 | 3 |
+| 上海210 | | flume | 否 | 3 |
+| 贵州851 | | put | 是 | 6 |
+| 黑龙江451 | | put | 是 | 6 |
+| 辽宁240 | | put | 是 | 6 |
+| 湖北270 | | put | 是 | 6 |
+
+
+
+参考：
+[Linux日志文件总管——logrotate](https://linux.cn/article-4126-1.html)
+[linux下logrotate 配置和理解](https://blog.csdn.net/cjwid/article/details/1690101)
+
+* * *
+
 
 
 参考资料:
