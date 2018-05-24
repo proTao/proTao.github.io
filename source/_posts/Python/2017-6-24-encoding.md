@@ -5,8 +5,7 @@ title: 字符集与字符编码问题
 category: python
 tags:
 - python
-- programmer
-keywords: 编码
+- tools
 description:
 ---
 ## 字符集
