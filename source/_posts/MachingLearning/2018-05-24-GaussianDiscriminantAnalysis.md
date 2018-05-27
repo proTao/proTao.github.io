@@ -22,8 +22,8 @@ Gaussian Discriminant Analysis模型的理论十分简单，这里写这篇文�
 
 ### GDA模型原理
 原理其实很简单，认为每个类别来自于一个高斯分布$$$Gaussian(\mu, \Sigma)$$$.
-而不同的类别的先验概率是一个Multinoulli分布，在二分类任务就就是一个bernoulli分布，参数是$$$\phi$$$，前面已经提到，GDA是生成式模型，那么就是对联合概率P(X,Y)进行建模。
-$$$P(X,Y)=P(X|Y=0)P(Y=0)+P(X|Y=1)P(Y=1)$$$，其中，$$$ P(Y)=\phi^y(1-\phi)^{1-y} $$$， ** 即$$$\phi$$$是类别1的概率 **。
+而不同的类别的先验概率是一个Multinoulli分布，在二分类任务就就是一个bernoulli分布，参数是$$$\phi$$$，前面已经提到，GDA是生成式模型，那么就是对联合概率$$$P(X,Y)$$$(在下面的推导的第二步中很明显的看出来)进行建模。
+$$$P(X)=\sum_yP(X,Y=y)=P(X|Y=0)P(Y=0)+P(X|Y=1)P(Y=1)$$$，其中，$$$ P(Y)=\phi^y(1-\phi)^{1-y} $$$， ** 即$$$\phi$$$是类别1的概率 **。
 
 $$ P(X|Y=0)=\frac{1}{(2\pi)^{n/2}|\Sigma_0|^{1/2}}exp\Big(-\frac{1}{2}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0)\Big) $$
 $$ P(X|Y=1)=\frac{1}{(2\pi)^{n/2}|\Sigma_1|^{1/2}}exp\Big(-\frac{1}{2}(x-\mu_1)^T\Sigma_1^{-1}(x-\mu_1)\Big) $$
