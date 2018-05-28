@@ -1,9 +1,11 @@
+
 ---
 layout: post
 title: 高斯判别模型（GDA）原理与推导
 date: 2018-05-24
 category: 机器学习
 tags: 
+- model
 - generative
 - maths
 - tools
@@ -96,11 +98,11 @@ from sklearn.datasets.samples_generator import make_blobs
 
 # 超参数设定
 n=2 # 两个特征即二维数据
-class_num=3 # 几类数据
+class_num=5 # 几类数据(可以在2~6之间调节以观察实验结果)
 
-X, y = make_blobs(n_samples=1000, centers=class_num, n_features=n,random_state=0,cluster_std=0.7)
+X, y = make_blobs(n_samples=1000, centers=class_num, n_features=n,cluster_std=0.7)
 
-color=['green', 'red', 'blue']
+color=['green', 'red', 'blue', 'yellow', 'black','yellow']
 x_min = min(X[:,0])-1
 x_max = max(X[:,0])+1
 y_min = min(X[:,1])-1
@@ -133,13 +135,25 @@ Z=[]
 for i in range(class_num):
     Z.append(np.array(list(map(partial(gaussian_pdf, mu=mu[i], sigma=sigma[i]), list(zip(X.flatten(),Y.flatten()))))).reshape(X.shape))
 
-plt.scatter(X,Y,c=sum(Z), alpha=0.4, marker=".")
+#plt.scatter(X,Y,c=sum(Z), alpha=0.4, marker=".") #不好看
 Z=np.dstack(Z)
-plt.scatter(X,Y,c=Z.argmax(axis=2), alpha=0.3, marker=".");
+plt.scatter(X,Y,c=Z.argmax(axis=2), alpha=0.1, marker=".");
+plt.show()
+```
+注：
+1. `make_blob`函数生成的分布具有相同的协方差。另外生成数据的函数有`make_classification`和`make_gaussian_quantiles`。前者特点是可以生成冗余的特征（和其他某几个特征线性相关）或者重复特征，可以生成脏数据（类别标记错误）等等，很强大。后者感觉和`make_blobs`差不多。
+2. 生成散点图用scatter，我总是记成plot函数
+
+```python
+# 生成三维存在线性相关的数据
+X, y = make_classification(n_samples=1000, n_features=3, n_informative=3, n_redundant=0, n_repeated=0, n_classes=2, n_clusters_per_class=1, weights=None, flip_y=0.01, class_sep=1.0, hypercube=True, shift=0.0, scale=1.0, shuffle=True, random_state=None)
+fig=plt.figure()
+ax = fig.add_subplot(1, 1, 1, projection='3d')
+ax.scatter3D(X[:,0],X[:,1],X[:,2],c=y)
 plt.show()
 ```
 
-
-
 参考
 1. [高斯判别分析实现与分析](https://www.cnblogs.com/jcchen1987/p/4424436.html)
+2. [sklearn文档：Plot randomly generated classification dataset](http://sklearn.apachecn.org/cn/0.19.0/auto_examples/datasets/plot_random_dataset.html#sphx-glr-auto-examples-datasets-plot-random-dataset-py)
+3. 

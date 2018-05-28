@@ -1,6 +1,6 @@
 ---
 layout: post
-title: EM算法与GMM模型
+title: EM算法原理与推导
 date: 2018-05-27
 category: 机器学习
 tags:
