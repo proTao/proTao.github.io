@@ -43,7 +43,11 @@ $$ P(X)=\sum_iP(X, Y=i) $$
 $$ l(\theta)=\sum_{i=1}^mlogP(x^{(i)};\theta)\qquad$$
 $$ l(\theta)=\sum_{i=1}^mlog\sum_zP(x^{(i)},z^{(i)};\theta)\quad$$
 
-根据之前EM算法中进行到最后的推导，E步需要求隐标签的后验分布，这个是好求的。我们已知\\(P(X|y)\\)的正态分布计算方式，那么通过贝叶斯公式就可以求得反向的条件概率。
+根据之前EM算法中进行到最后的推导，E步需要求隐标签的后验分布，这个是好求的。我们已知\\(P(X|y)\\)的正态分布计算方式，那么通过贝叶斯公式就可以求得反向的条件概率。然而在[EM算法原理与推导](https://protao.github.io/2018/05/27/MachingLearning-2018-05-27-EMAlgorithm/)中，M步的时候，留下了一个疑问：**M步的计算公式好算吗，为什么好算？**
+
+$$ \theta := argmax_\theta\sum_i\sum_{z^{(i)}}Q_i(z^{(i)})log\frac{P(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})} $$
+
+
 
 
 
