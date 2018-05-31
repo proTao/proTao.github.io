@@ -29,7 +29,7 @@ description:
 
 <!-- more -->
 
-### 推导
+### 模型
 
 子模型（联合分布）是高斯分布：
 $$ P(X, Y=i)=P(X|Y=i)*P(Y=i) $$
@@ -38,17 +38,56 @@ $$=\frac{1}{(2\pi)^{n/2}|\Sigma_i|^{1/2}}exp\Big(-\frac{1}{2}(x-\mu_i)^T\Sigma_i
 总模型（边缘分布）是子模型在隐变量上的累加：
 $$ P(X)=\sum_iP(X, Y=i) $$
 
+### 参数估计：隐变量(E-Step)
 
 既然我们增加了隐变量，极大似然就不能直接用了，然后就能套到EM算法中了。
 $$ l(\theta)=\sum_{i=1}^mlogP(x^{(i)};\theta)\qquad$$
 $$ l(\theta)=\sum_{i=1}^mlog\sum_zP(x^{(i)},z^{(i)};\theta)\quad$$
 
-根据之前EM算法中进行到最后的推导，E步需要求隐标签的后验分布，这个是好求的。我们已知\\(P(X|y)\\)的正态分布计算方式，那么通过贝叶斯公式就可以求得反向的条件概率。然而在[EM算法原理与推导](https://protao.github.io/2018/05/27/MachingLearning-2018-05-27-EMAlgorithm/)中，M步的时候，留下了一个疑问：**M步的计算公式好算吗，为什么好算？**
+根据之前EM算法中进行到最后的推导，E步需要求隐标签的后验分布，这个是好求的。我们已知\\(P(X|y)\\)的正态分布计算方式，那么通过贝叶斯公式就可以求得反向的条件概率。用$$$\omega$$$表示我们计算得到的隐变量的后验概率，即$$$Q$$$，则
 
-$$ \theta := argmax_\theta\sum_i\sum_{z^{(i)}}Q_i(z^{(i)})log\frac{P(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})} $$
+$$ \omega_j^{(i)}=Q_i(z^{(i)}=j)=P(z^{(i)}=j|x^{(i)};\phi,\mu,\Sigma) $$
 
 
+然而在[EM算法原理与推导](https://protao.github.io/2018/05/27/MachingLearning-2018-05-27-EMAlgorithm/)中，M步的时候，留下了一个疑问：**M步的计算公式好算吗，为什么好算？**
 
+$$ \theta := argmax_\theta J(Q, \theta) $$
+
+### 参数估计：$$$\mu$$$(M-Step)
+
+至少目前看来，在高斯模型中是这样的：直接累加的模型中有隐变量我们不能求解MLE，如果使用了EM算法，真正M步可以计算的原因不是公式的形式，而是我们在E步中确定下来的隐变量的后验概率，那么我们就可以把这个值带入进去进行计算了。联合分布的概率公式我们也明确的知道。即：
+
+$$ J(Q, \theta)=\sum_i^m\sum_{z^{(i)}}Q_i(z^{(i)})log\frac{P(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})} $$
+$$ J(Q, \theta)=\sum_{i=1}^m\sum_{j=1}^kQ_i(z^{(i)}=j)log\frac{P(x^{(i)}|z^{(i)}=j;\mu,\Sigma)P(z^{(i)}=j;\phi)}{Q_i(z^{(i)})} $$
+$$ J(Q, \theta)=\sum_{i=1}^m\sum_{j=1}^k\omega_j^{(i)}log\frac{\frac{1}{(2\pi)^{n/2}|\Sigma_j|^{1/2}}exp\Big(-\frac{1}{2}(x-\mu_j)^T\Sigma_j^{-1}(x-\mu_j)\Big)*\phi_j}{\omega_j^{(i)}} \qquad(1)$$
+
+令$$$J(Q, \theta)$$$对$$$\mu_l$$$的梯度为零：
+$$ \nabla_{\mu_l}\sum_{i=1}^m\sum_{j=1}^k\omega_j^{(i)}log\frac{\frac{1}{(2\pi)^{n/2}|\Sigma_j|^{1/2}}exp\Big(-\frac{1}{2}(x-\mu_j)^T\Sigma_j^{-1}(x-\mu_j)\Big)*\phi_j}{\omega_j^{(i)}} $$
+$$ =-\frac12\nabla_{\mu_l}\sum_{i=1}^m\sum_{j=1}^k\omega_j^{(i)}(x-\mu_j)^T\Sigma_j^{-1}(x-\mu_j) $$
+$$ =-\frac12\sum_{i=1}^m\nabla_{\mu_l}\omega_l^{(i)}(x-\mu_l)^T\Sigma_l^{-1}(x-\mu_l) $$
+$$ =\sum_{i=1}^m\omega_l^{(i)}\Sigma_l^{-1}(x-\mu_l)=\sum_{i=1}^m\omega_l^{(i)}(x-\mu_l)=0$$
+所以：
+$$ \mu_l:=\frac{\sum_{i=1}^m\omega_l^{(i)}x^{(i)}}{\sum_{i=1}^m\omega_l^{(i)}} $$
+
+### 参数估计：$$$\phi$$$(M-Step)
+将（1）式中的log展开，只保留与$$$\phi$$$有关的项，则我们实际需要优化的项是：
+$$ \sum_{i=1}^m\sum_{j=1}^k\omega_j^{(i)}log\phi_j $$
+
+优化这一项有一点需要注意，$$$log\phi$$$是一个单调函数，不能直接MLE，而限制它的是另外的条件：$$$\phi$$$是一个分布，要求和为一。因此带约束的优化问题，考虑使用拉格朗日乘子法：
+
+$$ \mathcal{L}(\phi)=\sum_{i=1}^m\sum_{j=1}^k\omega_j^{(i)}log\phi_j+\beta(\sum_{j=1}^k\phi_j-1)$$
+$$ \frac{\partial}{\partial\phi_l}=\frac1{\phi_l}\sum_{i=1}^m\omega_l^{(i)}+\beta=0 $$
+$$ \therefore \qquad \phi_l:=\frac{\sum_{i=1}^m\omega_l^{(i)}}{-\beta} \qquad$$
+
+$$$\beta$$$的求法这里不多说，是Lagrange Multiplier的基本方法，就是把上面的$$$\phi_l$$$的表达式带入约束条件即求和为一，可以解得$$$-\beta=m$$$，因此：
+$$ \phi_l:=\frac{\sum_{i=1}^m\omega_l^{(i)}}{m} $$
+
+注意：其实还有$$$\phi$$$必须大于零的要求，我们没有考虑是因为这里即使只考虑等式约束，解得的解也会自动满足不等式约束，深入的原因在于广义拉格朗日乘子法。
+
+### 参数估计：$$$\Sigma$$$(M-Step)
+协方差矩阵的推导不多做说明，可以参考[GDA原理与推导](https://protao.github.io/2018/05/24/MachingLearning-2018-05-24-GaussianDiscriminantAnalysis/)，过程类似，这里只给出解析式。
+
+$$ \mu_l:=\frac{\sum_{i=1}^m\omega_l^{(i)}(x^{(i)}-\mu_l)(x^{(i)}-\mu_l)^T}{\sum_{i=1}^m\omega_l^{(i)}} $$
 
 
 ## sklearn实践
