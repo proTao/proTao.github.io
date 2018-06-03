@@ -48,6 +48,141 @@ $$ \mathbb{E}_Z\big[lnP(X,Z|\mu,\pi)\big]=\sum_i\sum_Z\omega_{nk}\big(ln\pi_k+\s
 然后M步对其最大化。
 
 #### 实践
+```python
+import numpy as np
+import pathlib
+from scipy.special import logsumexp
+from sklearn.metrics import confusion_matrix
+
+p=pathlib.Path("trainingDigits/")
+cache=[]
+label=[]
+for fname in p.iterdir():
+    with open(str(fname),'r') as f:
+        cache.append(i.strip() for i in f.readlines())
+        label.append(int(str(fname.name)[0]))
+data=np.array([[list(map(int,line)) for line in digit] for digit in cache])
+label=np.array(label)
+
+p=pathlib.Path("testDigits/")
+cache=[]
+answer=[]
+for fname in p.iterdir():
+    with open(str(fname),'r') as f:
+        cache.append(i.strip() for i in f.readlines())
+        answer.append(int(str(fname.name)[0]))
+test=np.array([[list(map(int,line)) for line in digit] for digit in cache])
+answer=np.array(answer)
+
+M = len(data)
+D = np.prod(data[0].shape)
+K = len(np.unique(label))
+
+# initial by label
+init_mu=[]
+init_phi=[]
+for i in range(K):
+    index=label==i
+    labeled_data=data[index].reshape(-1,D)
+    init_mu.append(np.sum(labeled_data,axis=0)/len(labeled_data))
+    init_phi.append(sum(label==i)/M)
+
+init_mu=np.array(init_mu)
+init_phi=np.array(init_phi)
+
+
+
+class MixtureBernoulli:
+    def __init__(self,K,D,M):
+        self.K=K # 组分数
+        self.D=D # 数据维度
+        self.M=M # 数据规模
+        self.phi = np.random.ranf((1,K))
+        self.phi /= sum(self.phi)
+        self.mu = np.random.ranf((K,D))
+    
+    def setPara(self, phi=None, mu=None):
+        if phi is not None:
+	        self.phi = phi
+        if mu is not None:
+        	self.mu = mu
+    
+    def _log_bernoulli(self, X):
+        np.clip(self.mu, 1e-10, 1-1e-10, out=self.mu)
+        return (X[:,None,:]*np.log(self.mu)+(1-X[:,None,:])*np.log(1-self.mu)).sum(axis=-1)
+
+    def _E_Step(self, X):
+        responsibility=np.log(self.phi)+self._log_bernoulli(X)
+        responsibility -= logsumexp(responsibility, axis=1).reshape((X.shape[0],1))
+        return np.exp(responsibility)
+
+    def _M_Step(self, X, responsibility):
+        # Nk是所有数据点在第k个组分的权重和，所以sum(Nk)=M
+        Nk = np.sum(responsibility,axis=0).reshape((1,self.K))
+        self.mu = ((X.T @ responsibility)/Nk).T
+        self.phi=Nk/self.M
+    
+    def fit(self,X,verbose=False):
+        i=0
+
+        while True:
+            old_params = np.hstack((self.phi.ravel(), self.mu.ravel()))
+            resp = self._E_Step(X)
+            self._M_Step(X, resp)
+            if np.allclose(old_params, np.hstack((self.phi.ravel(), self.mu.ravel()))):
+                break
+            else:
+                i += 1
+                print("iteration {}".format(i))
+                if verbose:
+                    pred=np.argmax(resp,axis=1)
+                    print(pred[:1600].reshape(400,-1)[:,0].reshape((20,20)))
+
+    def classify_proba(self, X):
+        """
+        posterior probability of cluster
+        p(z|x,theta)
+        Parameters
+        ----------
+        X : (sample_size, ndim) ndarray
+            input
+        Returns
+        -------
+        output : (sample_size, n_components) ndarray
+            posterior probability of cluster
+        """
+        return self._E_Step(X)
+        
+    def classify(self, X):
+        """
+        classify input
+        max_z p(z|x, theta)
+        Parameters
+        ----------
+        X : (sample_size, ndim) ndarray
+            input
+        Returns
+        -------
+        output : (sample_size,) ndarray
+            corresponding cluster index
+        """
+        return np.argmax(self.classify_proba(X), axis=1)
+        
+mb = MixtureBernoulli(K,D,M)
+mb.setPara(phi=init_phi, mu=init_mu)
+mb.fit(data.reshape(-1, D),verbose=True)
+
+pred=mb.classify(test.reshape(test.shape[0],32*32))
+confusion_matrix(pred, answer)
+
+mu0=mb.mu[0].reshape((32,32))
+plt.imshow(mu0, cmap="gray")
+plt.show()
+```
+
+最后的分类正确率是87%左右。
+
+还是别人家的代码好啊。注意`logsumexp`这个函数，我就知道有，但是没找到！然后为了防止下溢出用了对数计算，还有`np.clip`辅助。多分类问题使用`sklearn.metric`中的混淆矩阵函数进行直观评估。还有自带的`pathlib`是好帮手。
 
 ## EM算法与KL散度
 限制考虑单个数据的情况，因为是对数似然，全部数据集只需要求和。
@@ -58,12 +193,17 @@ $$J(Q,\theta)=lnP(x^{(i)};\theta)-KL(Q||P) \qquad(4.3)$$
 $$lnP(x^{(i)};\theta)=J(Q,\theta)+KL(Q||P) \qquad(4.4)$$
 
 KL散度这里不展开说，只需要知道：KL散度衡量两个分布的距离，P是被衡量的分布，Q是用来拟合的分布，当两个分布一样的时候，KL散度为零。
-（4.4）式的意义在于，将真正的对数似然拆分成了两部分，第一部分是我们固定$$$\theta$$$构建的下界，第二部分是在$$$\theta$$$处，下界和真正似然的差距。
+（4.4）式的意义在于，将真正的对数似然拆分成了两部分，第一部分是我们固定$$$\theta$$$构建的下界，第二部分是在$$$\theta$$$处，下界和真正似然的差距。KL距离是一定大于零的，**在给定$$$\theta$$$时**，对数似然可以想（4.4）一样拆成两部分，我们希望下界$$$J$$$尽可能的大，以使得得到最紧的下界，即KL距离尽可能的小，所以必须要让Q分布等于$$$P(z|x;\theta)$$$，于是得到了和第一篇文章中使用Jensen不等式殊途同归的结果。
 
+![图1：在$$$\theta$$$上优化对数似然](/img/EM2.png)
+![图2：固定$$$\theta$$$看（4.4）式](/img/EM3.png)
+
+图2的左图表示图1中$$$\theta_{old}$$$经过E步之后，（4.4）式中三个部分的各个状态：在$$$\theta_{old}$$$处，下界紧贴目标函数且KL距离为0的状态。图2的右图表示图1中$$$\theta_{new}$$$的经过M步的状态，即对下界进行优化，得到新的参数估计。此时在图一中花了三条横线，分别对应图2右图中的三条线，**紫色线表示本次E步之前的对数似然，然后从$$$\theta_{old}$$$变成$$$\theta_{new}$$$后，$$$J(Q,\theta)$$$提升到了蓝线的高度，$$$lnP(x^{(i)};\theta)$$$提升到了红线的高度，$$$KL(Q||P)$$$从0变成了蓝红两线的间距**，然后本次的M又会把这个间距缩小成0，以此类推。
 
 参考：
 1. [怎么通俗易懂地解释EM算法并且举个例子?](https://www.zhihu.com/question/27976634?sort=created)
-2. [关于EM算法的九层境界的浅薄介绍，​Hinton和Jordan理解的EM算法](http://www.elecfans.com/d/604076.html)
+2. [关于EM算法的九层境界的浅薄介绍，Hinton和Jordan理解的EM算法](http://www.elecfans.com/d/604076.html)
 3. [从最大似然到EM算法：一致的理解方式](https://spaces.ac.cn/archives/5239)
 4. [梯度下降和EM算法：系出同源，一脉相承](https://spaces.ac.cn/archives/4277)
 5. Patttern Recognition and Machine Learning 中译版
+6. [PRML读书伴侣ch9](https://github.com/ctgk/PRML/blob/master/prml/rv/bernoulli_mixture.py)

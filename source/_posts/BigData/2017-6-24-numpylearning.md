@@ -69,6 +69,14 @@ description:
 >        代码中尽可能避免显式的for循环。
 >通过不使用for循环实现相同功能，可以显著提升运行速度。对Matlab/Octave代码进行矢量化的工作很大一部分集中在避免使用for循环上，因为这可以使得Matlab/Octave更多地利用代码中的并行性，同时其解释器的计算开销更小。
 
+### 更新于2018-06-02
+在写EM算法第二篇文章的时候，自己实现混合伯努利分布，然后有各种矩阵乘的时候，都用numpy的广播解决，对此我只能说，NP大法好！
+主要就是：
+1. `@`实现矩阵乘
+2. `_log_bernoulli`函数中，`X[:,None,:]*np.log(self.mu)`这一骚操作，本来我是要实现成for循环按列乘的，但是隐隐一个声音告诉我不要用for循环......尴尬。看了PRML读书伴侣，看到了这个小trick，利用None扩充ndarray的维度，然后尺寸对上了就可以利用广播进行矢量化计算了，美滋滋。
+3. `np.clip`防止上下溢出，`np.allclose`检查参数收敛。
+
 - - -
 参考：
 1. ufldl[矢量化编程](http://http://ufldl.stanford.edu/wiki/index.php?diff=2028&oldid=2027&title=%E7%9F%A2%E9%87%8F%E5%8C%96%E7%BC%96%E7%A8%8B)
+2. [PRML读书伴侣ch9](https://github.com/ctgk/PRML/blob/master/prml/rv/bernoulli_mixture.py)

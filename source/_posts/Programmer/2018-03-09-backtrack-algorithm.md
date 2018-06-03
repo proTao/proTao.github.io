@@ -1,5 +1,5 @@
 ---
-title: backtrack-algorithm
+title: Leetcode之backtrack
 date: 2018-03-09 16:57:25
 category: 程序员的玩具
 tags: algorithm
