@@ -1,7 +1,7 @@
 ---
 layout: post
 title: EM算法原理与推导(续)
-date: 2018-05-27
+date: 2018-05-28
 category: 机器学习
 tags:
 - generative

@@ -129,3 +129,6 @@ print(struct.genus.level) # 错误
 
 - 假如你有一个类称为MyClass和这个类的一个实例MyObject。当你调用这个对象的方法MyObject.method(arg1, arg2)的时候,这会由Python自动转为MyClass.method(MyObject, arg1,arg2)——这就是self的原理了。
 
+相关阅读：
+1. [干货分享：Python开发的高级技巧](http://developer.51cto.com/art/201611/522852.htm)
+
