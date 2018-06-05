@@ -131,4 +131,5 @@ print(struct.genus.level) # 错误
 
 相关阅读：
 1. [干货分享：Python开发的高级技巧](http://developer.51cto.com/art/201611/522852.htm)
+2. 别人家的[Python Trick](https://vimiix.com/python_tricks/#1)
 
