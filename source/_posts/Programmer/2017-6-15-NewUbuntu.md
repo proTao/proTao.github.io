@@ -90,10 +90,11 @@ $ sudo apt-get install okular
 sudo apt-get install deluge
 ```
 
-## jekyll
+## 博客工具
 ```bash
-sudo apt install jekyll
+# sudo apt install jekyll
 ```
+已经替换为hexo了，参考[hexo使用体验](https://protao.github.io/2018/03/08/Programmer-2018-03-08-hexo/)
 
 ## SMplayer
 ```bash
@@ -159,5 +160,36 @@ sudo -H pip3 install matplotlib
 sudo -H pip3 install jupyter notebook
 ```
 
----
+## 安装一系列命令行工具
+```bash
+# autojump
+sudo apt-get install autojump
+echo '. /usr/share/autojump/autojump.sh'>>~/.bashrc
+
+# fzf : 高级Ctrl+r（安装后需要重启）
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+cd ~/.fzf && git pull && ./install
+
+# thefuck
+sudo apt update
+sudo apt install python3-dev python3-pip
+sudo pip3 install thefuck
+echo 'eval "$(thefuck --alias)"' >> .bashrc
+
+sudo apt install shellcheck # bash查错
+sudo apt install cloc # 代码统计
+sudo apt install silversearcher-ag # 高级grep
+# sudo apt install jq # json高亮显示
+sudo apt install axel # 多线程下载
+# pip install yapf # google的PEP8格式化工具
+```
+
+* * *
+
+参考：
+1. [有哪些命令行的软件堪称神器？](http://blog.jobbole.com/111072/)
+2. [自动补完不算什么，一键直达目录才是终极神器！](https://linux.cn/article-3401-1.html)
+3. [Autojump：一个可以在 Linux 文件系统快速导航的高级 cd 命令](https://www.linuxidc.com/Linux/2015-08/121421.htm)
+4. [The Fuck](https://github.com/nvbn/thefuck)
 

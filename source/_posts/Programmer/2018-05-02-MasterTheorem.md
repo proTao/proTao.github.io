@@ -1,6 +1,6 @@
 ---
 title: 时间复杂度分析的主定理
-date: 2018-06-02
+date: 2018-05-02
 category: 程序员的玩具
 tags:
 - algorithm

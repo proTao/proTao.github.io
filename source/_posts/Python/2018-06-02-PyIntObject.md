@@ -1,6 +1,6 @@
 ---
 layout: post
-date: 2018-06-04
+date: 2018-06-02
 title: python中的整数对象
 category: python
 tags: 
@@ -10,6 +10,15 @@ description:
 ---
 
 ## 1. 初识 PyIntObject 对象
+
+```CPP
+[intobject.h]
+typedef struct {
+	PyObject_HEAD
+    long ob_ival;
+} PyIntObject
+```
+
 首先，`PyIntObject`是一个不可变（immutable）对象。其次，Python内部也大量的使用整数对象，我们在自己的代码中也会有大量的创建销毁整型对象的操作，因此单独的维护整形对象并对其申请内存和释放内存是不现实的。Python给出的解决方案是将整形对象通过一定的结构连接在一起的**整数对象系统**：整数对象池，一个整形对象的缓冲池机制。
 
 Python的实现中，对某些可能频繁执行的代码，都会提供函数和宏两个版本。**宏版本节省了一次函数调用的开销但是牺牲了类型安全。**对于`PyIntObject`的操作，像前面说的，定义在该类型对象的函数指针中。特别注意的是，`tp_as_number`指针存放的是`int_as_number`结构体的地址，在 python2.5 中，该结构体包含了39个`PyNumberMethods`要求的函数指针，但是不是每个指针都有定义，部分为`NULL`。
@@ -17,7 +26,7 @@ Python的实现中，对某些可能频繁执行的代码，都会提供函数�
 另一个有趣的元信息是对象的文档，这个元信息维护在`int_doc`域中，文档无缝集成在语言的实现中，这一点是Python相对其他语言的一大特点。
 
 
-
+<!-- more -->
 
 ## 2. PyIntObject 对象的创建和维护
 
@@ -134,19 +143,19 @@ static void int_dealloc(PyIntObject *v)
 [intobject.c]
 int _PyInt_Init(void)
 {
-PyIntObject *v;
-int ival;
-#if NSMALLNEGINTS + NSMALLPOSINTS > 0
-for (ival = -NSMALLNEGINTS; ival < NSMALLPOSINTS; ival++)
-{
-if (!free_list && (free_list = fill_free_list()) == NULL)
-return 0;
-/* PyObject_New is inlined */
-v = free_list;
-free_list = (PyIntObject *)v->ob_type;
-PyObject_INIT(v, &PyInt_Type);
-v->ob_ival = ival;
-small_ints[ival + NSMALLNEGINTS] = v;
+	PyIntObject *v;
+	int ival;
+	#if NSMALLNEGINTS + NSMALLPOSINTS > 0
+	for (ival = -NSMALLNEGINTS; ival < NSMALLPOSINTS; ival++)
+	{
+		if (!free_list && (free_list = fill_free_list()) == NULL)
+			return 0;
+		/* PyObject_New is inlined */
+		v = free_list;
+		free_list = (PyIntObject *)v->ob_type;
+		PyObject_INIT(v, &PyInt_Type);
+		v->ob_ival = ival;
+		small_ints[ival + NSMALLNEGINTS] = v;
 }
 #endif
 return 1;
@@ -157,6 +166,12 @@ return 1;
 综上所述，Python 中的`PyIntObject`构成了一个整数系统，其下有两个“部门”，一个是静态对象池，一个是动态缓冲池，两个池的管理使用两个不同级别的指针`block_list`和`free_list`来统一管理，内存使用的基本单元是`PyIntObject`。
 
 ## Hack PyIntObject
+![](/img/PyIntObject7.png)
+![](/img/PyIntObject8.png)
+![](/img/PyIntObject9.png)
+![](/img/PyIntObject10.png)
+
+
 
 （略略略）
 
