@@ -141,7 +141,7 @@ static int ins1(PyListObject *self, int where, PyObject *v)
 ![PyList_Insert(op,3,99)](/img/PyListObject3.png)
 
 这里的重点是resize函数：
-```python
+```CPP
 [listobject.c]
 static int list_resize(PyListObject *self, int newsize)
 {
@@ -161,7 +161,7 @@ static int list_resize(PyListObject *self, int newsize)
 	 * system realloc().
 	 * The growth pattern is: 0, 4, 8, 16, 25, 35, 46, 58, 72, 88, ...
 	 */
-    # 新的内存大小
+    // 新的内存大小
 	new_allocated = (newsize >> 3) + (newsize < 9 ? 3 : 6) + newsize;
 	if (newsize == 0)
 		new_allocated = 0;
@@ -181,6 +181,8 @@ static int list_resize(PyListObject *self, int newsize)
 4. newsize > ob_size && newsize > allocated :存货不足，继续申请。
 
 而经常使用到的append操作其实就是先使用`list_resize`让现有元素数加 1 ，然后使用`PyList_SetItem`设置最后一个元素的值。
+
+疑问：这里存的就是一个连续的数组，可是假设后面没有连续的足够空间怎么办？应该答案在`PyMem_RESIZE`函数中，这个函数会在当前空间的后面继续扩展，但是是否真的是这样，等待后续更新。。。
 
 ![PyList_Append(op,101)](/img/PyListObject4.png)
 
@@ -224,8 +226,7 @@ static int list_ass_slice(PyListObject *a, int ilow, int ihigh, PyObject *v);
 static void list_dealloc(PyListObject *op)
 {
 	int i;
-	PyObject_GC_UnTrack(op);
-	Py_TRASHCAN_SAFE_BEGIN(op)
+    //调整 list 中对象的引用计数
 	if (op->ob_item != NULL) {
 		/* Do it backwards, for Christian Tismer. There's a simple test case where somehow this reduces thrashing when a *very* large list is created and immediately deleted. */
 		i = op->ob_size;
@@ -234,11 +235,11 @@ static void list_dealloc(PyListObject *op)
 		}
 		PyMem_FREE(op->ob_item);
 	}
+    //将被销毁的 PyListObject 对象放入缓冲池
 	if (num_free_lists < MAXFREELISTS && PyList_CheckExact(op))
 		free_lists[num_free_lists++] = op;
 	else
 		op->ob_type->tp_free((PyObject *)op);
-	Py_TRASHCAN_SAFE_END(op)
 }
 ```
 删除的时候，使用倒序将`op->ob_size`中的对象的引用计数全部减一，释放`op->ob_size`的空间，然后尝试将该对象`PyListObject`结构体放入缓冲池。注意没有将`ob_size`和`allocated`置0，因为下次从缓冲池取用的时候会为其赋新值。
@@ -246,6 +247,7 @@ static void list_dealloc(PyListObject *op)
 ![缓冲池](/img/PyListObject6.png)
 
 ## 4. Hack PyListObject
+注意`allocated`的增长公式`new_allocated = (newsize >> 3) + (newsize < 9 ? 3 : 6) + newsize;`
 
 ![](/img/PyListObject7.png)
 ![](/img/PyListObject8.png)
