@@ -134,4 +134,6 @@ done
 6. [Feature Hashing](https://en.wikipedia.org/wiki/Feature_hashing)
 7. [Topic extraction with Non-negative Matrix Factorization and Latent Dirichlet Allocation](http://sklearn.apachecn.org/cn/0.19.0/auto_examples/applications/plot_topics_extraction_with_nmf_lda.html#sphx-glr-auto-examples-applications-plot-topics-extraction-with-nmf-lda-py)
 8. [Javascript unescape() vs. Python urllib.unquote()](https://stackoverflow.com/questions/23158822/javascript-unescape-vs-python-urllib-unquote)
-9. [](https://distill.pub/2016/misread-tsne/)
+9. [How to Use t-SNE Effectively](https://distill.pub/2016/misread-tsne/)
+10. [Hopkins test for cluster tendency](https://matevzkunaver.wordpress.com/2017/06/20/hopkins-test-for-cluster-tendency/)
+11. [机器学习——聚类质量评估方法（有效性指标）](http://blog.sina.com.cn/s/blog_135031dae0102xgov.html)
