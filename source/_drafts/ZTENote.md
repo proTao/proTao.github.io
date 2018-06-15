@@ -124,6 +124,9 @@ done
 ### 2. 无线的类别特征比如怎么处理，比如uri，referrer？
 
 
+# 工程技巧
+给特征命名可以很好地在模块之间提高可扩展性。前面加了新的特征，后面的模块可以不改动，也可以添加少许代码利用起新的特征。
+
 
 参考：
 1. [hmmlearn 官方文档](http://hmmlearn.readthedocs.io/en/latest/tutorial.html#available-models)
@@ -134,4 +137,10 @@ done
 6. [Feature Hashing](https://en.wikipedia.org/wiki/Feature_hashing)
 7. [Topic extraction with Non-negative Matrix Factorization and Latent Dirichlet Allocation](http://sklearn.apachecn.org/cn/0.19.0/auto_examples/applications/plot_topics_extraction_with_nmf_lda.html#sphx-glr-auto-examples-applications-plot-topics-extraction-with-nmf-lda-py)
 8. [Javascript unescape() vs. Python urllib.unquote()](https://stackoverflow.com/questions/23158822/javascript-unescape-vs-python-urllib-unquote)
-9. [](https://distill.pub/2016/misread-tsne/)
+9. [How to Use t-SNE Effectively](https://distill.pub/2016/misread-tsne/)
+10. [Pandas分类数据](https://www.yiibai.com/pandas/python_pandas_categorical_data.html)
+11. [通俗理解LDA主题模型](http://www.360doc.com/content/16/0428/10/478627_554452907.shtml)
+12. [用pandas处理大数据———减少90%内存消耗](https://blog.csdn.net/wally21st/article/details/77688755)
+13. [CategoricalDtype Doc](http://pandas.pydata.org/pandas-docs/stable/categorical.html#categoricaldtype)
+14. [numpy,pandas,scipy求众数速度比较](http://blog.sina.com.cn/s/blog_12c3192a50102xdhd.html)
+15. [使用sklearn做单机特征工程](http://www.cnblogs.com/jasonfreak/p/5448385.html)
