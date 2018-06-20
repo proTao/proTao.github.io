@@ -17,13 +17,17 @@
 
 | session_seq | method | domain | uri | referrer | useragent |
 |-----|-----|-----|-----|-----|-----|
-| 6 | GET | rand.com | /manageonline/images/login/login_btn.png | http://manage.com/manageonline/login.aspx | Mozilla/4.0  |
+| 6 | GET | rand.com | /manageonline/login.png | http://manage.com/login.aspx | Mozilla/4.0  |
 
 （13-27）
 
-| 啥长度1 | 啥长度2 | RCODE | R | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 奇怪的id | 奇怪的类型 | 不知道啥id | MIME |
-|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
-| 0 | 4035 | 200 | OK | - | - | - | (empty) | - | - | - | - | - | FBIJWU2KqyqlNqwqXi | image/png |
+| 啥长度1 | 啥长度2 | RCODE | R | 17 | 18 | 19 | 20 | 21 | 22 | 23 |
+|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| 0 | 4035 | 200 | OK | - | - | - | (empty) | - | - | - |
+
+| 奇怪的id | 奇怪的类型 | 不知道啥id | MIME |
+|-----|-----|-----|-----|
+| - | - | FBIJWU2KqyqlNqwqXi | image/png |
 
 
 ## all.log数据探索：
@@ -124,6 +128,71 @@ done
 ### 2. 无线的类别特征比如怎么处理，比如uri，referrer？
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* * *
+
+## 服务器环境配置
+```bash
+# 基础环境是 ubuntu
+workspace=zte
+
+# python3.6 安装
+wget https://www.python.org/ftp/python/3.6.2/Python-3.6.2.tar.xz
+sudo apt-get update
+sudo apt-get install zlib1g zlib1g-dev
+sudo apt-get install libbz2-dev
+# sudo apt-get install tcl-dev tk-dev python3-tk bzip2 # 后续的matplotlib包需要
+tar -xvf Python-3.6.2.tar.xz
+cd Python-3.6.2
+./configure
+make
+sudo make install
+
+# python3 虚拟环境和包管理
+## 好像上面的python包中有pip和setuptools
+# curl "https://bootstrap.pypa.io/3.2/get-pip.py" -o "get-pip.py"
+# sudo python3 get-pip.py
+sudo pip3 install --upgrade pip
+pip install --user pipenv
+# pip3 list # 如果是新安装的环境，此时只有pip和setuptools
+sudo ln -s /usr/local/bin/python3.6 /usr/bin/python3
+cd $workspace
+pipenv install numpy
+pipenv install scikit-learn
+pipenv install pandas
+pipenv install matplotlib
+pipenv install ipython --dev
+
+# 进入虚拟环境
+pipenv shell
+
+# 配置虚拟工作环境，安装依赖包
+
+
+
+
+```
+
+* * *
+
 # 工程技巧
 给特征命名可以很好地在模块之间提高可扩展性。前面加了新的特征，后面的模块可以不改动，也可以添加少许代码利用起新的特征。
 
@@ -144,3 +213,4 @@ done
 13. [CategoricalDtype Doc](http://pandas.pydata.org/pandas-docs/stable/categorical.html#categoricaldtype)
 14. [numpy,pandas,scipy求众数速度比较](http://blog.sina.com.cn/s/blog_12c3192a50102xdhd.html)
 15. [使用sklearn做单机特征工程](http://www.cnblogs.com/jasonfreak/p/5448385.html)
+16. [Python包和版本管理的最好工具----pipenv](http://www.mamicode.com/info-detail-2214218.html)
