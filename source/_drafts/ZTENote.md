@@ -103,18 +103,38 @@ elasticsearch@zookeeper2:~/yjyj/zte$ grep FADyvg1RmeJdUhiP33 all.log
 
 ## 用户特征
 
-### 单个record特征
-- 距离上一条的时间
-- uri的长度、分隔符数、特殊字符数；referrer在单个的record中不考虑特征，放到session中考虑；tfidf啊！uri的处理我觉得可以作为单独的特征向量一部分，host和post提取出频率，即被访问的这个host在整个内网中被访问多少次，
+### uri特征
+- uri_chrlen
+- uri_len
+- query_chrlen
+- query_count
+- longest_query
+- query_parts
+- tfidf
 
-### 单个session特征
-- session持续时间
-- 
+
+
+### 处理 user 特征
+输入： 
+- session个数 (1)
+
+- 每个 session 长度构成的1维序列的统计特征（平均值、方差、max、min）
+- 每个 action 长度1 构成的1维序列的统计特征（平均值、方差、max、min）
+- 每个 action 长度2 构成的1维序列的统计特征（平均值、方差、max、min）
+- 每个 action 中的 uri 字符长度构成的1维序列的统计特征（平均值、方差、max、min）
+- 每个 action 中的非空 query 部分的字符长度构成的1维序列的统计特征（平均值、方差、max、min）
+- 相邻两个 action 的时间差构成的1维序列的统计特征（平均值、方差、中位数、max、min）
+
+- session开始时间提取得到月份，周几，时辰，作为类别特征，处理为直方图，直方图size分别是12，7,12
+- action特征中的类别特征，目前是type\_、MIME、rcode、method这四个。
+- uri特征中的类别特征，目前是
 
 
 
 
 * * *
+
+
 
 ## 遇到的问题
 
@@ -209,10 +229,12 @@ pipenv shell
 7. [Topic extraction with Non-negative Matrix Factorization and Latent Dirichlet Allocation](http://sklearn.apachecn.org/cn/0.19.0/auto_examples/applications/plot_topics_extraction_with_nmf_lda.html#sphx-glr-auto-examples-applications-plot-topics-extraction-with-nmf-lda-py)
 8. [Javascript unescape() vs. Python urllib.unquote()](https://stackoverflow.com/questions/23158822/javascript-unescape-vs-python-urllib-unquote)
 9. [How to Use t-SNE Effectively](https://distill.pub/2016/misread-tsne/)
-10. [Pandas分类数据](https://www.yiibai.com/pandas/python_pandas_categorical_data.html)
-11. [通俗理解LDA主题模型](http://www.360doc.com/content/16/0428/10/478627_554452907.shtml)
-12. [用pandas处理大数据———减少90%内存消耗](https://blog.csdn.net/wally21st/article/details/77688755)
-13. [CategoricalDtype Doc](http://pandas.pydata.org/pandas-docs/stable/categorical.html#categoricaldtype)
-14. [numpy,pandas,scipy求众数速度比较](http://blog.sina.com.cn/s/blog_12c3192a50102xdhd.html)
-15. [使用sklearn做单机特征工程](http://www.cnblogs.com/jasonfreak/p/5448385.html)
-16. [Python包和版本管理的最好工具----pipenv](http://www.mamicode.com/info-detail-2214218.html)
+10. [Hopkins test for cluster tendency](https://matevzkunaver.wordpress.com/2017/06/20/hopkins-test-for-cluster-tendency/)
+11. [机器学习——聚类质量评估方法（有效性指标）](http://blog.sina.com.cn/s/blog_135031dae0102xgov.html)
+12. [Pandas分类数据](https://www.yiibai.com/pandas/python_pandas_categorical_data.html)
+13. [通俗理解LDA主题模型](http://www.360doc.com/content/16/0428/10/478627_554452907.shtml)
+14. [用pandas处理大数据———减少90%内存消耗](https://blog.csdn.net/wally21st/article/details/77688755)
+15. [CategoricalDtype Doc](http://pandas.pydata.org/pandas-docs/stable/categorical.html#categoricaldtype)
+16. [numpy,pandas,scipy求众数速度比较](http://blog.sina.com.cn/s/blog_12c3192a50102xdhd.html)
+17. [使用sklearn做单机特征工程](http://www.cnblogs.com/jasonfreak/p/5448385.html)
+18. [Python包和版本管理的最好工具----pipenv](http://www.mamicode.com/info-detail-2214218.html)
