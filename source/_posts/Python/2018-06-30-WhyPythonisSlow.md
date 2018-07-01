@@ -1,3 +1,14 @@
+---
+layout: post
+date: 2018-06-30
+title: [译](Why Python is Slow: Looking Under the Hood)
+category: python
+tags: 
+- python
+keywords:
+description:
+---
+
 **翻译自[Why Python is Slow: Looking Under the Hood](https://jakevdp.github.io/blog/2014/05/09/why-python-is-slow/)**
 
 我们以前都听说过 : Python很慢。
@@ -392,174 +403,134 @@ data = arraytype.from_address(xstruct.ob_data)
 [d for d in data]  # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
 
-The `data` variable is now a view of the contiguous block of memory defined in the NumPy array! To show this, we'll change a value in the array...
+`data`变量现在是NumPy数组中定义的连续内存块的视图!为了显示这一点，我们将修改数组中的一个值……
+```python
+x[4] = 555
+[d for d in data] # [0, 1, 2, 3, 555, 5, 6, 7, 8, 9]
+```
 
-In \[20\]:
+…观察数据视图也在变化。`x`和`data`都指向相同的连续内存块。
 
-x\[4\] = 555
-\[d for d in data\]
-
-Out\[20\]:
-
-\[0, 1, 2, 3, 555, 5, 6, 7, 8, 9\]
-
-... and observe that the data view changes as well. Both `x` and `data` are pointing to the same contiguous block of memory.
-
-Comparing the internals of the Python list and the NumPy ndarray, it is clear that NumPy's arrays are **much, much** simpler for representing a list of identically-typed data. That fact is related to what makes it more efficient for the compiler to handle as well.
+通过比较Python列表和NumPy ndarray的内部结构，很明显，NumPy的数组对于表示相同类型数据的列表来说要**简单得多**。这一事实与使编译器能够更有效地处理有关。
 
 Just for fun: a few "never use these" hacks[¶](#Just-for-fun:-a-few-"never-use-these"-hacks)
 --------------------------------------------------------------------------------------------
 
-Using `ctypes` to wrap the C-level data behind Python objects allows you to do some pretty interesting things. With proper attribution to my friend James Powell, I'll say it here: [seriously, don't use this code](http://seriously.dontusethiscode.com/). While nothing below should actually be used (ever), I still find it all pretty interesting!
+使用“ctype”将c级数据封装在Python对象后面，可以做一些非常有趣的事情。如果我的朋友詹姆斯·鲍威尔(James Powell)说得对，我会在这里说:[说真的，不要使用这段代码](http://seriously.dontusethiscode.com/)。虽然下面的内容实际上不应该使用(曾经使用过)，但我仍然觉得非常有趣!
 
 ### Modifying the Value of an Integer[¶](#Modifying-the-Value-of-an-Integer)
 
-Inspired by [this Reddit post](http://www.reddit.com/r/Python/comments/2441cv/can_you_change_the_value_of_1/), we can actually modify the numerical value of integer objects! If we use a common number like `0` or `1`, we're very likely to crash our Python kernel. But if we do it with less important numbers, we can get away with it, at least briefly.
+受到[Reddit文章](http://www.reddit.com/r/Python/comments/2441cv/can_you_change_the_value_of_1/)的启发，我们实际上可以修改整型对象的数值!如果我们使用“0”或“1”这样的公共数字，很可能会导致Python内核崩溃。但如果我们用不太重要的数字来做，我们就能侥幸过关，至少是短暂的。
 
-Note that this is a _really, really_ bad idea. In particular, if you're running this in an IPython notebook, you might corrupt the IPython kernel's very ability to run (because you're screwing with the variables in its runtime). Nevertheless, we'll cross our fingers and give it a shot:
+注意，这是一个非常非常糟糕的想法。特别是，如果您在IPython笔记本上运行这个程序，您可能会破坏IPython内核的运行能力(因为您在其运行时处理变量)。不过，我们还是祈祷一下:
 
-In \[21\]:
-
-\# WARNNG: never do this!
+```python
+# WARNNG: never do this!
 id113 = id(113)
 iptr = IntStruct.from_address(id113)
-iptr.ob_digit = 4  \# now Python's 113 contains a 4!
+iptr.ob_digit = 4  # now Python's 113 contains a 4!
 
-113 == 4
+113 == 4 # True
+```
 
-Out\[21\]:
 
-True
+但是请注意，现在我们不能以简单的方式设置值，因为在Python中不再存在真正的值“113”!
 
-But note now that we can't set the value back in a simple manner, because the true value `113` no longer exists in Python!
+```python
+113 # 4
+112 + 1 # 4
 
-In \[22\]:
 
-113
+恢复的一种方法是直接操作字节。我们知道$$$113 = 7 \times 16^1 + 1 * 16^0$$$,所以在低位优先的64位系统上运行Python 3.4,运行以下代码:
 
-Out\[22\]:
+```python
+ctypes.cast(id113, ctypes.POINTER(ctypes.c_char))[3 * 8] = b'\x71'
+112 + 1 # 113
+```
 
-4
+然后我们恢复了！
 
-In \[23\]:
+再次强调一边:**永远不要这样做**。
 
-112 + 1
-
-Out\[23\]:
-
-4
-
-One way to recover is to manipulate the bytes directly. We know that $113 = 7 \\times 16^1 + 1 * 16^0$, so **on a little-endian 64-bit system running Python 3.4**, the following should work:
-
-In \[24\]:
-
-ctypes.cast(id113, ctypes.POINTER(ctypes.c_char))\[3 * 8\] = b'\\x71'
-112 + 1
-
-Out\[24\]:
-
-113
-
-and we're back!
-
-Just in case I didn't stress it enough before: **never do this.**
 
 ### In-place Modification of List Contents[¶](#In-place-Modification-of-List-Contents)
 
-Above we did an in-place modification of a value in a numpy array. This is easy, because a numpy array is simply a data buffer. But might we be able to do the same thing for a list? This gets a bit more tricky, because lists store _references_ to values rather than the values themselves. And to not crash Python itself, you need to be very careful to keep track of these reference counts as you muck around. Here's how it can be done:
+上面我们对numpy数组中的值进行了就地修改。这很简单，因为numpy数组只是一个数据缓冲区。但是我们是否可以对列表做同样的事情呢?这有点棘手，因为列表存储_references_为值，而不是值本身。而且，为了不使Python本身崩溃，您需要非常小心地跟踪这些引用计数。以下是如何做到这一点:
 
-In \[25\]:
-
-\# WARNING: never do this!
-L = \[42\]
+```python
+# WARNING: never do this!
+L = [42]
 Lwrapper = ListStruct.from_address(id(L))
 item_address = ctypes.c_long.from_address(Lwrapper.ob_item)
-print("before:", L)
+print("before:", L) # before: [42]
 
-\# change the c-pointer of the list item
+# change the c-pointer of the list item
 item_address.value = id(6)
 
-\# we need to update reference counts by hand
+# we need to update reference counts by hand
 IntStruct.from_address(id(42)).ob_refcnt -= 1
 IntStruct.from_address(id(6)).ob_refcnt += 1
 
-print("after: ", L)
+print("after: ", L) # after:  [6]
+```
 
-before: \[42\]
-after:  \[6\]
 
-Like I said, you should never use this, and I honestly can't think of any reason why you would want to. But it gives you an idea of the types of operations the interpreter has to do when modifying the contents of a list. Compare this to the NumPy example above, and you'll see one reason why Python lists have more overhead than Python arrays.
+就像我说的，你不应该用这个，我真的想不出你为什么要用这个。但是它可以让您了解解释器在修改列表内容时必须执行的操作类型。将它与上面的NumPy示例进行比较，您将看到Python列表比Python数组有更多开销的一个原因。
 
 ### Meta Goes Meta: a self-wrapping Python object[¶](#Meta-Goes-Meta:-a-self-wrapping-Python-object)
 
-Using the above methods, we can start to get even stranger. The `Structure` class in `ctypes` is itself a Python object, which can be seen in [Modules/_ctypes/ctypes.h](http://hg.python.org/cpython/file/3.4/Modules/_ctypes/ctypes.h#l46). Just as we wrapped ints and lists, we can wrap structures themselves as follows:
+使用上述方法，我们可以开始变得更奇怪。`ctypes`中的`Structure`类本身就是一个Python对象，可以在[Modules/_ctypes/ctypes.h](https://hg.python.org/cpython/file/3.4/Modules/_ctypes/ctypes.h#l46)中看到。就像我们对int和list进行封装一样，我们也可以对结构本身进行封装，如下所示:
 
-In \[26\]:
-
+```python
 class CStructStruct(ctypes.Structure):
-    \_fields\_ = \[("ob_refcnt", ctypes.c_long),
-                ("ob_type", ctypes.c\_void\_p),
-                ("ob_ptr", ctypes.c_long),  \# char* pointer cast to long
-                    \]
+    _fields_ = [("ob_refcnt", ctypes.c_long),
+                ("ob_type", ctypes.c_void_p),
+                ("ob_ptr", ctypes.c_long),  # char* pointer cast to long
+                    ]
     
-    def \_\_repr\_\_(self):
+    def __repr__(self):
         return ("CStructStruct(ptr=0x{self.ob_ptr:x}, "
                 "refcnt={self.ob_refcnt})").format(self=self)
+```
 
-Now we'll attempt to make a structure that wraps itself. We can't do this directly, because we don't know at what address in memory the new structure will be created. But what we can do is create a _second_ structure wrapping the first, and use this to modify its contents in-place!
+现在我们将尝试创建一个封装自身的结构。我们不能直接这样做，因为我们不知道在内存中会创建什么地址。但是我们可以做的是创建一个_second_结构包装第一个，并使用它来修改它的内容。
 
-We'll start by making a temporary meta-structure and wrapping it:
+我们先做一个临时的元结构，然后包装它:
 
-In \[27\]:
-
+```python
 tmp = IntStruct.from_address(id(0))
 meta = CStructStruct.from_address(id(tmp))
 
 print(repr(meta))
 
 CStructStruct(ptr=0x10023ef00, refcnt=1)
+```
+现在我们添加第三个结构，并使用它来就地修改第二个的内存值:
 
-Now we add a third structure, and use it to adjust the memory value of the second in-place:
-
-In \[28\]:
-
+```python
 meta_wrapper = CStructStruct.from_address(id(meta))
 meta_wrapper.ob_ptr = id(meta)
 
-print(meta.ob_ptr == id(meta))
-print(repr(meta))
+print(meta.ob_ptr == id(meta)) # True
+print(repr(meta)) # CStructStruct(ptr=0x106d828c8, refcnt=7)
+```
+我们现在有了一个自封装的Python结构!
 
-True
-CStructStruct(ptr=0x106d828c8, refcnt=7)
+再说一遍，我想不出你为什么要这么做。请记住，在Python中，这种类型的自我引用是具有开创性的——由于它的动态类型，在不直接入侵内存的情况下，这样做是非常直接的:
 
-We now have a self-wrapping Python structure!
 
-Again, I can't think of any reason you'd ever want to do this. And keep in mind there is noting groundbreaking about this type of self-reference in Python – due to its dynamic typing, it is realatively straightforward to do things like this without directly hacking the memory:
 
-In \[29\]:
-
-L = \[\]
+```python
+L = []
 L.append(L)
-print(L)
-
-\[\[...\]\]
+print(L) # [[...]]
+```
 
 Conclusion[¶](#Conclusion)
 --------------------------
 
-Python is slow. And one big reason for that, as we've seen, is the type indirection under the hood which makes Python quick, easy, and fun for the developer. And as we've seen, Python itself offers tools that can be used to hack into the Python objects themselves.
+Python是缓慢的。正如我们所看到的，这其中的一个重要原因是引擎盖下的间接类型，它使Python变得快速、简单、有趣。正如我们所看到的，Python本身提供了可以用来攻击Python对象本身的工具。
 
-I hope that this was made more clear through this exploration of the differences between various objects, and some liberal mucking around in the internals of CPython itself. This exercise was extremely enlightening for me, and I hope it was for you as well... Happy hacking!
+我希望通过对不同对象之间的差异的探索，以及对CPython本身内部的一些自由主义的胡乱操作，可以使这一点更加清晰。这个练习对我非常有启发，我希望对你也一样……黑客快乐!
 
-_This blog post was written entirely in the IPython Notebook. The full notebook can be downloaded [here](http://jakevdp.github.io/downloads/notebooks/WhyPythonIsSlow.ipynb), or viewed statically [here](http://nbviewer.ipython.org/url/jakevdp.github.io/downloads/notebooks/WhyPythonIsSlow.ipynb)._
-
-if (!document.getElementById('mathjaxscript\_pelican\_#%@#$@#')) { var mathjaxscript = document.createElement('script'); mathjaxscript.id = 'mathjaxscript\_pelican\_#%@#$@#'; mathjaxscript.type = 'text/javascript'; mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML\_HTMLorMML'; mathjaxscript\[(window.opera ? "innerHTML" : "text")\] = "MathJax.Hub.Config({" + " config: \['MMLorHTML.js'\]," + " TeX: { extensions: \['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'\], equationNumbers: { autoNumber: 'AMS' } }," + " jax: \['input/TeX','input/MathML','output/HTML-CSS'\]," + " extensions: \['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'\]," + " displayAlign: 'center'," + " displayIndent: '0em'," + " showMathMenu: true," + " tex2jax: { " + " inlineMath: \[ \['$','$'\] \], " + " displayMath: \[ \['$$','$$'\] \]," + " processEscapes: true," + " preview: 'TeX'," + " }, " + " 'HTML-CSS': { " + " styles: { '.MathJax\_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" + " } " + "}); "; (document.body || document.getElementsByTagName('head')\[0\]).appendChild(mathjaxscript); }
-
-[python](http://jakevdp.github.io/tag/python.html) [tutorial](http://jakevdp.github.io/tag/tutorial.html) [ctypes](http://jakevdp.github.io/tag/ctypes.html)
-
-Comments
-========
-
-Please enable JavaScript to view the [comments powered by Disqus.](http://disqus.com/?ref_noscript)
-
-var disqus\_shortname = 'pythonicperambulations'; var disqus\_identifier = '/blog/2014/05/09/why-python-is-slow/'; var disqus\_url = 'http://jakevdp.github.io/blog/2014/05/09/why-python-is-slow/'; var disqus\_title = 'Why Python is Slow: Looking Under the Hood'; (function() { var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true; dsq.src = "//" + disqus_shortname + '.disqus.com/embed.js'; (document.getElementsByTagName('head')\[0\] || document.getElementsByTagName('body')\[0\]).appendChild(dsq); })();
+这篇博文完全是在IPython笔记本上写的。完整的笔记本可以在这里[下载](http://jakevdp.github.io/downloads/notebooks/WhyPythonIsSlow.ipynb)，或者静态地在这里[查看](http://nbviewer.ipython.org/url/jakevdp.github.io/downloads/notebooks/WhyPythonIsSlow.ipynb)

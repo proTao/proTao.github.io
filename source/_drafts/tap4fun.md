@@ -40,6 +40,42 @@ def plot_learning_curve(train_sizes, train_scores, test_scores):
     plt.legend(loc="best")
     plt.show()
 
+def compute_scores(X):
+    pca = PCA(svd_solver='full')
+
+    pca_scores = []
+    for n in n_components:
+        pca.n_components = n
+        pca_scores.append(np.mean(cross_val_score(pca, X)))
+
+    return pca_scores
+
+def modelfit(alg, X, y, performCV=True, printFeatureImportance=True, cv_folds=5):
+    #Fit the algorithm on the data
+    alg.fit(dtrain[predictors], dtrain['Disbursed'])
+
+    #Predict training set:
+    dtrain_predictions = alg.predict(dtrain[predictors])
+    dtrain_predprob = alg.predict_proba(dtrain[predictors])[:,1]
+
+    #Perform cross-validation:
+    if performCV:
+        cv_score = cross_validation.cross_val_score(alg, dtrain[predictors], dtrain['Disbursed'], cv=cv_folds, scoring='roc_auc')
+
+    #Print model report:
+    print "\nModel Report"
+    print "Accuracy : %.4g" % metrics.accuracy_score(dtrain['Disbursed'].values, dtrain_predictions)
+    print "AUC Score (Train): %f" % metrics.roc_auc_score(dtrain['Disbursed'], dtrain_predprob)
+
+    if performCV:
+        print "CV Score : Mean - %.7g | Std - %.7g | Min - %.7g | Max - %.7g" % (np.mean(cv_score),np.std(cv_score),np.min(cv_score),np.max(cv_score))
+
+    #Print Feature Importance:
+    if printFeatureImportance:
+        feat_imp = pd.Series(alg.feature_importances_, predictors).sort_values(ascending=False)
+        feat_imp.plot(kind='bar', title='Feature Importances')
+        plt.ylabel('Feature Importance Score')
+
 
 header = subprocess.getoutput('head -1 tap_fun_train.csv')[1:].split(",")
 header = header[2:] # drop user_id and register_time
@@ -87,15 +123,17 @@ train.drop(['prediction_pay_price'], axis=1, inplace=True)
 
 # 特征规格化
 from sklearn import preprocessing
-scaler = preprocessing.MinMaxScaler()
-X = scaler.fit_transform(train)
-target = (y > 0).astype("int8")
+pay_scaler = preprocessing.MinMaxScaler()
+X = pay_scaler.fit_transform(train)
+joblib.dump(pay_scaler, "pay_scaler.pkl")
+target = (y > 0).astype("int8") # 支付的用户的目标值是1
 
 # 氪金用户分类模型部分
 from sklearn.model_selection import learning_curve, cross_val_score
 from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.metrics import accuracy_score
 
-clf = ExtraTreesClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=0)
+
 train_sizes, train_scores, validation_scores = learning_curve(
                                                    estimator = ExtraTreesClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=0), 
                                                    X = X,
@@ -108,14 +146,16 @@ train_sizes, train_scores, validation_scores = learning_curve(
 
 plot_learning_curve(train_sizes, train_scores, validation_scores)
 
-scores = cross_val_score(clf, X, target)
-print(scores) # array([0.99738915, 0.99767337, 0.99753985])
-clf.fit(X, y)
+print(cross_val_score(clf, X, target)) # array([0.99738915, 0.99767337, 0.99753985])
+
+pay_clf = ExtraTreesClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=0)
+pay_clf.fit(X, target)
+joblib.dump(pay_clf, "pay_clf.pkl")
 # top 10 important features
+# 这段图形化特征重要性的代码可以改善
 print(sorted(zip(header,feature_importances_), key = lambda x:x[1])[-10:]) 
 # classification model accuracy : 0.9998
 accuracy_score(clf.predict(X), target) 
-
 pred = clf.predict(X)
 index = np.array(list(map(lambda x:x[0], filter(lambda x:x[1]==True, enumerate(pred==1)))))
 # 查看分类结果
@@ -129,12 +169,101 @@ for i in index:
 # 大佬用户分类模型(大佬：潜在7～45内持续消费的人。非大佬消费者：7天内消费完不再消费了。)
 # 在45天内会消费的预测用户中找大佬，而不是在45天内会消费的真实用户中找大佬
 payuser_X = train[pred==1].copy()
+payuser_y = y[pred==1].copy()
 dalao_index = y[pred==1] > payuser_X.pay_price # bool index
 for i in range(1,20):
       print(payuser_X[dalao_index].iloc[i:i+1,:].pay_price)
       print(y[pred==1][dalao_index][i:i+1])
       print()
 dalao_target = dalao_index.astype("int8")
+pay_scaler = preprocessing.MinMaxScaler()
+payuser_X = pay_scaler.fit_transform(payuser_X)
+joblib.dump(pay_scaler, "pay_scaler.pkl")
+del pay_scaler
+
+
+# 数据少了，先降维
+from sklearn.decomposition import PCA
+n_components = [30,50,60,65,75,80,85,90]
+pca_scores = compute_scores(payuser_X)
+# 可视化降维结果
+# plt.plot(n_components,pca_scores); plt.show()
+pca = PCA(n_components= n_components[np.argmax(pca_scores)])
+reduced_payuser_X = pca.fit_transform(payuser_X)
+
+# 采用GBM模型进行分类，进行参数搜索
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import GradientBoostingClassifier as GBC
+
+# GBM参数调优
+param_test1 = {'n_estimators':range(20,81,10)}
+gsearch1 = GridSearchCV(estimator = GBC(learning_rate=0.1, min_samples_split=500,min_samples_leaf=50,max_depth=8,max_features='sqrt',subsample=0.8,random_state=10), param_grid = param_test1, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
+gsearch1.fit(reduced_payuser_X, dalao_target)
+print(gsearch1.best_params_, gsearch1.best_score_)
+
+param_test2 = {'max_depth':range(5,16,2), 'min_samples_split':range(200,1001,200)}
+gsearch2 = GridSearchCV(estimator = GBC(learning_rate=0.2, n_estimators=60, max_features='sqrt', subsample=0.8, random_state=10), param_grid = param_test2, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
+gsearch2.fit(reduced_payuser_X, dalao_target)
+print(gsearch2.best_params_, gsearch2.best_score_)
+
+param_test3 = {'min_samples_leaf':range(30,71,10)}
+gsearch3 = GridSearchCV(estimator = GBC(learning_rate=0.2, n_estimators=60,max_depth=9,max_features='sqrt', subsample=0.8, random_state=10, min_samples_split=800), param_grid = param_test3, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
+gsearch3.fit(reduced_payuser_X, dalao_target)
+print(gsearch3.best_params_, gsearch3.best_score_)
+
+param_test4 = {'max_features':range(7,20,2)}
+gsearch4 = GridSearchCV(estimator = GBC(learning_rate=0.2, n_estimators=60,max_depth=9, min_samples_split=800, min_samples_leaf=50, subsample=0.8, random_state=10),
+param_grid = param_test4, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
+gsearch4.fit(reduced_payuser_X, dalao_target)
+print(gsearch4.best_params_, gsearch4.best_score_)
+
+param_test5 = {'subsample':[0.6,0.7,0.75,0.8,0.85,0.9]}
+gsearch5 = GridSearchCV(estimator = GBC(learning_rate=0.2, n_estimators=60,max_depth=9,min_samples_split=800, min_samples_leaf=50, random_state=10,max_features=15),
+param_grid = param_test5, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
+gsearch5.fit(reduced_payuser_X, dalao_target)
+print(gsearch5.best_params_, gsearch5.best_score_)
+
+
+dalao_clf = GBC(learning_rate=0.01, n_estimators=1500,max_depth=9,min_samples_split=800, min_samples_leaf=50, random_state=10,max_features=15, subsample=0.8)
+# cross_val_score(estimator=dalao_clf, X=reduced_payuser_X, y=dalao_target, cv=5, n_jobs=4, verbose=True, scoring="roc_auc")
+dalao_clf.fit(reduced_payuser_X, dalao_target)
+dalao_pred = dalao_clf.predict(reduced_payuser_X)
+accuracy_score(dalao_pred, dalao_target)
+joblib.dump(dalao_clf, "dalao_clf.pkl")
+
+# 对大佬的目标值建立回归模型
+dalao_X = preprocessing.MinMaxScaler().fit_transform(payuser_X[dalao_index])
+dalao_y = payuser_y[dalao_index]
+pca = PCA(n_components= n_components[np.argmax(pca_scores)])
+reduced_dalao_X = pca.fit_transform(dalao_X)
+
+from sklearn.ensemble import GradientBoostingRegressor as GBR
+param_test1 = {'n_estimators':range(20,81,10)}
+gsearch1 = GridSearchCV(estimator = GBR(learning_rate=0.1, min_samples_split=500,min_samples_leaf=50, max_depth=8,max_features='sqrt',subsample=0.8,random_state=10), param_grid = param_test1, scoring='neg_mean_squared_error',n_jobs=4,iid=False, cv=5)
+gsearch1.fit(reduced_dalao_X, dalao_y)
+print(gsearch1.best_params_, gsearch1.best_scores_)
+
+param_test2 = {'max_depth':range(5,16,2), 'min_samples_split':range(200,1001,200)}
+gsearch2 = GridSearchCV(estimator = GBR(learning_rate=0.1, min_samples_leaf=50, n_estimators=70, max_features='sqrt',subsample=0.8,random_state=10), param_grid = param_test1, scoring='neg_mean_squared_error',n_jobs=4,iid=False, cv=5)
+gsearch2.fit(reduced_dalao_X, dalao_y)
+print(gsearch2.best_params_, gsearch2.best_scores_)
+
+# 先随便试试一个简单的模型
+# 就用的岭回归
+
+# 进行预测
+question = pd.read_csv("tap_fun_test.csv",  dtype=coltype, usecols=header[:-1])
+question_zero_index = np.all(question[assets_index.append(imp_index)]==0, axis=1)
+answer = pd.Series(index=question.index)
+answer[question_zero_index] = 0
+question = pd.read_csv("tap_fun_test.csv",  dtype=coltype, usecols=header[:-1], skiprows=lambda x: question_zero_index[x-1])
+
+# 对于是否氪金的分类，加载scaler与clf
+pay_clf = joblib.load("pay_clf.pkl")
+pay_scaler = joblib.load("pay_scaler.pkl")
+question = pd.DataFrame(pay_scaler.transform(question),  columns=train.columns)
+pred = pay_clf.predict(question)
+
 ```
 
 
@@ -142,3 +271,4 @@ dalao_target = dalao_index.astype("int8")
 [简单又实用的pandas技巧：如何将内存占用降低90%](https://www.jiqizhixin.com/articles/2018-03-07-3)
 [在 Python 中高效堆叠模型](https://www.jiqizhixin.com/articles/2018-01-14-8)
 [利用学习曲线诊断模型的偏差和方差](https://www.jiqizhixin.com/articles/2018-01-23)
+[](https://blog.csdn.net/han_xiaoyang/article/details/52663170)
