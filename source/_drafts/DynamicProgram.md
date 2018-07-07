@@ -216,7 +216,7 @@ A : None
 
 ## 买卖股票系列
 
-### 714 Best Time to Buy and Sell Stock with Transaction Fee [bangbang]
+### 714 Best Time to Buy and Sell Stock with Transaction Fee *bangbang*
 
 这道题我和solution不大一样，子问题我设置为，截止到当前的最大值和最小值，但是这样的话立刻就会有疑问：最大值出现在最小值之前怎么办。这个其实先明确子问题的更新方法后就可以证明不会出现这种情况，更新方法就是一旦今天的价格比之前的最大值低fee还要多，那我就立刻清算之前的交易，然后加到我总的盈利里面，然后以今天的价格同时替代最大值最小值。不然就正常的更新最大值最小值。这里的合理性写一个小等式就可以证明，设置最大值为a，最小值为b，当前价格为p，后面的又一个峰值是x，然后列不等式就行。
 
@@ -252,6 +252,18 @@ TODO
 ### 377 Combination Sum IV [bagging]
 一开始我以为是bagging问题，转化为完全背包恰好装满的装法数问题，后来发现这道题允许同一种组合的不同顺序，那就不能用背包了。
 然后思路是转化为回溯，回溯的推导中发现有大量的重复子问题。比如想要计算F([2,3,4],10)，就必须去算F([2,3,4],6)，F([2,3,4],7)，F([2,3,4],8)，这样的话，一个一维会发现由于不同的顺序算不同的解，作为第一个参数的列表自始至终都不会变（如果是不考虑顺序的话，列表在回溯法中会变少，用背包套路解的话又会变大），所以改变的只有target参数，因此这就变成了一维的DP问题。
+
+
+### 516 Longest Palindromic Subsequence *bangbang*
+[Solution](https://leetcode.com/problems/longest-palindromic-subsequence/discuss/99101/Straight-forward-Java-DP-solution)
+
+### 96 Unique Binary Search Trees
+由于树自身的递推结构，直接去退递推关系一点毛病也没有。递推关系式得到之后发现并不是以来常数个子问题，而是依赖前面所有的子问题，这一点和277基本如出一辙，唯一不同的就是怎么利用前面的子问题的解上。这样的问题应该可以归为一类：无限制单序列DP问题。这类问题需要线性时间线性空间，与之类似的是限制型单序列DP问题，如斐波那契数列的求解，这种问题需要常数空间线性时间。
+
+### 718	Maximum Length of Repeated Subarray
+一下子就想到的最长子串匹配，但是不可能这么简单，仔细一看，啊！要求连续子串！连续性问题在前面的单个数组想好多问题中都见过了，这里一样，设置一个历史最大值，然后DP只处理当前连续的子问题解，并对最大值进行维护就行。但是这样得到的效率是MN。Solution给出了一种基于Rabin-Karp算法的解决方案，效率是O((M+N)∗log(min(M,N)))，这种灵性的解法估计想不出来，就这么看看吧。。
+
+[图说Rabin-Karp字符串查找算法](http://www.ituring.com.cn/article/1759)
 
 
 
