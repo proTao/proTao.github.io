@@ -216,7 +216,7 @@ A : None
 
 ## 买卖股票系列
 
-### 714 Best Time to Buy and Sell Stock with Transaction Fee [bangbang]
+### 714 Best Time to Buy and Sell Stock with Transaction Fee *bangbang*
 
 这道题我和solution不大一样，子问题我设置为，截止到当前的最大值和最小值，但是这样的话立刻就会有疑问：最大值出现在最小值之前怎么办。这个其实先明确子问题的更新方法后就可以证明不会出现这种情况，更新方法就是一旦今天的价格比之前的最大值低fee还要多，那我就立刻清算之前的交易，然后加到我总的盈利里面，然后以今天的价格同时替代最大值最小值。不然就正常的更新最大值最小值。这里的合理性写一个小等式就可以证明，设置最大值为a，最小值为b，当前价格为p，后面的又一个峰值是x，然后列不等式就行。
 
@@ -243,6 +243,18 @@ A : None
 
 ### 5 Longest Palindromic Substring
 经过647的考验，这道题应该立刻想到manachers算法，可惜我没有立刻想到，我反映了一下，还尝试自己解，然后没想到好方法，才想到了马拉车。想到马拉车就好办了，我直接把647Solution里面的子函数拿过来用了，不过我也不知道之前咋想的，马拉车里面dp数组存放的是回文串半径，但是我写的马拉车的半径不算中心元素。。。
+
+### 516 Longest Palindromic Subsequence *bangbang*
+[Solution](https://leetcode.com/problems/longest-palindromic-subsequence/discuss/99101/Straight-forward-Java-DP-solution)
+
+### 96 Unique Binary Search Trees
+由于树自身的递推结构，直接去退递推关系一点毛病也没有。递推关系式得到之后发现并不是以来常数个子问题，而是依赖前面所有的子问题，这一点和277基本如出一辙，唯一不同的就是怎么利用前面的子问题的解上。这样的问题应该可以归为一类：无限制单序列DP问题。这类问题需要线性时间线性空间，与之类似的是限制型单序列DP问题，如斐波那契数列的求解，这种问题需要常数空间线性时间。
+
+### 718	Maximum Length of Repeated Subarray
+一下子就想到的最长子串匹配，但是不可能这么简单，仔细一看，啊！要求连续子串！连续性问题在前面的单个数组想好多问题中都见过了，这里一样，设置一个历史最大值，然后DP只处理当前连续的子问题解，并对最大值进行维护就行。但是这样得到的效率是MN。Solution给出了一种基于Rabin-Karp算法的解决方案，效率是O((M+N)∗log(min(M,N)))，这种灵性的解法估计想不出来，就这么看看吧。。
+
+[图说Rabin-Karp字符串查找算法](http://www.ituring.com.cn/article/1759)
+
 
 
 ---
