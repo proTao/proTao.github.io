@@ -4,7 +4,7 @@ date: 2018-05-02
 category: 程序员的玩具
 tags:
 - algorithm
-- math
+- maths
 ---
 
 ## 主定理 Master Theorem
