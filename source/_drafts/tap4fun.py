@@ -230,6 +230,46 @@ def optimizeXGBR():
     gsearch4.fit(reduced_payuser_X, payuser_y)
     print(gsearch4.best_params_, gsearch4.best_score_)
 
+def optimizeXGBC():
+    param = dict(learning_rate=0.2, gamma = 0.01, subsample = 0.8, colsample_bytree = 0.8, scale_pos_weight=1)
+
+    param_test1 = {'max_depth':range(3,10,2), 'min_child_weight':range(1,11,2)}
+    param_test1 = {'max_depth':[6,7,8], 'min_child_weight':[2,3,4]}
+    param_test2 = { 'gamma':[i/10.0 for i in range(0,5)]}
+    param_test3 = { 'subsample':[i/10.0 for i in range(5,10)], 'colsample_bytree':[i/10.0 for i in range(5,10)]}
+    param_test3 = { 'subsample':[i/100.0 for i in range(61,80,3)], 'colsample_bytree':[i/100.0 for i in range(51,80,3)]}
+
+    gsearch1 = GridSearchCV(estimator = XGBClassifier(**param), param_grid = param_test1, scoring='recall',n_jobs=4,iid=True, cv=4, verbose=2)
+    gsearch1.fit(X, target)
+    print(gsearch1.best_params_, gsearch1.best_score_) #{'max_depth': 7, 'min_child_weight': 3} 0.9936717204458547
+
+    param.update(gsearch1.best_params_)
+    for i in param_test2.keys():
+        if i in param:
+            param.pop(i)
+
+    gsearch2 = GridSearchCV(estimator = XGBClassifier(**param), param_grid = param_test2, scoring='roc_auc',n_jobs=4,iid=True, cv=4, verbose=2)
+    gsearch2.fit(X, target)
+    print(gsearch2.best_params_, gsearch2.best_score_)
+
+    param.update(gsearch2.best_params_)
+    for i in param_test3.keys():
+        if i in param:
+            param.pop(i)
+
+    gsearch3 = GridSearchCV(estimator = XGBClassifier(**param), param_grid = param_test3, scoring='roc_auc',n_jobs=4,iid=True, cv=4, verbose=2)
+    gsearch3.fit(X, target)
+    print(gsearch3.best_params_, gsearch3.best_score_)
+
+    param.update(gsearch3.best_params_)
+    for i in param_test4.keys():
+        if i in param:
+            param.pop(i)
+
+    gsearch4 = GridSearchCV(estimator = XGBClassifier(**param), param_grid = param_test4, scoring='roc_auc',n_jobs=4,iid=True, cv=4, verbose=2)
+    gsearch4.fit(X, target)
+    print(gsearch4.best_params_, gsearch4.best_score_)
+
 
 # -------------------------------preprocessing--------------------------------
 
@@ -377,7 +417,6 @@ def answer(inputfile, debug=False):
     dalao_pred_answer = model.predict(dalao_reducer2.transform(dalao_scaler2.transform(question_payuser)))
     dalao_pred_answer = pd.Series(dalao_pred_answer, index=question_payuser.index)
     dalao_pred_answer[dalao_pred_answer < 0] = 0.99
-    dalao_index = answer.isna()
     answer[answer.isna()] = dalao_pred_answer
 
     assert np.sum(answer.isna()) == 0

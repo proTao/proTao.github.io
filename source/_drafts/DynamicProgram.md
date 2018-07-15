@@ -268,6 +268,25 @@ TODO
 ### 838
 TODO
 
+### 813 Largest Sum of Average [bangbang]
+序列切分问题，是不是可以引出一类问题？
+核心思想是前i个元素分成k个的最优解，依赖于前j个元素分成k-1份的子问题的最优解，其中j是所有大于k-1小于i的整数。
+用官方example举例来说，【9,1,2,3,9】分成3份的最优解来自于这么几个字问题：
+	【9,1,2,3】分成两份的最优解 + average（9）
+	【9,1,2】分成两份的最优解 + average（3,9）
+	【9,1】分成两份的最优解 + average（2,3,9）
+
+### 300 Longest Increasing Subsequence [bangbang]
+很不错的题，我开始的思路是就是先找递推关系，比如subQ[1,3,6,7,9,4,10,5,6]可以约减为[1,3,6,7,9,4,10,5]+1，subQ[1,3,6,7,9,4,10,5]就要分情况了，一种是[1,3,6,7,9,4]+1，一种是[1,3,6,7,9,4,10]，因为选了最后的5的话，倒数第二个10肯定要不了了，要么就是先不要5，看看选更大的10会不会带来更大的收益。然后[1,3,6,7,9,4,10]可以直接约减为[1,3,6,7,9,4]+1，此时已经出现重复子问题了，可以用DP做。
+上面是反着思考，然后要正着写代码，思路就和我的实现一样，从前面所有的子问题中选可以和当前元素构成新的递增序列的子问题的解的最大值，如果没有就赋值1。DP数组的意义就是“以当前元素结尾的递增子序列最长可以多长”，然后返回DP中的最大值就行。
+
+上面这个思路没问题，本来也可以结束了，但是题目下面问可不可以用nlogn来解决，现在的解法是n^2的时间效率。现在的DP数组肯定是nlogn不了，我直接看的答案。
+重点是构建有序的DP，这样就可以用二分搜索了，但是我死活也是没能自己想出来。。。
+新的DP[i]表示长度为i+1的递增序列末尾元素最小是多少，最后DP的长度就是答案。logn出现在DP是有序数组，在更新DP的时候可以二分搜索。
+
+[Java/Python Binary search O(nlogn) time with explanation](https://leetcode.com/problems/longest-increasing-subsequence/discuss/74824/JavaPython-Binary-search-O(nlogn)-time-with-explanation)
+[leetcode（300）—— Longest Increasing Subsequence（最长递增子序列）](https://blog.csdn.net/lanchunhui/article/details/51611970)
+
 ---
 1. [什么是动态规划？动态规划的意义是什么？](https://www.zhihu.com/question/23995189)
 2. [非常好的动态规划总结，DP总结](https://blog.csdn.net/mmc2015/article/details/73558346)
