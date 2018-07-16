@@ -287,6 +287,12 @@ TODO
 [Java/Python Binary search O(nlogn) time with explanation](https://leetcode.com/problems/longest-increasing-subsequence/discuss/74824/JavaPython-Binary-search-O(nlogn)-time-with-explanation)
 [leetcode（300）—— Longest Increasing Subsequence（最长递增子序列）](https://blog.csdn.net/lanchunhui/article/details/51611970)
 
+### 213. House Robber II
+就是用198的套路解就行，就是选第一个不能选最后一个，选最后一个不能选第一个。那就直接掐头用198算一遍，去尾用198算一遍，然后取最大值。
+
+### 416. Partition Equal Subset Sum *bangbang*
+在彪哥的启发下套上了01背包问题。但是看了答案，DFS是比DP更快的解法。还需要研究一下
+
 ---
 1. [什么是动态规划？动态规划的意义是什么？](https://www.zhihu.com/question/23995189)
 2. [非常好的动态规划总结，DP总结](https://blog.csdn.net/mmc2015/article/details/73558346)
