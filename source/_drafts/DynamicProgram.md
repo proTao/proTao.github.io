@@ -133,7 +133,7 @@ f(k) = min(f(k-1)+cost(k-1), f(k-2)+cost(k-2))
 ### 357
 
 
-### 638 Shopping Offers
+### 638 Shopping Offers [bagging]
 这道题启发我的入手点是把它当做背包问题，只能使用第一个special，然后推只能使用第二个special时的最小花费。
 思路是完全背包问题，因为offer可以重复使用，去计算使用这个offer获得的收益。
 递推思路是，如果使用这个offer的套餐不超过我现在的需求，且套餐比单买划算，我就有两种策略，要么使用这个special，然后降低我的需求，然后考虑继续使用这个special的子问题，要么直接放弃这个specal，不改变需求，直接看下一个special。
@@ -193,7 +193,7 @@ A : None
 ### 62 Unique Path
 这道题比较简单，可以转化为组合数问题，使用scipy.special.comb比较慢，自己实现DP解法，空间代价是O(min(m,n)),时间代价是O(mn)，子问题就是到某一个点的路径数
 
-### 494 Target Sum
+### 494 Target Sum [bagging] 
 简单的思路就是用深度递归，去掉最后一个元素，并且改变目标，然后求解子问题。进行了一点优化是预先求出累加和，如果目标值大于累加和，直接返回0。但是超时了，然后加上memoization技巧，成功AC。
 但是Solution中的DP解法没太明白，但是看了Discuss中的排名最高的那个解法，倒是理解了，十分巧妙，通过一点简单的推理，将该问题转化为背包问题的变体。即从拥有各自价值的一堆物品中，选出恰好为某价值的物品的选法总数。
 转化DP传统的二维表思路，子问题就是"选择前i个物品，使总价值是w的选择方法数"。递推公式是dp[i][w]=dp[i-1][w]+dp[i-1][w-wi]，就是选不选当前物品这两种可能性。然后Discuss的实现中有两处优化，一是空间缩减为线性，这样就需要对价值倒序更新，因为我们需要的是i-1的dp。其次就是对于价值小于本次物品价值的dp不予更新。
@@ -231,7 +231,7 @@ A : None
 这道题我感觉我并没有用到DP的方法，也就是memoization trick用到了，更像是DFS，但是也是过了，估计是整个leetcode最慢的了。。。看一看Solution中的DP方法，很DP了，不断地更新矩阵，没仔细看，先马后看（吗）。。
 
 
-### 474 Ones and Zeros [Greedy]
+### 474 Ones and Zeros [Greedy][bagging]
 我把这道题转化为一个二维多重背包问题，就好解了，但是提交之后发现竟然有更快的。看了一下代码，发现更快的是用了贪心，贪心的大概思路明白了，我把我的想法写在了代码StandardSolution类的注释里，但是正确性证明我不懂，不知道为什么这样可以。目前的感觉在于一个原因是所有的物品价值相同。
 
 ### 740 Delete and Earn
@@ -244,6 +244,16 @@ A : None
 ### 5 Longest Palindromic Substring
 经过647的考验，这道题应该立刻想到manachers算法，可惜我没有立刻想到，我反映了一下，还尝试自己解，然后没想到好方法，才想到了马拉车。想到马拉车就好办了，我直接把647Solution里面的子函数拿过来用了，不过我也不知道之前咋想的，马拉车里面dp数组存放的是回文串半径，但是我写的马拉车的半径不算中心元素。。。
 
+### 63
+TODO
+
+### 464 Can I Win
+
+### 377 Combination Sum IV [bagging]
+一开始我以为是bagging问题，转化为完全背包恰好装满的装法数问题，后来发现这道题允许同一种组合的不同顺序，那就不能用背包了。
+然后思路是转化为回溯，回溯的推导中发现有大量的重复子问题。比如想要计算F([2,3,4],10)，就必须去算F([2,3,4],6)，F([2,3,4],7)，F([2,3,4],8)，这样的话，一个一维会发现由于不同的顺序算不同的解，作为第一个参数的列表自始至终都不会变（如果是不考虑顺序的话，列表在回溯法中会变少，用背包套路解的话又会变大），所以改变的只有target参数，因此这就变成了一维的DP问题。
+
+
 ### 516 Longest Palindromic Subsequence *bangbang*
 [Solution](https://leetcode.com/problems/longest-palindromic-subsequence/discuss/99101/Straight-forward-Java-DP-solution)
 
@@ -254,6 +264,9 @@ A : None
 一下子就想到的最长子串匹配，但是不可能这么简单，仔细一看，啊！要求连续子串！连续性问题在前面的单个数组想好多问题中都见过了，这里一样，设置一个历史最大值，然后DP只处理当前连续的子问题解，并对最大值进行维护就行。但是这样得到的效率是MN。Solution给出了一种基于Rabin-Karp算法的解决方案，效率是O((M+N)∗log(min(M,N)))，这种灵性的解法估计想不出来，就这么看看吧。。
 
 [图说Rabin-Karp字符串查找算法](http://www.ituring.com.cn/article/1759)
+
+### 838
+TODO
 
 ### 813 Largest Sum of Average [bangbang]
 序列切分问题，是不是可以引出一类问题？
@@ -273,6 +286,12 @@ A : None
 
 [Java/Python Binary search O(nlogn) time with explanation](https://leetcode.com/problems/longest-increasing-subsequence/discuss/74824/JavaPython-Binary-search-O(nlogn)-time-with-explanation)
 [leetcode（300）—— Longest Increasing Subsequence（最长递增子序列）](https://blog.csdn.net/lanchunhui/article/details/51611970)
+
+### 213. House Robber II
+就是用198的套路解就行，就是选第一个不能选最后一个，选最后一个不能选第一个。那就直接掐头用198算一遍，去尾用198算一遍，然后取最大值。
+
+### 416. Partition Equal Subset Sum *bangbang*
+在彪哥的启发下套上了01背包问题。但是看了答案，DFS是比DP更快的解法。还需要研究一下
 
 ---
 1. [什么是动态规划？动态规划的意义是什么？](https://www.zhihu.com/question/23995189)
