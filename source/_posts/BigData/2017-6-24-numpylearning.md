@@ -76,6 +76,10 @@ description:
 2. `_log_bernoulli`函数中，`X[:,None,:]*np.log(self.mu)`这一骚操作，本来我是要实现成for循环按列乘的，但是隐隐一个声音告诉我不要用for循环......尴尬。看了PRML读书伴侣，看到了这个小trick，利用None扩充ndarray的维度，然后尺寸对上了就可以利用广播进行矢量化计算了，美滋滋。
 3. `np.clip`防止上下溢出，`np.allclose`检查参数收敛。
 
+
+
+
+
 - - -
 参考：
 1. ufldl[矢量化编程](http://http://ufldl.stanford.edu/wiki/index.php?diff=2028&oldid=2027&title=%E7%9F%A2%E9%87%8F%E5%8C%96%E7%BC%96%E7%A8%8B)

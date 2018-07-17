@@ -1,11 +1,6 @@
 
 
 
-# 数据探索性分析
-
-
-# 优化数据存储
-
 ```python
 import matplotlib
 matplotlib.use('Agg')
@@ -26,6 +21,7 @@ from sklearn.ensemble import GradientBoostingClassifier as GBC
 from sklearn.metrics import accuracy_score, confusion_matrix, roc_curve, auc
 from sklearn.decomposition import PCA, TruncatedSVD
 from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression as LR
 
 # 一些工具函数
 def plot_learning_curve(train_sizes, train_scores, test_scores):
@@ -239,7 +235,7 @@ def optimizeXGBC():
     param_test3 = { 'subsample':[i/10.0 for i in range(5,10)], 'colsample_bytree':[i/10.0 for i in range(5,10)]}
     param_test3 = { 'subsample':[i/100.0 for i in range(61,80,3)], 'colsample_bytree':[i/100.0 for i in range(51,80,3)]}
 
-    gsearch1 = GridSearchCV(estimator = XGBClassifier(**param), param_grid = param_test1, scoring='recall',n_jobs=4,iid=True, cv=4, verbose=2)
+    gsearch1 = GridSearchCV(estimator = XGBClassifier(**param), param_grid = param_test1, scoring='roc_auc',n_jobs=4,iid=True, cv=4, verbose=2)
     gsearch1.fit(X, target)
     print(gsearch1.best_params_, gsearch1.best_score_) #{'max_depth': 7, 'min_child_weight': 3} 0.9936717204458547
 
@@ -281,8 +277,8 @@ zero_index = get_zero_index(data)
 #joblib.dump(zero_index, "zero_index.pkl")
 
 train, y, target = preprocessData("tap_fun_train.csv", zero_index)
-# vali_zero_index = get_zero_index(pd.read_csv("tap_fun_validation.csv",  dtype=coltype, usecols=header, index_col='user_id'))
-# vali, vali_y, vali_target = preprocessData("tap_fun_validation.csv", vali_zero_index)
+vali_zero_index = get_zero_index(pd.read_csv("tap_fun_validation.csv",  dtype=coltype, usecols=header, index_col='user_id'))
+vali, vali_y, vali_target = preprocessData("tap_fun_validation.csv", vali_zero_index)
 
 
 # ------------------------------pipeline 1--------------------------------------
@@ -297,7 +293,36 @@ X = pay_scaler.fit_transform(train)
 
 # 尝试自动估计GBM最优参数
 # pay_clf = GBC(**optimiziGBC())
-pay_clf = GBC(**joblib.load("pay_clf.pkl").get_params())
+
+param = joblib.load("pay_clf.pkl").get_params()
+param.pop('verbose')
+pay_clf1 = GBC(**param, verbose=2)
+
+pay_clf2 = XGBClassifier(**{'base_score': 0.5,
+ 'booster': 'gbtree',
+ 'colsample_bylevel': 1,
+ 'colsample_bytree': 0.89,
+ 'gamma': 0.1,
+ 'learning_rate': 0.2,
+ 'max_delta_step': 0,
+ 'max_depth': 7,
+ 'min_child_weight': 3,
+ 'missing': None,
+ 'n_estimators': 100,
+ 'n_jobs': 1,
+ 'nthread': None,
+ 'objective': 'binary:logistic',
+ 'random_state': 0,
+ 'reg_alpha': 0,
+ 'reg_lambda': 1,
+ 'scale_pos_weight': 1,
+ 'seed': None,
+ 'silent': True,
+ 'subsample': 0.63,
+ 'verbose': 2})
+pay_clf3 = LR(verbose=2)
+vote_pay_clf = VotingClassifier(estimators=[('GBM',pay_clf1),('XGBC', pay_clf2),('lr',pay_clf3)], voting='soft', weights=[2,2,1])
+vote_pay_clf.fit(X, target)
 
 pay_clf.fit(X, target)
 # joblib.dump(pay_clf, "pay_clf.pkl")
@@ -331,7 +356,7 @@ joblib.dump(dalao_scaler1, "dalao_scaler1.pkl")
 
 
 # 数据少了，先降维
-n_components = [10,20,30,50,60,65,75,80]
+n_components = [5,8,10,20,30,50,60,65,75,80]
 pca_scores = compute_scores(payuser_X, 'pca')
 # pca = PCA(n_components= n_components[np.argmax(pca_scores)], whiten=True)
 pac = PCA(n_components=75)
@@ -375,7 +400,7 @@ train_sizes, train_scores, validation_scores = learning_curve(
                                                    y = payuser_y, 
                                                    train_sizes = [100,1000,2000,3000,4000,5000,8000,9000,10000,12000,15000,20000,25000,30000], 
                                                    cv = 5,
-                                                   scoring = 'neg_mean_squared_error')
+                                                   scoring = 'neg_mean_absolute_error')
 a = Lasso(**param)
 a.fit(reduced_payuser_X, payuser_y)
 joblib.dump(a, "model.pkl")
@@ -495,3 +520,5 @@ for i in index:
 [在 Python 中高效堆叠模型](https://www.jiqizhixin.com/articles/2018-01-14-8)
 [利用学习曲线诊断模型的偏差和方差](https://www.jiqizhixin.com/articles/2018-01-23)
 [](https://blog.csdn.net/han_xiaoyang/article/details/52663170)
+[](http://d0evi1.com/sklearn/model_evaluation/)
+[xgboost文档](http://xgboost.readthedocs.io/en/latest/get_started/index.html)

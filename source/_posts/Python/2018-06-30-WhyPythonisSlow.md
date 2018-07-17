@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2018-06-30
-title: [译](Why Python is Slow: Looking Under the Hood)
+title: Why Python is Slow: Looking Under the Hood
 category: python
 tags: 
 - python
