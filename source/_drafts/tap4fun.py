@@ -441,7 +441,7 @@ def answer(inputfile, debug=False):
     # dalao_reducer2 = joblib.load("dalao_reducer2.pkl")
     dalao_pred_answer = model.predict(dalao_reducer2.transform(dalao_scaler2.transform(question_payuser)))
     dalao_pred_answer = pd.Series(dalao_pred_answer, index=question_payuser.index)
-    dalao_pred_answer[dalao_pred_answer < 0] = 0.99
+    dalao_pred_answer[dalao_pred_answer < 0] = 0
     answer[answer.isna()] = dalao_pred_answer
 
     assert np.sum(answer.isna()) == 0
