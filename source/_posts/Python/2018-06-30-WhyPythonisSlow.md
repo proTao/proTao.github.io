@@ -1,12 +1,11 @@
 ---
 layout: post
 date: 2018-06-30
-title: Why Python is Slow: Looking Under the Hood
+title: Why Python is Slow:Looking Under the Hood
 category: python
-tags: 
+tags:
 - python
-keywords:
-description:
+- translation
 ---
 
 **翻译自[Why Python is Slow: Looking Under the Hood](https://jakevdp.github.io/blog/2014/05/09/why-python-is-slow/)**
