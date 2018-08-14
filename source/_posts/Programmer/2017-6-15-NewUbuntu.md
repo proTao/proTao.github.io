@@ -185,6 +185,12 @@ sudo apt install axel # 多线程下载
 # pip install yapf # google的PEP8格式化工具
 ```
 
+## VSCODE
+参考
+[用vscode写python的插件推荐](https://blog.csdn.net/hnshhshjq/article/details/80140401)
+[Vscode写Python代码](http://www.360doc.com/content/18/0326/07/11881101_740225701.shtml)
+
+
 * * *
 
 参考：

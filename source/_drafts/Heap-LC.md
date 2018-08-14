@@ -1,0 +1,87 @@
+
+
+### 703. Kth Largest Element in a Stream
+入门题目，没啥，会想到只保留前k个元素，每次来和最小元素比较，然后就由最小想到优先队列。
+注意的是初始化，我用的heapq中的nlargest函数，慢了一些？还有就是初始化的时候可能不足k个，后面加的时候直接加就行。
+
+### 451. Sort Characters By Frequency
+一个就是要把元素及其计数关联起来，我直接用一个tuple就可以，把计数当做第一个元素。然后建堆是O(N),依次弹出最小元素是O(NlogN)。
+但是应该想到可以使用BucketSort的。。。
+另外一个单行实现的方法也是很Pythonic了
+
+```python
+''.join([char * count for char, count in Counter(s).most_common()])
+```
+
+### 347. Top K Frequent Elements
+和上一题451很像，直接模仿那个单行python解决的。
+
+### 692. Top K Frequent Words
+和451类似。
+
+### 378. Kth Smallest Element in a Sorted Matrix
+这道题感觉和之前做过的一个在这样的有序二维数组中找指定元素那道题很像。然后这样特殊的有序数组肯定可以利用起他自身比较严格的限制。不然之间按个遍历用703就解决了。我的思路和遍历一个Graph很像，是用一个堆维护下一个要访问的元素，每次从里面取堆顶，然后把这次访问的元素的下面和右边的元素进堆，然后标记为已访问，然后重复这样的操作k次就行。
+然后Discussion中有很多python代码也使用一行写的。。。但是要全部读进去然后排序，并不优雅。有一个还行。
+
+```python
+list(heapq.merge(*matrix))[k-1]
+```
+
+但是结合堆的建堆复杂度，也是要全部读进去，然后O(n^2)。
+然后下面这个链接中的解法符合我的思路，就是既然数据结构上有更严格的限制，就要利用起来加速算法。他的Solution中给出了一种针对这种二维数组的比较好的二分搜索的方法，每次对半分二维数组的时间复杂度是O(n)。
+[Share my thoughts and Clean Java Code](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/discuss/85173/Share-my-thoughts-and-Clean-Java-Code)
+
+### 313. Super Ugly Number
+前面的题都是开胃菜，后面的题才开始有意思起来。这道题我就是模仿264(Ugly Number II)做的，但是直接超时，然后分析原因。用`cProfile`和`pstats`分析时间效率。
+```python
+import cProfile, pstats
+n=10000
+primes=[(含有100个素数)]
+cProfile.run("Solution().nthSuperUglyNumber(n, primes)","timeit")
+p = pstats.Stats('timeit')
+p.sort_stats('time')
+p.print_stats()
+```
+
+会发现原始代码的瓶颈在与每次都要取堆顶元素，然后把堆顶元素乘以每一个素数然后尝试推进堆中。就对当前我写的代码进行复杂度分析，假设H是堆的大小，H是一个不断增长的数并且略小于N×K，K是primes中元素个数，在上面的用例中N=10000，K=100，最后的堆的大小是652519。这里就不负责任的假设，最后的堆的大小是NK乘以一个常数$$$\alpha$$$，那么最后总的复杂度是$$$O(Nlog(H)+N\alpha Klog(H)+NK)$$$，共有的因子N是由于最外层的循环，要不停的从堆中弹出元素知道弹出N个。
+
+执行上面的代码，会发现，复杂度分析中的NK，出现在lambda函数中，其次执行了662518次heappush。堆中维护这么多元素是完全没有必要的，怎么避免呢？
+
+要么就是用264中我最初的想法，不要提前全部乘以所有的因子，每次只乘以一个因子，然后下次从下一个因子开始乘并且保证每次都有一个数要乘以primes数组中的最小值。但是又懒得去实现了。。。然后看到了下面这篇文章。
+[Python, generators on a heap](https://leetcode.com/problems/super-ugly-number/discuss/76301/Python-generators-on-a-heap)
+这篇文章真的挺牛逼。。。我只看了第一种解法。
+重点是heapq.merge函数的效率，该函数接收iterable列表，返回迭代器，然后每次取merge返回的迭代器的第一个元素。注意的是，merge函数的输入在后面会不停的改，但是merge不不关心的，因为迭代器还没有yield到那里。这个函数每次对多个iterable的队首中选择一个最小的，然后去该iterable的下一个位置，然后yield住，至于iterable后面又append了多少个元素，只要我还没有跑到那里，我就不关心。注意的是，merge函数要求每个iterable要有序，那么这里可以做到吗。这要理解每个iterable中存放的是什么。实际上有多少个prime，就有多少个iterable，因为下一个元素肯定是来自于之前的某个元素乘以一个prime得到的，我就对每个prime维护一个队列，这有点像264时我最开始的思路，但是要更好。
+
+### 215. Kth Largest Element in an Array
+对于该题，我个人的理解是，可以使用快排，时间效率是O(nlogn)，空间复杂度是O(n)；可以使用快排中的partition方法，时间复杂度是O(n)，空间复杂度是O(n)；也可以使用优先队列，时间复杂度是O(nlogk)，空间复杂度是O(k)。理论上来说，partition的最坏情况的渐进时间复杂度常数是2，那么如果堆很大，使得堆的深度远大于2的时候，Partition的时间效率应该表现的更好的。但是我实际做出来的实验是堆排序始终优于partition，这点我不太明白。
+
+另外，基于堆的解法的时间复杂度也没有和k表现出对数关系，我每次使用一个随机打乱的二百万个元素组成的数组，然后逐渐藏大k，观察程序运行时间。实验结果如下。
+
+![](/img/Heap-LC1.png)
+
+这个现象也不太明白。
+
+### 659. Split Array into Consecutive Subsequesces
+思路就是，我们需要有能力拿到以某个数结尾的都有哪些子串，然后把当前这个数加到最短串中，然后更新我们的数据结构。然是这个明显空间效率不是常数，时间效率也要大于线性。Submission中有一个解法常数空间线性时间，屌屌的，没看。
+找了一个python解法，没有用到堆，思路是往前看往后看，往前看没有子串可以append的时候，往后看后面有没有连续的两个元素可以放在这个元素后面，如果没有可以快速失败，因此需要预先遍历一遍对元素计数。
+但是跑起来的结果和我的时间差不多。估计是因为我的虽然用到堆了，但是每个堆都很小，趋于线性时间。而且我的没有预先扫描的过程。
+
+
+### 767. Reorganize String
+思路直接，拿最多的，计数减一个，如果和前面的不一样，计数减一后如果计数依然大于零再放回堆里，然后把该字符接到字符串后面。如果和字符串之前一个一样，就再出堆一个字符像前面一样的操作，然后别忘了把先拿出来的再放回去。
+
+### 743. Network Delay Time
+其实就是单源最短路径问题，我直接想到的就是Dijkstra算法，然后正好用前一阵在书上看到的`IndexMinHeap`试试手，理论上跑起来应该是更快一些的因为不会维护无用的路径，每次拿出来堆顶直接就能用，而Solution中的解法还需要看一下是没有访问的点才可以用，堆中也维护了更多的点。
+
+但是由于自己写的`IndexMinHeap`效率应该是没有内建的`heapq`高的，然后测试用例中的图可能也不是太大，实际运行起来我的要慢一些。
+
+### 373. Find K Pairs with Smallest Sums
+
+
+### 355. Design Twitter
+业务上没啥，没考虑很复杂的性能问题，以实现需求为第一要务。对象内部维护一个计数器，每当有人发twitter时，计数器减一，这样越新的twitter计数值越小。然后每个人发过的twitter维护一个队列，需要刷twitter时拉取数据，用heapq.merge函数，只需要10次操作。
+注意自己始终是关注自己的，还有就是自己不能取消关注没有关注的人，这些加上条件判断就好。
+
+
+参考：
+[python性能分析大全](http://python.jobbole.com/85381/)
