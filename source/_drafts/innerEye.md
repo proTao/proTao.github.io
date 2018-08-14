@@ -1,0 +1,85 @@
+## 安装与配置环境
+
+### 初始化项目结构
+解压交付压缩包，得到如下内容。
+
+![初始项目结构](innerEye1.png)
+
+具体说明：
+- server1.log：输入文件，内容为HTTP bro日志。如果需要更换文件，确保文件名和文件内部字段与该文件一致。
+- OpenNE：网络结构嵌入工具源代码，无需改动。
+- python\_src：异常检测部分源代码，无需改动。
+- pre.sh：数据清洗与预处理脚本。
+- Pipfile与Pipfile.lock：项目依赖文件。
+
+
+### 服务器环境配置
+本程序运行需要
+
+```bash
+# 基础环境是 ubuntu
+workspace=zte
+
+# python3.6 安装
+wget https://www.python.org/ftp/python/3.6.2/Python-3.6.2.tar.xz
+sudo apt-get update
+sudo apt-get install zlib1g zlib1g-dev
+sudo apt-get install libbz2-dev
+# sudo apt-get install tcl-dev tk-dev python3-tk bzip2 # 后续的matplotlib包需要
+tar -xvf Python-3.6.2.tar.xz
+cd Python-3.6.2
+./configure
+make
+sudo make install
+
+# python3 虚拟环境和包管理
+## 好像上面的python包中有pip和setuptools
+# curl "https://bootstrap.pypa.io/3.2/get-pip.py" -o "get-pip.py"
+# sudo python3 get-pip.py
+# sudo pip3 install --upgrade pip # 可选
+pip install --user pipenv
+# pip3 list # 如果是新安装的环境，此时只有pip和setuptools
+cd $workspace
+
+# 设置虚拟环境
+pipenv --python /usr/local/bin/python3 # 或者你自己的python3.6路径
+sudo pipenv install # 自动安装虚拟环境
+sudo pipenv check
+pipenv shell # 进入虚拟环境
+```
+
+执行上述部分后，python虚拟环境创建完毕。虚拟环境可以更好的封闭起项目依赖，成功执行上述命令后，可以使用`pipenv graph`显示python虚拟环境依赖包。如果上述命令失败或者不在意项目的环境隔离性，可以直接使用下述命令进行简单安装。
+```bash
+sudo -H pip install numpy
+sudo -H pip install scikit-learn
+sudo -H pip install pandas
+sudo -H pip install matplotlib
+sudo -H pip install ipython --dev
+sudo -H pip install hypertools
+sudo -H pip install bottleneck
+```
+如果直接使用pip进行安装，那么`python3.6`不再是必须的版本，使用`python3.5`也可以正常运行。
+
+至此项目环境配置完毕。
+
+## 运行说明
+
+执行`./pre 1 0 0 0 0`进行项目结构初始化与源文件过滤，运行后项目结构为：
+![](innerEye2.png)
+
+具体说明变动部分：
+- bak：存放源文件的备份。
+- columns：中间文件，处理出的文本形式的DataFrame的列文件。
+- Connection：内网网络图结构邻接表，以connection为目标进行检测的时候的输入文件。
+- pkl：模型序列化文件。
+- sedf：自动生成的数据清洗脚本。
+- result：最终检测出异常用户列表与可视化显示图像。
+
+执行`./pre.sh 0 1 1 1 1`完成后续剩余的预处理步骤。
+
+执行`python3 python_src/OutlierDetection.py parameter`，运行针对HTTP参数的异常检测。
+
+执行`python3 python_src/OutlierDetection.py connection`，运行针对内网结构的异常检测。
+
+执行`python3 python_src/user_visual.py parameter`与`python3 python_src/user_visual.py connection`对之前的检测结果进行可视化输出。
+

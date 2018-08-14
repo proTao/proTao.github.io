@@ -116,7 +116,6 @@ oppo http://oppotqp.zhaopin.com/index.html 智联
 珍爱网 http://zhenai.zhiye.com/Portal/Apply/Index @love
 华为 @huawei1
 好未来 http://job.100tal.com/Portal/Apply/Index @TAL123
-科大讯飞 2ifly
 新浪 http://career.sina.com.cn/welcome.html @weibo
 字节跳动 https://job.bytedance.com/campus/position 微信登录
 奇虎360 http://campus.chinahr.com/2019/qihu360/index.html 短信登录
@@ -137,11 +136,19 @@ oppo http://oppotqp.zhaopin.com/index.html 智联
 
 查薪资 https://offernews.cn/
 
-
+科大讯飞 https://iflytek.cheng95.com/campus_delivery/record 2ifly
+wind http://www.wind.com.cn/NewSite/campus.html (TODO)
+网易互联网 https://campus.163.com/app/personal/interview
+作业帮 http://job.zuoyebang.com/campus2 @job$$ (还没投，官网有bug)
+汇顶科技 http://www.goodix.com/campus/detail176.html @job$$
+趋势科技 
+饿了么 https://campus.ele.me/profile/delivery
+菜鸟
+海康威视 http://campus.hikvision.com/Portal/Apply/Index
 
 参考：
 https://www.jianshu.com/p/fc9b6e1b4041?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation
-
+查薪资 https://offernews.cn/
 
 
 
