@@ -114,7 +114,7 @@ thoughtworks https://join.thoughtworks.cn/ 微信登录
 oppo http://oppotqp.zhaopin.com/index.html 智联
 顺丰 http://campus.sf-tech.com.cn/campusRecruitment/Jobs.html?p=28943577456 智联
 珍爱网 http://zhenai.zhiye.com/Portal/Apply/Index @love
-华为 @huawei1
+华为 http://career.huawei.com/reccampportal/portal4_index.html#!portal/usercenter4/recruitmentProgress/recruitmentProgress.html @huawei1
 好未来 http://job.100tal.com/Portal/Apply/Index @TAL123
 新浪 http://career.sina.com.cn/welcome.html @weibo
 字节跳动 https://job.bytedance.com/campus/position 微信登录
@@ -132,10 +132,6 @@ oppo http://oppotqp.zhaopin.com/index.html 智联
 携程 http://ctrip.zhiye.com/Portal/Apply/Index @Ctrip123
 迅雷 http://campus.xunlei.com/personal_center.html @xunlei321
 阿里（国际事业部）
-
-
-查薪资 https://offernews.cn/
-
 科大讯飞 https://iflytek.cheng95.com/campus_delivery/record 2ifly
 wind http://www.wind.com.cn/NewSite/campus.html (TODO)
 网易互联网 https://campus.163.com/app/personal/interview
@@ -143,8 +139,13 @@ wind http://www.wind.com.cn/NewSite/campus.html (TODO)
 汇顶科技 http://www.goodix.com/campus/detail176.html @job$$
 趋势科技 
 饿了么 https://campus.ele.me/profile/delivery
-菜鸟
 海康威视 http://campus.hikvision.com/Portal/Apply/Index
+小红书 http://xiaohongshu.zhiye.com/Portal/Apply/Index @redbook$
+小米 http://campus.hr.xiaomi.com/#/candidateHome/applications?_k=qgj45g
+
+
+查薪资 https://offernews.cn/
+
 
 参考：
 https://www.jianshu.com/p/fc9b6e1b4041?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation
@@ -211,6 +212,12 @@ https://www.jianshu.com/p/fc9b6e1b4041?utm_campaign=maleskine&utm_content=note&u
 在轮滑社中学习了轮滑作为了新的技能，迅速的以此为契机融入了丰富多彩的大学生活。
 
 
+获奖情况：
+2013-2014 南开大学奖学金
+2014-2015 南开大学奖学金
+2015-2016 南开大学奖学金
+2017-2018 中国科学院大学三好学生
+
 
 提问：
 有没有什么新员工的培养，发展计划
@@ -226,6 +233,10 @@ OQ2：印象最深的项目是我在简历中提到的第二个项目，这个�
 后来在尝试的过程中，发现这实际上就是一个参数搜索的过程呀，在深度学习的优化算法中我学到了很多相关的算法，这个是类似的。但是问题是我要优化的任务没有明确的目标函数，输入参数返回结果需要数个小时，另外根本无法求梯度，也就是说深度学习中的那些优化算法在这里用不上。但是这个思路启发了我，把这个问题抽象成一个数值优化问题。在数值优化中也有无梯度优化算法，但是依然需要大量的计算，而我拿到的需要被优化任务计算又十分耗时。
 那么我想到的解决方法就是先批量执行，模拟GridSearch的采样过程，拿到参数和执行时间的对应关系后，将其作为一个回归问题建立模型去拟合，只要拟合的足够好，那么我拿到的模型就不存在计算时间的问题了。拟合的过程不详细说，得到拟合函数后，为了求全局最优点，使用的是粒子群算法去优化，最后解决了老师的问题，将每天的批处理任务的执行时间从40小时降低到了24小时。
 这个过程中其实没有用到一些很厉害的算法、很高级的工具，但是是一个做项目的过程，我知道了做项目重要的是利用已有能力去解决目标问题，我知道了要尽可能高的达到目标的需要，在这个过程中利用起了linux的相关工具与bash、利用了python的机器学习工具sklearn与pyswarm包，把理论中的知识转化为现实解决问题的武器，这是我提到这个项目的原因。
+
+
+英语流利说是一个正在高速成长的创业团队，中美顶级VC IDG, GGV等投资，第一支获得世界最知名互联网创业孵化器Y-Combinator录取的中国大陆团队。
+我在本科期间曾经使用过流利说，对流利说的功能印象深刻，也确确实实对我在英语的交流上提供了很多帮助。对于这家公司，我认为是一家分厂有前景的公司，在这里既能收获很多前沿的技术，自身得到锻炼，又可以和志同道合的人一起成长。
 
 
 
