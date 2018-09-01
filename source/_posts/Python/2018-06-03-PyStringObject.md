@@ -134,7 +134,7 @@ void PyString_InternInPlace(PyObject **p)
 ```
 整个代码的流程：
 1. 类型检查：不是str就不能应用intern机制，甚至派生类对象系统也不行。
-2. 已经应用过inern机智的直接返回，确保不会对同一个`PyStringObject`进行一次以上的intern操作。
+2. 已经应用过intern机制的直接返回，确保不会对同一个`PyStringObject`进行一次以上的intern操作。
 3. 如果还没有使用过intern，新建interned字典结构。
 4. 如果interned中由当前字符串，让当前`PyStringObject`指针和`interned`中指针指向同一位置，然后改变引用计数。
 5. 将字典中键和值都设为改字符串对象**指针**。

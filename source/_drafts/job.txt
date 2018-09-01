@@ -142,7 +142,9 @@ wind http://www.wind.com.cn/NewSite/campus.html (TODO)
 海康威视 http://campus.hikvision.com/Portal/Apply/Index
 小红书 http://xiaohongshu.zhiye.com/Portal/Apply/Index @redbook$
 小米 http://campus.hr.xiaomi.com/#/candidateHome/applications?_k=qgj45g
-
+便利蜂 http://bianlifeng.zhiye.com/Portal/Apply/Index @NewBee_
+微众银行 https://webank.cheng95.com/deliver/flow?channel=1&bole_id=377106&project_id= _123123
+vivo https://hr.vivo.com/wt/vivo/web/templet1000/index/corpprimaryResume1000vivo!listResume?operational=ee6ed55f2b64386ef9ee75211f9e32ac384175f02409c2d2e56227d3ed22ac164cb7bd8fd71cf968484b66392c4c6afd0bf627eb8b9d15b3d2683c5ab4286207a3f40c2dfe2f5ac0997f0bcae363b6d3ba27a253ea1a9ed090a2fc5316778d8b 2vivo2
 
 查薪资 https://offernews.cn/
 
@@ -150,21 +152,6 @@ wind http://www.wind.com.cn/NewSite/campus.html (TODO)
 参考：
 https://www.jianshu.com/p/fc9b6e1b4041?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation
 查薪资 https://offernews.cn/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -183,29 +170,36 @@ https://www.jianshu.com/p/fc9b6e1b4041?utm_campaign=maleskine&utm_content=note&u
 
 技能
 1. 个人博客: protao.github.io
-2. 编程工具: 熟练掌握 Python, 以及常用数据处理与机器学习工具包, 如 numpy / matplotlib / pandas / sklearn.
+2. 编程工具: 熟练掌握 Python, 以及常用数据处理与机器学习工具包, 如 numpy / matplotlib / pandas / sklearn/ xgboost。了解 Mapreduce 与大数据处理基本方法,有过 Hadoop 基本使用经验。
 3. 基础知识: 熟悉 linux 上的开发环境，熟悉 bash 脚本。熟悉常用机器学习算法的原理与使用，了解深度学习基本原理与常用网络结构，了解相关数学基础。具有良好的数据结构与算法基础。
 
 
-异常流量检测技术研究与系统实现
-专利的撰写投稿与内网模块的设计开发。
-1. 使用开源图嵌入工具 OpenNE 对内网网络结构进行表征学习得到特征。根据内部 HTTP bro 日志，对用户访问模式进行建模，感知可能的威胁行为。
-2. 专利《一种随机子域名 DDoS 攻击检测方法》申请号： 201801641482.7
+异常流量检测技术研究与系统实现（2018年4月——2018年10月）
+负责：专利的撰写投稿与内网模块的设计开发。
+1. 从参数特征和结构特征两方面对用戶画像,使用 bash 和 hadoop 对原始日志预处理。
+2. 使用开源图嵌入工具 OpenNE 对内网网络结构进行表示学习,使用基于密度的聚类方法对离群用戶进行检测。使用 hypertools 在向量空间中对异常用戶进行可视化。
+3. 专利《一种随机子域名 DDoS 攻击检测方法》申请号： 201801641482.7
 
-大规模网络日志处理平台
-日志的管理维护与 spark job 的参数调优。
+大规模网络日志处理平台（2018年3月——2018年6月）
+负责：日志的管理维护与 spark job 的参数调优。
 1. 对 spark job 主要参数与任务执行时间建立回归模型。基于 pyswarm 包，使用粒子群算法对模型搜索最优点。模型对于小数据量任务的执行时间拟合误差在 5 分钟内，大数据量任务的拟合误差在 20 分钟内，调优后的整体执行时间缩短百分之 40。
-2. 部署定时任务，管理每日数据上传并对其进行监控，自动执行每日批处理任务，收集执行时间数据并更新已有数据模型。
+2. 部署 crontab 和 logrotate,每日数据实时上传进行批处理。
 
-基于高斯混合模型的背景提取算法的实现
-理解算法并在matlab对算法进行高效实现。
+基于高斯混合模型的背景提取算法的实现（2017年5月——2017年6月）
+负责：理解算法并在matlab对算法进行高效实现。
 1. matlib 矢量化编程，迭代流程加速至原周期的 1/9。
 2. 使用 EM 算法预训练对模型参数进行初始化。对 EM 算法进行微调后，使之适应视频流的在线学习。
 
-基于词嵌入的用户评论情感判别
-使用少量带标注的数据，设计一个用户评论情感判别模块。
+基于词嵌入的用户评论情感判别（2017年3月——2017年6月）
+负责：使用少量带标注的数据，设计一个用户评论情感判别模块。
 1. 使用 gensim 中的 word2vec 对语料进行无监督预处理，得到预训练的中文词的 Embedding 层。
 2. 使用 keras 来构建基于单层 LSTM 的分类器，在其中使用了预训练的中文词向量 Embedding 层。未细致调参的模型训练集正确率 0.96，测试集正确率 0.90。
+
+其他
+ 2017 年 6 月 – 2017 年 10 月
+• 基于 LFM 的题目推荐平台(课程设计)
+• 支持自定义激活函数和损失函数的多层感知机实现
+• 个人技术博客:protao.github.io
 
 
 轮滑

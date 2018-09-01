@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2017-6-20
-title: Spark初探（一）
+title: Spark初探（一）——————基于矩阵分解的题目推荐系统
 category: 大数据
 tags: 
 - bigdata 
@@ -126,4 +126,5 @@ $$C = \sum_{i,j \in R}[(a_{i,j}-u_iv_j^T)+\lambda(u_i^2+v_j^2)]$$
 ## 参考
 1. [ALS矩阵分解算法应用](https://blog.csdn.net/a358463121/article/details/51078341)
 2. [深入理解Spark ML：基于ALS矩阵分解的协同过滤算法与源码分析](https://blog.csdn.net/u011239443/article/details/51752904)
+3. [推荐系统中的矩阵分解技术](http://www.52nlp.cn/juzhenfenjiedatagrand)
 
