@@ -145,6 +145,8 @@ wind http://www.wind.com.cn/NewSite/campus.html (TODO)
 便利蜂 http://bianlifeng.zhiye.com/Portal/Apply/Index @NewBee_
 微众银行 https://webank.cheng95.com/deliver/flow?channel=1&bole_id=377106&project_id= _123123
 vivo https://hr.vivo.com/wt/vivo/web/templet1000/index/corpprimaryResume1000vivo!listResume?operational=ee6ed55f2b64386ef9ee75211f9e32ac384175f02409c2d2e56227d3ed22ac164cb7bd8fd71cf968484b66392c4c6afd0bf627eb8b9d15b3d2683c5ab4286207a3f40c2dfe2f5ac0997f0bcae363b6d3ba27a253ea1a9ed090a2fc5316778d8b 2vivo2
+一点资讯 @1point
+
 
 查薪资 https://offernews.cn/
 
