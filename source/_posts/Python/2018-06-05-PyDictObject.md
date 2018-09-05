@@ -15,7 +15,7 @@ C++的 STL 中的 map 就是一种关联容器,map 的实现基于 RB-tree(红�
 
 ## 2. PyDictObject
 
-### 2.1 关联容器的enry
+### 2.1 关联容器的entry
 
 在此后的描述中,我们将把关联容器中的一个(键,值)元素对称为一个 `entry`。
 ```CPP
@@ -181,7 +181,7 @@ static dictentry* lookdict_string(dictobject *mp, PyObject *key, register long h
 5. `lookdict`方法不展开说了，关键在于理解第四条的判断一致的条件。除此之外就是多了大量的类型安全和捕获错误的代码。
 
 ### 3.3 插入
-`PyDictObject` 对象中元素的插入动作建立在搜索的基础之上，理解了搜索操作，拆入操作就是在此基础上的函数调用、调整指针和引用计数。
+`PyDictObject` 对象中元素的插入动作建立在搜索的基础之上，理解了搜索操作，插入操作就是在此基础上的函数调用、调整指针和引用计数。
 ```CPP
 [dictobject.c]
 static void insertdict(register dictobject *mp, PyObject *key, long hash, PyObject *value)
