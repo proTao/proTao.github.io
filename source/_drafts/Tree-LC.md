@@ -69,3 +69,23 @@
 
 ### 687. Longest Univalue Path
 没啥
+
+### 654. Maximum Binary Tree *bangbang*
+我用的递归，就没啥。但是这道题不用递归就有难度了。
+```python
+def constructMaximumBinaryTree(self, nums):
+    """
+    :type nums: List[int]
+    :rtype: TreeNode
+    """
+    stack = []
+    for num in nums:
+        cur = TreeNode(num)
+        while stack and stack[-1].val < num:
+        cur.left = stack.pop()
+        
+        if stack:
+        stack[-1].right = cur
+        stack.append(cur)
+    return stack[0] if stack else None
+```

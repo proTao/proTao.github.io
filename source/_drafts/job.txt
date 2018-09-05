@@ -104,6 +104,7 @@ netlogo工具
 投简历：
 51job账号 @job$$
 智联招聘 _job_1
+大街 @dajie$$
 
 CVTE https://careers.cvte.com 2ZVTE
 拼多多 http://pinduoduo.zhiye.com/ @PDD$
@@ -142,6 +143,11 @@ wind http://www.wind.com.cn/NewSite/campus.html (TODO)
 海康威视 http://campus.hikvision.com/Portal/Apply/Index
 小红书 http://xiaohongshu.zhiye.com/Portal/Apply/Index @redbook$
 小米 http://campus.hr.xiaomi.com/#/candidateHome/applications?_k=qgj45g
+触宝 https://app.mokahr.com/campus_apply/cootek/343#/candidateHome/applications?_k=pzk2aj
+猿辅导 https://app.mokahr.com/campus_apply/fenbi/28#/job/71668320-9de7-4fd7-b030-c6eead192573/campus_apply/thanks?jobId=71668320-9de7-4fd7-b030-c6eead192573&candidateId=26545862&_k=e8syut
+度小满 @talent123	 TODO
+点我达 TODO
+VIPKID http://join.vipkid.com.cn/#/personal
 
 
 查薪资 https://offernews.cn/
@@ -188,9 +194,9 @@ https://www.jianshu.com/p/fc9b6e1b4041?utm_campaign=maleskine&utm_content=note&u
 
 
 异常流量检测技术研究与系统实现
-专利的撰写投稿与内网模块的设计开发。
-1. 使用开源图嵌入工具 OpenNE 对内网网络结构进行表征学习得到特征。根据内部 HTTP bro 日志，对用户访问模式进行建模，感知可能的威胁行为。
-2. 专利《一种随机子域名 DDoS 攻击检测方法》申请号： 201801641482.7
+专利的撰写投稿与内网检测模块的设计开发。
+1. 从参数特征和结构特征两方面对用戶画像,使用 bash 和 hadoop 对原始日志预处理。
+2. 使用开源图嵌入工具 OpenNE 对内网网络结构进行表示学习,使用基于密度的聚类方法对离群用戶进行检测。使用 hypertools 在向量空间中对异常用戶进行可视化。
 
 大规模网络日志处理平台
 日志的管理维护与 spark job 的参数调优。
