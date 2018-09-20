@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2018-07-23 21:47:19
-title: LeetCode刷题记录——DynamicProgram
+title: LeetCode刷题笔记——DynamicProgram
 category: 程序员的玩具
 tags: algorithm
 ---

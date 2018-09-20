@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2017-4-12
-title: HMM模型（三）——Baum-Walch算法
+title: HMM模型之三——Baum-Walch算法
 category: 机器学习
 tags: 
 - algorithm 
