@@ -1,9 +1,11 @@
 ---
 layout: post
 date: 2018-09-19
-title: LeetCode刷题记录——ReserviorSampling
+title: LeetCode刷题笔记——ReserviorSampling
 category: 程序员的玩具
-tags: algorithm
+tags:
+- algorithm
+- maths
 ---
 
 在面试中遇到了这么一道问题：有一个抽奖系统，内存很小（存不下所有用户的id），在截止时间前任何用户都可以访问该系统参与一次抽奖，到了截止时间后要求以等概率的可能性选取一个合法用户作为幸运用户。比如截止时间前有十个用户访问该系统，那么要求每个用户都有 10% 的概率被选中，如果截止时间前有100个用户访问该系统，那么到了截止时间的时候，要求每个用户有 1% 的概率被选中。
