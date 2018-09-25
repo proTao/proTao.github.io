@@ -3,6 +3,7 @@ from bisect import bisect_left
 from itertools import accumulate
 
 def roulette_sampling(p:dict, n):
+    # 轮盘赌
     assert type(p) is dict
     samples = [None] * n
     keys = list(p.keys())

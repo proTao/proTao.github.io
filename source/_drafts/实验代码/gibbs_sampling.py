@@ -1,6 +1,6 @@
 import numpy as np
 import seaborn as sns
-
+from matplotlib import pyplot as plt
 
 def p_x_given_y(y, mus, sigmas):
     mu = mus[0] + sigmas[1, 0] / sigmas[0, 0] * (y - mus[1])
