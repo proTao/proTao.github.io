@@ -15,14 +15,18 @@ def q(x):
     return st.norm.pdf(x, loc=50, scale=30)
 
 
-x = np.arange(-50, 151)
-k = max(p(x) / q(x))
 
 
-def rejection_sampling(iter=1000):
+
+def rejection_sampling(p, q, xs, iter=1000, draw=False):
     samples = []
+    k = max(p(xs) / q(xs))
+    if draw:
+        plt.plot(xs, p(xs))
+        plt.plot(xs, k*q(xs))
+        # plt.show()
 
-    for i in range(iter):
+    for _ in range(iter):
         z = np.random.normal(50, 30)
         u = np.random.uniform(0, k*q(z))
 
@@ -33,10 +37,7 @@ def rejection_sampling(iter=1000):
 
 
 if __name__ == '__main__':
-    plt.plot(x, p(x))
-    plt.plot(x, k*q(x))
-    # plt.show()
-
-    s = rejection_sampling(iter=10000)
+    xs = np.arange(-50, 151)
+    s = rejection_sampling(p, q, xs, iter=10000, draw=True)
     sns.distplot(s, norm_hist=True)
     plt.show()
