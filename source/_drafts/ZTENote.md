@@ -7,27 +7,18 @@
 拿到手里的bro HTTP日志字段含义。
 
 字段含义：
-（1-6）
 
 | 时间戳 | uid | sip | sport | dip | dport |
 |-----|-----|-----|-----|-----|-----|
 | 1465601748.513841 | C6tQ1j2quWmpEvTque | 10.42.65.141 | 1695 | 61.132.54.2 | 80 |
 
-（7-12）
-
 | session_seq | method | domain | uri | referrer | useragent |
 |-----|-----|-----|-----|-----|-----|
 | 6 | GET | rand.com | /manageonline/login.png | http://manage.com/login.aspx | Mozilla/4.0  |
 
-（13-27）
-
-| 啥长度1 | 啥长度2 | RCODE | R | 17 | 18 | 19 | 20 | 21 | 22 | 23 |
-|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
-| 0 | 4035 | 200 | OK | - | - | - | (empty) | - | - | - |
-
-| 奇怪的id | 奇怪的类型 | 不知道啥id | MIME |
-|-----|-----|-----|-----|
-| - | - | FBIJWU2KqyqlNqwqXi | image/png |
+| len1 | len2 | RCODE | R | sessionid | MIME |
+|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| 0 | 4035 | 200 | OK | FBIJWU2KqyqlNqwqXi | image/png |
 
 
 ## log数据探索：
