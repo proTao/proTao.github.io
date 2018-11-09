@@ -213,7 +213,7 @@ java.lang.RuntimeException: HMaster Aborted
         at org.apache.hadoop.hbase.util.ServerCommandLine.doMain(ServerCommandLine.java:127)
         at org.apache.hadoop.hbase.master.HMaster.main(HMaster.java:3164)
 ```
-后来试了所有的办法，甚至想重新安装才发现有可能是版本的问题。估计没有任何我犯一样的错误吧。。。
+后来试了所有的办法，甚至想重新安装才发现有可能是版本的问题。估计没有人和我犯一样的错误吧。。。
 
 - javac编译的问题：在IDE中整个程序运行无误，然后在javac中编译显示找不到用户包出错，这个可以在`/etc/profile`中配置需要的jar包到CLASSPATH，我看到网上说这个路径内的目录不起作用，必须要把每一个jar包单独写一个路径。我试了一下好像的确是这样，也不知道是为什么。还有一种方法是写到另外一个变量中，然后再`javac`编译时用`-cp`或者`-classpath`参数输入用户包路径也可以。
 
