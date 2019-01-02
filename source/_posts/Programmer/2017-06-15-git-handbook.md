@@ -327,6 +327,8 @@ pull命令会默认用当前分支去merge参数place中的destination分支。�
 
 * * *
 参考内容：
-1. 《Git Pro》
+1. [Git Pro Book](https://git-scm.com/book/zh/v2)
 2. 《Git Community Book》
 3.  <http://learngitbranching.js.org/>
+4. [深入理解git](https://blog.csdn.net/bdss58/article/details/45023493)
+5. [使用git微命令深入理解git工作机制](https://blog.csdn.net/snowsnowsnow1991/article/details/72654854)
