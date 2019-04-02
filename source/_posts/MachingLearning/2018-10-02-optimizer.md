@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2018-10-2
-title: 深度学习中的Optimization
+title: 优化算法小备忘
 category: 机器学习
 tags: 
 - deeplearning
@@ -169,4 +169,4 @@ RMSProp修改Adagrad以在非凸条件下效果更好，改变梯度累计为指
 4. [莫烦小哥的blog](https://morvanzhou.github.io/)
 5. [DeepLearning](http://homepages.math.uic.edu/~julius/
 saddle.html)
-6. 
+

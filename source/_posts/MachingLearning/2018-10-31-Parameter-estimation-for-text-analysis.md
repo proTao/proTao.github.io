@@ -1,3 +1,13 @@
+---
+layout: post
+date: 2018-06-30
+title: [译]Parameter Estimation For Text Analysis
+category: 
+tags:
+- machinelearning
+---
+
+
 ## 2. Parameter estimation approaches
 
 我们面临两个推论问题，(1)一组分布参数的估算值 θ 能最好的解释一组观察 X 和(2)在已有观测结果 X 的前提下，得到新观测 $\tilde x$ 的概率，即计算 $P(\tilde x|X)$ 。我们将前一个问题称为估计问题，后一个问题称为预测或回归问题。

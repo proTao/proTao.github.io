@@ -33,3 +33,5 @@ https://htmlpreview.github.io/?https://github.com/Kivy-CN/MLAPP-CN/master/HTML/0
 在形式上，高斯过程生成的数据分布在整个域内，使得范围的任何有限子集都遵循多元高斯分布。
 
 
+
+[](https://www.cnblogs.com/hxsyl/p/5229746.html)
