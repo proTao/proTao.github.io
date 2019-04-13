@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2018-10-2
-title: 深度学习中的Optimization
+title: 优化算法小备忘
 category: 机器学习
 tags: 
 - deeplearning
@@ -25,6 +25,9 @@ description:
 考虑函数 $$$f(x)=A^{-1}x$$$ ，当$$$A$$$可以特征值分解时，其条件数为：
 
 $$max_{i,j} \bigg| \frac{\lambda_i}{\lambda_j}\bigg|$$
+
+
+<!-- more -->
 
 当该定义下的条件数很大时，矩阵求逆对于输入的误差特别敏感。对于病态条件对于计算的不稳定性，我们可以做一个小实验。可以看到的确是条件数越大，对于输入越不稳定。
 
@@ -169,4 +172,4 @@ RMSProp修改Adagrad以在非凸条件下效果更好，改变梯度累计为指
 4. [莫烦小哥的blog](https://morvanzhou.github.io/)
 5. [DeepLearning](http://homepages.math.uic.edu/~julius/
 saddle.html)
-6. 
+

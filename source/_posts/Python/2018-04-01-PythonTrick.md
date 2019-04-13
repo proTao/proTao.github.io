@@ -104,8 +104,10 @@ class A:
     def __len__(self):
         return self.length
 ```
+
+
 ### 7. 区分函数作用域与闭包
-参考[Python五个知识点搞定作用域](python.jobbole.com/86465)
+参考[Python五个知识点搞定作用域](http://python.jobbole.com/86465)
 ```python
 a = 1
 def f1():

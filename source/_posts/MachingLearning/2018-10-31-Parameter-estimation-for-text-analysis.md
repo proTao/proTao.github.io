@@ -1,3 +1,15 @@
+---
+layout: post
+title: 【译】Parameter estimation for text analysis
+date: 2018-10-31
+category: 机器学习
+tags:
+- machinelearning
+- deeplearning
+keywords:
+description:
+---
+
 ## 2. Parameter estimation approaches
 
 我们面临两个推论问题，(1)一组分布参数的估算值 θ 能最好的解释一组观察 X 和(2)在已有观测结果 X 的前提下，得到新观测 $\tilde x$ 的概率，即计算 $P(\tilde x|X)$ 。我们将前一个问题称为估计问题，后一个问题称为预测或回归问题。
@@ -13,6 +25,8 @@ $$P(\theta|X)=\frac{P(X|\theta) \cdot P(\theta)}{P(X)} \qquad(1)$$
 $$posterior=\frac{likelihood \cdot prior}{evidence}\qquad(2)$$
 
 在接下来的段落中，我们将会展示不同的估计方法，从简单的似然最大化开始，然后展示如何通过最大化后验来合并参数的先验信念，最后使用贝叶斯规则来推断一个完整的后验分布。
+
+<!-- more -->
 
 ### 2.1 Maximum likelihood estimation
 最大似然估计试图找到使似然最大化的参数。

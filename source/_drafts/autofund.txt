@@ -1,0 +1,9 @@
+要做一个自动的定投计划，就要拿到指数基金的指标
+要拿到指数基金的指标，就得拿到指数的历史数据，这个我查了很多地方，目前觉得还可以的网站是亿牛网。比如说，要看上证指数的市盈率（目前只找到了市盈率），可以访问https://eniu.com/gu/sh000001/。进入这个网站可以看到市盈率的图，按理说这个图是加载是通过数据，要是是后台画好的图片直接放到网页里面那就没办法了，好在看到图是对鼠标有响应的，那就应该不是后者了。先是用chrome的performance功能捕获执行的函数是哪个，一看是echart，这个我也不懂，不过看代码应该是很基础的用法，直接对一个空的div进行渲染。但是他这个是动态加载数据，不是写死在js代码中的。异步加载数据的代码也好找，注释里面都写着了“异步加载数据”，看了一下是下载的路径为"/chart/peindex/sh000001"的数据，看着路径就有戏，直接访问https://eniu.com/chart/peindex/sh000001，果不其然是市盈率的数据。
+
+http://www.csindex.com.cn/zh-CN/downloads/index-information
+http://www.360doc.com/content/17/1030/16/209997_699470076.shtml
+http://www.indexfunds.com.cn/analyse/industry/exponent/distribution
+http://www.indexfunds.com.cn/analyse/estimate/index/ratio?indexCodes=000016.SH%2C000044.SH%2C000300.SH%2C000905.SH%2C399330.SZ&date=2018-02-23
+http://static.indexfunds.com.cn/market/his/ifs/000905.SH_all_dpe.js?_=1552410285232
+http://static.indexfunds.com.cn/market/ifs/000905.SH_cy_dpe.js
