@@ -41,13 +41,21 @@ import math
 import time
 
 PRIMES = [
-    112272535095293,
-    112582705942171,
-    112272535095293,
-    115280095190773,
-    115797848077099,
-    1099726899285419
+    1122725350952951,
+    1125827059421723,
+    1152800951907791,
+    1157978480770999,
+    11227253509529381,
+    10997268992854241
 ]
+
+def timer(f):
+    def inner():
+        t0 = time.time()
+        f()
+        print(time.time()-t0)
+    return inner
+
 
 def is_prime(n):
     if n % 2 == 0:
@@ -59,16 +67,13 @@ def is_prime(n):
             return False
     return True
 
-def main():
+@timer
+def map_fast():
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        for number, prime in zip(PRIMES, executor.map(is_prime, PRIMES)):
-            print('%d is prime: %s' % (number, prime))
+        return list(executor.map(is_prime, PRIMES))
 
-if __name__ == '__main__':
-    start = time.time()
-    main()
-    # for i in PRIMES:
-        # print(i, is_prime(i))
-    end = time.time()
-    print(end - start)
+@timer
+def map_slow():
+    return list(map(is_prime, PRIMES))
+
 

@@ -1,0 +1,204 @@
+---
+layout: post
+date: 2019-04-07
+title: SICP3
+category: python
+tags: 
+- python
+keywords:
+description:
+---
+
+## 三、计算机程序的构造和解释
+
+1. 简陋的计算器解释器
+
+典型的解释器拥有简洁的通用结构:两个可变的递归函数,第一个求解环境中的表达式,第二个在参数上调用函数。这些函数都是递归的,因为它们互相定义:调用函数需要求出函数体的表达式,而求出表达式可能涉及到调用一个或多个函数。对于嵌套的表达式可以解析为表达式树，表达式树可以使用树形结构编程表示,例如计算Fibonacci数的过程实际上可以表示为一棵树，树的节点中存放了计算结果。
+
+使用函数（闭包构建偏序对），使用偏序对构建递归列表，使用偏序对构成的列表构建字典，这意味着我们可以使用函数构建出以上的数据结构类型。并且通过让这些数据类型的接口函数只产生新的数据而不修改输入进去的数据，使得函数自身没有副作用。并且，由于数据结构自身是递归的，则行为函数也应该使用递归的方式处理数据。这几点在一定程度上反映了函数是编程的思想。
+
+首先，程序的解释器要能够解析表达式，解释表达式的核心是一个递归函数,它会求解树形表达式对象。到目前为止,我们在描述求值过程中所引用的表达式树,还是概念上的实体。为了编写解释器,我们必须将表达式当做数据操作。
+
+
+```python
+# 代码片3.1.1
+from operator import mul
+from functools import reduce
+
+known_operators = ['add', 'sub', 'mul', 'div', '+', '-', '*', '/']
+
+class Exp():
+    """A call expression in Calculator."""
+    def __init__(self, operator, operands):
+        self.operator = operator
+        self.operands = operands
+    def __repr__(self):
+        return 'Exp({0}, {1})'.format(repr(self.operator), repr(self.operands))
+    def __str__(self):
+        operand_strs = ', '.join(map(str, self.operands))
+        return '{0}({1})'.format(self.operator, operand_strs)
+
+def calc_eval(tree):
+    operator = tree.operator
+    operands = tree.operands
+    paras = []
+    for exp in operands:
+        if isinstance(exp, Exp):
+            val = calc_eval(exp)
+        else:
+            val = exp
+        paras.append(val)
+    return calc_apply(operator, paras)
+
+def calc_apply(operator, args):
+    """Apply the named operator to a list of args."""
+    if operator in ('add', '+'):
+        return sum(args)
+    if operator in ('sub', '-'):
+        if len(args) == 0:
+            raise TypeError(operator + ' requires at least 1 argument')
+        if len(args) == 1:
+            return -args[0]
+        return sum(args[:1] + [-arg for arg in args[1:]])
+    if operator in ('mul', '*'):
+        return reduce(mul, args, 1)
+    if operator in ('div', '/'):
+        if len(args) != 2:
+            raise TypeError(operator + ' requires exactly 2 arguments')
+        numer, denom = args
+        return numer/denom
+
+
+def read_eval_print_loop():
+    """Run a read-eval-print loop for calculator."""
+    while True:
+        try:
+            expression_tree = calc_parse(input('calc> '))
+            print(calc_eval(expression_tree))
+        except (SyntaxError, TypeError, ZeroDivisionError) as err:
+            print(type(err).__name__ + ':', err)
+        except (KeyboardInterrupt, EOFError):  # <Control>-D, etc.
+            print('Calculation completed.')
+            return
+
+def calc_parse(line):
+    """Parse a line of calculator input and return an expression tree."""
+    tokens = tokenize(line)
+    expression_tree = analyze(tokens)
+    if len(tokens) > 0:
+        raise SyntaxError('Extra token(s): ' + ' '.join(tokens))
+    return expression_tree
+
+def tokenize(line):
+    """Convert a string into a list of tokens."""
+    spaced = line.replace('(',' ( ').replace(')',' ) ').replace(',', ' , ')
+    return spaced.split()
+
+def analyze(tokens):
+    """Create a tree of nested lists from a sequence of tokens.
+
+    """
+    assert isinstance(tokens, list)
+    assert_non_empty(tokens)
+    token = analyze_token(tokens.pop(0))
+    if type(token) in (int, float):
+        return token
+    if token in known_operators:
+        if len(tokens) == 0 or tokens.pop(0) != '(':
+            raise SyntaxError('expected ( after ' + token)
+        return Exp(token, analyze_operands(tokens))
+    else:
+        raise SyntaxError('unexpected ' + token)
+
+def assert_non_empty(tokens):
+    """Raise an exception if tokens is empty."""
+    if len(tokens) == 0:
+        raise SyntaxError('unexpected end of line')
+
+def analyze_operands(tokens):
+    """Read a list of comma-separated operands.
+    >>> analyze_operands(['1',',','2',')'])
+    [1,2]
+    """
+    assert isinstance(tokens, list)
+
+    assert_non_empty(tokens)
+    operands = []
+    while tokens[0] != ')':
+        if operands and tokens.pop(0) != ',':
+            raise SyntaxError('expected ,')
+        operands.append(analyze(tokens))
+        assert_non_empty(tokens)
+    tokens.pop(0)  # Remove )
+    return operands
+
+def analyze_token(token):
+    """Return the value of token if it can be analyzed as a number, or token.
+    >>> analyze_token('1')
+    1
+    >>> analyze_token("add")
+    "add"
+    """
+    assert isinstance(token, str)
+    
+    try:
+        return int(token)
+    except (TypeError, ValueError):
+        try:
+            return float(token)
+        except (TypeError, ValueError):
+            return token
+
+```
+
+
+`Exp`是字符串形式的递归的表达式解析得到的树形表达式结构，解析的结果将表示为代码片3.1.1中的`Exp`对象，其中`operator`是操作符，一定是字符串。`operands`是操作数列表，可以是基本的数值类型，也可以是`Exp`对象。`calc_eval`是递归的计算解析好的表达式树的方法。
+
+`calc_apply`函数用户计算最基础的`Exp`对象，即操作数列表中全是基本的数值类型的情况。
+
+`read_eval_print_loop`由解析函数`calc_parse`、求值函数`calc_eval`,和由`try`语句处理的异常类型参数化。除了这些修改之外,任何`REPL`循环交互程序都可以使用相同的结构来实现。解析是从原始文本输入生成表达式树的过程，即`calc_parse`完成的工作。解释这些表达式树是求值器的任务，即`calc_eval`要做的工作,但是解析器必须提供符合格式的表达式树给求值器。
+
+`tokenize`是分词器，由于在这里允许的语法比较苛刻，因此分词器本身十分简单，就是使用括号，逗号将字符串分割即可。
+
+`analyze`是语法分析器，是将标记序列解释为表达式树的组件。`analyze`本身是一个简单的递归函数，递归的原因是分析标记序列经常涉及到分析这些表达式树中的标记子序列,它本身作为更大的表达式树的子分支(比如操作数)。递归会生成由求值器使用的层次结构。
+
+`calc_parse`是解析器，解析器实际上由两个组件组成,词法分析器和语法分析器。首先,**词法分析器**将输入字符串拆成标记(token),它们是语言的最小语法单元,就像名称和符号那样。其次,**语法分析器**从这个标记序列中构建表达式树。用于将字符串解释为标记序列的组件叫做**分词器(tokenizer)**,或者**词法分析器**。在这里,分词器就是`tokenize`函数。
+
+### 2. 抽象语言解释器
+
+上面提供的”计算器解释器“提供了一种手段,来计算一些嵌套的调用表达式。然而,我们却没有办法定义新的运算符,将值赋给名称,或者表达通用的计算方法。总之,计算器并不以任何方式支持抽象。所以,它并不是特别强大或通用的语言。我们现在转到定义一种通用编程语言的任务中,这门语言通过将名称绑定到值以及定义新的操作来支持抽象。
+
+这里跟随原书打算实现一个Logo语言的解释器。基本的规则如下：
+
+- 整数、布尔值、字符、字符串和向量都求值为它们自己。所以,表达式`5`求值为5。
+- 纯符号看做变量。它们的值由当前被求值环境来决定,就像 Python 那样。
+- 非空列表以两种方式解释,取决于它们的第一个成员:
+	- 如果第一个成员是特殊形式的符号(在下面描述),求值由这个特殊形式的规则执行。
+	- 所有其他情况(叫做组合)中,列表的成员会以非特定的顺序(递归)求值。第一个成员必须是函数值。这个值会被调用,以列表中剩余成员的值作为参数。
+- 其他 Scheme 值(特别是,不是列表的偶对)在程序中是错误的。
+
+Logo 语言使用了非标准的调用表达式语法,完全不带括号分隔符。
+Logo 拥有过程而不是 Python 中等价的函数,而且过程输出值而不是返回值。
+Logo 中最常见的数据类型是单词,它是不带空格的字符串。
+Logo 的行可以顺序包含多个表达式。解释器会一次求出每个表达式。如果行中任何顶层表达式不求值为None ,解释器会报错。一旦发生错误,行中其余的表达式会被忽略。
+Logo 的调用表达式可以嵌套。在 Logo 的实现版本中,每个过程接受固定数量的参数。所以,当嵌套调用表达式的操作数完整时,Logo 解释器能够唯一地判断。分隔调用表达式的圆括号和逗号不是必须的。在上面的计算器解释器中,标点符号允许我们将表达式树构建为纯粹的句法操作,没有任何运算符名称的判断。在 Logo 中,我们必须使用我们的知识,关于每个过程接受多少参数,来得出嵌套表达式的正确结构。
+在 Lisp 的方言中（包括Logo）,任何不被求值的表达式都叫做引用。以双引号开始的记号解释为单词字面值。
+除了单词,Logo 包含句子类型,可以叫做列表。句子由方括号包围。print过程并不会打印方括号,以维持 Logo 的惯例风格,但是方括号可以使用show过程打印到输出。在	Logo 中将句子解构为`first`和剩余部分(叫做`butfirst`)也非常直接,所以,我们也拥有一系列句子的选择器过程，包括`first`,`last`,`butfirst`。
+Logo 的用户定义过程所产生的调用过程和 Python 中的过程类似。在一系列参数上调用过程以使用新的帧扩展当前环境,以及将过程的形参绑定到实参开始,之后在开始于新帧的环境中求出过程体的代码行。
+Logo 是动态作用域语言(**这一点和python不同**)。在类似Python的词法作用域语言中，并不允许一个函数的局部名称影响另一个函数的求值,除非第二个函数显式定义在第一个函数内。两个顶层函数的形参完全是隔离的。在动态作用域的语言中,没有这种隔离。当一个函数调用另一个函数时,绑定到第一个函数局部帧的名称可在第二个函数的函数体中访问。动态作用域只需要一个对计算环境模型的简单修改就能实现。由用户函数调用创建的帧总是扩展自当前环境(调用处)。与之相似,在 Python 词法作用域下, print_last_x 的帧只扩展自全局帧(定义处),而并不扩展自 print_x 的局部帧(调用处)。
+
+`isprimitive`，判断一个token是否是原始类型，即数字、布尔值。
+`isvariable`，判断一个token是否是变量，标准是以`:`开头。
+`isoutput`，判断一个表达式是否是output，标准是一个“OUTPUT”开头的偶对
+
+
+
+[函数式编程模块](https://docs.python.org/zh-cn/3/library/functional.html)
+[functools源码](https://github.com/python/cpython/blob/3.7/Lib/functools.py)
+[functools --- 高阶函数和可调用对象上的操作](https://docs.python.org/zh-cn/3/library/functools.html)
+[python中functools.singledispatch的使用](https://www.jianshu.com/p/33e1db06f2d5)
+[python实现尾递归](http://www.cnblogs.com/Alexander-Lee/archive/2010/09/16/1827587.html)
+[logo project](http://www-inst.eecs.berkeley.edu/~cs61a/fa11/projects/logo/logo.html)
+[lambda算子系列文章](https://so.csdn.net/so/search/s.do?q=lambda&t=blog&u=g9yuayon)
+[浅谈Y组合子](http://jjyy.guru/y-combinator)
+[在线运行scheme](https://repl.it/languages/scheme)

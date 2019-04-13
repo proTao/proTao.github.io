@@ -10,6 +10,8 @@ keywords:
 description:
 ---
 
+![](/img/python3_cookbook_cover.png)
+
 ### 1. 在函数上添加装饰器
 
 ### 2. 创建装饰器时保留函数元信息
