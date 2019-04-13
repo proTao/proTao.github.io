@@ -10,6 +10,8 @@ keywords:
 description: 
 ---
 
+![](/img/python3_cookbook_cover.png)
+
 ### 1. 解压序列赋值给多个变量
 基本用法很简单，注意的是这种解压赋值可以用在任何可迭代对象上面,而不仅仅是列表或者元组。 包括字符串, 文件对象, 迭代器和生成器。
 ```python

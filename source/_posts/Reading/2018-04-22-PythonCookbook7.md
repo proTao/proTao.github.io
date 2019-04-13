@@ -10,6 +10,7 @@ keywords:
 description:
 ---
 
+![](/img/python3_cookbook_cover.png)
 
 ### 1. 任意数量的位置参数和关键字参数
 

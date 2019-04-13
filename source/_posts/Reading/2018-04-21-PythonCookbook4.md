@@ -10,50 +10,7 @@ keywords:
 description:
 ---
 
-
-### 0. 章前tips
-
-这一章有关迭代器。这里一定要区分迭代器和可迭代对象。range是惰性可迭代对象（当然了，迭代器也是惰性的），却不是迭代器。`iter(range(n))`才能获得range对象的迭代器，实际上使用iter可以从任何可迭代对象中获得迭代器，迭代器唯一能做的就是next直到StopIteration。所有的迭代器都是可迭代对象，意思是你可以从一个迭代器中得到一个迭代器，因此你可以遍历一个迭代器。
-```python
-a = [1,2,3]
-it1 = iter(a)
-it2 = iter(it1)
-
-# 其实it1和it2是同一个对象的两个引用
-
-```
-enumerate、zip、reversed和其他一些内置函数会返回迭代器。生成器（无论来自生成器函数还是生成器表达式）是一种创建迭代器的简单方法。注意下面的代码中，a不是一个元组，a是一个生成器对象。生成器表达式是列表推倒式的生成器版本，看起来像列表推导式，但是它返回的是一个生成器对象而不是列表对象。
-```python
-a = (for i in range(10))
-```
-
-而range本身不是迭代器，因为无法对于range调用next函数。与迭代器不同的是，我们可以遍历一个 range 对象而不「消耗」它。range 对象在某种意义上是「惰性的」，因为它不会生成创建时包含的每个数字，相反，当我们在循环中需要的时候，它才将这些数字返回给我们。不像生成器，range 对象有长度，并且可以被索引。如果你想要一个 range 对象的描述，可以称它们为懒序列，range 是序列（如列表，元组和字符串），但并不包含任何内存中的内容，而是通过计算来回答问题。
-
-
-<!-- more -->
-
-
-```python
-a = range(10)
-
-# 这一段代码可以多次执行
-for i in a:
-    print(a)
-```
-你可以询问他们是否包含某元素而不改变他们的状态。迭代器的特点是，当遍历它时，这些元素将从迭代器中被消耗掉，有时候这个特性可以派上用场（以特殊的方式处理迭代器）。
-```python
-a = range(3)
-b = iter([1,2,3])
-print(2 in a)
-print(2 in a)
-print(2 in b)
-print(2 in b)
-```
-
-详见[Python：range 对象并不是迭代器](https://blog.csdn.net/IaC743nj0b/article/details/79547122)
-
-对于支持随机访问的数据结构：list、tuple等，迭代器和经典的for循环（索引访问）相比，并无优势，反而失去了索引值。不过可以使用内置函数enumerate（）找回这个索引值。但对于无法随机访问的数据结构：set（），迭代器是唯一的访问元素的方式。
-**省内存**：迭代器不需要事先准备好整个迭代过程中的所有元素，仅仅在迭代到某个元素时才计算该元素，而在这之前或之后，元素可以不存在或销毁。
+![](/img/python3_cookbook_cover.png)
 
 ### 1. 手动遍历迭代器
 ```python
@@ -77,6 +34,8 @@ while ch:
 ```
 
 对于返回的StopIteration异常，我们在迭代中通常使用的 for 语句会自动处理这种细节,所以你无需担心。
+
+<!-- more -->
 
 ### 2. 代理迭代
 Python 的迭代器协议需要 iter() 方法返回一个实现了 next() 方法的迭代器对象。如果你只是迭代遍历其他容器的内容,你无须担心底层是怎样实现的。你所要做的只是传递迭代请求既可。这里的 iter() 函数的使用简化了代码, iter(s) 只是简单的通过调用s.iter() 方法来返回对应的迭代器对象,就跟 len(s) 会调用 s.len() 原理是一样的。
@@ -113,13 +72,8 @@ def myrange(start, stop, increment):
         x += increment
 ```
 
-到这里可能会有点混乱，迭代器生成器是一个东西吗？如果不是的话有什么区别嘛？
-看图说话：
-![生成器迭代器的关系](/img/generator.png)
 
 一言以蔽之，生成器就是方便的迭代器，你只需要写一个yield语句，系统自动帮你实现迭代器协议。
-
-参考：[Iterables vs. Iterators vs. Generators](https://nvie.com/posts/iterators-vs-generators/)
 
 
 ### 4. 实现迭代器协议
@@ -168,7 +122,7 @@ for rr in Countdown(30):
 可以使用`itertools.islice()`，接收参数(对象，开始，终止，步长)。迭代器和生成器不能使用标准的切片操作,因为它们的长度事先我们并不知道 (并且也没有实现索引)。函数 islice() 返回一个可以生成指定元素的迭代器,它通过遍历并丢弃直到切片开始索引位置的所有元素。然后才开始一个个的返回元素,并直到切片结束索引位置。这里要着重强调的一点是 islice() 会消耗掉传入的迭代器中的数据。
 
 ### 8. 跳过可迭代对象的开始部分
-使用`itertools.dropwhile()`，使用时,你给它传递一个函数对象和一个可迭代对象。返回在第一次函数对象返回False处，返回该位置后面的**所有**元素。
+使用`itertools.dropwhile`，使用时,你给它传递一个函数对象和一个可迭代对象。返回在第一次函数对象返回False处，返回该位置后面的**所有**元素。类似的还有`itertools.takewhile`，这个函数和`dropwhile`相反，作用是从第一个迭代器元素就开始返回，直到测试函数返回假值。
 
 ### 9. 排列组合的迭代
 在刷leetcode的时候自己实现过排列组合生成器了，也看到了python solution中别人用到了这几个工具函数。
@@ -192,8 +146,50 @@ itertools.chain() 接受一个或多个可迭代对象最为输入参数。然�
 高效的多。
 
 ### 13. 创建数据处理管道
-通过生成器
+通过生成器可以方便的建立起数据处理的管道。下面分别使用`yield`实现了三个生成器，`filegen`接受一个（可以带通配符的）路径，返回的迭代器迭代满足通配符的所有文件；`linegen`接受一个文件名，迭代文件中的每一行；`wordgen`接受一个字符串，迭代其中的每一个单词。注意这三个生成器函数都是接受一个元素，返回多个元素。我们使用`iterator_concentrate`将两个可迭代对象组合起来。对于接受一个元素返回一个元素类型的数据处理管道，可以使用内建的`filter`、`map`和`itertools.filterfalse`进行生成。使用这些组件我们可以开发数据处理管道出来，在下一篇关于python数据流的文章中，还会介绍使用`yield from`以及协程计数连接数据处理管道的方法。这种方法的优点在于对于每一个子步骤都单独开发，耦合性很低，每一个代码片也有更高的复用的价值。
 
+```python
+from pathlib import Path
+import glob
+from collections import Generator, Callable, Iterable
+
+def filegen(path_pattern) -> Generator:
+    assert isinstance(path_pattern, str)
+    for filename in glob.glob(path_pattern):
+        path = Path(filename)
+        if path.is_file():
+            yield filename
+
+def linegen(filepath) -> Generator:
+    assert isinstance(filepath, str)
+    with open(filepath) as f:
+        yield from f
+
+def wordgen(line) -> Generator:
+    assert isinstance(line, str)
+    for word in line.strip().split():
+        yield word
+
+def iterator_concentrate(it1, gf2):
+    """
+    it1 is a iterable object
+    it2 is a generator function
+    and every element from it1 is input of it2
+    """
+    assert isinstance(it1, Iterable)
+    assert isinstance(gf2, Callable)
+    for i in it1:
+        yield from gf2(i)
+
+
+if __name__ == "__main__":
+    files = filegen("./*") # 文件生成器
+    lines = iterator_concentrate(files, linegen) # 字符串生成器
+    words = iterator_concentrate(lines, wordgen) # 单词生成器
+    targetwords = filter(lambda s:s.startswith('a'), words) # 过滤器
+    for w in targetwords:
+        print(w)
+```
 
 ### 14. 展开嵌套的序列
 注意 yield from 语句,它将 yield 操作代理到父生成器上去。语句 yield from it 简单的返回生成器 it 所产生的所有值。
@@ -213,16 +209,61 @@ items = [1, 2, [3, 4, [5, 6], 7], 8]
 for x in flatten(items):
 print(x)
 ```
-要注意的一点是, yield from 在涉及到基于协程和生成器的并发编程中扮演着更加重要的角色。
+
 
 
 ### 15. 顺序迭代合并后的排序迭代对象
 `heap.merge`
 heapq.merge 可迭代特性意味着它不会立马读取所有序列。这就意味着你可以在非常长的序列中使用它,而不会有太大的开销。它仅仅是检查所有序列的开始部分并返回最小的那个,这个过程一直会持续直到所有输入序列中的元素都被遍历完。
 
-### 16. 使用迭代器代替while无限循环
-iter 函数一个鲜为人知的特性是它接受一个可选的 callable 对象和一个标记 (结尾) 值作为输入参数。当以这种方式使用的时候,它会创建一个迭代器,这个迭代器会不断调用 callable 对象直到返回值和标记值相等为止。这种特殊的方法对于一些特定的会被重复调用的函数很有效果,比如涉及到 I/O调用的函数。举例来讲,如果你想从套接字或文件中以数据块的方式读取数据,通常你得要不断重复的执行 read() 或 recv() ,并在后面紧跟一个文件结尾测试来决定是否终止。
+```python
+from memory_profiler import profile
+from collections import Iterable
+from itertools import chain
+import heapq
 
+@profile
+def merge_seq(iters:list):
+    for i in iters:
+        assert isinstance(i, Iterable)
+
+    for i in heapq.merge(*iters):
+        pass
+  
+@profile
+def merge_seq_bad(iters:list):
+    for i in iters:
+        assert isinstance(i, Iterable)
+
+    for i in sorted(chain(*iters)):
+        pass      
+
+@profile
+def main():
+    l = []
+    for i in range(1,100):
+        l.append(list(range(i,i+100000, i)))
+
+    print("start merge seq")
+    merge_seq(l)
+    print("start merge seq")
+    merge_seq_bad(l)
+
+if __name__ == "__main__":
+    main()
+```
+
+可以在输出中看到，`heapq.merge`几乎不会增加内存。我们可以看一下python内部是怎么实现的，这里只贴出最核心的部分代码，并且把原理在注释中。注意到，函数内部的堆的大小与可迭代对象的个数成正比，而与可迭代对象的长度无关。具体实现可以参考[源码](https://github.com/python/cpython/blob/3.7/Lib/heapq.py)
+
+
+### 16. 使用迭代器代替while无限循环
+iter 函数一个鲜为人知的特性是它接受一个可选的 callable 对象和一个标记 (结尾) 值作为输入参数。当以这种方式使用的时候,它会创建一个迭代器,这个迭代器会不断调用 callable 对象直到返回值和标记值相等为止。这种特殊的方法对于一些特定的会被重复调用的函数很有效果,比如涉及到 I/O调用的函数。举例来讲,如果你想从套接字或文件中以数据块的方式读取数据,通常你得要不断重复的执行 read() 或 recv() ,并在后面紧跟一个文件结尾测试来决定是否终止。用这种方式写一个读文件的方法如下：
+```python
+filepath = "/etc/apt/sources.list"
+with open(filepath) as f:
+    for line in iter(f.readline().strip, ""):
+        print(line)
+```
 
 * * *
 

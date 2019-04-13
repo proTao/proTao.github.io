@@ -10,6 +10,8 @@ keywords:
 description:
 ---
 
+![](/img/python3_cookbook_cover.png)
+
 ### 1. 数字的舍入
 使用`round`函数。round 函数返回离它最近的偶数。也就是说,对 1.5 或者 2.5 的舍入运算都会得到 2。
 ```python

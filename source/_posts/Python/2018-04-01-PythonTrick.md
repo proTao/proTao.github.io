@@ -178,7 +178,8 @@ a.b(name="tom")
 ```
 
 ### 14. 指定import
-一个包里有三个模块，mod1.py, mod2.py, mod3.py，但使用from demopack import *导入模块时，如何保证只有mod1、mod3被导入了？增加init.py文件，并在文件中增加：`__all__ = ['mod1','mod3']`
+一个包里有三个模块，mod1.py, mod2.py, mod3.py，但使用from demopack import \*导入模块时，如何保证只有mod1、mod3被导入了？增加init.py文件，并在文件中增加：`__all__ = ['mod1','mod3']`
+
 
 ### 15. new 和 init
 ```python
