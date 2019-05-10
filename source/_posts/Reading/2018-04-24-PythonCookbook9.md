@@ -16,7 +16,6 @@ description:
 
 ### 2. 创建装饰器时保留函数元信息
 
-
 ### 3. 解除一个装饰器
 前面好好的看的话，装饰器这个内容现在已经算比较简单了。`@wraps` 有一个重要特征是它能让你通过属性` __wrapped__ `直接访问被包装函数。`__wrapped__` 属性还能让被装饰函数正确暴露底层的参数签名信息。直接访问未包装的原始函数在调试、内省和其他函数操作时是很有用的。但是我们这里的方案仅仅适用于在包装器中正确使用了 @wraps 或者直接设置了 `__wrapped__` 属性的情况。如果有多个包装器，那么访问 `__wrapped__` 属性的行为是不可预知的，应该避免这样做。在Python3.3中，它会略过所有的包装层（只有3.3）。最后要说的是，并不是所有的装饰器都使用了`@wraps` ，因此这里的方案并不全部适用。特别的，内置的装饰器 `@staticmethod` 和 `@classmethod` 就没有遵循这个约定(它们把原始函数存储在属性 `__func__` 中)。
 
@@ -287,3 +286,4 @@ print(a is b)
 13. [你真的理解Python中MRO算法吗？](http://python.jobbole.com/85685/)
 14. [关于python中inspect模块的一些探究](https://blog.csdn.net/weixin_35955795/article/details/53053762)
 15. [Python “黑魔法” 之 Meta Classes](http://python.jobbole.com/85126/)
+16. [python元编程](http://python.jobbole.com/85721/)
