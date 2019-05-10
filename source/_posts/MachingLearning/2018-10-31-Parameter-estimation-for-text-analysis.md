@@ -5,6 +5,7 @@ title: [译]Parameter Estimation For Text Analysis
 category: 
 tags:
 - machinelearning
+- algorithm
 ---
 
 

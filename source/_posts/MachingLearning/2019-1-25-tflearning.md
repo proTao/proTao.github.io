@@ -1,3 +1,13 @@
+---
+layout: post
+date: 2019-01-25
+title: TensorFlow学习笔记
+category: 
+tags:
+- machinelearning
+- algorithm
+---
+
 ## 一、反向传播算法
 
 ### 1.1 局部梯度计算

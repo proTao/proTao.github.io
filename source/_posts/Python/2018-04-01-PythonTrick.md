@@ -279,3 +279,4 @@ print(report())
 2. 别人家的[Python Trick](https://vimiix.com/python_tricks/#1)
 3. 《Python3 Cookbook》
 4. [wtfpython](https://github.com/satwikkansal/wtfpython)
+5. [从字节码的角度加速python](http://python.jobbole.com/86545/)

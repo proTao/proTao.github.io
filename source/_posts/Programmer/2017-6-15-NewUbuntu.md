@@ -183,6 +183,7 @@ sudo apt install silversearcher-ag # 高级grep
 # sudo apt install jq # json高亮显示
 sudo apt install axel # 多线程下载
 # pip install yapf # google的PEP8格式化工具
+sudo apt-get install tmux # 终端复用
 ```
 
 ## VSCODE
@@ -198,4 +199,5 @@ sudo apt install axel # 多线程下载
 2. [自动补完不算什么，一键直达目录才是终极神器！](https://linux.cn/article-3401-1.html)
 3. [Autojump：一个可以在 Linux 文件系统快速导航的高级 cd 命令](https://www.linuxidc.com/Linux/2015-08/121421.htm)
 4. [The Fuck](https://github.com/nvbn/thefuck)
+5. [Tmux速成教程：技巧和调整](https://www.cnblogs.com/maoxiaolv/p/5526602.html)
 

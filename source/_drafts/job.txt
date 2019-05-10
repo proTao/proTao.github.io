@@ -57,19 +57,17 @@ https://github.com/search?p=2&q=%E7%AE%80%E5%8E%86&type=Repositories ﻿
 机器学习项目：
 
 http://feed.baidu.com/feed/data/wise/landingpage?s_type=news&dsp=wise&nid=9114129388901394849&n_type=1&p_from=5
-
 https://cloud.tencent.com/developer/article/1110377
 
 
 算法
 
 语言：python源码 自制编译器 pythonic
-
 工具：shell sed awk
-
 netlogo工具
 
-一进门就微笑！！
+
+一进门就微笑可以加分
 
 我提问的环节：
 如果我面的是ML岗：“不知道我在的岗位有没有接触到深度学习的机会，我对DL很感兴趣，但是缺乏实战经验，目前的项目是什么？”
