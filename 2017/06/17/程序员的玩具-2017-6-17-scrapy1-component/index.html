@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>scrapy tutorial | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="又是一段没有营养的description">
+<meta name="keywords" content="spider scrapy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scrapy tutorial">
+<meta property="og:url" content="https://protao.github.io/2017/06/17/程序员的玩具-2017-6-17-scrapy1-component/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="又是一段没有营养的description">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scrapy-chs.readthedocs.io/zh_CN/1.0/_images/scrapy_architecture.png">
+<meta property="og:updated_time" content="2019-06-26T03:42:02.773Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scrapy tutorial">
+<meta name="twitter:description" content="又是一段没有营养的description">
+<meta name="twitter:image" content="http://scrapy-chs.readthedocs.io/zh_CN/1.0/_images/scrapy_architecture.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-程序员的玩具-2017-6-17-scrapy1-component" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2017-06-16T16:00:00.000Z" itemprop="datePublished">2017-06-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      scrapy tutorial
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="scrapy学习"><a href="#scrapy学习" class="headerlink" title="scrapy学习"></a>scrapy学习</h1><h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p><img src="http://scrapy-chs.readthedocs.io/zh_CN/1.0/_images/scrapy_architecture.png" alt="architecture"></p>
+<ol>
+<li>引擎打开一个网站(open a domain)，找到处理该网站的Spider并向该spider请求第一个要爬取的URL(s)。</li>
+<li>引擎从Spider中获取到第一个要爬取的URL并在调度器(Scheduler)以Request调度。</li>
+<li>引擎向调度器请求下一个要爬取的URL。</li>
+<li>调度器返回下一个要爬取的URL给引擎，引擎将URL通过下载中间件(请求(request)方向)转发给下载器(Downloader)。</li>
+<li>一旦页面下载完毕，下载器生成一个该页面的Response，并将其通过下载中间件(返回(response)方向)发送给引擎。</li>
+<li>引擎从下载器中接收到Response并通过Spider中间件(输入方向)发送给Spider处理。</li>
+<li>Spider处理Response并返回爬取到的Item及(跟进的)新的Request给引擎。</li>
+<li>引擎将(Spider返回的)爬取到的Item给Item Pipeline，将(Spider返回的)Request给调度器。</li>
+<li>(从第二步)重复直到调度器中没有更多地request，引擎关闭该网站。</li>
+</ol>
+<h2 id="Spider"><a href="#Spider" class="headerlink" title="Spider"></a>Spider</h2><p>整体架构中需要编写的最主体部分就是spider，首先就先对这一组件进行说明。</p>
+<p>###流程</p>
+<ol>
+<li>generating the initial Request</li>
+<li>parse the response</li>
+<li>using seletor</li>
+<li>store item</li>
+</ol>
+<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><ul>
+<li>name：spider的id，唯一</li>
+<li>allowed_domains：域名限制</li>
+<li>start_urls：初始url列表</li>
+<li>custom_settings：局部设置，优先级高于全局设置</li>
+<li>crawler：</li>
+<li>setting：<a id="more"></a></li>
+<li>logger：</li>
+</ul>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><ul>
+<li>from_crawler </li>
+<li>start_requests</li>
+<li>make_requests_from_url</li>
+<li>parse</li>
+<li>log：新版本使用self.logger.info(“info”)</li>
+<li>closed</li>
+</ul>
+<h3 id="子类"><a href="#子类" class="headerlink" title="子类"></a>子类</h3><ul>
+<li>CrawlSpider：</li>
+<li>XMLFeedSpider</li>
+<li>CSVFeedSpider</li>
+<li>SitemapSpider</li>
+</ul>
+<h3 id="选择器Selector"><a href="#选择器Selector" class="headerlink" title="选择器Selector"></a>选择器Selector</h3><h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>构建于 lxml 库之上的选择器</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><ul>
+<li>Selector(text = String)</li>
+<li>Selector(response = HtmlResponse)，在写spider时，在回调函数中可以通过response.selector获取。但是我们平时调用是直接用<code>response.xpath</code>就可以，因为这个是对<code>response.selector.xpath</code>的简化写法。</li>
+</ul>
+<p>####方法</p>
+<ul>
+<li>extract()：返回满足选择器的html内容的列表。</li>
+<li>xpath()：xpath选择器，我会用一篇文章另说这个。</li>
+<li>re()：使用者则表达式过滤。</li>
+<li>css()：css选择器。</li>
+</ul>
+<h2 id="Item-Pipeline"><a href="#Item-Pipeline" class="headerlink" title="Item Pipeline"></a>Item Pipeline</h2><h3 id="Item"><a href="#Item" class="headerlink" title="Item"></a>Item</h3><h4 id="自定义Item"><a href="#自定义Item" class="headerlink" title="自定义Item"></a>自定义Item</h4><p>我在我的一个demo中使用的Item是：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TaospiderItem</span><span class="params">(scrapy.Item)</span>:</span></span><br><span class="line">    <span class="comment"># define the fields for your item here like:</span></span><br><span class="line">    user = scrapy.Field()</span><br><span class="line">    quesion = scrapy.Field()</span><br><span class="line">    submit_id = scrapy.Field()</span><br><span class="line">    time = scrapy.Field()</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="Item操作"><a href="#Item操作" class="headerlink" title="Item操作"></a>Item操作</h4><ol>
+<li>通过Item.fields得到Item的schema</li>
+<li>通过<code>item = TaospiderItem()</code>构造一个空对象，或者在构造函数中输入class预定义的field对应的值，比如<code>item = TaospiderItem(user=‘tom’)</code>，如果有Item.fields中包含的属性会报错。</li>
+<li>像python字典一样读取或赋值，类似于：<code>item[&#39;user&#39;]</code>或者<code>item[&#39;time&#39;]=100</code>。也可以用get方法取值，这种方法的好处是可以在get方法的第二个可选参数中为读取失败的情况设置返回值。</li>
+<li>使用<code>item.keys()</code>获取所有键的列表，使用<code>item.items()</code>获取所有键值对元组列表。</li>
+<li>允许拷贝构造函数，即<code>item2 = TaospiderItem(item1)</code>或者通过通过<code>item2 = item1.copy()</code>。<em>（注：深拷贝）</em></li>
+<li><code>dict(item)</code>强制类型转换为字典。反之亦可。</li>
+</ol>
+<h4 id="使用Item-Loader"><a href="#使用Item-Loader" class="headerlink" title="使用Item Loader"></a>使用Item Loader</h4><p>我们可以在parse函数中对Item进行复制，比如在我的代码中：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lines = response.xpath(<span class="string">"//table[@id='alternate']/tbody/tr"</span>)</span><br><span class="line">item=TaospiderItem()</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">	item[<span class="string">'user'</span>] = line.xpath(<span class="string">"td[@class='u-name']/a/text()"</span>).extract()</span><br><span class="line">	item[<span class="string">'submit_id'</span>] =line.xpath(<span class="string">"td[1]/text()"</span>).extract()</span><br><span class="line">	item[<span class="string">'question'</span>] = line.xpath(<span class="string">"td[3]/a/text()"</span>).extract()</span><br><span class="line">	item[<span class="string">'time'</span>] = line.xpath(<span class="string">"td[last()-2]/text()"</span>).extract()</span><br><span class="line">	<span class="keyword">yield</span> item</span><br></pre></td></tr></table></figure></p>
+<p>在scrapy中提供了更优雅的方式。可以这么理解，Items 提供了盛装抓取到的数据的<strong>容器</strong> , 而Item Loaders提供了构件<strong>装载</strong>该容器。<br>使用方法是：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">loader = ItemLoader(item=TaospiderItem(), response=response)</span><br><span class="line">lines = len(response.xpath(<span class="string">"//table[@id='alternate']/tbody/tr"</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(lines):</span><br><span class="line">	j=str(i+<span class="number">1</span>)</span><br><span class="line">    loader.replace_xpath(<span class="string">'user'</span>,<span class="string">"//table[@id='alternate']/tbody/tr["</span>+j+<span class="string">"]/td[@class='u-name']/a/text()"</span>)</span><br><span class="line">    loader.replace_xpath(<span class="string">'submit_id'</span>,<span class="string">"//table[@id='alternate']/tbody/tr["</span>+j+<span class="string">"]/td[1]/text()"</span>)</span><br><span class="line">    loader.replace_xpath(<span class="string">'question'</span>,<span class="string">"//table[@id='alternate']/tbody/tr["</span>+j+<span class="string">"]/td[3]/a/text()"</span>)</span><br><span class="line">    loader.replace_xpath(<span class="string">'time'</span>,<span class="string">"//table[@id='alternate']/tbody/tr["</span>+j+<span class="string">"]/td[last()-2]/text()"</span>)</span><br><span class="line">    <span class="keyword">yield</span> loader.load_item()</span><br></pre></td></tr></table></figure></p>
+<p>两者的效果是完全一致的。这里有些尴尬的是ItemLoader构造函数中的response参数接受的赋值要是一个具有text属性的对象，response是满足这个要求的，但是通过xpath得到的对象却由于这个原因不能赋值给response参数，导致只能用整个response来构造这个loader，这就导致后面的xpath路径比较冗余。<br>因此我感觉前者的代码更清晰一点，但是好在loader为我们提供了不少的API可供调用。如下：</p>
+<ul>
+<li>add_xpath(field,value):类似于上面的replace_xpath，但是这个函数会在item中拼接处一个列表。</li>
+<li>get_xpath(value):传递进去一个xpath表达式，相当于当做一个选择器用。</li>
+<li>load_item():返回loader中当前加载的item。</li>
+<li>等等</li>
+</ul>
+<h3 id="Pipeline作用"><a href="#Pipeline作用" class="headerlink" title="Pipeline作用"></a>Pipeline作用</h3><ul>
+<li>清理HTML数据</li>
+<li>验证爬取的数据(检查item包含某些字段)</li>
+<li>查重(并丢弃)</li>
+<li>将爬取结果保存到数据库中</li>
+</ul>
+<h3 id="启用pipeline"><a href="#启用pipeline" class="headerlink" title="启用pipeline"></a>启用pipeline</h3><p>在setting.py文件中添加以下代码，格式为‘文件名’：‘优先级’，优先级的数字越小，说明优先级越高，执行顺序越靠前。不同优先级的pipeline文件形成流水线一次处理item数据流。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ITEM_PIPELINES = &#123;</span><br><span class="line">    <span class="string">'myproject.pipelines.PricePipeline'</span>: <span class="number">300</span>,</span><br><span class="line">    <span class="string">'myproject.pipelines.JsonWriterPipeline'</span>: <span class="number">800</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="使用pipeline"><a href="#使用pipeline" class="headerlink" title="使用pipeline"></a>使用pipeline</h3><p>在pipeline中通过<code>process_item(self, item, spider)</code>方法处理item。<br>每个item pipeline组件都需要调用该方法，这个方法必须返回一个具有数据的dict，或是 Item (或任何继承类)对象， 或是抛出 DropItem 异常，被丢弃的item将不会被之后的pipeline组件所处理。<br>因为在前面的parse函数中，直接将extract()之后的内容存放到item中，而extract()返回的是一个列表，这个列表在该例中只有一个元素，并且里面的内容是unicode编码，类似于这种格式：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;"submit_id": ["2040240"], "question": ["A+B Problem"], "user": ["octobervj"], "time": [" 240"]&#125;,</span><br></pre></td></tr></table></figure>
+<p>因此我们在pipeline中处理，希望将列表去除并得到utf-8编码的数据。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self, item, spider)</span>:</span></span><br><span class="line">    keys = item.keys()</span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> keys:</span><br><span class="line">        item[key] = item[key][<span class="number">0</span>].encode(<span class="string">'utf8'</span>).strip()</span><br><span class="line">    <span class="keyword">return</span> item</span><br></pre></td></tr></table></figure></p>
+<p>经过pipeline处理之后的数据：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;"submit_id": "2040240", "question": "A+B Problem", "user": "octobervj", "time": "240"&#125;,</span><br></pre></td></tr></table></figure></p>
+<h2 id="Request-和-Response"><a href="#Request-和-Response" class="headerlink" title="Request 和 Response"></a>Request 和 Response</h2><h3 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h3><p>用于发送HTTP请求。</p>
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><ul>
+<li>url：必须参数，指定目的地址。</li>
+<li>callback：常用。指定处理该Request得到的Response的回调函数。</li>
+<li>meta：用于在两个连续的解析函数之间传递数据。数据类型是一个python字典。在Request中对meta参数赋值，在回调函数可以通过meta方法得到该数据。另外这个字典中有一些制定的特殊的key可以被scrapy识别并完成特定功能。</li>
+</ul>
+<h3 id="子类：FormRequest"><a href="#子类：FormRequest" class="headerlink" title="子类：FormRequest"></a>子类：FormRequest</h3><p>可以用于登录！</p>
+<h4 id="特殊参数"><a href="#特殊参数" class="headerlink" title="特殊参数"></a>特殊参数</h4><ul>
+<li>formdata：表单数据</li>
+</ul>
+<h3 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h3><p>通常不会手动创建，而是通过Request得到。</p>
+<h4 id="子类-1"><a href="#子类-1" class="headerlink" title="子类"></a>子类</h4><ul>
+<li>TextResponse</li>
+<li>HtmlResponse（继承于TextResponse）</li>
+<li>XmlResponse</li>
+</ul>
+<h2 id="其他零碎"><a href="#其他零碎" class="headerlink" title="其他零碎"></a>其他零碎</h2><h3 id="Feed-Export"><a href="#Feed-Export" class="headerlink" title="Feed Export"></a>Feed Export</h3><p>用于输出得到的数据的组件，这里的输出文件被称为“feed”，支持多种序列化格式(serialization format)及存储方式(storage backends)。feed文件使用Item exporters进行输出。</p>
+<ul>
+<li>XML</li>
+<li>JSON</li>
+<li>JSON line</li>
+<li>CSV<br>最简单的使用方式就是直接在使用命令行运行爬虫的个时候使用-o参数：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy crawl spider -o item.json</span><br></pre></td></tr></table></figure>
+<h3 id="logging"><a href="#logging" class="headerlink" title="logging"></a>logging</h3><h4 id="常用setting-py设置"><a href="#常用setting-py设置" class="headerlink" title="常用setting.py设置"></a>常用setting.py设置</h4><ul>
+<li>LOG_LEVEL:显示日志的最低级别，低于这个级别的不予显示。<em>这个对重定向到文件中的日志不起作用。</em>log有五个级别,从高到低是：<ol>
+<li>CRITICAL</li>
+<li>ERROR</li>
+<li>WARNING</li>
+<li>INFO</li>
+<li>DEBUG</li>
+</ol>
+</li>
+<li>LOG_FILE：如果设置了这个参数，log就不会标准输出中输出，而是重定向到文件中。</li>
+<li>LOG_ENCODING：Log使用的编码。</li>
+<li>LOG_STDOUT：默认为False，如果为 True ，进程所有的标准输出(及错误)将会被重定向到log中。例如， 执行 print ‘hello’ ，其将会在Scrapy log中显示。</li>
+</ul>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>在scrapy中直接使用<code>self.logger.info()</code>或者其他级别来调用。</p>
+<h3 id="setting"><a href="#setting" class="headerlink" title="setting"></a>setting</h3><p>这个文件中有很多选项可以设置，关于Log和Pipeline相关的在上面已经提到了。这里说一些我比较感兴趣的：</p>
+<ul>
+<li><p>DEFAULT_REQUEST_HEADERS：Scrapy HTTP Request使用的默认header。由DefaultHeadersMiddleware 产生。默认为:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',</span><br><span class="line">    'Accept-Language': 'en',</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>DEPTH_LIMIT：默认为0。爬取网站最大允许的深度(depth)值。如果为0，则没有限制。</p>
+</li>
+<li><p>DOWNLOAD_DELAY：默认为0。下载器在下载同一个网站下一个页面前需要等待的时间，以ms为单位。该选项可以用来限制爬取速度， 减轻服务器压力。同时也支持小数。该设定影响(默认启用的) RANDOMIZE_DOWNLOAD_DELAY 设定。另外您可以通过spider的 download_delay属性为每个spider设置该设定。</p>
+</li>
+</ul>
+<ul>
+<li>RANDOMIZE_DOWNLOAD_DELAY：默认为True。如果启用，当从相同的网站获取数据时，Scrapy将会等待一个随机的值 (0.5到1.5之间的一个随机值×DOWNLOAD_DELAY)。该随机值降低了crawler被检测到(接着被block)的机会。某些网站会分析请求， 查找请求之间时间的相似性。若 DOWNLOAD_DELAY 为0(默认值)，该选项将不起作用。</li>
+<li>STATS_CLASS:默认为’scrapy.statscollectors.MemoryStatsCollector’。收集数据的类。该类必须实现 <strong>状态收集器(Stats Collector)</strong> API.</li>
+</ul>
+<hr>
+<p>参考Scrapy在线文档：<a href="http://scrapy-chs.readthedocs.io/zh_CN/1.0/index.html" target="_blank" rel="noopener">http://scrapy-chs.readthedocs.io/zh_CN/1.0/index.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2017/06/17/程序员的玩具-2017-6-17-scrapy1-component/" data-id="cjxo5e6tv004zz16ds2oj62gd" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/spider/">spider</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../19/程序员的玩具-2017-6-19-RESTful/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          理解RESTful架构
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../15/程序员的玩具-2017-06-15-git-handbook/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">我的git学习笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

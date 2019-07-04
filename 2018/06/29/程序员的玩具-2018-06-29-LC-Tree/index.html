@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>LeetCode刷题笔记——Tree | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="662. Maximum Width of Binary Tree bangbang一上来的思路就是层次遍历，一开始用的是deque，这样的话就要自己往里面加分隔符，确定宽度。还有就是遇到空节点也不能停，要接着向队列里面压入两个空节点，然后每一层结束时判断最左非空节点和最右非空节点之间的节点数。然后超时了。。。看了一下调用栈，就是空节点太多了，然后转回溯法试了一下，还是没能解决空节点的问题。注意的">
+<meta name="keywords" content="algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode刷题笔记——Tree">
+<meta property="og:url" content="https://protao.github.io/2018/06/29/程序员的玩具-2018-06-29-LC-Tree/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="662. Maximum Width of Binary Tree bangbang一上来的思路就是层次遍历，一开始用的是deque，这样的话就要自己往里面加分隔符，确定宽度。还有就是遇到空节点也不能停，要接着向队列里面压入两个空节点，然后每一层结束时判断最左非空节点和最右非空节点之间的节点数。然后超时了。。。看了一下调用栈，就是空节点太多了，然后转回溯法试了一下，还是没能解决空节点的问题。注意的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-30T02:52:09.855Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LeetCode刷题笔记——Tree">
+<meta name="twitter:description" content="662. Maximum Width of Binary Tree bangbang一上来的思路就是层次遍历，一开始用的是deque，这样的话就要自己往里面加分隔符，确定宽度。还有就是遇到空节点也不能停，要接着向队列里面压入两个空节点，然后每一层结束时判断最左非空节点和最右非空节点之间的节点数。然后超时了。。。看了一下调用栈，就是空节点太多了，然后转回溯法试了一下，还是没能解决空节点的问题。注意的">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-程序员的玩具-2018-06-29-LC-Tree" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-06-29T07:17:12.000Z" itemprop="datePublished">2018-06-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LeetCode刷题笔记——Tree
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="662-Maximum-Width-of-Binary-Tree-bangbang"><a href="#662-Maximum-Width-of-Binary-Tree-bangbang" class="headerlink" title="662. Maximum Width of Binary Tree bangbang"></a>662. Maximum Width of Binary Tree <em>bangbang</em></h3><p>一上来的思路就是层次遍历，一开始用的是<code>deque</code>，这样的话就要自己往里面加分隔符，确定宽度。还有就是遇到空节点也不能停，要接着向队列里面压入两个空节点，然后每一层结束时判断最左非空节点和最右非空节点之间的节点数。<br>然后超时了。。。看了一下调用栈，就是空节点太多了，然后转回溯法试了一下，还是没能解决空节点的问题。注意的是每一层最左非空节点的左边的节点都不用考虑，右边的同理，然后用了两个数组进行层次遍历，然后加了一些小trick，每层最左最右的空节点直接跳过，勉勉强强的AC了，代码最后也是很丑陋。<br>然后看了top1的代码。。。思路真的很巧妙。。一开始我也往这边想了，就是贴着两边找，但是不知道怎么确定位置。位置这点怎么能没想到呢，刚刷完堆的题，对于完全二叉树，每个节点的紧凑表示后的位置是确定的啊！那然后给每个节点一个编号，然后随意遍历这棵树，看同一层中的编号的差值就好了。<br>现在觉得棒棒，多刷刷可能就好了。树的核心思想就是那几个遍历，这道题其实没有脱离框架的。</p>
+<a id="more"></a>
+<h3 id="637-Average-of-Levels-in-Binary-Tree"><a href="#637-Average-of-Levels-in-Binary-Tree" class="headerlink" title="637. Average of Levels in Binary Tree"></a>637. Average of Levels in Binary Tree</h3><p>做完662看到了669然后没有思路，然后觉得这道题好欺负就做这道题了。层次遍历，双数组，挺简单的。需要区分层次的时候感觉双数组加上一个指示变量这种方法挺好的，要是用一个队列的话需要处理层次的问题。用两个数组加上指示变量，每次换层次的时候的代价是指示变量变一下，current模拟指针改变指向，然后当前层数组clear一下，应该是常数级别的操作还不需要额外空间。<br>要是有更好的方法会更新这个方法的，目前来看就先用这个吧。</p>
+<h3 id="669-Trim-a-Binary-Search-Tree"><a href="#669-Trim-a-Binary-Search-Tree" class="headerlink" title="669. Trim a Binary Search Tree"></a>669. Trim a Binary Search Tree</h3><p>昨天晚上困了看了这道题没思路，今天一早做这道题，仔细一琢磨倒是不难，就是递归。但是我用递归做完之后发现效率好低，琢磨有没有优化的方法。<br>捉摸了一下没想出来，看了top1的代码，思路没有大问题，又跑了一次，就打败100%了。。</p>
+<h3 id="226-Invert-Binary-Tree"><a href="#226-Invert-Binary-Tree" class="headerlink" title="226. Invert Binary Tree"></a>226. Invert Binary Tree</h3><p>典型题。</p>
+<h3 id="559-Maximum-Depth-of-N-ary-Tree"><a href="#559-Maximum-Depth-of-N-ary-Tree" class="headerlink" title="559. Maximum Depth of N-ary Tree"></a>559. Maximum Depth of N-ary Tree</h3><p>数据结构不能用leetcode自带的辅助函数初始化了，算法倒是不难。用backtrack，实际上是DFS，在对象里保存最大深度即可。</p>
+<h3 id="653-Two-Sum-IV"><a href="#653-Two-Sum-IV" class="headerlink" title="653. Two Sum IV"></a>653. Two Sum IV</h3><p>结合前面几种Two Sum问题，原始的问题在官方Solution中给了三种解法，可以两次遍历，可以使用HashTable加上Two Pass，更好的就是HashTable加上One Pass。另外一种问题的变形是有序的输入求解TwoSum问题，那可以用双指针来解决。这道题考虑能使用哪种方法，双指针的不行，因为树不能没有代价的从孩子节点找到父节点，那就使用OnePass加上HashTable解决，然后用基于循环的dfs进行遍历。</p>
+<h3 id="606-Construct-String-from-Binary-Tree"><a href="#606-Construct-String-from-Binary-Tree" class="headerlink" title="606. Construct String from Binary Tree"></a>606. Construct String from Binary Tree</h3><p>明显是一个先序遍历，没什么算法上的难度，就是逻辑理清了就行，主要看右节点有没有。右节点中存在，左节点一定加括号。右节点为空时，左节点非空时加括号。</p>
+<h3 id="590-N-ary-Tree-Postorder-Traversal"><a href="#590-N-ary-Tree-Postorder-Traversal" class="headerlink" title="590. N-ary Tree Postorder Traversal"></a>590. N-ary Tree Postorder Traversal</h3><p>没啥</p>
+<h3 id="404-Sum-of-Left-Leaves"><a href="#404-Sum-of-Left-Leaves" class="headerlink" title="404. Sum of Left Leaves"></a>404. Sum of Left Leaves</h3><p>没啥。</p>
+<h3 id="538-Convert-BST-to-Greater-Tree"><a href="#538-Convert-BST-to-Greater-Tree" class="headerlink" title="538. Convert BST to Greater Tree"></a>538. Convert BST to Greater Tree</h3><p>题目没啥，倒着中序遍历就行。用非递归的中序遍历来做可能更好，顺便用这道题复习非递归的中序遍历。然后还看到了一种<strong>Morris遍历法</strong>，不需要额外空间，下一题实现一下。</p>
+<h3 id="563-Binary-Tree-Tilt"><a href="#563-Binary-Tree-Tilt" class="headerlink" title="563. Binary Tree Tilt"></a>563. Binary Tree Tilt</h3><p>后序遍历，用递归法是没有啥问题的，我想尝试用迭代的方法做这道题，没做出来。直接用迭代方式实现了一些树的迭代器在treetools中。</p>
+<h3 id="429-N-ary-Tree-Level-Order-Traversal"><a href="#429-N-ary-Tree-Level-Order-Traversal" class="headerlink" title="429. N-ary Tree Level Order Traversal"></a>429. N-ary Tree Level Order Traversal</h3><p>没啥</p>
+<h3 id="700-Search-in-a-Binary-Search-Tree"><a href="#700-Search-in-a-Binary-Search-Tree" class="headerlink" title="700. Search in a Binary Search Tree"></a>700. Search in a Binary Search Tree</h3><p>没啥</p>
+<h3 id="543-Diameter-of-Binary-Tree"><a href="#543-Diameter-of-Binary-Tree" class="headerlink" title="543. Diameter of Binary Tree"></a>543. Diameter of Binary Tree</h3><p>没啥</p>
+<h3 id="589-N-ary-Tree-Preorder-Traversal"><a href="#589-N-ary-Tree-Preorder-Traversal" class="headerlink" title="589. N-ary Tree Preorder Traversal"></a>589. N-ary Tree Preorder Traversal</h3><p>没啥</p>
+<h3 id="107-Binary-Tree-Level-Order-Traversal-II"><a href="#107-Binary-Tree-Level-Order-Traversal-II" class="headerlink" title="107. Binary Tree Level Order Traversal II"></a>107. Binary Tree Level Order Traversal II</h3><p>没啥</p>
+<h3 id="671-Second-Minimum-Node-In-a-Binary-Tree"><a href="#671-Second-Minimum-Node-In-a-Binary-Tree" class="headerlink" title="671. Second Minimum Node In a Binary Tree"></a>671. Second Minimum Node In a Binary Tree</h3><p>没啥</p>
+<h3 id="437-Path-Sum-III-bangbang"><a href="#437-Path-Sum-III-bangbang" class="headerlink" title="437. Path Sum III bangbang"></a>437. Path Sum III <em>bangbang</em></h3><p>关键是弄出了一个函数，计算以当前点为起点的解。</p>
+<h3 id="572-Subtree-of-Another-Tree"><a href="#572-Subtree-of-Another-Tree" class="headerlink" title="572. Subtree of Another Tree"></a>572. Subtree of Another Tree</h3><p>我的思路是，两个树根节点一样就看看是不是一棵树，不一样就进s的左子树和t比，或者进s的右子树。</p>
+<h3 id="235-Lowest-Common-Ancestor-of-a-Binary-Search-Tree"><a href="#235-Lowest-Common-Ancestor-of-a-Binary-Search-Tree" class="headerlink" title="235. Lowest Common Ancestor of a Binary Search Tree"></a>235. Lowest Common Ancestor of a Binary Search Tree</h3><p>深度遍历，找到节点时保存各自的路径，然后返回最后一个相同的节点。但是注意是BST，直接可以选择进哪个节点。</p>
+<h3 id="501-Find-Mode-in-Binary-Search-Tree"><a href="#501-Find-Mode-in-Binary-Search-Tree" class="headerlink" title="501. Find Mode in Binary Search Tree"></a>501. Find Mode in Binary Search Tree</h3><p>中序遍历得到非严格单增序列。</p>
+<h3 id="687-Longest-Univalue-Path"><a href="#687-Longest-Univalue-Path" class="headerlink" title="687. Longest Univalue Path"></a>687. Longest Univalue Path</h3><p>没啥</p>
+<h3 id="654-Maximum-Binary-Tree-bangbang"><a href="#654-Maximum-Binary-Tree-bangbang" class="headerlink" title="654. Maximum Binary Tree bangbang"></a>654. Maximum Binary Tree <em>bangbang</em></h3><p>我用的递归，就没啥。但是这道题不用递归就有难度了。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">constructMaximumBinaryTree</span><span class="params">(self, nums)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    :type nums: List[int]</span></span><br><span class="line"><span class="string">    :rtype: TreeNode</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    stack = []</span><br><span class="line">    <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">        cur = TreeNode(num)</span><br><span class="line">        <span class="keyword">while</span> stack <span class="keyword">and</span> stack[<span class="number">-1</span>].val &lt; num:</span><br><span class="line">        cur.left = stack.pop()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> stack:</span><br><span class="line">        stack[<span class="number">-1</span>].right = cur</span><br><span class="line">        stack.append(cur)</span><br><span class="line">    <span class="keyword">return</span> stack[<span class="number">0</span>] <span class="keyword">if</span> stack <span class="keyword">else</span> <span class="keyword">None</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="230-Kth-Smallest-Element-in-s-BST"><a href="#230-Kth-Smallest-Element-in-s-BST" class="headerlink" title="230. Kth Smallest Element in s BST"></a>230. Kth Smallest Element in s BST</h3><p>中序遍历啊，没啥</p>
+<h3 id="814-Binary-Tree-Pruning"><a href="#814-Binary-Tree-Pruning" class="headerlink" title="814. Binary Tree Pruning"></a>814. Binary Tree Pruning</h3><p>我的做法是先通过递归将树遍历一遍进行标记，标记的方式就利用<code>TreeNode</code>的<code>val</code>字段，然后在自顶向下的遍历树，把被标记的节点删除掉即可。没有考虑依次对被删除节点进行垃圾回收，是整个删除子树。</p>
+<h3 id="897-Increasing-Order-Search-Tree"><a href="#897-Increasing-Order-Search-Tree" class="headerlink" title="897. Increasing Order Search Tree"></a>897. Increasing Order Search Tree</h3><p>我过了的方法是中序遍历这棵树，新建一棵树，然后按照遍历的顺序不断地往这棵树中添加节点。然后看了看答案中较快的方法，是在原来的树上面修改指针。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">increasingBST</span><span class="params">(self, root)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">changeOrder</span><span class="params">(node)</span>:</span></span><br><span class="line">            <span class="keyword">if</span> node:</span><br><span class="line">                changeOrder(node.left)</span><br><span class="line">                node.left = <span class="keyword">None</span></span><br><span class="line">                self.cur.right = node</span><br><span class="line">                self.cur = node</span><br><span class="line">                changeOrder(node.right)</span><br><span class="line"></span><br><span class="line">        res = self.cur = TreeNode(<span class="keyword">None</span>)</span><br><span class="line">        changeOrder(root)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> res.right</span><br></pre></td></tr></table></figure>
+<h3 id="508-Most-Frequent-Subtree-Sum"><a href="#508-Most-Frequent-Subtree-Sum" class="headerlink" title="508. Most Frequent Subtree Sum"></a>508. Most Frequent Subtree Sum</h3><p>后续递归（先递归子问题，然后解当前问题）。用一个字典缓存结果，然后遍历缓存。</p>
+<h3 id="894-All-Possible-Full-Binary-Trees"><a href="#894-All-Possible-Full-Binary-Trees" class="headerlink" title="894. All Possible Full Binary Trees"></a>894. All Possible Full Binary Trees</h3><p>一看就是一个递归生成的问题，避免重复计算，自底向上生成。然后每一层只需要新建一个根节点，然后子树复用已经缓存的子树就行。</p>
+<h3 id="701-Insert-into-a-Binary-Search-Tree"><a href="#701-Insert-into-a-Binary-Search-Tree" class="headerlink" title="701. Insert into a Binary Search Tree"></a>701. Insert into a Binary Search Tree</h3><p>可以说是没有丝毫难度。</p>
+<h3 id="865-Smallest-Subtree-with-all-the-Deepest-Nodes"><a href="#865-Smallest-Subtree-with-all-the-Deepest-Nodes" class="headerlink" title="865. Smallest Subtree with all the Deepest Nodes"></a>865. Smallest Subtree with all the Deepest Nodes</h3><p>先遍历一遍确定树的深度以及最深的节点的个数。然后进行后递归，先判断左子树有几个最深节点，然后判断右子树有几个，然后加到一起如果等于总的就直接停止，否则返回当前最深节点数由父节点继续判断。</p>
+<h3 id="145-Binary-Tree-Postorder-Traversal"><a href="#145-Binary-Tree-Postorder-Traversal" class="headerlink" title="145. Binary Tree Postorder Traversal"></a>145. Binary Tree Postorder Traversal</h3><p>虽然是hard级别，但是之前在别的题中写过非递归的后序遍历，因此不难。</p>
+<h3 id="95-Unique-Binary-Search-Trees-II"><a href="#95-Unique-Binary-Search-Trees-II" class="headerlink" title="95. Unique Binary Search Trees II"></a>95. Unique Binary Search Trees II</h3><p>非常类似于894，但是这道题子树复用的可能性不大，因为子树结构不重复，我只复用的叶节点。</p>
+<h3 id="222-Count-Complete-Tree-Nodes-bangbang"><a href="#222-Count-Complete-Tree-Nodes-bangbang" class="headerlink" title="222. Count Complete Tree Nodes [bangbang]"></a>222. Count Complete Tree Nodes <em>[bangbang]</em></h3><p>这道题一看就是不能直接遍历，不然完全树的条件就没有用到。但是怎么用是一个问题，我已开始想的办法是深度有限遍历并且记录叶节点的深度，深度改变的时候就意味着最下面那一层的宽度，然后结合树的深度可以推出来总节点个数。<br>但是这种方法有一个问题，首先没有根本降低复杂度，对于n个结点的树，平均要遍历0.5n个节点才能得到答案，最坏情况是正好最后一层是满的，此时情况退化到需要遍历所有节点。抓住这一点进行优化，如果最后一层是满的，那么不需要遍历了，直到深度就行。那么在上面的算法中加上一个特殊情况的判断，树左边的深度等于右边的深度时，节点可以直接计算。<br>但是还是没有改变复杂度量级。考虑到完全二叉树的左右子树，中一定一颗是完全二叉树，另一颗是满的二叉树。那么就可以考虑用递归了，此时的复杂度是$$$O(logn)$$$。</p>
+<h3 id="337-House-Robber-III-bangbang"><a href="#337-House-Robber-III-bangbang" class="headerlink" title="337. House Robber III [bangbang]"></a>337. House Robber III <em>[bangbang]</em></h3><p>这道题点赞数太多了，所以我也加了<em>bangbang</em>标签，但是感觉这道题实际上没有那么棒棒。就是一道把子问题的拆分方式都告诉你了的DP问题，每个点在子树已解决的情况下，尝试要么偷要么不偷。</p>
+<h3 id="102-Binary-Tree-Level-Order-Traversal"><a href="#102-Binary-Tree-Level-Order-Traversal" class="headerlink" title="102. Binary Tree Level Order Traversal"></a>102. Binary Tree Level Order Traversal</h3><p>我用的双队列，import了collections中的deque，发现别人的代码格外的酷炫。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">levelOrder</span><span class="params">(self, root)</span>:</span></span><br><span class="line">        ans=[]</span><br><span class="line">        level=[root]</span><br><span class="line">        <span class="keyword">while</span> level <span class="keyword">and</span> root:</span><br><span class="line">            ans.append([node.val <span class="keyword">for</span> node <span class="keyword">in</span> level])</span><br><span class="line">            pair=[(node.left,node.right) <span class="keyword">for</span> node <span class="keyword">in</span> level]</span><br><span class="line">            level=[kid <span class="keyword">for</span> p <span class="keyword">in</span> pair <span class="keyword">for</span> kid <span class="keyword">in</span> p <span class="keyword">if</span> kid]</span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure></p>
+<h3 id="236-Lowest-Common-Ancestor-of-a-Binary-Tree-bangbang"><a href="#236-Lowest-Common-Ancestor-of-a-Binary-Tree-bangbang" class="headerlink" title="236. Lowest Common Ancestor of a Binary Tree [bangbang]"></a>236. Lowest Common Ancestor of a Binary Tree <em>[bangbang]</em></h3><p>又是一道上千赞的题目。而且剑指offer中又出现，在最后的第二个面试案例中。剑指offer中给的思路是如果树中有指向父节点的指针那就好办，变成两个链表找公共节点的问题，或者允许改动树，可以人为的改动指针这两种情况在这道题都不符合。然后剑指offer中给的最好的思路是保存根节点到这两个节点的路径，强行转化为找两个链表的公共节点。<br>然后我考虑到了一共可以避免这种额外的空间代价的方法。就是用两个flag，一个代表找到第一个节点，另一个代表找到第二个节点。然后后递归，如果连个flag均为真，就把那个节点返回。</p>
+<h3 id="652-Find-Duplicate-Subtrees-bangbang"><a href="#652-Find-Duplicate-Subtrees-bangbang" class="headerlink" title="652. Find Duplicate Subtrees [bangbang]"></a>652. Find Duplicate Subtrees <em>[bangbang]</em></h3><p>因为相似子树是基于递归的概念，当当两棵树的左子树和右子树和节点的值都一致的时候，认为两课子树是一致的。重要的是么通过递归函数的返回值判定两个子树是一致的。我想到的方法是制作一个哈希函数，整个树的哈希函数等于两棵子树的哈希值与当前节点值的哈希值的叠加，因为防止顺序颠倒，三个哈希值通过不一样的系数进行线性组合，然后对出现第二次的哈希值对应的子树进行存储。但是最后有一个测试用例通不过，不知道问什么。<br>然后看了答案的思路，总体思路也是用哈希值，但是不像我这么瞎弄哈希函数，而是对于新见到的树，用逐渐递增的索引值作为哈希值。思路很棒。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findDuplicateSubtrees</span><span class="params">(self, root)</span>:</span></span><br><span class="line">        trees = collections.defaultdict()</span><br><span class="line">        trees.default_factory = trees.__len__</span><br><span class="line">        count = collections.Counter()</span><br><span class="line">        ans = []</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">lookup</span><span class="params">(node)</span>:</span></span><br><span class="line">            <span class="keyword">if</span> node:</span><br><span class="line">                uid = trees[node.val, lookup(node.left), lookup(node.right)]</span><br><span class="line">                count[uid] += <span class="number">1</span></span><br><span class="line">                <span class="keyword">if</span> count[uid] == <span class="number">2</span>:</span><br><span class="line">                    ans.append(node)</span><br><span class="line">                <span class="keyword">return</span> uid</span><br><span class="line">        lookup(root)</span><br><span class="line">        <span class="comment"># print(trees)</span></span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure></p>
+<h3 id="450-Delete-Node-in-a-BST"><a href="#450-Delete-Node-in-a-BST" class="headerlink" title="450. Delete Node in a BST"></a>450. Delete Node in a BST</h3><p>很基础的一道题但是比较考验基本功，需要找到被删除节点的上一个节点，用了两个trick。第一个是在树的根节点上面又加了一个父节点，起到类似于链表头结点的功能，第二个trick是类似于链表的删除，利用换值节省改变指针的操作。</p>
+<h3 id="623-Add-One-Row-to-Tree"><a href="#623-Add-One-Row-to-Tree" class="headerlink" title="623. Add One Row to Tree"></a>623. Add One Row to Tree</h3><p>没啥，就是层次遍历。</p>
+<h3 id="449-Serialize-and-Deserialize-BST"><a href="#449-Serialize-and-Deserialize-BST" class="headerlink" title="449. Serialize and Deserialize BST"></a>449. Serialize and Deserialize BST</h3><p>我的方法就是对于BST来说，通过对树的前序和中序两种遍历方式可以还原一棵树这个性质来做。思路朴实，效率一般。然后考虑到leetcode有自己的序列化方法，这个我一开始想到这么做了，但是考虑到通过层次遍历的方法可能的问题是需要存空节点可能有空间浪费，但是我的方法也是需要存两倍的节点个数，空间点的个数最多不超多总的节点数（这种情况就是一棵右倾的树），所以从空间效率上两者不相上下。<br>但是时间效率和通用性上我的方法都略逊一筹。从时间效率的角度看，因为我的方法每次需要在中序遍历的数组中找到根节点，最坏情况就是一个左倾的树，此时是平方的复杂度。另外从通用性角度看，我的方法只适用于树中没有重复节点的情况，当左子树中有和根节点相同的值的时候，会导致在中序遍历的结果中不能判断哪一个是根节点。<br>这里给出标答：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque</span><br><span class="line"><span class="comment">#serialize row by row, bfs</span></span><br><span class="line"><span class="comment">#for deserialization:</span></span><br><span class="line"><span class="comment">#the idea is to notice the pattern of distance of a node value to its children value</span></span><br><span class="line"><span class="comment">#write out a deserialized tree and notice, kinda intuitive</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Codec</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">serialize</span><span class="params">(self, root)</span>:</span></span><br><span class="line">        <span class="string">"""Encodes a tree to a single string.</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        :type root: TreeNode</span></span><br><span class="line"><span class="string">        :rtype: str</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="comment">#go row by row, bfs</span></span><br><span class="line">        q = deque([root])</span><br><span class="line">        output = []</span><br><span class="line">        <span class="keyword">while</span> q:</span><br><span class="line">            cur = q.popleft()</span><br><span class="line">            output.append(str(cur.val) <span class="keyword">if</span> isinstance(cur, TreeNode) <span class="keyword">else</span> <span class="string">'null'</span>)</span><br><span class="line">            <span class="comment"># only append children of a node, dont care about null</span></span><br><span class="line">            <span class="keyword">if</span> isinstance(cur, TreeNode):</span><br><span class="line">                q.extend([cur.left, cur.right])</span><br><span class="line">        <span class="comment"># print(output)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">','</span>.join(output) <span class="comment">#seems like changing separator from ' ' to ',' passes more test case. y?</span></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">deserialize</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="string">"""Decodes your encoded data to tree.</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        :type data: str</span></span><br><span class="line"><span class="string">        :rtype: TreeNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        data = data.split()</span><br><span class="line">        <span class="comment"># take in an index where the value of node is in data list</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">create_node</span><span class="params">(i)</span>:</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> i &lt; len(data) <span class="keyword">or</span> data[i] == <span class="string">'null'</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">            node = TreeNode(data[i])</span><br><span class="line">            dist_to_left_child = i+<span class="number">1</span></span><br><span class="line">            node.left = create_node(i + dist_to_left_child)</span><br><span class="line">            node.right = create_node(i + dist_to_left_child + <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> node</span><br><span class="line">            </span><br><span class="line">        head = create_node(<span class="number">0</span>) <span class="comment">#create a node which has value at index = 0 in data</span></span><br><span class="line">        <span class="keyword">return</span> head</span><br></pre></td></tr></table></figure></p>
+<h3 id="297-Serialize-and-Deserialize-Binary-Tree"><a href="#297-Serialize-and-Deserialize-Binary-Tree" class="headerlink" title="297. Serialize and Deserialize Binary Tree"></a>297. Serialize and Deserialize Binary Tree</h3><p>基本上是按照层次遍历的思路。<code>serialize</code>的代码在上面已经有了，我自己写的基本和这段一致。但是<code>deserialize</code>的部分略有不同，因为<code>serialize</code>是连同<code>None</code>也会放到队列中，因此在序列化的结果中，相邻的两个一定是兄弟节点，这样的话就维护一个队列，这个队列中存放的都是还没有处理孩子节点的节点，然后每次从data中去两个元素转换成<code>TreeNode</code>，从队列中<code>pop</code>一个节点，把他们连上，然后把这两个孩子节点亚入队列，不断训练就可以。这样的话这个方法还可以推广到N叉树或者任意一棵树。</p>
+<h3 id="863-All-Nodes-Distance-K-in-Binary-Tree-bangbang"><a href="#863-All-Nodes-Distance-K-in-Binary-Tree-bangbang" class="headerlink" title="863. All Nodes Distance K in Binary Tree [bangbang]"></a>863. All Nodes Distance K in Binary Tree <em>[bangbang]</em></h3><p>这道题我拆成两部分来做。首先得到target节点的路径，用LR表示。这个本来想用非递归的形式写，没写出来，用递归好写多了。然后得到路径之后就好办了，此时考虑多种情况并用递归解决。<br>写一个递归函数，包含两个参数，一个是从当前节点出发，目标节点的路径，另一个是目标长度K。分三种情况，一种是当前节点是目标节点祖先（path不为空，K大于0,且len(path)==K），一种是目标节点是当前节点祖先（path为空，K=0），第三种是没有祖先关系(path为空，K=0)。后两个看似条件重复，但是实际上在进入左右子树的时候会区分开来。</p>
+<h3 id="919-Complete-Binary-Tree-Inserter"><a href="#919-Complete-Binary-Tree-Inserter" class="headerlink" title="919. Complete Binary Tree Inserter"></a>919. Complete Binary Tree Inserter</h3><p>用队列是一个很巧的方法，每次压两个出一个，停的时候可以保证queue中全部是叶子节点。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/06/29/程序员的玩具-2018-06-29-LC-Tree/" data-id="cjxo5e7df005yz16diycs1eaj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../30/Python-2018-06-30-WhyPythonisSlow/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Why Python is Slow:Looking Under the Hood
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../05/Python-2018-06-05-PyDictObject/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python中的字典对象</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

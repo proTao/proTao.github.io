@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>python中的字符串对象 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. PyStringObject 与 PyString_Type1234567[stringobject.h]typedef struct &amp;#123;	PyObject_VAR_HEAD	long ob_shash;	int ob_sstate;	char ob_sval[1];&amp;#125; PyStringObject; PyStringObject是变长对象中的不可变对象。当创建了一个Py">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python中的字符串对象">
+<meta property="og:url" content="https://protao.github.io/2018/06/03/Python-2018-06-03-PyStringObject/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="1. PyStringObject 与 PyString_Type1234567[stringobject.h]typedef struct &amp;#123;	PyObject_VAR_HEAD	long ob_shash;	int ob_sstate;	char ob_sval[1];&amp;#125; PyStringObject; PyStringObject是变长对象中的不可变对象。当创建了一个Py">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/PyStringObject1.png">
+<meta property="og:image" content="https://protao.github.io/img/PyStringObject2.png">
+<meta property="og:image" content="https://protao.github.io/img/PyStringObject3.png">
+<meta property="og:updated_time" content="2018-09-05T16:10:58.482Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python中的字符串对象">
+<meta name="twitter:description" content="1. PyStringObject 与 PyString_Type1234567[stringobject.h]typedef struct &amp;#123;	PyObject_VAR_HEAD	long ob_shash;	int ob_sstate;	char ob_sval[1];&amp;#125; PyStringObject; PyStringObject是变长对象中的不可变对象。当创建了一个Py">
+<meta name="twitter:image" content="https://protao.github.io/img/PyStringObject1.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-Python-2018-06-03-PyStringObject" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-06-02T16:00:00.000Z" itemprop="datePublished">2018-06-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/python/">python</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      python中的字符串对象
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-PyStringObject-与-PyString-Type"><a href="#1-PyStringObject-与-PyString-Type" class="headerlink" title="1. PyStringObject 与 PyString_Type"></a>1. PyStringObject 与 PyString_Type</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[stringobject.h]</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	PyObject_VAR_HEAD</span><br><span class="line">	<span class="keyword">long</span> ob_shash;</span><br><span class="line">	<span class="keyword">int</span> ob_sstate;</span><br><span class="line">	<span class="keyword">char</span> ob_sval[<span class="number">1</span>];</span><br><span class="line">&#125; PyStringObject;</span><br></pre></td></tr></table></figure>
+<p><code>PyStringObject</code>是变长对象中的不可变对象。当创建了一个<code>PyStringObject</code>对象之后,该对象内部维护的字符串就不能再被改变了。这一点特性使得 <code>PyStringObject</code> 对象能作为 <code>PyDictObject</code> 的键值,但同时也使得一些字符串操作的效率大大降低,比如多个字符串的连接操<br>作。</p>
+<p><code>ob_sval</code>是存放实际字符串的数组，数组长度是<code>ob_size+1</code>，因为里面存放的是原生C字符串，需要一个额外的结束符。但是注意，申请的时候令数组长度为1，实际上是为了要数组的首地址当做指针来用，<code>ob_sval</code> 作为首地址，在字符串申请函数中，申请的是一段长度为<code>ob_size+1</code>个字节的内存,而且必须满足 <code>ob_sval[ob_size] = &quot;\0‟</code>。详见后面源码与图一。</p>
+<p><img src="/img/PyStringObject1.png" alt="PyStringObject存储结构"></p>
+<p><code>PyStringObject</code> 中的 <code>ob_shash</code> 变量其作用是缓存该对象的 HASH 值,这样可以避免每一次都重新计算该字符串对象的 HASH 值。如果一个 <code>PyStringObject</code>对象还没有被计算过 HASH 值,那么 <code>ob_shash</code> 的初始值是-1。<code>PyStringObject</code> 对象的 <code>ob_sstate</code> 变量该对象是否被 <code>Intern</code> 的标志。</p>
+<p>需要注意的是,字符串类型对象的<code>tp_as_number</code>,<code>tp_as_sequence</code>,<code>tp_as_mapping</code>,<br>三个域都被设置了。这表示<code>PyStringObject</code>对数值操作,序列操作和映射操作都支持。</p>
+<a id="more"></a>
+<h2 id="2-创建-PyStringObject-对象"><a href="#2-创建-PyStringObject-对象" class="headerlink" title="2. 创建 PyStringObject 对象"></a>2. 创建 PyStringObject 对象</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">[stringobject.c]</span><br><span class="line"><span class="function">PyObject* <span class="title">PyString_FromString</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">register</span> <span class="keyword">size_t</span> size;</span><br><span class="line">	<span class="keyword">register</span> PyStringObject *op;</span><br><span class="line">	assert(str != <span class="literal">NULL</span>);</span><br><span class="line">	<span class="comment">/*判断字符串长度*/</span></span><br><span class="line">	size = <span class="built_in">strlen</span>(str);</span><br><span class="line">	<span class="keyword">if</span> (size &gt; PY_SSIZE_T_MAX) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/*处理 null string 和单个字符， 注意没有增加引用计数，为什么？*/</span></span><br><span class="line">	<span class="keyword">if</span> (size == <span class="number">0</span> &amp;&amp; (op = nullstring) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    	Py_INCREF(op);</span><br><span class="line">		<span class="keyword">return</span> (PyObject *)op;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (size == <span class="number">1</span> &amp;&amp; (op = characters[*str &amp; UCHAR_MAX]) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    	Py_INCREF(op);</span><br><span class="line">		<span class="keyword">return</span> (PyObject *)op;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/* 创建新的 PyStringObject 对象,并初始化 */</span></span><br><span class="line">	<span class="comment">/* Inline PyObject_NewVar */</span></span><br><span class="line">	op = (PyStringObject *)PyObject_MALLOC(<span class="keyword">sizeof</span>(PyStringObject) + size);</span><br><span class="line">	<span class="keyword">if</span> (op == <span class="literal">NULL</span>) <span class="keyword">return</span> PyErr_NoMemory();</span><br><span class="line">	PyObject_INIT_VAR(op, &amp;PyString_Type, size);</span><br><span class="line">	op-&gt;ob_shash = <span class="number">-1</span>;</span><br><span class="line">	op-&gt;ob_sstate = SSTATE_NOT_INTERNED;</span><br><span class="line">	<span class="built_in">memcpy</span>(op-&gt;ob_sval, str, size+<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 这一段现在不用看，到第三节再回来看</span></span><br><span class="line">	<span class="comment">/* Intern(共享)长度较短的 PyStringObject 对象 */</span></span><br><span class="line">	<span class="keyword">if</span> (size == <span class="number">0</span>) &#123;</span><br><span class="line">		PyObject *t = (PyObject *)op;</span><br><span class="line">		PyString_InternInPlace(&amp;t);</span><br><span class="line">		op = (PyStringObject *)t;</span><br><span class="line">		nullstring = op;</span><br><span class="line">		Py_INCREF(op);</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (size == <span class="number">1</span>) &#123;</span><br><span class="line">		PyObject *t = (PyObject *)op;</span><br><span class="line">		PyString_InternInPlace(&amp;t);</span><br><span class="line">		op = (PyStringObject *)t;</span><br><span class="line">		characters[*str &amp; UCHAR_MAX] = op;</span><br><span class="line">		Py_INCREF(op);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> (PyObject *) op;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解释一下上面的源码，有几个重要的逻辑。</p>
+<ol>
+<li>字符串长度如果过长，将不会创建并返回空。win32 平台下，该值是2147483647。</li>
+<li>空字符串会用特殊的对象<code>nullstring</code>保存。</li>
+<li>单个字符会有一个专用对象缓冲池维护，该缓冲池维护长度为1的<code>PyStringObject</code>。</li>
+<li>最后使用intern机制</li>
+</ol>
+<p>除了<code>PyString_FromString</code>，还有<code>PyString_FromStringAndSize</code> 可以通过C的原生字符串创建python字符串对象。而后者的操作过程和 <code>PyString_FromString</code> 一般无二,只是<br>有一点,<code>PyString_FromString</code> 传入的参数必须是以 <code>\0</code> 结尾的字符数组的指<br>针，然后通过 C 函数<code>strlen</code>确定字符串长度。而 <code>PyString_FromStringAndSize</code> 不会有这样的要求,因为通过传入的 <code>size</code> 参数就可以确定需要拷贝的字符的个数。</p>
+<h2 id="3-Intern-机制"><a href="#3-Intern-机制" class="headerlink" title="3. Intern 机制"></a>3. Intern 机制</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">[stringobjec.c]</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PyString_InternInPlace</span><span class="params">(PyObject **p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 为什么要传指针的指针没有太想明白</span></span><br><span class="line">	<span class="keyword">register</span> PyStringObject *s = (PyStringObject *)(*p);</span><br><span class="line">	PyObject *t;</span><br><span class="line">	<span class="keyword">if</span> (s == <span class="literal">NULL</span> || !PyString_Check(s))</span><br><span class="line">	Py_FatalError(<span class="string">"PyString_InternInPlace: strings only please!"</span>);</span><br><span class="line">	<span class="comment">/* If it's a string subclass, we don't really know what putting</span></span><br><span class="line"><span class="comment">	   it in the interned dict might do. */</span></span><br><span class="line">	<span class="keyword">if</span> (!PyString_CheckExact(s))</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">if</span> (PyString_CHECK_INTERNED(s))</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">if</span> (interned == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		interned = PyDict_New();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	t = PyDict_GetItem(interned, (PyObject *)s);</span><br><span class="line">	<span class="keyword">if</span> (t) &#123;</span><br><span class="line">    	<span class="comment">// 注意这里对引用计数的调整，新创建出来的对象引用计数是1，DEC后直接可以垃圾回收了</span></span><br><span class="line">		Py_INCREF(t);</span><br><span class="line">		Py_DECREF(*p);</span><br><span class="line">		*p = t;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 这个字典的键和值都是这个字符串对象</span></span><br><span class="line">	PyDict_SetItem(interned, (PyObject *)s, (PyObject *)s) &lt; <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* The two references in interned are not counted by refcnt.</span></span><br><span class="line"><span class="comment">	   The string deallocator will take care of this */</span></span><br><span class="line">	s-&gt;ob_refcnt -= <span class="number">2</span>;</span><br><span class="line">	PyString_CHECK_INTERNED(s) = SSTATE_INTERNED_MORTAL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>整个代码的流程：</p>
+<ol>
+<li>类型检查：不是str就不能应用intern机制，甚至派生类对象系统也不行。</li>
+<li>已经应用过intern机制的直接返回，确保不会对同一个<code>PyStringObject</code>进行一次以上的intern操作。</li>
+<li>如果还没有使用过intern，新建interned字典结构。</li>
+<li>如果interned中由当前字符串，让当前<code>PyStringObject</code>指针和<code>interned</code>中指针指向同一位置，然后改变引用计数。</li>
+<li>将字典中键和值都设为改字符串对象<strong>指针</strong>。</li>
+<li>注意对于被 <code>Intern</code> 的 <code>PyStringObject</code> 对象,Python 采用了特殊的引用计数机制。<strong>在将一个 <code>PyStringObject</code> 对象 A 的 <code>PyObject</code> 指针作为 Key 和 Value 添加到 <code>interned</code>中时，<code>PyDictObject</code> 对象会通过这两个指针对 A 的引用计数进行两次加 1 操作。</strong>但是 Python 的设计者规定在 interned 中 A 的指针不能被视为对象 A 的有效引用。否则 <code>interned</code> 中对<code>PyStringObject</code>的两个引用，将导致<code>interned</code>中的对象永远不能被回收。</li>
+</ol>
+<p><img src="/img/PyStringObject2.png" alt="intern机制"></p>
+<p>为了对<code>PyStringObject</code>正常的垃圾回收，对<code>interned</code>使用了特殊的引用计数规则，那么在销毁对象的时候，也要对<code>interned</code>中存放的对象进行特殊处理。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[stringobject.c]</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">string_dealloc</span><span class="params">(PyObject *op)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">switch</span> (PyString_CHECK_INTERNED(op)) &#123;</span><br><span class="line">		<span class="keyword">case</span> SSTATE_NOT_INTERNED:</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">            </span><br><span class="line">		<span class="keyword">case</span> SSTATE_INTERNED_MORTAL:</span><br><span class="line">			<span class="comment">/* revive dead object temporarily for DelItem */</span></span><br><span class="line">            <span class="comment">// 这里设置为3应该是又加上了开始时去掉的两个引用计数</span></span><br><span class="line">			op-&gt;ob_refcnt = <span class="number">3</span>;</span><br><span class="line">			<span class="keyword">if</span> (PyDict_DelItem(interned, op) != <span class="number">0</span>)</span><br><span class="line">				Py_FatalError(<span class="string">"deletion of interned string failed"</span>);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">            </span><br><span class="line">		<span class="keyword">case</span> SSTATE_INTERNED_IMMORTAL:</span><br><span class="line">			Py_FatalError(<span class="string">"Immortal interned string died."</span>);</span><br><span class="line">            </span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			Py_FatalError(<span class="string">"Inconsistent interned string state."</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	op-&gt;ob_type-&gt;tp_free(op);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>说了这么多，用人话表述该机制就是：</p>
+<blockquote>
+<p>该机制规定：当两个或以上的字符串变量它们的值相同且仅由数字字母下划线构成而且长度在20个字符以内，或者值仅含有一个字符时，内存空间中只创建一个对象来让这些变量都指向该内存地址。当字符串不满足该条件时，相同值的字符串变量在创建时都会申请一个新的内存地址来保存值。</p>
+<p>另外，并非全部的字符串都会采用intern机制。仅仅包括下划线、数字、字母的字符串才会被intern。也就是说。仅仅对那些看起来像是python标识符的进行intern。</p>
+</blockquote>
+<p>上面的这个表述经过在 python 终端中的尝试，应该是正确无误的，但是我在Python源码中没有发现对大于一个字符的字符串的 intern 处理代码。而作者在对读者的回信中提到：</p>
+<blockquote>
+<p>从 <code>PyStringObject</code> 对象的源码来看,在创建 <code>PyStringObject</code> 对象的时候,确实只对字符和 <code>nullstring</code> 进行了 Intern 操作。实际上在别的使用 <code>PyStringObject</code> 对象的地方,会在创建了对象后,调用 <code>Intern</code> 机制。比如在 <code>dict</code> 中,当你设置一个<code>(key, value)</code>的对时,就会用到这个 Intern 机制。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span></span><br><span class="line">PyDict_SetItemString(PyObject *v, <span class="keyword">const</span> <span class="keyword">char</span> *key, PyObject *item)</span><br><span class="line">&#123;</span><br><span class="line">    PyObject *kv;</span><br><span class="line">    <span class="keyword">int</span> err;</span><br><span class="line">    kv = PyString_FromString(key);</span><br><span class="line">    <span class="keyword">if</span> (kv == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    PyString_InternInPlace(&amp;kv); <span class="comment">/* XXX Should we really? */</span></span><br><span class="line">    err = PyDict_SetItem(v, kv, item);</span><br><span class="line">    Py_DECREF(kv);</span><br><span class="line">    <span class="keyword">return</span> err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-字符缓冲池"><a href="#4-字符缓冲池" class="headerlink" title="4. 字符缓冲池"></a>4. 字符缓冲池</h2><p>类似于先对所创建的字符串(字符)对象进行 Intern 操作,再将 Intern 的结果缓存到字符缓冲池 <code>characters</code> 中。不同的是，在 Python 的整数对象体系中,小整数的缓冲池是在 Python runtime 初始化时被创建的,而字符串对象体系中的字符缓冲池则是“按需使用”。在 Python runtime 初始化完成之后,缓冲池中的所有 <code>PyStringObject</code> 指针都为空。</p>
+<p>注意第二节创建 <code>PyStringObject</code> 部分的源码，对于单个字符实际上是按照这样的流程处理：</p>
+<ol>
+<li>创建 PyStringObject 对象”P”</li>
+<li>对对象”P”进行 Intern 操作</li>
+<li>将对象”P”缓存至字符缓冲池中</li>
+</ol>
+<p><img src="/img/PyStringObject3.png" alt="字符缓冲池"></p>
+<h2 id="5-字符串连接效率问题"><a href="#5-字符串连接效率问题" class="headerlink" title="5. 字符串连接效率问题"></a>5. 字符串连接效率问题</h2><p>Python 中通过“+”进行字符串连接的方法效率及其低下,其根源在于 Python 中的 <code>PyStringObject</code> 对象是一个不可变对象。这就意味着当进行字符串连接时,实际上是必须要创建一个新的 <code>PyStringObject</code> 对象。这样,如果要连接 N 个 <code>PyStringObject</code> 对象,那么就必须进行 N-1 次的内存申请及内存搬运的工作。</p>
+<p>而<code>join</code>操作只需要分配一次内存,执行效率将大大提高。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">[stringobject.c]</span><br><span class="line"><span class="function"><span class="keyword">static</span> PyObject* <span class="title">string_join</span><span class="params">(PyStringObject *self, PyObject *orig)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> *sep = PyString_AS_STRING(self);</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> seplen = PyString_GET_SIZE(self);</span><br><span class="line">	PyObject *res = <span class="literal">NULL</span>;</span><br><span class="line">	<span class="keyword">char</span> *p;</span><br><span class="line">	<span class="keyword">int</span> seqlen = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">size_t</span> sz = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	PyObject *seq, *item;</span><br><span class="line">	......</span><br><span class="line">    <span class="comment">//获得 list 中 PyStringObject 对象的个数,保存在 seqlen 中</span></span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; seqlen; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">const</span> <span class="keyword">size_t</span> old_sz = sz;</span><br><span class="line">		item = PySequence_Fast_GET_ITEM(seq, i);</span><br><span class="line">		sz += PyString_GET_SIZE(item);</span><br><span class="line">		<span class="keyword">if</span> (i != <span class="number">0</span>)</span><br><span class="line">			sz += seplen;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/* 申请内存空间 */</span></span><br><span class="line">	res = PyString_FromStringAndSize((<span class="keyword">char</span>*)<span class="literal">NULL</span>, (<span class="keyword">int</span>)sz);</span><br><span class="line">	<span class="comment">/* 连接 list 中的每一个 PyStringObject 对象*/</span></span><br><span class="line">	p = PyString_AS_STRING(res);</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; seqlen; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">size_t</span> n;</span><br><span class="line">		<span class="comment">/* 获得 list 中的一个 PyStringObject 对象*/</span></span><br><span class="line">		item = PySequence_Fast_GET_ITEM(seq, i);</span><br><span class="line">		n = PyString_GET_SIZE(item);</span><br><span class="line">		<span class="built_in">memcpy</span>(p, PyString_AS_STRING(item), n);</span><br><span class="line">		p += n;</span><br><span class="line">		<span class="keyword">if</span> (i &lt; seqlen - <span class="number">1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">memcpy</span>(p, sep, seplen);</span><br><span class="line">			p += seplen;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	Py_DECREF(seq);</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="6-Hack-PyStringObject"><a href="#6-Hack-PyStringObject" class="headerlink" title="6. Hack PyStringObject"></a>6. Hack PyStringObject</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">a=<span class="string">"asd"</span>;b=<span class="string">"asd"</span></span><br><span class="line">print(a <span class="keyword">is</span> b) <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line">a=<span class="string">"asd!"</span>;b=<span class="string">"asd!"</span></span><br><span class="line">print(a <span class="keyword">is</span> b) <span class="comment"># False</span></span><br><span class="line"></span><br><span class="line">a=<span class="string">"a"</span>+<span class="string">"_"</span>;b=<span class="string">"a_"</span></span><br><span class="line">print(a <span class="keyword">is</span> b) <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line">a=<span class="string">"a"</span>;b=<span class="string">"ab"</span></span><br><span class="line">print(a+<span class="string">"b"</span> <span class="keyword">is</span> b) <span class="comment"># False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">a=<span class="string">"apple"</span></span><br><span class="line">print(sys.getrefcount(a))</span><br><span class="line">b=<span class="string">"apple"</span></span><br><span class="line">print(sys.getrefcount(a)) <span class="comment"># 多了1</span></span><br><span class="line"></span><br><span class="line">a=<span class="string">"apple@"</span></span><br><span class="line">print(sys.getrefcount(a))</span><br><span class="line">b=<span class="string">"apple@"</span></span><br><span class="line">print(sys.getrefcount(a)) <span class="comment"># 不变</span></span><br></pre></td></tr></table></figure>
+<p>（略略略）</p>
+<hr>
+<p>参考：</p>
+<ol>
+<li>Python源码剖析（陈孺）</li>
+<li><a href="https://www.cnblogs.com/brucemengbm/p/6952822.html" target="_blank" rel="noopener">什么是string interning(字符串驻留)以及python中字符串的intern机制</a></li>
+<li><a href="https://my.oschina.net/u/3723649/blog/1815000" target="_blank" rel="noopener">Python字符串的intern机制和大小整数对象池</a></li>
+<li><a href="https://en.wikipedia.org/wiki/String_interning" target="_blank" rel="noopener">tring interning Wiki</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/06/03/Python-2018-06-03-PyStringObject/" data-id="cjxo5e6pq0031z16dwc2gv7ls" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../04/Python-2018-06-04-PyListObject/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          python中的列表对象
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../02/Python-2018-06-02-PyIntObject/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python中的整数对象</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>优化算法小备忘 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="优化是不只是机器学习中一个基础而重要的步骤，对于这种计算机学科乃至理工科，都是 一、数值计算与优化基础1.1 溢出在计算机中，我们通过有限的离散位数来表示无限的连续实数域，这使得这种原因导致的数值误差————即舍入误差，几乎不可能避免。上溢和下溢是一种非常严重的舍入误差。比如机器学习中常见的Softmax函数，其中的除法和指数运算就是经常会出现溢出并导致计算错误的案例，常见的防范措施是对于每个So">
+<meta name="keywords" content="machinelearning,maths,deeplearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="优化算法小备忘">
+<meta property="og:url" content="https://protao.github.io/2018/10/02/机器学习-2018-10-02-optimizer/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="优化是不只是机器学习中一个基础而重要的步骤，对于这种计算机学科乃至理工科，都是 一、数值计算与优化基础1.1 溢出在计算机中，我们通过有限的离散位数来表示无限的连续实数域，这使得这种原因导致的数值误差————即舍入误差，几乎不可能避免。上溢和下溢是一种非常严重的舍入误差。比如机器学习中常见的Softmax函数，其中的除法和指数运算就是经常会出现溢出并导致计算错误的案例，常见的防范措施是对于每个So">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/2018/10/02/img/BadGD.png">
+<meta property="og:image" content="https://protao.github.io/2018/10/02/img/GradientNorm.png">
+<meta property="og:image" content="https://protao.github.io/2018/10/02/img/SaddleGradient.png">
+<meta property="og:image" content="https://protao.github.io/2018/10/02/img/ErrorAndEigenvalues.png">
+<meta property="og:image" content="https://protao.github.io/2018/10/02/img/Optimization-SGD.png">
+<meta property="og:image" content="https://protao.github.io/2018/10/02/img/Optimization-Momentum.png">
+<meta property="og:image" content="https://protao.github.io/2018/10/02/img/Optimization-Nesterov.png">
+<meta property="og:image" content="https://protao.github.io/2018/10/02/img/Optimization-Adagrad.png">
+<meta property="og:image" content="https://protao.github.io/2018/10/02/img/Optimization-RMSProp.png">
+<meta property="og:image" content="https://protao.github.io/2018/10/02/img/Optimization-RMSProp2.png">
+<meta property="og:image" content="https://protao.github.io/2018/10/02/img/Optimization-Adam.png">
+<meta property="og:updated_time" content="2019-05-11T07:05:53.406Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="优化算法小备忘">
+<meta name="twitter:description" content="优化是不只是机器学习中一个基础而重要的步骤，对于这种计算机学科乃至理工科，都是 一、数值计算与优化基础1.1 溢出在计算机中，我们通过有限的离散位数来表示无限的连续实数域，这使得这种原因导致的数值误差————即舍入误差，几乎不可能避免。上溢和下溢是一种非常严重的舍入误差。比如机器学习中常见的Softmax函数，其中的除法和指数运算就是经常会出现溢出并导致计算错误的案例，常见的防范措施是对于每个So">
+<meta name="twitter:image" content="https://protao.github.io/2018/10/02/img/BadGD.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-机器学习-2018-10-02-optimizer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-10-01T16:00:00.000Z" itemprop="datePublished">2018-10-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/机器学习/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      优化算法小备忘
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>优化是不只是机器学习中一个基础而重要的步骤，对于这种计算机学科乃至理工科，都是</p>
+<h2 id="一、数值计算与优化基础"><a href="#一、数值计算与优化基础" class="headerlink" title="一、数值计算与优化基础"></a>一、数值计算与优化基础</h2><h3 id="1-1-溢出"><a href="#1-1-溢出" class="headerlink" title="1.1 溢出"></a>1.1 溢出</h3><p>在计算机中，我们通过有限的离散位数来表示无限的连续实数域，这使得这种原因导致的数值误差————即舍入误差，几乎不可能避免。上溢和下溢是一种非常严重的舍入误差。比如机器学习中常见的Softmax函数，其中的除法和指数运算就是经常会出现溢出并导致计算错误的案例，常见的防范措施是对于每个Softmax的$$$w$$$，进行计算$$$w=w-maxw_j$$$。</p>
+<h3 id="1-2-病态条件"><a href="#1-2-病态条件" class="headerlink" title="1.2 病态条件"></a>1.2 病态条件</h3><p>条件数表征函数相对于输入的微小变化而变化的快慢程度。输入被轻微扰动而迅速改变的函数对于数值计算来说可能是有问题的，因为输入中的舍入误差可能导致输出的巨大变化。<br>考虑函数 $$$f(x)=A^{-1}x$$$ ，当$$$A$$$可以特征值分解时，其条件数为：</p>
+<p>$$max_{i,j} \bigg| \frac{\lambda_i}{\lambda_j}\bigg|$$</p>
+<a id="more"></a>
+<p>当该定义下的条件数很大时，矩阵求逆对于输入的误差特别敏感。对于病态条件对于计算的不稳定性，我们可以做一个小实验。可以看到的确是条件数越大，对于输入越不稳定。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> linalg</span><br><span class="line">m = np.random.random(size=(<span class="number">3</span>,<span class="number">3</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(m, delta)</span>:</span></span><br><span class="line">    x1 = np.array([<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>])</span><br><span class="line">    x2 = x1 + delta</span><br><span class="line">    print(<span class="string">"&#123;&#125;扰动误差"</span>.format(delta), linalg.norm(np.dot(x1, m) - np.dot(x2, m)))</span><br><span class="line"></span><br><span class="line">print(<span class="string">"条件数"</span>, linalg.cond(m))</span><br><span class="line">f(m, <span class="number">0.01</span>)</span><br><span class="line">f(m, <span class="number">0.001</span>)</span><br><span class="line"></span><br><span class="line">ill_m = m.copy()</span><br><span class="line">ill_m[<span class="number">0</span>,<span class="number">0</span>] += <span class="number">100</span></span><br><span class="line">print(<span class="string">"条件数"</span>, linalg.cond(ill_m))</span><br><span class="line">f(ill_m, <span class="number">0.01</span>)</span><br><span class="line">f(ill_m, <span class="number">0.001</span>)</span><br></pre></td></tr></table></figure>
+<p>对于 Hessian 矩阵，它的条件数衡量了这些二阶导数的变化范围当 Hessian 的条件数很差时，梯度下降法也会表现得很差。这是因为一个方向上的导数增加得很快,而在另一个方向上增加得很慢,可是梯度下降却不知道导数的这种变化，所以它不知道应该优先探索导数长期为负的方向，而不是梯度当前最小但是却会快速增加的方向。病态条件也导致很难选择合适的步长。步长必须足够小,以免冲过最小而向具有较强正曲率的方向上升。这通常意味着步长太小,以致于在其他较小曲率的方向上进展不明显。<br><img src="../img/BadGD.png" alt><br>在上图中，就是经典的GD算法表现不好的“峡谷场景”，如果可以利用Hessian矩阵，我们会得到$$$g^THg$$$是一个较大的正数，这意味着一阶拟合的效果很不好，二阶项告诉我们在当前方向上函数要比一阶项预测的大，所以Hessian可以告诉我们当前方向不是最好的方向。</p>
+<h3 id="1-3-基于梯度的优化方法"><a href="#1-3-基于梯度的优化方法" class="headerlink" title="1.3 基于梯度的优化方法"></a>1.3 基于梯度的优化方法</h3><p>对于一个标量函数函数，函数的导数告诉我们的信息是输入的小变化怎么影响输出的变化，实际上这来自于泰勒分解的第一项，即只使用线性项与拟合原函数的结果，所以倒数告诉了我们<strong>斜率</strong>信息。<br>在导数为零的地方，我们无法通过线性项获得函数的斜率信息，这实际上是一种一阶的<strong>退化现象</strong>。此时的 x 被称为临界点(Critical Point)或者驻点(Stationary Point)。<br>对于接受向量输入的函数，导数的概念被扩展为偏导数、梯度和方向导数。偏导数是针对一维数据的导数，梯度是偏导数构成的向量。方向导数是f在 <strong>u</strong> 方向的斜率。方向导数是函数 $$$f(x+αu)$$$ 关于 α 的导数(在 α = 0 时取得)。使用链式法则,我们可以看到当 α = 0 时, $$$\frac{∂}{∂α}f(x + αu) = u^⊤∇f(x)$$$。通过这个式子，我们以希望找到一个方向，该方向上的方向导数最小，该方向即为负梯度方向，使用该方向的一阶方法称为最速下降法。</p>
+<h3 id="1-4-Jocobian和Hessian矩阵"><a href="#1-4-Jocobian和Hessian矩阵" class="headerlink" title="1.4 Jocobian和Hessian矩阵"></a>1.4 Jocobian和Hessian矩阵</h3><p>对于输入和输出均为导数的函数，其偏导数为矩阵，被称为<strong>Jacobian</strong>矩阵。这个矩阵在我们进行积分的计算使用变量替换时会经常用到。</p>
+<p>另外，导数的导数对于多维函数变现为Hessian矩阵，根据概念，他等价于梯度函数的 Jocobian 矩阵。它表示只基于梯度信息的梯度下降步骤是否会产生如我们预期的那样大的改善，因此可以认为它是<strong>曲率的衡量</strong>。Hessian 矩阵是对称的，因此<strong>一定可以将其分解为一组实特征值和一组特征向量的正交基</strong>。</p>
+<p>在特定方向 d 上的二阶导数可以写成 $$$d^THd$$$。对于任意的方向 d,方向二阶导数都可以表示为所有特征值的加权平均，<strong>权重在 0 和 1 之间</strong>，且与 d 夹角越小的特征向量的权重越大。最大特征值确定最大二阶导数,最小特征值确定最小二阶导数。</p>
+<p>就像前面说的，可以通过二阶导数来预测梯度下降步骤能表现的有多好。</p>
+<p>$$f(x) = f(x^{(0)})+(x-x^{(0)})^Tg + \frac12(x-x^{(0)})^TH(x-x^{(0)})$$</p>
+<p>当使用最速下降法时，下一步移动的方向是$$$-g$$$， 步长是$$$\epsilon$$$。此时：</p>
+<p>$$f(x) = f(x^{(0)}) - \epsilon g^Tg + \frac12g^THg$$</p>
+<p>如果想要求出最优步长，实际上对于右侧的二阶逼近来说，就是一个关于步长的二次函数，当$$$\frac12g^THg$$$为负数或者零时，步长在无穷远处时函数值最小，这显然是不行的，因为泰格展开只在邻域内有效；如果二阶项是正数，那可以直接求解最优步长：$$$\frac{g^Tg}{g^THg}$$$。目标函数能用二次函数很好的近似的情况下，Hessian的特征值决定了学习率的量级。</p>
+<p>通过Hessian的特征值正负情况，可以判断驻点是极点还是鞍点。在特征值有正有负的情况下，意味着当前点是某个方向上的极大值而是另一个方向上的极小值，这就足以判断该点是一个鞍点。</p>
+<h3 id="1-5-二阶方法"><a href="#1-5-二阶方法" class="headerlink" title="1.5 二阶方法"></a>1.5 二阶方法</h3><p>如果利用起二阶信息比如指导搜索，可以有更快的搜索速度，最简单的就是牛顿法，牛顿法基于二阶的泰勒展开。牛顿法能够以一个二次曲面逼近局部函数。但是牛顿法的一个缺点是会被鞍点吸引，这一点对于梯度下降来说却不是问题。然而在实际使用中由于这一点限制，二阶方法在深度学习中应用却并不广泛，反而一阶方法的优化和变体却是遍地开花。因为深度学习中涉及到的函数族特别复杂，使用二阶方法可能没有保证。通常认为深度学习有非常弱的限制比如<strong>Lipschitz连续</strong>。</p>
+<h3 id="1-6-约束优化"><a href="#1-6-约束优化" class="headerlink" title="1.6 约束优化"></a>1.6 约束优化</h3><p>对于约束优化中的约束有时候不是问题自身限制的，有的时候也可能是我们人为加入的一些约束，比如1-norm正则或者2-norm正则都等价于约束优化问题。对于约束优化问题，KKT（Karush – Kuhn – Tucker）是一个通用性的解法，满足KKt条件时，原问题可以等价的转换为对偶问题。KKT条件，包括：</p>
+<ol>
+<li>广义Lagrangian的梯度为零</li>
+<li>所有对于x和KKT乘子的条件也都满足。</li>
+<li>不等式约束显式的“松弛互补性”。</li>
+</ol>
+<p>比如对于最小二乘问题，我们有闭式解。如果我们加上约束，希望$$$x^Tx\le1$$$，那么就需要用到KKT方法了。首先构造广义Lagrangian：<br>$$L(x,\lambda)=\frac12||Ax-b||^2+\lambda(x^Tx-1)$$</p>
+<p>原问题转化为对偶问题$$$minf(x)=max_\lambda min_xL(x)$$$，内层x有闭式解$$$x=(A^TAx+2\lambda I)^-1A^Tb$$$，带入后函数中只有$$$\lambda$$$变量，用梯度上升法求$$$\lambda$$$的最大值。具体说明，当x不满足约束时，拉格朗日函数关于$$$\lambda$$$的梯度是正的，针对$$$\lambda$$$进行梯度上升后，$$$\lambda$$$变大，重新计算x的闭式解，x的范数会减小，重复此过程直到x满足要求切$$$\lambda$$$的梯度是0。</p>
+<h2 id="二、深度学习中的优化"><a href="#二、深度学习中的优化" class="headerlink" title="二、深度学习中的优化"></a>二、深度学习中的优化</h2><p>首先我们了解统计学习的基础是模型，目标函数和算法，模型确定了我们的<strong>假设集 (hypothesis set) </strong>，目标函数告诉我们我们假设集中哪一个假设更好，而学习算法帮助我们找到最好的那一个假设。但是注意，对于一个<strong>学习 (Learning) </strong>任务来说，<strong>优化 (Optimization)</strong> 不是全部，优化只能帮助我们经验风险最小，但是一个学习任务最终的目标是<strong>泛化(generalization)</strong>能力最好。</p>
+<h3 id="2-1-学习与纯优化的区别"><a href="#2-1-学习与纯优化的区别" class="headerlink" title="2.1 学习与纯优化的区别"></a>2.1 学习与纯优化的区别</h3><ol>
+<li>我们使用某种性能度量指标 P 作为我们真正关注的目标，但是学习中使用的是建立在经验分布上的损失函数。比如说我们关注期望泛化误差（risk），但是却优化经验风险，这种学习策略有过拟合的风险，比如高容量的模型可以简单地记住训练集。而且假设我们使用0-1损失，我们甚至没有方法去优化经验损失函数。</li>
+<li>我们使用一些其他的损失函数作为0-1损失的代理，比如对数损失。在某些情况下，代理损失函数甚至比原函数能学到更多的东西，在训练集上损失函数为0后继续训练，测试集上0-1损失还能继续下降一段时间，只是因为，我们能持续优化决策边界，加大类别之间的距离以增强模型的鲁棒性。    </li>
+<li>如果使用基于测试集的提前终止的话，学习算法甚至不会停在局部最优点上。</li>
+<li>实践中使用随机或者小批量算法代替原有的批量算法，原因是考虑n个样本均值的标准差$$$\sigma/\sqrt n$$$，这意味着使用更多样本来估计梯度的方法的回报是低于线性的，另外一个动机是训练及数据的冗余，即大量的样本杜宇梯度的贡献都是近似的。小批量算法一个额外的好处是，他们在学习中可能引入了一些噪声使得自带一些正则化效果，这个之后会详细说明。</li>
+</ol>
+<h3 id="2-2-神经网络优化中的挑战"><a href="#2-2-神经网络优化中的挑战" class="headerlink" title="2.2 神经网络优化中的挑战"></a>2.2 神经网络优化中的挑战</h3><h4 id="2-2-1-病态"><a href="#2-2-1-病态" class="headerlink" title="2.2.1 病态"></a>2.2.1 病态</h4><p>Hessian矩阵的病态性之前也提到，这里再次进行详细说明，Hessian如果条件数很大，即使不考虑误差，这样的Hessian矩阵也意味着梯度下降会卡在峡谷区域。为了解决这个问题，我们分别检测代价函数泰勒展开的一阶项 $$$\epsilon g^Tg$$$ 和二阶项 $$$\frac12\epsilon^2g^THg$$$ 。当二阶项超过一阶项的时候，意味着可能会出现问题，因为目标函数可能不降反增。很多情况下，梯度的范数不会显著缩小，但是 $$$g^THg$$$ 的增长会超过一个量级。其结果是尽管梯度很强,学习会变得非常缓慢,因为学习率必须收缩以弥补更强的曲率。<br><img src="../img/GradientNorm.png" alt><br><img src="../img/SaddleGradient.png" alt></p>
+<h4 id="2-2-2-局部极小"><a href="#2-2-2-局部极小" class="headerlink" title="2.2.2 局部极小"></a>2.2.2 局部极小</h4><p>对于深度学习，我们会说模型的函数是非凸函数，可能存在局部极小的问题。这个问题是这样的，对于深度学习，一定存在局部极小值，因为<strong>模型的可辨识性问题</strong>，我们简单的交换隐层变量可以得到一个完全一样的模型，这种不可辨识性称为<strong>权重空间对称性</strong>，这意味着我们的特征变化函数其实具有高度的<strong>高维对称结构</strong>。</p>
+<p>但是这种局部极小不是困扰我们的问题，因为这些局部极小具有一样的函数值。而且对于超高维空间来说，局部极小意味着Hessian正定，这通常非常困难，我们即使找到梯度为零的点，也基本上是遇到了鞍点。但是每一个特征值为正的概率不是固定的，当我们的损失函数值越小的时候，我们的Hessian中约有较大的可能有正的特征值。</p>
+<p><img src="../img/ErrorAndEigenvalues.png" alt></p>
+<p>而且一些Paper在某些方向上对随时函数进行可视化，比如初始点和最终点连接的方向上，发现损失函数在这些方向上性质很好，通常是表现为凸的。    </p>
+<p><a href="http://www.offconvex.org/2016/03/22/saddlepoints/" target="_blank" rel="noopener"></a></p>
+<h4 id="2-2-3-长期依赖和梯度爆炸（消失）"><a href="#2-2-3-长期依赖和梯度爆炸（消失）" class="headerlink" title="2.2.3 长期依赖和梯度爆炸（消失）"></a>2.2.3 长期依赖和梯度爆炸（消失）</h4><p>梯度消失使得我们难以知道参数朝哪个方向移动能够改进代价函数,而梯度爆炸会使得学习不稳定。这个不用多说了，可以使用截断法解决。</p>
+<h2 id="三、具体算法"><a href="#三、具体算法" class="headerlink" title="三、具体算法"></a>三、具体算法</h2><h3 id="3-1-基本算法"><a href="#3-1-基本算法" class="headerlink" title="3.1 基本算法"></a>3.1 基本算法</h3><h4 id="3-1-1-SGD"><a href="#3-1-1-SGD" class="headerlink" title="3.1.1 SGD"></a>3.1.1 SGD</h4><p><img src="../img/Optimization-SGD.png" alt></p>
+<h4 id="3-1-2-Momentum"><a href="#3-1-2-Momentum" class="headerlink" title="3.1.2 Momentum"></a>3.1.2 Momentum</h4><p>动量方法 (Polyak, 1964) 旨在加速学习,特别是处理高曲率、小但一致的梯度,或是带噪声的梯度。动量算法积累了之前梯度指数级衰减的移动平均,并且继续沿该方向移动。</p>
+<p><img src="../img/Optimization-Momentum.png" alt></p>
+<h4 id="3-1-3-Nesterov"><a href="#3-1-3-Nesterov" class="headerlink" title="3.1.3 Nesterov"></a>3.1.3 Nesterov</h4><p><img src="../img/Optimization-Nesterov.png" alt><br>在凸批量梯度的情况下，Nesterov动量将额外误差收敛率降低到$$$O(1/k^2)$$$，可惜在随机梯度下，该算法没有明显改进收敛率。</p>
+<h3 id="3-2-自适应学习率"><a href="#3-2-自适应学习率" class="headerlink" title="3.2 自适应学习率"></a>3.2 自适应学习率</h3><h4 id="3-2-1-Adagrad"><a href="#3-2-1-Adagrad" class="headerlink" title="3.2.1 Adagrad"></a>3.2.1 Adagrad</h4><p>独立地适应所有模型参数的学习率,缩放每个参数反比于其所有梯度历史平方值总和的平方根 (Duchi et al., 2011)。具有损失最大偏导的参数相应地有一个快速下降的学习率,而具有小偏导的参数在学习率上有相对较小的下降。净效果是在参数空间中更为平缓的倾斜方向会取得更大的进步。</p>
+<p><img src="../img/Optimization-Adagrad.png" alt></p>
+<h4 id="3-2-2-RMSProp"><a href="#3-2-2-RMSProp" class="headerlink" title="3.2.2 RMSProp"></a>3.2.2 RMSProp</h4><p>RMSProp修改Adagrad以在非凸条件下效果更好，改变梯度累计为指数加权移动平均。因此相比于后者，RMSProp引入一个新的超参数控制指数加权移动平均的窗口大小。<br>当应用于非凸函数训练神经网络时,学习轨迹可能穿过了很多不同的结构,最终到达一个局部是凸碗的区域。AdaGrad 根据平方梯度的整个历史收缩学习率,可能使得学习率在达到这样的凸结构前就变得太小了。RMSProp 使用指数衰减平均以丢弃遥远过去的历史,使其能够在找到凸碗状结构后快速收敛，最终结果就像一个初始化于该碗附近的AdaGrad算法。</p>
+<p><img src="../img/Optimization-RMSProp.png" alt><br><img src="../img/Optimization-RMSProp2.png" alt></p>
+<h4 id="3-2-3-Adam"><a href="#3-2-3-Adam" class="headerlink" title="3.2.3 Adam"></a>3.2.3 Adam</h4><p><img src="../img/Optimization-Adam.png" alt></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="http://www.jianshu.com/p/d99b83f4c1a6" target="_blank" rel="noopener">如何选择优化器</a></li>
+<li><a href="https://zhuanlan.zhihu.com/data-miner" target="_blank" rel="noopener">当我们在谈论数据挖掘</a></li>
+<li><a href="http://blog.topspeedsnail.com/" target="_blank" rel="noopener">“斗大的熊猫”的博客</a></li>
+<li><a href="https://morvanzhou.github.io/" target="_blank" rel="noopener">莫烦小哥的blog</a></li>
+<li><a href="http://homepages.math.uic.edu/~julius/
+saddle.html" target="_blank" rel="noopener">DeepLearning</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/10/02/机器学习-2018-10-02-optimizer/" data-id="cjxo5e6t0004fz16dhcxd4qpd" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/maths/">maths</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../08/程序员的玩具-2018-10-08-LC-Random/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          LeetCode刷题笔记——Random
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../01/程序员的玩具-2018-10-01-LC-BinarySearch/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">LeetCode刷题笔记——BinarySearch</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

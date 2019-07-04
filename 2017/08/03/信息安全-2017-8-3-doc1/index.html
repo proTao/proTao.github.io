@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>RIOT文档一 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. AbstractRIoT是一种为计算设备提供基础信任服务的体系结构。信任服务包括设备标识、密封、认证和数据完整性。之所以使用“健壮”这个词，是因为最小的可信计算基数很小，而且因为RIoT的功能可以远程重建被恶意软件破坏的设备的信任。术语“物联网”之所以被使用，是因为即使是最微小的设备，这些服务也可以以低成本提供。本文描述了RIoT的硬件需求以及硬件如何支持一系列基础信任服务。 2. Intr">
+<meta name="keywords" content="security,hash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RIOT文档一">
+<meta property="og:url" content="https://protao.github.io/2017/08/03/信息安全-2017-8-3-doc1/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="1. AbstractRIoT是一种为计算设备提供基础信任服务的体系结构。信任服务包括设备标识、密封、认证和数据完整性。之所以使用“健壮”这个词，是因为最小的可信计算基数很小，而且因为RIoT的功能可以远程重建被恶意软件破坏的设备的信任。术语“物联网”之所以被使用，是因为即使是最微小的设备，这些服务也可以以低成本提供。本文描述了RIoT的硬件需求以及硬件如何支持一系列基础信任服务。 2. Intr">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/figure1.png">
+<meta property="og:image" content="https://protao.github.io/img/figure2.png">
+<meta property="og:image" content="https://protao.github.io/img/figure3.png">
+<meta property="og:image" content="https://protao.github.io/img/figure4.png">
+<meta property="og:image" content="https://protao.github.io/img/figure5.png">
+<meta property="og:image" content="https://protao.github.io/img/figure6.png">
+<meta property="og:image" content="https://protao.github.io/img/figure7.png">
+<meta property="og:image" content="https://protao.github.io/img/figure8.png">
+<meta property="og:image" content="https://protao.github.io/img/figure9.png">
+<meta property="og:image" content="https://protao.github.io/2017/08/03/信息安全-2017-8-3-doc1/img/figure10.png">
+<meta property="og:updated_time" content="2018-03-30T13:51:02.849Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RIOT文档一">
+<meta name="twitter:description" content="1. AbstractRIoT是一种为计算设备提供基础信任服务的体系结构。信任服务包括设备标识、密封、认证和数据完整性。之所以使用“健壮”这个词，是因为最小的可信计算基数很小，而且因为RIoT的功能可以远程重建被恶意软件破坏的设备的信任。术语“物联网”之所以被使用，是因为即使是最微小的设备，这些服务也可以以低成本提供。本文描述了RIoT的硬件需求以及硬件如何支持一系列基础信任服务。 2. Intr">
+<meta name="twitter:image" content="https://protao.github.io/img/figure1.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-信息安全-2017-8-3-doc1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2017-08-03T08:35:28.000Z" itemprop="datePublished">2017-08-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/信息安全/">信息安全</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      RIOT文档一
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-Abstract"><a href="#1-Abstract" class="headerlink" title="1. Abstract"></a>1. Abstract</h1><p>RIoT是一种为计算设备提供基础信任服务的体系结构。信任服务包括设备标识、密封、认证和数据完整性。之所以使用“健壮”这个词，是因为最小的可信计算基数很小，而且因为RIoT的功能可以远程重建被恶意软件破坏的设备的信任。术语“物联网”之所以被使用，是因为即使是最微小的设备，这些服务也可以以低成本提供。<br>本文描述了RIoT的硬件需求以及硬件如何支持一系列基础信任服务。</p>
+<h1 id="2-Introduction"><a href="#2-Introduction" class="headerlink" title="2. Introduction"></a>2. Introduction</h1><p>技术正在迅速地发展和丰富现代世界，许多应用程序使计算设备对我们的日常生活不可或缺。这些应用程序中有很多都是非常昂贵的，而且，由于传统的基于硬件的安全方法增加了设备的成本，基于硬件的安全性通常被认为是不切实际的。同时，设备经常在没有物理安全保证的苛刻环境中部署。加速上市的时间、迭代的改进和不断改进的安全研究，已经为频繁的软件更新创造了需要。但是，这些更新必须在没有人参与的情况下进行管理和验证。RIoT解决了这些新的安全现实，并且可以进一步加强传统的安全技术。</p>
+<p>加密操作和密钥管理构成了许多安全场景，而RIoT的核心贡献是为这些服务提供安全且可管理的基础。身份验证、完整性验证和数据保护要求加密密钥加密和解密，以及对数据进行散列和签名的机制。大多数联网设备也使用加密技术来与其他设备和服务进行通信。通过设备标识、访问控制、设备健康验证以及制造商控制更新到设备的部署和验证安装完成等更复杂的场景，也最好使用加密技术完成。</p>
+<p>为了支持这些和其他方案，RIoT提供的基本加密服务包括:</p>
+<ul>
+<li><p>Device Identity<br>  设备通常通过证明拥有一个加密密钥来对自己进行身份验证。如果与设备相关的键被提取和克隆，那么设备可以被模拟，因此保护设备标识键是至关重要的。</p>
+</li>
+<li><p>Data protection<br>  设备通常使用加密来对本地数据进行加密和完整性保护。如果密码密钥只能被授权的代码访问，那么恶意软件或可能对平台安全产生不利影响的未经授权的软件将无法解密或修改数据。</p>
+</li>
+<li><p>Attestation<br>  设备通常需要能够报告它们正在运行的代码以及它们的安全配置——一个被称为认证的过程。特别地，认证常常用来证明设备正在运行最新的补丁代码。</p>
+</li>
+</ul>
+<p>如果密钥不被对手所知，密码学只会对整个系统安全起作用。如果密钥仅在软件中进行管理，那么软件组件中的缺陷就会导致密钥被盗，从而否定它们的安全价值。对于软件系统来说，恢复信任的主要方法是安装更新的软件，并在物理安全条件下为设备提供新的密钥。对于典型的PC机、服务器和移动设备来说，这是耗时且昂贵的，当设备在物理上无法访问时，这是不可行的或不可能的。</p>
+<p>今天的安全远程重置的实用解决方案涉及基于硬件的安全性。软件级别的攻击可能允许对手使用硬件保护的密钥，但不能提取它们，因此，硬件保护密钥是安全重新配置受损害的系统的有用的构建块。可信平台模块(TPM)是一个低成本安全模块的例子，它为密钥提供硬件保护，并允许设备报告它正在运行的软件。[1]因此，一个受损的tpm设备可以安全发布新的密钥，并且还可以提供证明更新成功的认证报告。</p>
+<p>TPMs在当代计算平台上随处可见，而soc -集成和处理器-分离的固件TPMs的出现降低了成本。然而，在某些情况下，TPMs仍然是不切实际的。例如，在一个小型物联网设备中，如果没有大幅增加成本和电力预算，就无法支持TPM。TPM使用的另一个不实际的例子是确保TPM本身——TPM是需要进行现场更新的复杂软件系统。如果TPM被破坏，那么它不太可能获得第二个TPM来帮助重新配置和重新定位，因此需要另一种方法。</p>
+<p>RIoT已经被开发用来为即使是最小的计算设备提供这种基本的设备安全性，尽管它可以应用于任何处理器或计算机系统。对于RIoT的硬件和软件需求非常有限，不应该增加任何足以运行网络堆栈的设备的材料成本。特别是，<strong>RIoT不需要专用的安全处理器或专用处理器模式</strong>。</p>
+<a id="more"></a>
+<p>RIoT的安全基础非常简单，而且实际上可以完全不受exploitable bug的影响(在最简单的情况下，它只是一个HMAC函数)。<strong>如果在RIoT核心之外的软件组件被破坏，那么RIoT将提供安全补丁和重新配置</strong>。</p>
+<p>RIoT也非常灵活:它的简单硬件基础可以用来bootstrap广泛的基于软件的安全服务。</p>
+<p>最后，RIoT在加密密钥保护方面采取了一种不同寻常的方法。<strong>在启动过程中，RIoT框架使用的最受保护的加密密钥只能在短时间内使用。</strong>这种方法的关键管理既是造成暴乱的低成本的原因，也是长期居住的防暴钥匙被妥善保管的原因。但是，一些操作和协议必须适应这种限制。</p>
+<h1 id="3-RIoT-in-a-Netshell"><a href="#3-RIoT-in-a-Netshell" class="headerlink" title="3. RIoT in a Netshell"></a>3. RIoT in a Netshell</h1><p>本节简要概述基于RIoT的系统的原则。详细的软件和硬件架构在接下来的章节中更详细地描述。</p>
+<p>在一个RIoT系统中，引导的过程是分阶段进行的。一个初始的不可变加载程序，称为L0或0层(在基于cpu的ROM中执行)，加载并启动第二阶段加载器L1。这一层依次加载和启动下一个阶段加载程序L2，直到操作系统(OS)和应用程序运行。这种类型的进展如图1所示。</p>
+<p>RIoT系统安全基于一个名为“设备秘密”的秘密值，该值是在生产过程中设置的(或稍后提供，前提是在物理安全条件下设置)。在典型的RIoT实现中，设备秘密只存在于它所供应的设备中。然而，在这个教学的介绍中，将假定制造商维护一个设备机密数据库。</p>
+<p>在启动时，第一个基于rom的引导加载程序L0可以访问UDS。RIoT系统提供了一种硬件机制，基于rom的加载器使用它来使设备秘密无法访问，直到下一次启动循环。<em>(The systems provide a hardware mechanism that the ROM-based loader uses to render the Device Secret inaccessible until the next boot cycle.)</em><br><img src="/img/figure1.png" alt></p>
+<p>基于rom的加载器L0可以很好地为L1提供该设备的秘密，并在启动链上提供。然后，软件可以使用秘密值加密机密数据或对设备进行认证。这个简单方案的问题是，如果有任何一个软件可以访问设备的秘密，并且设备秘密泄露，所有的设备安全都会丢失，并且可能无法安全地重新提供设备。</p>
+<p>为了避免这种缺点，在一个与RIoT兼容的系统中，L0代码永远不会泄露实际设备的秘密。相反，它为引导链中的下一个程序提供了一个派生的键。然后，如果L1被破坏，派生的密钥可能会被破坏，但是UDS仍然是安全的。当然，一个恶意的L1可能会试图自己获取设备的秘密。<strong>为了防止这种情况发生，具有RIoT能力的系统必须提供一种硬件机制，以确保只有L0引导加载程序才能访问设备机密。</strong></p>
+<p>关键的派生函数有许多可能的选择。具有必要的安全属性的最简单的构造是一个函数，它依赖于引导链中的下一个程序的散列。例如:</p>
+<pre><code>K1 = KDF（UDS，Hash（L1））
+</code></pre><p>其中，KDF是一种加密单向键派生函数，如HMAC函数。产生的键K1，也被称为FDS（Fuse Derived Secret）。</p>
+<p>这个操作如图2所示。“键控二极管”电路元件代表单向函数，开关说明了在启动过程中阻塞访问设备秘密的一种机制。<br><img src="/img/figure2.png" alt></p>
+<p>这个结构有两个有趣的特点。首先，派生的密钥K1依赖于设备机密和L1的加密标识。由于设备秘密唯一地标识设备硬件，因此程序L1可以在证明文件中使用K1，以向制造商证明平台的身份和它正在运行的代码的密码标识。换句话说，K1可以用于设备和软件认证。</p>
+<p>其次，考虑从脆弱版本LA1到LB1的授权更新，如图3所示。层LA,1接收键KA,1。如果LA,1被篡改，那么制造商可以推出一个软件更新，LB,1，它将收到一个不同的派生键KB,1，这个派生键不能从泄漏的密钥中推断出来(KDF是一个单向函数)。现在，更新后的LB,1可以使用这个新的派生键来证明设备正在运行新的和bug固定的程序。</p>
+<p>实际上，这意味着推出一个软件补丁也可以安全地重新开启设备。</p>
+<p>一个层的派生键也可以用来保护私有数据。L1可以使用K1来加密和完整性保护本地存储的数据，这是一种被称为<strong>密封(sealing)</strong>的安全原语。简单的基于KDF的密钥派生方案对试图获得解密密钥和解密数据的恶意软件提供了极好的保护。例如，如果攻击者能够在尝试接收或提取K1时替换L1，那么攻击者将获得另一个密钥，并且无法解密先前存储的数据。这是因为派生的密钥基于接收密钥的组件的标识。图3中也说明了这一点。<br><img src="/img/figure3.png" alt></p>
+<p>这个简单的关键推导方案有一个显著的副作用。当制造商执行授权更新时，更新后的程序也会获得一个不同的密钥(KB,1而不是KA,1在图3中)，这意味着新组件将无法解密之前存储的数据。有一些方法可以解决这个问题。最简单的解决方案是将应该被等同处理的程序分组，(<strong>这里不明白?</strong>)例如，通过数字签名。第6节描述了另一种解决方案，其中涉及到派生数据迁移键。</p>
+<p>从初始引导加载程序L0到L1的派生键的切换可以在引导的每个阶段重复，其中“层”可能包括一个引导加载程序序列、一个操作系统，甚至一个应用程序。</p>
+<p>例如，L1可以使用相同的基于kdf的方案提供第二阶段的派生密钥K2，它依赖于K1，以及程序的标识L2, L1将加载、测量和控制传输。如图4所示。<br><img src="/img/figure4.png" alt></p>
+<p><strong>L0和其他层的行为之间唯一的本质区别是，L0必须使用硬件设施来隐藏设备秘密，然后将控制传递给L1</strong>。由于后续层通常会在RAM或寄存器中获取派生的键，因此在将控制转移到后续层之前“隐藏”键只是将它们从内存中删除的问题。</p>
+<p>在这种分层架构中,在第n个引导阶段的FDS取决于UDS和前n层所有的代码，这些都是前n层基础TCB的组成部分。因此,如果将第n层的派生密钥用于认证（attestation）协议,制造商可以确定到底是哪些代码是属于前n层TCB的一部分。此外,如果第n层的派生密钥用于密封,受保护的数据只有在TCB不改变的情况下可以被访问。</p>
+<p><em>注：TCB是Trusted Computing Base的简称，指的是计算机内保护装置的总体，包括硬件、固件、软件和负责执行安全策略的组合体。它建立了一个基本的保护环境并提供一个可信计算机系统所要求的附加用户服务。</em></p>
+<h1 id="4-RIoT-Hardware-and-Firmware"><a href="#4-RIoT-Hardware-and-Firmware" class="headerlink" title="4. RIoT Hardware and Firmware"></a>4. RIoT Hardware and Firmware</h1><p>本节详述了一个防暴系统的基本硬件和固件要求。</p>
+<p>现代处理器的启动是复杂的，在设备和供应商之间的行为有很大的变化。RIoT设备必须满足以下一系列最低要求。</p>
+<h2 id="4-1-Reliable-Reset"><a href="#4-1-Reliable-Reset" class="headerlink" title="4.1 Reliable Reset"></a>4.1 Reliable Reset</h2><p>构建安全系统的一个基本特性是可靠的处理器和系统重置。重置过程必须清除所有可能影响未来执行的处理器、设备和易失性内存状态。然后，设备必须以定义良好的方式重新启动执行。在必要的硬件子系统初始化之后，Power-on通常会启动处理器重置。</p>
+<h2 id="4-2-Device-Secret"><a href="#4-2-Device-Secret" class="headerlink" title="4.2 Device Secret"></a>4.2 Device Secret</h2><p>基于事件的设备需要一个特定于设备的秘密。这个统计上唯一的秘密可能是在外部生成的，并且在制造过程中安装，或者在设备供应期间内部生成(参见第6节)。</p>
+<p>设备秘密必须存储在设备上的非易失性写入存储器中，例如efuse，或任何其他适当保护的NV存储子系统。它的大小取决于所使用的算法以及这些函数所需的安全强度。一个256位的设备机密应该被认为是这个时候的最小值。</p>
+<h2 id="4-3-Protection-of-the-Device-Secret"><a href="#4-3-Protection-of-the-Device-Secret" class="headerlink" title="4.3 Protection of the Device Secret"></a>4.3 Protection of the Device Secret</h2><p>设备的秘密必须提供给早期的引导程序代码，但是处理器还必须提供一种机制，以确保设备的秘密在以后的代码中是不可访问的。有很多方法可以做到这一点。例如，处理器或内存子系统可能包括一个门闩控制对设备秘密的访问控制，它只在处理器复位时打开，但是在ROM加载器读取了该值之后，可以以编程方式关闭它。</p>
+<h2 id="4-4-Immutable-Measurement-Code"><a href="#4-4-Immutable-Measurement-Code" class="headerlink" title="4.4 Immutable Measurement Code"></a>4.4 Immutable Measurement Code</h2><p>必须用不可变的代码来制造RIoT处理器，这些代码可以读取设备的秘密并生成派生的密钥或密钥，这些密钥或密钥依赖于启动链中下一个程序的加密标识。</p>
+<p>原则上，可以设计一个处理器来执行复杂的功能，比如证书验证，以建立软件标识。在实践中，最好是使用不可变/ROM代码的处理器来执行极其简单的加密操作，因为简单的代码更有可能是无bug的。</p>
+<p>在第6节中，我们演示了一个单独的派生值，它依赖于设备的秘密以及引导链中的下一个程序的摘要，可以用来引导复杂的密钥管理方案。因此，在本文的其余部分中，假定处理器提供了一个使用等式1来生成FDS。</p>
+<p>当然，不可变的代码必须隐藏UDS(并在RAM、寄存器、缓存等中删除任何副本)，然后才能将控制权传递给启动链中的下一个程序。</p>
+<h1 id="5-Fundamental-Characteristics-of-RIoT-Devices"><a href="#5-Fundamental-Characteristics-of-RIoT-Devices" class="headerlink" title="5 Fundamental Characteristics of RIoT Devices"></a>5 Fundamental Characteristics of RIoT Devices</h1><p>在这一节中，我们探讨了RIoT安全架构的一些基本特征。</p>
+<h2 id="5-1-Resilience（弹性）"><a href="#5-1-Resilience（弹性）" class="headerlink" title="5.1 Resilience（弹性）"></a>5.1 Resilience（弹性）</h2><p>Boot Measurement代码(在ROM中)的主要职责之一是保护设备的秘密。另一方面，对手会试图破坏ROM代码的操作，将设备秘密泄露给未经授权的实体。如果攻击者没有发起物理攻击，那么攻击计算机系统的主要方法是提供程序设计人员没有预见到的输入，并导致软件系统出现故障，例如，通过缓冲区溢出或其他逻辑错误。选择Boot代码的首选实现非常简单;它只计算内存区域的哈希值。由于它的简单性，预期实现这种行为的代码可以从可利用的bug中解放出来。</p>
+<p>执行更复杂功能的代码自然会有更大的攻击表面。在可能的情况下，这些复杂的函数应该在后面的引导序列中执行，在这种情况下，在开发过程中，可以通过早期的层来完成。</p>
+<p>RIoT安全性取决于维护加密密钥安全性。 如果软件漏洞允许提取密钥，那么可以使用这些密钥来模拟设备或声称设备正在运行不同的软件堆栈。 在这种情况下，弥补方法是修补设备，以便生成新的派生密钥，然后撤消对先前配置的信任。</p>
+<p>RIoT系统架构师的主要考虑因素是设计和构建极其稳健的基础层，可用于安全地重新配置更复杂和更容易出错的上层。</p>
+<h2 id="5-2-Protecting-Secrets-and-Keys"><a href="#5-2-Protecting-Secrets-and-Keys" class="headerlink" title="5.2 Protecting Secrets and Keys"></a>5.2 Protecting Secrets and Keys</h2><p>RIoT设备的弹性部分是由于RIoT框架保护秘密和密钥的方法。 维护加密密钥的秘密的典型方法是在由硬件和软件的组合提供的隔离包络内对密钥进行存储和操作，例如，独立的安全处理器或专用处理器模式。 但是，这些密钥随时可供使用。 这被称为空间保护。</p>
+<p>RIoT不同之处在于它还依赖对密钥和秘密的暂时保护，如图5所示。 RIoT密钥安全性基于从引导链中的早期组件接收密钥（或其他秘密），对这些密钥进行操作，然后在运行下一引导程序之前从内存中删除它们。 这意味着使用这些接收到的密钥的加密操作只能在有限的时间内执行。 也就是说，在启动过程中以及这些密钥可用的安全边界内。<br><img src="/img/figure5.png" alt></p>
+<p>请注意，只要程序能够阻止访问这些密钥，就不需要删除其RIoT生成的密钥。 早期启动组件通常会删除其密钥/密钥，因为它将系统的完全控制权交给另一个通常更复杂的程序。</p>
+<p>在较高层执行的程序可以选择保留其RIoT密钥而不是删除它们。 这可能是因为程序是需要使用密钥加密数据或验证自身的顶级应用程序，也可能是因为此层可以充分保护此密钥，以便更高层无法访问密钥。 例如，在ARM TrustZone中运行的固件TPM可能会在Secure World中保留RIoT密钥，以便TPM可以使用它来保护其重要密钥和状态。 上层软件可以（直接或间接）使用RIoT密钥，但无法直接访问它，就像图5中的传统安全处理器一样。这进一步说明了RIoT技术如何作为更传统安全处理器的基础。</p>
+<h2 id="5-3-RIoT-as-a-General-Purpose-Security-Processor"><a href="#5-3-RIoT-as-a-General-Purpose-Security-Processor" class="headerlink" title="5.3 RIoT as a General Purpose Security Processor"></a>5.3 RIoT as a General Purpose Security Processor</h2><p>如图5所示，RIoT引导序列中的每个层执行以下操作中的部分或全部操作：</p>
+<ul>
+<li>从前面的层接收一个或多个密钥</li>
+<li>从其他地方读取输入，如本地存储、本地用户交互、网络</li>
+<li>measure or/and validate后续层的身份标识</li>
+<li>对密钥、层的身份标识或其他输入进行加密操作</li>
+<li>从内存和寄存器中删除本层的私钥</li>
+<li>移交控制权给下一层</li>
+</ul>
+<p>许多加密操作可以适用于RIoT框架。 例如，可以通过密钥派生函数创建新密钥，包括非对称密钥。 对称和非对称密钥可用于签名和解密数据。 密钥可用于认证其他密钥或平台状态的其他方面。 除了密钥操作外，RIoT层还可以验证证书并生成新的密钥。</p>
+<p>RIoT的大部分功能都是因为系统设计人员可以直接实现精确的需求，而无需在预定义的硬件安全处理器的架构范围内工作。 此外，可以在上层实现复杂的功能（相应地具有更大的受攻击风险），以便低层的安全功能可以在需要时恢复它们。</p>
+<p>然而，一些RIoT密钥仅在引导过程中可用的事实通常需要调整协议和使用密钥的方式。</p>
+<h1 id="6-RIoT-Operations"><a href="#6-RIoT-Operations" class="headerlink" title="6 RIoT Operations"></a>6 RIoT Operations</h1><p>在第3节中，演示了实现设备身份，证明和密封的简单密钥推导方案。 也注意到简单方案的一些缺点。 例如，依靠设备密钥数据库进行证明，或者软件更新可以使以前密封的数据无法访问。 在本节中，描述了更完整和实用的RIoT实现。</p>
+<p>为简单起见，假定所有RIoT功能都在单层中实现：L1或RIoT Core。 这必须是处理器引导加载程序测量和启动的第一个组件。 实现主要设备功能的其余设备固件称为应用程序固件，并在第2层运行。</p>
+<p>然而，这种简化，即单层RIoT核心的假设确实引入了复杂性。 也就是说，单层RIoT Core不会在不丢失设备身份的情况下进行更新。 具体原因将在6.2节中描述。 实际上，更复杂的RIoT实现只有一小部分不可用代码。</p>
+<p>但是，假定剩余的应用程序固件需要更新以添加功能并修复潜在的问题。 升级过程的安全管理是本节的主要内容。 本节中讨论的组件和数据流在图6中进行了示意性说明。</p>
+<p><img src="/img/figure6.png" alt></p>
+<h2 id="6-1-Provisioning"><a href="#6-1-Provisioning" class="headerlink" title="6.1 Provisioning"></a>6.1 Provisioning</h2><p>在RIoT体系结构中，最简单的配置方案要求设备制造商保留安装在其设备上的设备机密数据库。 但是，这个密钥数据库代表了单一的攻击点。 此外，即使设备安全性和身份没有不可逆转的损失，该方案仍然不允许设备保持设备制造商本身的秘密。</p>
+<p>最受欢迎的替代方案是为处理器提供器件外部未知的器件秘密。 理想情况下，Device Secret是在处理器使用良好内部熵源的早期内部生成的。 如果在设备制造过程中使用外部工具生成并安装密码，则供应商不应记录设备秘密.</p>
+<p>由于Device Secret不是外部已知的，因此第3节中的简单证明方案不能用于标识第1层中的RIoT Core代码。相反，RIoT Core必须在制造期间的物理安全性条件下进行安装。</p>
+<h2 id="6-2-Using-the-Fuse-Derived-Secret"><a href="#6-2-Using-the-Fuse-Derived-Secret" class="headerlink" title="6.2 Using the Fuse Derived Secret"></a>6.2 Using the Fuse Derived Secret</h2><p>FDS是处理器ROM提供给初始引导代码的密钥。 FDS通常将用作设备身份，认证和数据保护的基础。 密码学最佳实践要求相同的密钥不用于多种用途。 这通过使用密码安全密钥导出函数推导附加密钥最容易实现。</p>
+<p>例如，设备身份密钥和操作可以基于KID，其中：</p>
+<pre><code>K_ID = KDF(FDS, &quot;identity&quot;)
+</code></pre><p>其他键可以类似地创建。 在本节中描述的几个RIoT基元中，明确和隐含地包含“目的”字段。</p>
+<p>FDS本身来源于Device Secret，并且层ROM的软件标识将控制权交给L1（参见图6）。 这就是单层RIoT Core不可用的原因。 将RIoT Core更新为单层会导致FDS发生更改。 FDS值的变化会导致每个派生链中完全不同的密钥，包括设备身份。</p>
+<p>对此的解决方案是一个多层次的RIoT实现，具有非常简单的第一层，为后续层的更新提供了稳定的身份和支持。</p>
+<h2 id="6-3-DeviceID"><a href="#6-3-DeviceID" class="headerlink" title="6.3 DeviceID"></a>6.3 DeviceID</h2><p>RIoT Core可以通过在启动时使用基于KID（或直接在Fuse Derived Secret）上的确定性密钥生成函数创建非对称密钥对来生成公钥设备标识。 只要第一阶段RIoT固件不更改，设备将始终生成相同的密钥对，即设备ID在设备的使用期限内将保持稳定。 见图7。</p>
+<p><img src="/img/figure7.png" alt></p>
+<p>设备ID公钥可以写入永久性存储器或传递给应用程序固件，并最终安全地导出至制造商或任何需要设备的长期稳定标识符的其他方。 制造商也可以选择使用制造商PKI来认证设备ID，或者保存他们制造的设备的设备ID的数据库。</p>
+<p>设备ID私钥的知识可用作加密协议中的构建块来识别设备，如以下示例所示。</p>
+<p>首先，服务器生成在下次重新启动时由RIoT设备ID密钥签名的质询随机数。 其次，服务器创建一个对称密钥，该密钥由设备ID公钥加密，该密钥可在下次重新启动时由目标设备上的RIoT Core进行解密（该选项在下一节中会详细讨论）。 第三，RIoT Core生成一个新的随机非对称密钥对KL2，供应用程序固件(FW)使用。 然后，RIoT Core可使用设备标识密钥对KL2，Public进行认证，并传递新密钥对以及Riot Core生成的证书，证明该密钥是安全生成的。 但是，现在KL2，Private可以随时使用，而不仅仅是在重新启动时使用。 参见图8。<br><img src="/img/figure8.png" alt></p>
+<p>实际上，如果没有明确的限定条件，相同的DeviceID密钥不应用于多种用途。 这可以通过派生专门用于签名和解密的密钥以及使用正在签名和解密的数据结构中的区分字段来完成。</p>
+<p>设备ID私钥必须在RIoT将控制权交给应用程序固件之前从RAM和寄存器中删除。</p>
+<h2 id="6-4-Attestation"><a href="#6-4-Attestation" class="headerlink" title="6.4 Attestation"></a>6.4 Attestation</h2><p>第3节中的简单证明方案需要Device Secret的知识来验证基于层标识的派生密钥的拥有证明。 在本节中描述了几种使用设备ID作为认证基础的备选方案。</p>
+<p>第一种方案使用设备ID通过创建非对称密钥（通过设备ID密钥）与应用程序固件与特定摘要相关联来间接证明应用程序固件的身份。</p>
+<p>这是上一节中描述的应用程序固件身份密钥的变体。 但是，证书现在不包含与KL2，Public和设备ID关联的简单证书，而是包含可访问KL2的软件的身份，Private。 参见图9。<br><img src="/img/figure9.png" alt></p>
+<p>在第3节中描述的基于对称密钥风格证明的另一种方案是供制造商与公众一起加密对称证明种子值（证明种子）</p>
+<p>在第3节中描述的基于对称密钥样式证明的另一种方案是制造商使用公共设备ID加密对称证明种子值（证明种子）。 证明种子可以在启动时由RIoT核心解密，然后可以完全按照第3节中所述用于KDF型密钥推导，即，</p>
+<pre><code>K_{Attest,L2} = KDF(Attestation Seed, D2)
+</code></pre><p>在这个简单的双层固件示例中，应用程序固件可以使用K_{ATTEST，L2}来证明存在协议，以向制造商（或提供Attestation种子值的任何其他实体）证明特定设备正在运行期望的固件。 如果系统具有附加层，则可以在引导的每个阶段重复密钥推导过程。</p>
+<p>图10说明了这一操作，以及“密封”证明种子值（而不是简单地加密它）的选项，以便种子只能被指定的应用程序固件访问。<br><img src="img/figure10.png" alt></p>
+<p>第三种技术是该方案的一种变体，但RIoT Core不是简单地解密Attestation种子值，而是将加密数据解释为由证明秘密和授权接收它的应用程序固件的身份组成的元组（可选 图10中的D2值）。 现在，RIoT Core将解密该元组，但只会将Attestation Seed值显示给上面的图层（如果它具有预期的哈希值）。 在这种情况下，本节前面所述的附加关键词变形不是必需的。 此操作与TPM如何实现开封非常相似。</p>
+<h2 id="6-5-Sealing-and-Data-Protection"><a href="#6-5-Sealing-and-Data-Protection" class="headerlink" title="6.5 Sealing and Data Protection"></a>6.5 Sealing and Data Protection</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2017/08/03/信息安全-2017-8-3-doc1/" data-id="cjxo5e6qi003dz16diwhwxacu" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/hash/">hash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/security/">security</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../04/信息安全-2017-8-4-doc2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          RIOT文档二
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../07/15/生活-2017-07-15-human-history/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">人类简史</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

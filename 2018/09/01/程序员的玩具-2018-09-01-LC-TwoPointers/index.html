@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>LeetCode刷题记录——TwoPointers | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="不得不说，TwoPointer问题一道道的都是很有意思的。。。 763. Patition Labels还算不错，需要遍历一遍拿到最右位置，然后是N的空间复杂度，N的时间复杂度。 524. Longest Word in Dictionary through Deleting和703有一点像，需要先遍历一遍，这里需要存下一个字符出现的每一个位置。然后加了大量的trick。 287. Find he">
+<meta name="keywords" content="algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode刷题记录——TwoPointers">
+<meta property="og:url" content="https://protao.github.io/2018/09/01/程序员的玩具-2018-09-01-LC-TwoPointers/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="不得不说，TwoPointer问题一道道的都是很有意思的。。。 763. Patition Labels还算不错，需要遍历一遍拿到最右位置，然后是N的空间复杂度，N的时间复杂度。 524. Longest Word in Dictionary through Deleting和703有一点像，需要先遍历一遍，这里需要存下一个字符出现的每一个位置。然后加了大量的trick。 287. Find he">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-09-20T15:14:03.568Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LeetCode刷题记录——TwoPointers">
+<meta name="twitter:description" content="不得不说，TwoPointer问题一道道的都是很有意思的。。。 763. Patition Labels还算不错，需要遍历一遍拿到最右位置，然后是N的空间复杂度，N的时间复杂度。 524. Longest Word in Dictionary through Deleting和703有一点像，需要先遍历一遍，这里需要存下一个字符出现的每一个位置。然后加了大量的trick。 287. Find he">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-程序员的玩具-2018-09-01-LC-TwoPointers" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-08-31T16:00:00.000Z" itemprop="datePublished">2018-09-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LeetCode刷题记录——TwoPointers
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>不得不说，TwoPointer问题一道道的都是很有意思的。。。</p>
+<h3 id="763-Patition-Labels"><a href="#763-Patition-Labels" class="headerlink" title="763. Patition Labels"></a>763. Patition Labels</h3><p>还算不错，需要遍历一遍拿到最右位置，然后是N的空间复杂度，N的时间复杂度。</p>
+<h3 id="524-Longest-Word-in-Dictionary-through-Deleting"><a href="#524-Longest-Word-in-Dictionary-through-Deleting" class="headerlink" title="524. Longest Word in Dictionary through Deleting"></a>524. Longest Word in Dictionary through Deleting</h3><p>和703有一点像，需要先遍历一遍，这里需要存下一个字符出现的每一个位置。然后加了大量的trick。</p>
+<h3 id="287-Find-he-Duplicate-Number"><a href="#287-Find-he-Duplicate-Number" class="headerlink" title="287. Find he Duplicate Number"></a>287. Find he Duplicate Number</h3><p>这道题思路也是很清奇了。首先先不考虑节点0，因为题目规定所有的节点的值的范围都在1到n范围内，因此1-n范围内必定形成环（证明方法类似于1自己不形成环，那么就要指向非1的数，假如指向2，然后为了不形成环，2不能指向1和2，类似的递推，n个点不形成环只能指向第n+1个节点），然后节点0由于题目要求一定指向1到你的某个节点。</p>
+<a id="more"></a>
+<h3 id="881-Boats-to-Save-People"><a href="#881-Boats-to-Save-People" class="headerlink" title="881. Boats to Save People"></a>881. Boats to Save People</h3><p>排序，两个指针，一个指向当前最大的，一个指向当前最小的。</p>
+<h3 id="75-Sort-Colors"><a href="#75-Sort-Colors" class="headerlink" title="75. Sort Colors"></a>75. Sort Colors</h3><p>考虑快排其实就是一个双指针问题，这道题就迎刃而解了，甚至更简单一些。第一遍划分为左边是0右边是非0，然后对右侧进行第二遍划分，划分为左边是1右边是2即可。</p>
+<h3 id="11-Container-With-Most-Water"><a href="#11-Container-With-Most-Water" class="headerlink" title="11. Container With Most Water"></a>11. Container With Most Water</h3><p>思路挺简单的，但就是自己想不到，尽管知道这是一道双指针问题但是并没有什么乱用……思路是维护两个指针，一个在头一个在尾，因为面积被两只之间较短的长度所限制，那么每次就将较短的指针往里面移动一位，这样是可能遇到面积变大的情况的，如果移动的是较长的指针，那么面积一定不会变大。</p>
+<h3 id="42-Trapping-Rain-Water"><a href="#42-Trapping-Rain-Water" class="headerlink" title="42. Trapping Rain Water"></a>42. Trapping Rain Water</h3><p>这道题是面试中遇到的一道题，当时的做法是Solution中的方法2，也算是DP，但是既然是双指针问题就会有更好的方法。Solution中给了一个一次遍历就得到解的方法，类似于11，维护左右两个指针，每次移动高度较小的那个指针，并且计算被移动的指针所在的位置所提供的水的多少，只需要和所在一侧的高度比较就行，原因在于每次移动的是较矮的一方，因此另一侧的高度肯定更高。</p>
+<h3 id="3-3Sum"><a href="#3-3Sum" class="headerlink" title="3. 3Sum"></a>3. 3Sum</h3><p>如果是2sum，那就是很明显的TwoPointer问题，复杂度是O(N)，3SUM的话，就是加一个外层循环，内层是一个2Sum问题，这样该问题就可以在平方复杂度下解决。注意实现时，内层2Sum问题范围要缩小，为了避免重复元素，外层指针要指向下一个<strong>不同</strong>的元素。</p>
+<h3 id="16-3Sum-Closest"><a href="#16-3Sum-Closest" class="headerlink" title="16. 3Sum Closest"></a>16. 3Sum Closest</h3><p>首先把问题转换为3sum+一个数与0最近的问题，与零最近的可能是正数也可能是负数，根据<a href="https://baike.baidu.com/item/%E9%9B%B6%E5%80%BC%E5%AE%9A%E7%90%86/9607445?fr=aladdin" target="_blank" rel="noopener">零值定理</a>，并且已经将数组排序，所以right指针往右移直到遇见第一个非正数或者遇到left时就意味着刚刚踩上零值或者越过零值，此时判断一下就行，正常情况下，比较当前值和上一个sum谁离0更近就更新谁，当right遇到left或者right指向最后一个元素的时候特殊考虑一些边界条件。</p>
+<h3 id="18-4Sum"><a href="#18-4Sum" class="headerlink" title="18. 4Sum"></a>18. 4Sum</h3><h3 id="80-Remove-Duplicates-from-Sorted-Array-II"><a href="#80-Remove-Duplicates-from-Sorted-Array-II" class="headerlink" title="80. Remove Duplicates from Sorted Array II"></a>80. Remove Duplicates from Sorted Array II</h3><p>维护一个变量count，表示当前fast指针前面有几个连续相同元素，然后当count大于等于2的时候，就让fast快速前进到下一个新的元素，除非移动到末尾，这就是主要思想。</p>
+<h3 id="713-Subarray-Product-Less-Than-K"><a href="#713-Subarray-Product-Less-Than-K" class="headerlink" title="713. Subarray Product Less Than K"></a>713. Subarray Product Less Than K</h3><blockquote>
+<p><em>Sliding Window</em></p>
+</blockquote>
+<p>可以考虑这么一个opt函数，接受一个值right，然后opt(right)返回满足要求的最（小）左的left，使得left到right这个区间的连乘积严格小于k，那么可以肯定的是这个opt函数是单调的（不是严格单调），因为nums中的元素都是正数。即当r1&gt;r2时，opt(r1)&gt;=opt(r2)。<strong>Solution中提到，有了这个性质之后，就可以考虑使用Sliding window了。</strong>因为此时可以保证window的两端都是始终向右移动的，此时可以保证O(N)的时间复杂度。</p>
+<p>有了这个函数后，下一条原则也是难以发现的。。。就是对于所有的$$$r$$$，计算$$$r-opt(r)+1$$$的和，就可以得到结果。原因在于对于以r结尾的最大子串时，只需要计算包含r的即可，不包含r的在之前就被计算了，任意一个串[l,r]的计数都会被assign到r的计算中。</p>
+<h3 id="209-Minimum-Size-Subarray-Sum"><a href="#209-Minimum-Size-Subarray-Sum" class="headerlink" title="209. Minimum Size Subarray Sum"></a>209. Minimum Size Subarray Sum</h3><p>与713同理，注意的是改变一下自己的思路，slow，fast指针一定要是左包含，右不包含，这样代码写起来很整洁。</p>
+<h3 id="845-Longest-Mountain-in-Array"><a href="#845-Longest-Mountain-in-Array" class="headerlink" title="845. Longest Mountain in Array"></a>845. Longest Mountain in Array</h3><p>我的做法是类似于42的做法，左扫描一遍右扫描一遍，left数组表左侧连续比当前元素小的长度，right数组类似，然后根据这两个数组可以求出最大的mountain。Solution中给的TwoPointers解法要更胜一筹因为只需要O(1)的空间复杂度。每次left指针指向可能的mountain的左边界，然后去找右边界，下次迭代让left追上right即可。</p>
+<h3 id="3-Longest-Substring-Without-Repeating-Characters"><a href="#3-Longest-Substring-Without-Repeating-Characters" class="headerlink" title="3. Longest Substring Without Repeating Characters"></a>3. Longest Substring Without Repeating Characters</h3><p>第一种方法是我一开始想到的方法，类似于524，设置一个表，通过这个表可以查到下一个该字符出现的位置，然后有了这个表之后用两个指针遍历字符串。left不断向右移动，right指向最小的table[left]，直到两个指针重合。<br>然后看了Solution中的解法，还是只用两个指针，需要一个额外的hashtable保存当前left-right串口内的字幕频次。每次循环时看看right指向的字符在不在串口内，在的话就右移left，直到right指向的字符被移出去；不在的话直接更新词频，右移right。</p>
+<h3 id="567-Permutation-in-String"><a href="#567-Permutation-in-String" class="headerlink" title="567. Permutation in String"></a>567. Permutation in String</h3><p>这道题的关键思想就是一点：一定要想到一个字符串是另一个字符串的permutation，意味着两个字符串的26个字母的频次相同，那么我们先统计s1的字符频次，然后用一个定长滑窗在s2上面滑，每滑动一次，就看看二者的频次表相不相同就可以了。然后一点优化就是每次比较词频表有一点浪费，比如这次滑动完全和字母a没关系，那么这次就不用考虑a的频次，每次滑窗内会移出最左字符，移入最右字符，那么维护着两个的字频变化就可以。用一个变量表示当前有多少个字母的词频一致，当这个变量等于26时，就是True了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/09/01/程序员的玩具-2018-09-01-LC-TwoPointers/" data-id="cjxo5e7e9006rz16dfjf8s6a6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../17/程序员的玩具-2018-09-17-LC-LinkedList/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          LeetCode刷题记录——LinkedList
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../08/24/程序员的玩具-2018-08-24-LC-Stack/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">LeetCode刷题记录——Stack</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

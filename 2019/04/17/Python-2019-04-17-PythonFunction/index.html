@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Python中的函数机制 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、使用函数构建抽象1.1 基本元素 程序必须为人类阅读而编写，并且仅仅碰巧可以让机器执行  编程语言都应该具有基本的元素，即表达式和语句，数据和函数是这两种基本元素的代表。有了基本元素之后，还要有合适的方式将他们进行组合以完成简单到复杂的构造。最后，可以对内容进行抽象，已完成复杂到简单的指代。 首先要区分代码中的语句和表达式，这两者分别负责执行某个操作或者计算某个值。最简单的语句就是赋值语句了，">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python中的函数机制">
+<meta property="og:url" content="https://protao.github.io/2019/04/17/Python-2019-04-17-PythonFunction/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="一、使用函数构建抽象1.1 基本元素 程序必须为人类阅读而编写，并且仅仅碰巧可以让机器执行  编程语言都应该具有基本的元素，即表达式和语句，数据和函数是这两种基本元素的代表。有了基本元素之后，还要有合适的方式将他们进行组合以完成简单到复杂的构造。最后，可以对内容进行抽象，已完成复杂到简单的指代。 首先要区分代码中的语句和表达式，这两者分别负责执行某个操作或者计算某个值。最简单的语句就是赋值语句了，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-09T12:07:08.353Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python中的函数机制">
+<meta name="twitter:description" content="一、使用函数构建抽象1.1 基本元素 程序必须为人类阅读而编写，并且仅仅碰巧可以让机器执行  编程语言都应该具有基本的元素，即表达式和语句，数据和函数是这两种基本元素的代表。有了基本元素之后，还要有合适的方式将他们进行组合以完成简单到复杂的构造。最后，可以对内容进行抽象，已完成复杂到简单的指代。 首先要区分代码中的语句和表达式，这两者分别负责执行某个操作或者计算某个值。最简单的语句就是赋值语句了，">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-Python-2019-04-17-PythonFunction" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2019-04-16T16:00:00.000Z" itemprop="datePublished">2019-04-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/python/">python</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python中的函数机制
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、使用函数构建抽象"><a href="#一、使用函数构建抽象" class="headerlink" title="一、使用函数构建抽象"></a>一、使用函数构建抽象</h2><h3 id="1-1-基本元素"><a href="#1-1-基本元素" class="headerlink" title="1.1 基本元素"></a>1.1 基本元素</h3><blockquote>
+<p>程序必须为人类阅读而编写，并且仅仅碰巧可以让机器执行</p>
+</blockquote>
+<p>编程语言都应该具有基本的元素，即表达式和语句，数据和函数是这两种基本元素的代表。有了基本元素之后，还要有合适的方式将他们进行<strong>组合</strong>以完成简单到复杂的构造。最后，可以对内容进行抽象，已完成复杂到简单的指代。</p>
+<p>首先要区分代码中的<strong>语句</strong>和<strong>表达式</strong>，这两者分别负责执行某个操作或者计算某个值。最简单的语句就是赋值语句了，赋值语句的执行作用就是负责将某个值和某个<strong>名字</strong>相关联，即“名称被绑定到了值上”，并将这种绑定存放在<strong>环境</strong>中。而表达式则会计算出一个结果，最简单的表达式就是一个字面量或者一个环境中已有的名字。最常见以及最重要的表达式是<strong>调用</strong>表达式。表达式是递归的，就是说通过调用运算可以将表达式构造成更大的表达式。解释器会以递归的方式计算复杂表达式：深入到子表达中，直到遇到字面量或者<strong>变量名称</strong>，进行计算并向上返回。注意不同于表达式，语句不返回任何值。最后，解释器负责关联起这些东西：存储对象与名字之间的关联、计算表达式、执行语句。</p>
+<a id="more"></a>
+<p>通过这些简单的基本元素，我们了解了编程语言是如何提供在本章开头时提到的基本能力的：（1）数值是内建数据，算数运算是函数。（2）嵌套提供了组合操作的手段。（3）名称到值的绑定提供了有限的抽象手段。但是这还远远不够，一个编程语言还需要更加强大的抽象技巧，即定义函数。定义函数可以将一个名称绑定到一个操作序列上，然后就可以将其作为一个整体来引用。</p>
+<p>函数中的一个重要概念是<strong>纯函数</strong>，纯函数具有一个特性：调用它们时除了返回一个值之外没有其它效果。而非纯函数除了返回一个值之外，会产生副作用，即改变解释器或计算机的一些状态。一个普遍的副作用就是在返回值之外生成额外的输出，比如打印一些内容到屏幕上。函数的可接受参数的描述叫做<strong>签名</strong>。</p>
+<p>在有了定义函数的能力后，实际上我们也有了划分局部环境的能力，因为通常函数自身具有局部环境。那么，什么是<strong>环境</strong>？之前我们提到，环境可以简单的看做一块内存，用于将名字绑定到值（要注意值并不属于环境帧），这种概念实际上是环境的“帧”。不同粒度的环境帧会构成帧序列，或者说是帧“链”。赋值语句和导入语句会再最上面的环境帧中新增绑定。而函数定义语句同样会新增绑定————将函数名称绑定到函数自身。此时函数名会出现在两个地方，环境帧与函数自身中。考虑到不同的名字可能会绑定到同一个函数体，因此这种重复是有意义的。注意，通常环境中的函数名上绑定的是函数地址，函数地址处存放有函数具体代码。</p>
+<p>如果对Python的实现有所了解，可以知道，运行时环境和静态编译出的字节码对象其实是分别存放的，前者为<code>PyFrameObject</code>，后者为<code>PyCodeObject</code>，而<code>PyFrameObject</code>中会保存指向<code>PyCodeObject</code>的指针以及当前执行的字节码在<code>PyCodeObject</code>中的偏移。</p>
+<p>定义了函数的目的是为了使用，使用的方式是通过调用，调用步骤会先求出参数表达式，但是对计算好的实参上调用具名函数。这个<strong>调用</strong>就会产生一个局部帧并将该帧链入当前的环境帧链上，在新的局部帧上，将实参绑定到函数的形式参数上，然后在当前帧的开头以及全局帧的末尾求出函数体。对于局部环境中的名字对应的值为，最先发现该名称的帧中绑定到这个名称的值（这句话实际上有着很严重的误导性，考虑一下，名字搜索时真的会沿着帧链一层层的搜索吗？后面会详细说明这一点。）。更具体地说，局部帧中维护了指向其前驱的指针（通常是更大的局部帧或者全局帧），通过这种形式，帧序列表现为链表。</p>
+<p>函数自身拥有局部环境使得，函数的形参名称可以是任意的————局部名字的作用域被限制在定义它的函数的函数体中。当一个名称不能再被访问时，它就离开了作用域。</p>
+<h3 id="1-2-高阶函数与作用域"><a href="#1-2-高阶函数与作用域" class="headerlink" title="1.2 高阶函数与作用域"></a>1.2 高阶函数与作用域</h3><p>觉得已经掌握了吗？考虑这段代码（可以参考我的<a href="https://protao.github.io/2018/04/01/Python-2018-04-01-PythonTrick/">另一篇文章</a>）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 代码片1.2.1</span></span><br><span class="line"><span class="comment"># 例子 0</span></span><br><span class="line">a = <span class="number">1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="keyword">return</span> a</span><br><span class="line">print(f())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 例子 1</span></span><br><span class="line">a = <span class="number">1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="keyword">return</span> a</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span><span class="params">()</span>:</span></span><br><span class="line">	a = <span class="number">2</span></span><br><span class="line">	<span class="keyword">return</span> f()</span><br><span class="line">print(g()) <span class="comment"># output: 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 例子2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">return</span> a</span><br><span class="line">    a=<span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> f()</span><br><span class="line">a=<span class="number">1</span></span><br><span class="line">print(g()) <span class="comment"># output：2</span></span><br></pre></td></tr></table></figure>
+<p>总的来说，函数给了我们更强大的抽象能力，我们可以将操作序列抽象到函数背后而不去了解其实现，只需要确定其“合约”（参考《程序员修炼之道》）符合我们的要求即可。这种抽象可以称为函数式抽象。函数提供了我们使用一个名字指代一段操作的能力，因此，我们要遵守 DRY 原则（同样参考《程序员修炼之道》），当你在复制粘贴的时候，你脑子中的“DRY警报”应该响起并提示你：“应该抽象了”。</p>
+<p>函数的强大还不止于此，因为一个函数可以作为另一个函数的返回值或者参数，这种方式允许我们以层次化的方式对复杂的逻辑进行多次抽象。另外，函数内部还可以嵌套的定义函数。在函数内使用<code>def</code>语句定义函数，此时函数名绑定在函数的局部帧中。回想一下，在代码片1.2.1的例子0中，直接执行<code>f</code>，输出 1 ，没有任何问题。调用函数，会创建新的栈帧，当需要查找名字的时候在局部环境中找不到，然后便会找前一个帧，找到<code>a</code>，并输出。那么例子 1 中按理说，进入到f后，局部执行环境中没有a，会向上找，然后再g的局部环境中会找到a，然后应该输出2呀？这个问题的原因在于，在Python中，一个名字绑定在程序正文的某个位置是否起作用，是由该名字在文本中的位置唯一决定的，而不是运行时动态决定的。因此Python的作用域是<strong>静态作用域</strong>，也称为<strong>词法作用域</strong>。</p>
+<p>而<strong>名字空间</strong>就是与作用域对应的动态的东西，作用域可以认为就是一段代码的范围，作用域在Python运行时就会转化为名字空间。因此对于例子1中的 f 函数，由于其定义在全局空间内而不是嵌套定义，因此其作用域规则为LGB规则。而在例子2中我们使用了嵌套定义函数，内层定义的函数与其“直接外围作用域”被捆绑到一起，因此即使我们把代码中函数g的返回值改为<code>return f</code>，然后执行g的返回值，结果依然不变，这就是所谓的闭包。</p>
+<p>对于词法作用域：</p>
+<ul>
+<li>局部函数的名称并不影响定义所在函数外部的名称，因为局部函数的名称绑定到了定义处的当前局部环境中，而不是全局环境。</li>
+<li>局部函数可以访问外层函数的环境。这是因为局部函数的函数体的求值环境扩展于定义处的求值环境。</li>
+</ul>
+<p>这种方式使得内部函数会额外绑定一些信息，即定义处的直接外围局部环境的数据。因此，带有词法作用域的编程语言的一个重要特性就是，嵌套定义函数在它们返回时仍旧持有所关联的环境。前面我们讨论过纯函数，但是闭包可能对导致以相同参数多次调用闭包却得到不同的结果，那闭包是纯函数吗？它们仍旧是纯函数，因为它们并不允许修改任何在局部环境帧之外的东西。</p>
+<p>最后，再多说一点所谓的“最内嵌套作用域规则”。看一下代码片1.2.2，预测一下结果是怎样的？运行的话会提示函数g中的第一个print语句出错“local variable ‘a’ referenced before assignment”。怎么f中运行没问题，到了g中就有问题了？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 代码片1.2.2</span></span><br><span class="line">a = <span class="number">1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">()</span>:</span></span><br><span class="line">    print(a)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># global a</span></span><br><span class="line">    print(a)</span><br><span class="line">    a=<span class="number">2</span></span><br><span class="line">    print(a)</span><br><span class="line"></span><br><span class="line">f()</span><br><span class="line">g()</span><br></pre></td></tr></table></figure>
+<p>要回答这个原因，就需要再逐字逐句的看一下作用域规则：<strong>由一个赋值语句引起的名字在这个赋值语句所在的作用域内是可见的</strong>。在g中的<code>a=2</code>这一句话对于其所在的整个作用域都是有影响的，因此第一个print知道自己的局部空间中有a这个变量，但是a却是在自己的后面定义的，所以会上面的报错。</p>
+<p>如果有兴趣可以使用<code>dis.dis</code>看一下下面的代码中，函数f和函数g生成的字节码就会发现，二者对于变量a的查找使用了不同的字节码指令，前者是<code>LOAD_GLOBAL</code>，而后者是<code>LOAD_FAST</code>。这就意味着通过作用域的静态信息，函数知道a是局部空间中的变量，因此直接使用<code>LOAD_FAST</code>，但是只有在运行时才会发现在该条语句执行失败，这意味着对于该变量，python在编译时就已经知道了名字应该到哪里去搜索。</p>
+<p>因此我们此时对<code>nonlocal</code>和<code>global</code>关键字的理解就更深入一层了，可以知道这两个关键字的本质是控制名字引用使用的字节码指令。我们可以做实验看一下是不是这样的，把代码片1.2.2中的放到一个单独的文件中，使用<code>compile</code>函数编译出code对象，然后执行<code>import dis;dis.dis(code.co_consts[3])</code>来查看函数g的代码编译出的字节码。可以发现对变量a的查找指令从<code>LOAD_GLOBAL</code>变成了<code>LOAD_FAST</code>，后者会查找代码函数栈帧的静态变量区，而前者会查找栈帧对象的global和buildin字典中依次查询。</p>
+<p>我们发现，python中的函数具有十分灵活的使用方式，这是因为，python将函数视为“一等公民”。通常，编程语言会限制操作计算元素的途径。带有最少限制的元素被称为具有一等地位。一些一等元素的“权利和特权”是：</p>
+<ol>
+<li>它们可以绑定到名称。</li>
+<li>它们可以作为参数向函数传递。</li>
+<li>它们可以作为函数的返回值返回。</li>
+<li>它们可以包含在数据结构中。</li>
+</ol>
+<h2 id="二、python虚拟机中的函数机制"><a href="#二、python虚拟机中的函数机制" class="headerlink" title="二、python虚拟机中的函数机制"></a>二、python虚拟机中的函数机制</h2><p>写这一章之前，几个问题很是困扰了我。</p>
+<p>第一是，上面代码片1.2.2中函数g体现的行为是，运行时直接在快速区进行查找，查找失败就是失败了，那么沿着作用域链向上查找的这种行为是在哪里出现的。是在编译字节码的时候出现的吗？如果是的话，可以说通函数f中对a的查找直接使用了<code>LOAD_GLOBAL</code>，而不是从局部开始查找。但是又可以看到<code>LOAD_NAME</code>中是有LGB规则的，具体见《python源码剖析》P167，这到底是咋回事？而且注意到<code>LOAD_GLOBAL</code>字节码中也有GB规则。目前的猜测是对于函数的静态信息使用快速查找，其他的情况使用LGB规则。那又有一个问题，<code>LOAD_NAME</code>中是只可以发现LGB规则的，LEGB中的E又是怎么实现的？</p>
+<p>第二是就是函数的调用栈与函数的作用域链的关系是什么，这两个概念我似乎有些混淆。我想了下面这个代码帮助清晰的展示这个问题。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_frame</span><span class="params">(func)</span>:</span></span><br><span class="line"><span class="meta">    @wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="comment"># print current frame chain</span></span><br><span class="line">        f = sys._getframe()</span><br><span class="line">        print(<span class="string">"\n&gt;"</span>+<span class="string">"="</span>*<span class="number">20</span>, func.__name__)</span><br><span class="line">        <span class="keyword">while</span> f:</span><br><span class="line">            print(f.f_code.co_name, end=<span class="string">" -&gt; "</span>)</span><br><span class="line">            f = f.f_back</span><br><span class="line">        print()</span><br><span class="line">        print(<span class="string">"="</span>*<span class="number">20</span>+<span class="string">"&lt;\n"</span>)</span><br><span class="line">        <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapped</span><br><span class="line"></span><br><span class="line">a = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@show_frame</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> n &lt; <span class="number">3</span>: <span class="comment"># 3是随便选的，只是为了让该函数递归的调用多次</span></span><br><span class="line">        g(n+<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(a)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">()</span>:</span></span><br><span class="line">    a = <span class="number">2</span></span><br><span class="line">    g(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">f()</span><br></pre></td></tr></table></figure>
+<p>运行f之后可以发现，<code>g</code>函数在打印出变量a的值的时候，环境栈帧中已经压了三个g的不同参数的调用。然而根据我的理解，函数中对于a的查找过程应该是这个调用链的深度无关的，应该是在<code>local</code>作用域中找不到该变量的绑定之后，直接到<code>global</code>作用域中去查找，而不是穿过栈帧链中的三个<code>g</code>函数的调用到全局环境中找到变量<code>a</code>，那么名字空间是怎么实现的呢？</p>
+<p>后面咱们就带着这几个问题来看函数对象。</p>
+<h3 id="1-函数对象"><a href="#1-函数对象" class="headerlink" title="1. 函数对象"></a>1. 函数对象</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    PyObject_HEAD</span><br><span class="line">    PyObject *func_code;    <span class="comment">/* 函数代码编译后的 PyCodeObject 对象 */</span></span><br><span class="line">    PyObject *func_globals; <span class="comment">/* global名字空间 */</span></span><br><span class="line">    PyObject *func_defaults;    <span class="comment">/* 默认参数（NULL or tuple） */</span></span><br><span class="line">    PyObject *func_closure; <span class="comment">/* NULL or a tuple of cell objects */</span></span><br><span class="line">    PyObject *func_doc;     <span class="comment">/* The __doc__ attribute, 是PyStringObject */</span></span><br><span class="line">    PyObject *func_name;    <span class="comment">/* The __name__ attribute, 是PyStringObject  */</span></span><br><span class="line">    PyObject *func_dict;    <span class="comment">/* The __dict__ attribute, a dict or NULL */</span></span><br><span class="line">    PyObject *func_weakreflist; <span class="comment">/* List of weak references */</span></span><br><span class="line">    PyObject *func_module;  <span class="comment">/* The __module__ attribute, can be anything */</span></span><br><span class="line">&#125; PyFunctionObject;</span><br></pre></td></tr></table></figure>
+<p>其中函数的代码段会编译为一个<code>PyCodeObject</code>对象，这个对象是对 python 源码的静态反映，但是不是说这个对象里面就是一行行的代码而别无他物。这个对象会保存可以从代码中获得的静态信息，比如常量表<code>co_const</code>、符号表<code>co_names</code>以及编译好的字节码序列<code>co_code</code>。关于这个对象可以参考前面<a href>讲PyCodeObject的文章</a>，这里简单的复习一下：字节码对象是代码编译的结果，是静态分析得到的信息，常量表和符号表都是元组，存放了这块Code Block内出现过的常量与名字，没有任何的绑定信息，因此名字空间肯定不在这里。而<code>PyFunctionObject</code>是一个函数运行时产生的动态对象，是在执行<code>def</code>子句的时候创建的。这个对象通过保存<code>PyCodeObject</code>来获得函数的静态信息。除此之外，<code>PyFunctionObject</code>还会保存函数执行时的动态信息，比如<code>func_globals</code>和<code>func_closure</code>。因为<code>global</code>作用域中的符号和值的对应关系一定是运行时才能知道，因此这部分必须要运行时动态创建。因此，一段python函数，其<code>PyCodeObject</code>是唯一的，而<code>PyFunctionObject</code>对象可能有多个，每次调用都会生成一个，并保存指向那个唯一的<code>PyCodeObject</code>的指针。</p>
+<p>在上面看到<code>func_globals</code>和<code>func_closure</code>时，心中一抖！（哎？这个好像和名字空间有关？）的确，这两个字段与名字空间是有关系的，但不是真正的名字空间，具体原因是在这里简单提一句：名字空间是存放在Frame中的，这两个字段是负责给Frame传递内容的“信使”，而不是真正的负责人。</p>
+<p>在函数定义的时候，会将当前的global放到函数的global中，然后在函数被调用的时候，函数对象中的global又会用于新的栈帧的global的初始化。思考一下，函数是允许嵌套的，那函数自身的名字应该是在global中的，是什么时候放进去的呢？定义函数是通过<code>MAKE_FUNCTION</code>指令做的，然后这个函数对象会在栈顶，然后要通过<code>STORE_NAME</code>把函数名和函数对象放到当前的<code>local</code>环境中，而全局函数的<code>local</code>和<code>global</code>是一个字典对象，因此<code>STORE_NAME</code>把当前函数名放到<code>local</code>环境的同事也就放到了<code>global</code>环境中，再通过函数对象对<code>global</code>环境的传递功能，函数内部就也可以使用自己的名字了。那如果是非全局函数呢？内部嵌套函数的名字的确在其自身的LGB环境中都找不到，这个就涉及到闭包了，比较复杂，我也还有点乱，就不在这里写了。</p>
+<p>第二个问题差不多可以解答了，LGB名字空间都是存在于每一个Frame内的，不用沿着栈帧往回搜索。函数在定义的时候会打包当前的global空间，等到被执行的时候在传递给新的帧。而buildin空间应该是共享的，local空间在新建的栈帧中应该为空。但是函数的局部变量怎么办？这个是放在frame的静态堆栈中，因为局部变量以及<strong>位置参数</strong>是一开始就可以确定个数的，因此是可以静态处理的。看python的源码，在<code>ceval.c</code>文件中，<code>LOAD_FAST</code>和<code>STORE_FAST</code>就是处理这种“快速局部变量”，他们会操作<code>frame</code>栈帧中<code>localplus</code>指向的部分。也就是说，frame的栈一部分是用于计算的，一部分是用来存储数据的，二者虽然形式上是一段连续的内存，一衣带水，但是永远是互不相见，“白天不懂夜的黑”的。</p>
+<p>第二个问题解决了，那第一个问题呢？LGB规则什么时候发生的？LEGB规则又是什么时候发生的？</p>
+<p>首先这个问题我现在没有明确的答案，不过我的猜测是，在全局空间内，LGB规则体现在<code>LOAD_NAME</code>字节码指令中，在函数的局部栈帧内，L规则被<code>LOAD_FAST</code>取代，不会使用LGB规则查找名字，而是静态的在<code>localplus</code>栈的指定位置读取，而GB规则还在，体现在<code>LOAD_GLOBAL</code>中。至于LEGB呢，要更细的说一下。</p>
+<p>E是闭包，在python中闭包就要用到嵌套函数。嵌套函数的静态得到的code对象中，<code>co_cellvars</code>和<code>co_freevars</code>是和闭包相关的，前者保存嵌套的作用域中使用的变量名，后者保存使用到的外层作用域中的变量名。而在frame对象中，和闭包有关的属性是<code>f_localsplus</code>。没错，又是这个老铁。这段内存实际上属于四个部分，运行时栈、局部变量（包括位置参数）、cell对象和free对象。</p>
+<p>和局部变量自身直接存在localplus中不同，cell变量是以<code>PyCellObject</code>对象的形式存在localplus中的，cell对象被指就是一个指针的封装，静态分析的时候只能知道这里有一个变量用到了外面的变量，但是不知道具体值是什么，就将一个cell放到静态数据区（localplus）的指定位置，等到外层的变量所在行运行的时候再通过<code>STORE_DEREF</code>指令，让cell对象指向外层的值。</p>
+<p>在内层嵌套函数的<code>def</code>语句执行的时候，会将通过<code>LOAD_CLOSURE</code>指令将外层的cel对象取出，封装到内层函数的function对象中。此时在内层函数完成定义时的状态时，外层的函数是运行时，拥有自己的栈帧，该栈帧的local空间中有一个函数对象，函数对象中的<code>func_closure</code>属性指向了当前栈帧中的其他变量。</p>
+<p>而当内层函数执行的时候，通过<code>PyEval_EvalCodeEx</code>函数，会将cell对象逐个拷贝到<code>localplus</code>中的指定位置（即freevars）。这就是闭包的基本原理。</p>
+<p>因此，对于全局函数，LGB规则的L体现在<code>localplus</code>静态区中，而对于内层嵌套函数，LEGB规则的LE都体现在<code>localplus</code>静态区中。这也就可以解答我们在本节开始提出的第一个问题。</p>
+<hr>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/windydays/archive/2012/04/09/2439519.html" target="_blank" rel="noopener">轻松7步，导出Y结合子</a><br><a href="https://baijiahao.baidu.com/s?id=1613289614650107001&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">Python进阶之路：operator模块</a><br><a href="https://www.jianshu.com/nb/5494249" target="_blank" rel="noopener">SICP 第一章</a><br><a href="https://book.douban.com/subject/3117898/" target="_blank" rel="noopener">Python源码剖析 第十一章</a><br><a href="http://python.jobbole.com/84577/" target="_blank" rel="noopener">python中的函数式编程</a><br><a href="http://python.jobbole.com/82178/" target="_blank" rel="noopener">Python函数式编程指南（4）：生成器</a><br><a href="https://www.jianshu.com/p/d00108741a18" target="_blank" rel="noopener">Python源码剖析笔记6-函数机制</a><br><a href="https://www.jianshu.com/p/0fa96d4a93c0" target="_blank" rel="noopener">深入理解python之函数系统</a><br><a href="http://python.jobbole.com/86937/" target="_blank" rel="noopener">python开启尾递归优化</a><br><a href="https://www.jianshu.com/p/0fa96d4a93c0" target="_blank" rel="noopener">深入理解python之函数系统</a><br><a href="https://www.jianshu.com/p/ad8d49511ea0" target="_blank" rel="noopener">Python 中的作用域准则</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2019/04/17/Python-2019-04-17-PythonFunction/" data-id="cjxo5e6q80039z16dftm1oz7r" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../Python-2019-04-17-PythonCookbook12/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Python Cookbook3 (12) 并发编程
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../16/Python-2019-04-16-PyEval/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python虚拟机中的一般表达式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

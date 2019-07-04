@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Ubuntu装机 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Vim1sudo apt install vim 搜狗输入法(参考http://www.linuxdiyf.com/linux/22075.html) 官网下载系统对应安装包(使用uname -m命令查看系统位数),如果是14以上的系统，尝试直接双击安装，如果成功就无需后续步骤。 配置fcitx。因为搜狗中文输入法基于fcitx，而ubuntu系统默认的输入法框架是iBus。 添加源:sudo a">
+<meta name="keywords" content="tools,linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu装机">
+<meta property="og:url" content="https://protao.github.io/2017/06/15/程序员的玩具-2017-6-15-NewUbuntu/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="Vim1sudo apt install vim 搜狗输入法(参考http://www.linuxdiyf.com/linux/22075.html) 官网下载系统对应安装包(使用uname -m命令查看系统位数),如果是14以上的系统，尝试直接双击安装，如果成功就无需后续步骤。 配置fcitx。因为搜狗中文输入法基于fcitx，而ubuntu系统默认的输入法框架是iBus。 添加源:sudo a">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-26T03:42:10.767Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ubuntu装机">
+<meta name="twitter:description" content="Vim1sudo apt install vim 搜狗输入法(参考http://www.linuxdiyf.com/linux/22075.html) 官网下载系统对应安装包(使用uname -m命令查看系统位数),如果是14以上的系统，尝试直接双击安装，如果成功就无需后续步骤。 配置fcitx。因为搜狗中文输入法基于fcitx，而ubuntu系统默认的输入法框架是iBus。 添加源:sudo a">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-程序员的玩具-2017-6-15-NewUbuntu" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2017-06-14T16:00:00.000Z" itemprop="datePublished">2017-06-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Ubuntu装机
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install vim</span><br></pre></td></tr></table></figure>
+<h2 id="搜狗输入法-参考http-www-linuxdiyf-com-linux-22075-html"><a href="#搜狗输入法-参考http-www-linuxdiyf-com-linux-22075-html" class="headerlink" title="搜狗输入法(参考http://www.linuxdiyf.com/linux/22075.html)"></a>搜狗输入法(参考<a href="http://www.linuxdiyf.com/linux/22075.html" target="_blank" rel="noopener">http://www.linuxdiyf.com/linux/22075.html</a>)</h2><ol>
+<li>官网下载系统对应安装包(使用uname -m命令查看系统位数),如果是14以上的系统，尝试直接双击安装，如果成功就无需后续步骤。</li>
+<li>配置fcitx。因为搜狗中文输入法基于fcitx，而ubuntu系统默认的输入法框架是iBus。<ol>
+<li>添加源:<code>sudo add-apt-repository ppa:fcitx-team/nightly</code></li>
+<li>更新源:<code>sudo apt-get update</code></li>
+<li>安装fcitx:<code>sudo apt-get install fcitx</code></li>
+<li>安装fcitx配置工具:<code>sudo apt-get install fcitx-config-gtk</code>(这个步骤我做的时候提示不用安装)。</li>
+<li>安装table-all软件包:<code>sudo apt-get install fcitx-table-all</code>(这个步骤我没有做，因为感觉没有必要)。</li>
+<li>安装im-switch切换工具:<code>sudo apt-get install im-switch</code>(这个步骤我没有做，因为感觉没有必要)。</li>
+<li><code>im-config</code>命令，如果弹出窗口中选择的不是fcitx，就改成fcitx，然后重启电脑。</li>
+</ol>
+</li>
+<li>安装搜狗输入法安装包，下载的是deb安装包，到所在文件夹使用<code>sudo dpkg -i &lt;搜狗输入法包名&gt;</code>进行安装。</li>
+<li><code>fcitx-config-gtk3</code>命令，点击加号，取消“Only Show Current Language”，输入sogou找到搜狗输入法。</li>
+<li>我的安装过程中有依赖项不满足的情况，使用<code>sudo apt-get check</code>检查依赖，然后使用<code>sudo apt -f install</code>安装不满足的依赖项。</li>
+</ol>
+<h2 id="git"><a href="#git" class="headerlink" title="git"></a>git</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install git</span><br></pre></td></tr></table></figure>
+<h2 id="Markdown编辑器——Haroopad"><a href="#Markdown编辑器——Haroopad" class="headerlink" title="Markdown编辑器——Haroopad"></a>Markdown编辑器——Haroopad</h2><p>一款跨平台的Markdown编辑器。下载链接：<a href="https://bitbucket.org/rhiokim/haroopad-download/downloads/haroopad-v0.13.1-x64.deb" target="_blank" rel="noopener">https://bitbucket.org/rhiokim/haroopad-download/downloads/haroopad-v0.13.1-x64.deb</a><br>四十兆多一点，比我在windows上用的MarkdownEditor.exe大了不少，不过这个代价换来的是更强的预览功能，导出PDF功能，自定义主题和字体大小，代码提示与折叠，同步滚动，甚至是Vim模式（虽然这个我没用到…)。<br>使用<code>sudo dpkg -i haroopad.deb</code>来安装，安装之后调整一下配置，可配置向不多，编辑主题我选择的是solarized light，预览主题选择的是default，其他的根据自己喜好调整即可。<br><a id="more"></a></p>
+<h2 id="截图工具"><a href="#截图工具" class="headerlink" title="截图工具"></a>截图工具</h2><p>有一些很好的截图工具但是需要另外下载，其实在Ubuntu内自带一个很好的截图工具就叫“截图”（汗）。我试了一下，这个工具完全满足我的需要了，然后添加到启动器中方便使用。</p>
+<h2 id="Flash-浏览器插件"><a href="#Flash-浏览器插件" class="headerlink" title="Flash 浏览器插件"></a>Flash 浏览器插件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install flashplugin-installer</span><br></pre></td></tr></table></figure>
+<h2 id="编辑器Sublime-Text3"><a href="#编辑器Sublime-Text3" class="headerlink" title="编辑器Sublime-Text3"></a>编辑器Sublime-Text3</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:webupd8team/sublime-text-3</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install sublime-text</span><br></pre></td></tr></table></figure>
+<h3 id="中文输入问题："><a href="#中文输入问题：" class="headerlink" title="中文输入问题："></a>中文输入问题：</h3><p>参考<a href="http://blog.csdn.net/jackailson/article/details/50878089" target="_blank" rel="noopener">这篇文章</a></p>
+<h2 id="scrapy"><a href="#scrapy" class="headerlink" title="scrapy"></a>scrapy</h2><p>最近在学这个爬虫框架，就把这个也写进去喽。<br>首先安装一些依赖包：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install python-dev python-pip libxml2-dev libxslt1-dev zlib1g-dev libffi-dev libssl-dev</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>python-dev：外部引用python时需要的开发包</li>
+<li>python-pip：python包安装工具</li>
+<li>libxml2-dev：C语言的XML程式库,能简单方便的提供对XML文件的各种操作,并且支持XPATH查询,及部分的支持XSLT转换等功能</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install Scrapy</span><br></pre></td></tr></table></figure>
+<h2 id="WPS"><a href="#WPS" class="headerlink" title="WPS"></a>WPS</h2><p>官网下载下载<a href="http://kdl.cc.ksosoft.com/wps-community/download/a21/wps-office_10.1.0.5672~a21_amd64.deb" target="_blank" rel="noopener">安装包</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg -i wps-office_10.1.0.5672~a21_i386.deb</span><br></pre></td></tr></table></figure>
+<h2 id="PDF阅读器——Okular"><a href="#PDF阅读器——Okular" class="headerlink" title="PDF阅读器——Okular"></a>PDF阅读器——Okular</h2><p>支持多类文档，并且注释功能强大<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install okular</span><br></pre></td></tr></table></figure></p>
+<h2 id="bt客户端"><a href="#bt客户端" class="headerlink" title="bt客户端"></a>bt客户端</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install deluge</span><br></pre></td></tr></table></figure>
+<h2 id="博客工具"><a href="#博客工具" class="headerlink" title="博客工具"></a>博客工具</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sudo apt install jekyll</span></span><br></pre></td></tr></table></figure>
+<p>已经替换为hexo了，参考<a href="https://protao.github.io/2018/03/08/Programmer-2018-03-08-hexo/">hexo使用体验</a></p>
+<h2 id="SMplayer"><a href="#SMplayer" class="headerlink" title="SMplayer"></a>SMplayer</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install smplayer</span><br></pre></td></tr></table></figure>
+<h3 id="中文设置"><a href="#中文设置" class="headerlink" title="中文设置"></a>中文设置</h3><p>options-preferences-interface-language-zh_CN</p>
+<h2 id="Ubuntu软件中心闪退"><a href="#Ubuntu软件中心闪退" class="headerlink" title="Ubuntu软件中心闪退"></a>Ubuntu软件中心闪退</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get dist-upgrade</span><br><span class="line">sudo apt-get install --reinstall software-center</span><br></pre></td></tr></table></figure>
+<p>dist-upgrade会比较灵活地处理包的依赖关系，而upgrade则不会，如果依赖包出了问题，upgrade会停止更新。</p>
+<h2 id="垃圾清理"><a href="#垃圾清理" class="headerlink" title="垃圾清理"></a>垃圾清理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get autoremove</span><br><span class="line">sudo apt-get autoclean</span><br><span class="line">uname -r <span class="comment">#查看当前内核</span></span><br><span class="line">dpkg --get-selections|grep linux <span class="comment">#查看系统中的内核文件</span></span><br><span class="line">sudo apt-get purge &lt;image/header&gt; <span class="comment"># 删除掉小版本号的image和header文件</span></span><br><span class="line">sudo apt-get remove libreoffice-common <span class="comment"># 删除libreoffice</span></span><br><span class="line">sudo apt-get remove unity-webapps-common <span class="comment"># 删除Amazon的链接</span></span><br><span class="line">sudo apt-get remove thunderbird totem rhythmbox empathy brasero simple-scan gnome-mahjongg aisleriot gnome-mines cheese transmission-common gnome-orca webbrowser-app gnome-sudoku landscape-client-ui-install onboard deja-dup <span class="comment"># 删掉基本不用的自带软件</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用国内源"><a href="#使用国内源" class="headerlink" title="使用国内源"></a>使用国内源</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># deb cdrom:[Ubuntu 16.04 LTS _Xenial Xerus_ - Release amd64 (20160420.1)]/ xenial main restricted</span></span><br><span class="line">deb-src http://archive.ubuntu.com/ubuntu xenial main restricted <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted multiverse universe <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://archive.canonical.com/ubuntu xenial partner</span><br><span class="line">deb-src http://archive.canonical.com/ubuntu xenial partner</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse</span><br></pre></td></tr></table></figure>
+<h2 id="安装pip"><a href="#安装pip" class="headerlink" title="安装pip"></a>安装pip</h2><p>因为我比较喜欢python3.x，所以我只直接安装pip3<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install python3-pip</span><br><span class="line">sudo -H pip3 install --upgrade pip</span><br></pre></td></tr></table></figure></p>
+<p>安装目录在<code>/usr/local/lib/python3.x/dist-package</code><br>接下来安装几个常用的包<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo -H pip3 install pip-autoremove</span><br><span class="line">sudo -H pip3 install numpy</span><br><span class="line">sudo -H pip3 install matplotlib</span><br><span class="line">sudo -H pip3 install jupyter notebook</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装一系列命令行工具"><a href="#安装一系列命令行工具" class="headerlink" title="安装一系列命令行工具"></a>安装一系列命令行工具</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># autojump</span></span><br><span class="line">sudo apt-get install autojump</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'. /usr/share/autojump/autojump.sh'</span>&gt;&gt;~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="comment"># fzf : 高级Ctrl+r（安装后需要重启）</span></span><br><span class="line">git <span class="built_in">clone</span> --depth 1 https://github.com/junegunn/fzf.git ~/.fzf</span><br><span class="line">~/.fzf/install</span><br><span class="line"><span class="built_in">cd</span> ~/.fzf &amp;&amp; git pull &amp;&amp; ./install</span><br><span class="line"></span><br><span class="line"><span class="comment"># thefuck</span></span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install python3-dev python3-pip</span><br><span class="line">sudo pip3 install thefuck</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'eval "$(thefuck --alias)"'</span> &gt;&gt; .bashrc</span><br><span class="line"></span><br><span class="line">sudo apt install shellcheck <span class="comment"># bash查错</span></span><br><span class="line">sudo apt install cloc <span class="comment"># 代码统计</span></span><br><span class="line">sudo apt install silversearcher-ag <span class="comment"># 高级grep</span></span><br><span class="line"><span class="comment"># sudo apt install jq # json高亮显示</span></span><br><span class="line">sudo apt install axel <span class="comment"># 多线程下载</span></span><br><span class="line"><span class="comment"># pip install yapf # google的PEP8格式化工具</span></span><br><span class="line">sudo apt-get install tmux <span class="comment"># 终端复用</span></span><br></pre></td></tr></table></figure>
+<h2 id="VSCODE"><a href="#VSCODE" class="headerlink" title="VSCODE"></a>VSCODE</h2><p>参考<br><a href="https://blog.csdn.net/hnshhshjq/article/details/80140401" target="_blank" rel="noopener">用vscode写python的插件推荐</a><br><a href="http://www.360doc.com/content/18/0326/07/11881101_740225701.shtml" target="_blank" rel="noopener">Vscode写Python代码</a></p>
+<hr>
+<p>参考：</p>
+<ol>
+<li><a href="http://blog.jobbole.com/111072/" target="_blank" rel="noopener">有哪些命令行的软件堪称神器？</a></li>
+<li><a href="https://linux.cn/article-3401-1.html" target="_blank" rel="noopener">自动补完不算什么，一键直达目录才是终极神器！</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2015-08/121421.htm" target="_blank" rel="noopener">Autojump：一个可以在 Linux 文件系统快速导航的高级 cd 命令</a></li>
+<li><a href="https://github.com/nvbn/thefuck" target="_blank" rel="noopener">The Fuck</a></li>
+<li><a href="https://www.cnblogs.com/maoxiaolv/p/5526602.html" target="_blank" rel="noopener">Tmux速成教程：技巧和调整</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2017/06/15/程序员的玩具-2017-6-15-NewUbuntu/" data-id="cjxo5e7gc008bz16dd6slfgkv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/tools/">tools</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../程序员的玩具-2017-06-15-git-handbook/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          我的git学习笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../06/程序员的玩具-2017-6-6-DateRegex/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">日期正则表达式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

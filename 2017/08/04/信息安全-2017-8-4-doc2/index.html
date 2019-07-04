@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>RIOT文档二 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="可信平台架构——设备标识符组合引擎的硬件需求1. Scope and Audience本规范描述了通过Device Secret和首次出现的可变代码的散列所派生出来的identity value的硬件要求和整体流程。该规范将此派生值称为复合设备标识符CDI（Compound Device Identifier）。这个复合设备标识符的组成收到硬件状态或配置和第一代可变代码的影响。 CDI的一个可能的">
+<meta name="keywords" content="security,hash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RIOT文档二">
+<meta property="og:url" content="https://protao.github.io/2017/08/04/信息安全-2017-8-4-doc2/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="可信平台架构——设备标识符组合引擎的硬件需求1. Scope and Audience本规范描述了通过Device Secret和首次出现的可变代码的散列所派生出来的identity value的硬件要求和整体流程。该规范将此派生值称为复合设备标识符CDI（Compound Device Identifier）。这个复合设备标识符的组成收到硬件状态或配置和第一代可变代码的影响。 CDI的一个可能的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/2017/08/04/信息安全-2017-8-4-doc2/img/cdi.png">
+<meta property="og:updated_time" content="2018-03-10T14:46:06.851Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RIOT文档二">
+<meta name="twitter:description" content="可信平台架构——设备标识符组合引擎的硬件需求1. Scope and Audience本规范描述了通过Device Secret和首次出现的可变代码的散列所派生出来的identity value的硬件要求和整体流程。该规范将此派生值称为复合设备标识符CDI（Compound Device Identifier）。这个复合设备标识符的组成收到硬件状态或配置和第一代可变代码的影响。 CDI的一个可能的">
+<meta name="twitter:image" content="https://protao.github.io/2017/08/04/信息安全-2017-8-4-doc2/img/cdi.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-信息安全-2017-8-4-doc2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2017-08-04T08:35:28.000Z" itemprop="datePublished">2017-08-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/信息安全/">信息安全</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      RIOT文档二
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="可信平台架构——设备标识符组合引擎的硬件需求"><a href="#可信平台架构——设备标识符组合引擎的硬件需求" class="headerlink" title="可信平台架构——设备标识符组合引擎的硬件需求"></a><strong>可信平台架构——设备标识符组合引擎的硬件需求</strong></h1><h1 id="1-Scope-and-Audience"><a href="#1-Scope-and-Audience" class="headerlink" title="1. Scope and Audience"></a>1. Scope and Audience</h1><p>本规范描述了通过Device Secret和首次出现的可变代码的散列所派生出来的identity value的硬件要求和整体流程。该规范将此派生值称为复合设备标识符CDI（Compound Device Identifier）。这个<br>复合设备标识符的组成收到硬件状态或配置和第一代可变代码的影响。</p>
+<p>CDI的一个可能的应用是attest一个嵌入式设备是否可信。</p>
+<p>文档的潜在读者是不可访问TPM的可编程组件的程序设计师。</p>
+<h1 id="2-Normative-references（规范性引用文件）"><a href="#2-Normative-references（规范性引用文件）" class="headerlink" title="2. Normative references（规范性引用文件）"></a>2. Normative references（规范性引用文件）</h1><p>（略）</p>
+<h1 id="3-Terms-and-definitions（名词解释）"><a href="#3-Terms-and-definitions（名词解释）" class="headerlink" title="3. Terms and definitions（名词解释）"></a>3. Terms and definitions（名词解释）</h1><ol>
+<li><p><strong>CDI</strong></p>
+<blockquote>
+<p>复合设备标识符是一组数据，用于标识用于生成该数据的系统上运行的软件。</p>
+</blockquote>
+</li>
+</ol>
+<ol start="2">
+<li><p><strong>digest</strong></p>
+<blockquote>
+<p>hash值</p>
+</blockquote>
+</li>
+<li><p><strong>device</strong></p>
+<blockquote>
+<p>一种整合了可编程组件与其他可选的可编程组件和外围设备平台。</p>
+</blockquote>
+</li>
+</ol>
+<a id="more"></a>
+<ol start="4">
+<li><p><strong>DICE</strong></p>
+<blockquote>
+<p>Device Identifier Composition Engine： 创建CDI的不可变引擎</p>
+</blockquote>
+</li>
+<li><p><strong>measurement</strong></p>
+<blockquote>
+<p>代码或者数据的安全哈希</p>
+</blockquote>
+</li>
+<li><p><strong>UDS</strong></p>
+<blockquote>
+<p>只有制造商和DICE知道的Unique Device Secret，并且被DICE用于生成CDI。</p>
+</blockquote>
+</li>
+</ol>
+<h1 id="4-Symbols-and-Abbreviated-Terms（符号和缩写术语）"><a href="#4-Symbols-and-Abbreviated-Terms（符号和缩写术语）" class="headerlink" title="4. Symbols and Abbreviated Terms（符号和缩写术语）"></a>4. Symbols and Abbreviated Terms（符号和缩写术语）</h1><p>（略）</p>
+<h1 id="5-Introduction"><a href="#5-Introduction" class="headerlink" title="5. Introduction"></a>5. Introduction</h1><p>CDI通过UDS和运行在平台上的第一代可变代码计算得到，并且涉及到了硬件状态信息和影响第一代可变代码的执行的配置信息。CDI被DICE计算出来。DICE在系统reset之后、移交控制权给可变代码之前，对UDS有着排他的访问权限。UDS由制造商以任何与该规范相一致的方式提供。如Figure 1中，举例说明CDI的计算的一般流程。UDS或者被测组件的任何改动都会导致CDI结果的改变。</p>
+<p><img src="img/cdi.png" alt></p>
+<p>UDS和可变代码的度量必须以一种加密的方式混合在一起，用CDI和代码度量来恢复UDS是不可行的。这可以通过使用一个安全的哈希算法来实现这两个值的连接。另外，这两个值可以在HMAC中使用，并使用UDS作为HMAC键。 <strong>HMAC将为UDS提供更高级别的保护，而不是简单的散列。</strong>结合这些值的具体方法是制造商的选择，因为它不影响互操作性。</p>
+<p><em>方式(1):如果是哈希函数就把UDS和measurement连接起来进行哈希</em></p>
+<p><em>方式(2):如果使用HMAC就用UDS作为key对measurement进行HMAC</em>。</p>
+<p>HMAC操作需要花费更多的时间，但是依据 NIST SP800-57 中的描述，方式(2)可以提供二倍于方式(1)的保护级别。</p>
+<p>在需要的地方，设备需要负责保护对CDI的访问(读、写和修改)。通过可变代码对CDI进行保护是不可行的。如何实现CDI的保护，超出了本规范的范围。</p>
+<h1 id="6-Requirements"><a href="#6-Requirements" class="headerlink" title="6. Requirements"></a>6. Requirements</h1><h2 id="6-1-Unique-Device-Secret-properties（UDS的属性）"><a href="#6-1-Unique-Device-Secret-properties（UDS的属性）" class="headerlink" title="6.1 Unique Device Secret properties（UDS的属性）"></a>6.1 Unique Device Secret properties（UDS的属性）</h2><p>UDS的值 <strong>必须</strong> 是不相关的，并且在统计上是唯一的。</p>
+<p>任何其他实体都 <strong>严禁</strong> 将UDS用作身份值。**</p>
+<p>设备 <strong>必须</strong> 具有至少与设备认证过程中使用的安全强度相同的UDS。认证过程报告了设备的软件状态和身份。</p>
+<p>当认证过程由不受设备制造商控制的软件决定时，UDS的大小 <strong>至少应该</strong> 是256位。</p>
+<blockquote>
+<p>建议256位是因为SHA1已经被弃用，长的UDS意味着更长的实现寿命。</p>
+</blockquote>
+<p>UDS <strong>不应该</strong> 被重新写（rewritable）。</p>
+<blockquote>
+<p>注：UDS改变意味着设备的身份改变，这意味着认证失败和先前的数据无法访问。</p>
+</blockquote>
+<h2 id="6-2-Device-Identifier-Composition-Engine-properties（DICE的属性）"><a href="#6-2-Device-Identifier-Composition-Engine-properties（DICE的属性）" class="headerlink" title="6.2 Device Identifier Composition Engine properties（DICE的属性）"></a>6.2 Device Identifier Composition Engine properties（DICE的属性）</h2><p>在设备上实现的DICE <strong>应该</strong> 是不可变的。</p>
+<blockquote>
+<p>在设备的制造过程结束时，DICE就将不可变。</p>
+</blockquote>
+<p>DICE <strong>必须</strong> 具有对UDS具有排他的读取权限。</p>
+<blockquote>
+<p>这意味着，实现DICE的可编程组件的封装通常会排除使用、读取和观察除DICE之外的实体的使用。</p>
+</blockquote>
+<blockquote>
+<p>通常情况下，当一个硬件事件(例如重设)导致DICE开始执行时，对包含UDS的存储位置的访问将被启用。然后，读取存储位置的访问权限将被一个软件命令禁用。其他的实现也是可以的。</p>
+</blockquote>
+<p>如果设备有调试端口或者调试模式的话：</p>
+<ul>
+<li><p>调试端口或调试模式只应在重置时启用，或者由在DICE执行后，由软件显式启用。</p>
+</li>
+<li><p>当启用调试端口或调试模式时，任何试图读取UDS(包括DICE)的尝试都将被拒绝，或者产生与UDS无关的值。</p>
+</li>
+</ul>
+<blockquote>
+<p>任何常数值，比如所有的0，都是一个不相关的值。</p>
+</blockquote>
+<h2 id="6-3-Compound-Device-Identifier-properties"><a href="#6-3-Compound-Device-Identifier-properties" class="headerlink" title="6.3 Compound Device Identifier properties"></a>6.3 Compound Device Identifier properties</h2><p>CDI的规范需求超出了本文档的范围。</p>
+<blockquote>
+<p>该设备可能需要专用的硬件来保护访问(读、写和修改)到CDI。</p>
+</blockquote>
+<blockquote>
+<p>如果硬件无法保护CDI，那么由制造商提供的可变代码将减少CDI暴露给未授权实体的机会。通过对授权的可变代码进行度量而泄漏CDI的设备可能容易受到重放攻击和模拟的攻击。</p>
+</blockquote>
+<blockquote>
+<p>鼓励设备制造商使用最佳实践(例如:iso/iec 27034)来防止CDI的泄漏。可能采取的措施包括:</p>
+</blockquote>
+<pre><code>1. 避免设计、编码和逻辑上的错误
+2. 使用后立刻从RAM、寄存器、cache中擦除CDI
+</code></pre><blockquote>
+<p>一个被可变代码泄漏的CDI应该以更新制造商的可变代码的方式淘汰。这将导致DICE产生一个新的CDI并且移除了泄漏的原因。</p>
+</blockquote>
+<h2 id="6-4-DICE-Operation"><a href="#6-4-DICE-Operation" class="headerlink" title="6.4 DICE Operation"></a>6.4 DICE Operation</h2><p>当设备被重新设置时，在设备上的任何可变代码执行之前，DICE都不会受到干扰或改变。</p>
+<p>在执行可变代码之前，DICE应该将UDS与第一代可变代码的measurement结合起来，这样就不能从CDI中推导出UDS，即使测量是已知的。</p>
+<p>DICE将使用至少与UDS相同的加密强度的单向函数来创建CDI。</p>
+<blockquote>
+<p>根据NIST的sp800-57，第1部分;在HMAC中使用散列算法提供的安全性和在摘要中的比特数一样多，但是在散列中使用的算法只提供了大约一半的比特。使用UDS作为HMAC密钥将使安全强度与UDS一样强大。</p>
+</blockquote>
+<p>在执行可变代码之前，对UDS的访问将被禁用，直到下一次设备reset。</p>
+<blockquote>
+<p>禁用功能可以通过很多方式实现,例如,通过将UDS存放在一次只读存储器中,通过显式的软件指令,通过硬件识别指令指针是否DICE指示的范围内 <del>仅允许访问的UDS范围</del>,通过在安全协处理器上只运行DICE并且只允许访问该安全协处理器访问DICE。或者其他可能的实现可是可以的。</p>
+</blockquote>
+<p>在执行可变代码之前，DICE应该安全地删除任何可以用来确定UDS的值。</p>
+<p>只要可变代码需要独占访问权，就可以将CDI写到一个位置，在这个位置上，可变的可变代码具有独占访问权。</p>
+<blockquote>
+<p>可变代码可以使用和删除CDI和任何可以用来确定CDI的值。当可变代码使用CDI时，它需要保证阻止对CDI的访问和避免该值的泄露。</p>
+</blockquote>
+<blockquote>
+<p>访问包括读、写、修改。</p>
+</blockquote>
+<blockquote>
+<p>可变代码使用CDI的具体细节不在本文档中予以说明</p>
+</blockquote>
+<p>DICE应使得设备在可变代码的范围内执行可变的代码，这些代码在被测的可变代码的范围内。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2017/08/04/信息安全-2017-8-4-doc2/" data-id="cjxo5e6qn003gz16dwpgdgb6v" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/hash/">hash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/security/">security</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../05/信息安全-2017-8-5-doc3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          RIOT文档三
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../03/信息安全-2017-8-3-doc1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">RIOT文档一</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

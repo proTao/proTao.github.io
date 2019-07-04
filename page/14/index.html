@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="proTao的大脑具现">
+<meta property="og:url" content="https://protao.github.io/page/14/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="proTao的大脑具现">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    
+
+<article id="post-C-2018-06-30-Counting-Objects-in-CPP" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="../../2018/06/30/C-2018-06-30-Counting-Objects-in-CPP/" class="article-date">
+  <time datetime="2018-06-29T16:00:00.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/C/">C++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="../../2018/06/30/C-2018-06-30-Counting-Objects-in-CPP/">【译】Counting Objects in C++</a>
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://www.ieee.org.cn/dispbbs.asp?boardID=61&amp;ID=15406" target="_blank" rel="noopener">Counting Objects in C++</a></p>
+<p>在c++中对给定类分配的所有对象进行计数并不困难，除非您必须处理分散注意力的问题。</p>
+<p>有时候简单的事情很简单，但它们仍然很微妙。例如，假设您有一个类Widget，并且希望有一种方法能够在运行时查明存在多少Widget对象。一种既容易实现又给出正确答案的方法是在Widget中创建静态计数器，每次调用Widget构造函数时递增计数器，每次调用Widget析构函数时递减计数器。您还需要一个静态成员函数<code>how many</code>来报告当前有多少Widget。如果Widget什么也不做，只是跟踪它的类型存在的数量，那么它看起来或多或少是这样的。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Widget() &#123; ++count; &#125;</span><br><span class="line">    Widget(<span class="keyword">const</span> Widget&amp;) &#123; ++count; &#125;</span><br><span class="line">    ~Widget() &#123; --count; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> size_t <span class="title">howMany</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> count; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">size_t</span> count;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// obligatory definition of count. This</span></span><br><span class="line"><span class="comment">// goes in an implementation file</span></span><br><span class="line"><span class="keyword">size_t</span> Widget::count = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="../../2018/06/30/C-2018-06-30-Counting-Objects-in-CPP/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/06/30/C-2018-06-30-Counting-Objects-in-CPP/" data-id="cjxo5e6nl001mz16daxeouq6v" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/translation/">translation</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
+    
+
+<article id="post-Python-2018-06-30-WhyPythonisSlow" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="../../2018/06/30/Python-2018-06-30-WhyPythonisSlow/" class="article-date">
+  <time datetime="2018-06-29T16:00:00.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/python/">python</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="../../2018/06/30/Python-2018-06-30-WhyPythonisSlow/">Why Python is Slow:Looking Under the Hood</a>
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>翻译自<a href="https://jakevdp.github.io/blog/2014/05/09/why-python-is-slow/" target="_blank" rel="noopener">Why Python is Slow: Looking Under the Hood</a></strong></p>
+<p>我们以前都听说过 : Python很慢。</p>
+<p>当我在Python上讲授关于科学计算的课程时，我在课程的早期就提出了这个观点，并告诉学生们为什么:它归结为Python是一种动态类型的解释语言，它的值不是存储在密集的缓冲区中，而是存储在分散的对象中。然后我将讨论如何通过使用NumPy、SciPy和相关工具对操作进行矢量化并调用到编译后的代码，然后继续。</p>
+<p>但最近我意识到一些事情:尽管上面的陈述相对准确，“动态类型-解释-缓存-向量-编译”这个词对参加入门编程研讨会的人来说可能没什么意义。可以说，这些术语并不能让人们了解“幕后”到底在发生什么。</p>
+<p>所以我决定写这篇文章，深入研究我经常忽略的细节。在此过程中，我们将研究如何使用Python的标准库来反思CPython本身的问题。因此，无论您是新手还是经验丰富的程序员，我希望您能从下面的探索中学到一些东西。</p>
+        
+          <p class="article-more-link">
+            <a href="../../2018/06/30/Python-2018-06-30-WhyPythonisSlow/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/06/30/Python-2018-06-30-WhyPythonisSlow/" data-id="cjxo5e6px0034z16d1brgm2nh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/translation/">translation</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
+    
+
+<article id="post-程序员的玩具-2018-06-29-LC-Tree" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="../../2018/06/29/程序员的玩具-2018-06-29-LC-Tree/" class="article-date">
+  <time datetime="2018-06-29T07:17:12.000Z" itemprop="datePublished">2018-06-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/程序员的玩具/">程序员的玩具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="../../2018/06/29/程序员的玩具-2018-06-29-LC-Tree/">LeetCode刷题笔记——Tree</a>
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="662-Maximum-Width-of-Binary-Tree-bangbang"><a href="#662-Maximum-Width-of-Binary-Tree-bangbang" class="headerlink" title="662. Maximum Width of Binary Tree bangbang"></a>662. Maximum Width of Binary Tree <em>bangbang</em></h3><p>一上来的思路就是层次遍历，一开始用的是<code>deque</code>，这样的话就要自己往里面加分隔符，确定宽度。还有就是遇到空节点也不能停，要接着向队列里面压入两个空节点，然后每一层结束时判断最左非空节点和最右非空节点之间的节点数。<br>然后超时了。。。看了一下调用栈，就是空节点太多了，然后转回溯法试了一下，还是没能解决空节点的问题。注意的是每一层最左非空节点的左边的节点都不用考虑，右边的同理，然后用了两个数组进行层次遍历，然后加了一些小trick，每层最左最右的空节点直接跳过，勉勉强强的AC了，代码最后也是很丑陋。<br>然后看了top1的代码。。。思路真的很巧妙。。一开始我也往这边想了，就是贴着两边找，但是不知道怎么确定位置。位置这点怎么能没想到呢，刚刷完堆的题，对于完全二叉树，每个节点的紧凑表示后的位置是确定的啊！那然后给每个节点一个编号，然后随意遍历这棵树，看同一层中的编号的差值就好了。<br>现在觉得棒棒，多刷刷可能就好了。树的核心思想就是那几个遍历，这道题其实没有脱离框架的。</p>
+        
+          <p class="article-more-link">
+            <a href="../../2018/06/29/程序员的玩具-2018-06-29-LC-Tree/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/06/29/程序员的玩具-2018-06-29-LC-Tree/" data-id="cjxo5e7df005yz16diycs1eaj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/algorithm/">algorithm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
+    
+
+<article id="post-Python-2018-06-05-PyDictObject" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="../../2018/06/05/Python-2018-06-05-PyDictObject/" class="article-date">
+  <time datetime="2018-06-04T16:00:00.000Z" itemprop="datePublished">2018-06-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/python/">python</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="../../2018/06/05/Python-2018-06-05-PyDictObject/">python中的字典对象</a>
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-散列表概述"><a href="#1-散列表概述" class="headerlink" title="1. 散列表概述"></a>1. 散列表概述</h2><p>C++的 STL 中的 map 就是一种关联容器,map 的实现基于 RB-tree(红黑树)，理论上,其搜索的复杂度为 O(logN)。Python 中同样提供关联式容器,即 <code>PyDictObject</code> 对象。与 map 不同的是,<code>PyDictObject</code> 对搜索的效率要求及其苛刻,这也是因为 <code>PyDictObject</code> 在 Python 本身的实现中被大量地采用,比如会通过 <code>PyDictObject</code> 来建立符号表。因此,<code>PyDictObject</code> 采用了散列表(hashtable)。理论上,在最优情况下,散列表能提供 O(1)复杂度的搜索效率。<br>有很多种方法可以用来解决产生的散列冲突,比如说开链法,这是 SGI STL 中的 hash table 所采用的方法;而 Python 中所采用的是另一种方法,即开放定址法。当产生散列冲突时, Python 会通过一个二次探测函数,计算下一个候选位置,如果这个位置可用,则可将待插入元素放到这个位置，如果不行将继续探测。</p>
+<h2 id="2-PyDictObject"><a href="#2-PyDictObject" class="headerlink" title="2. PyDictObject"></a>2. PyDictObject</h2><h3 id="2-1-关联容器的entry"><a href="#2-1-关联容器的entry" class="headerlink" title="2.1 关联容器的entry"></a>2.1 关联容器的entry</h3><p>在此后的描述中,我们将把关联容器中的一个(键,值)元素对称为一个 <code>entry</code>。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[dictobject.h]</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">long</span> ma_hash;</span><br><span class="line">	 <span class="comment">/* cached hash code of ma_key */</span></span><br><span class="line">	PyObject *ma_key;</span><br><span class="line">	PyObject *ma_value;</span><br><span class="line">&#125; PyDictEntry;</span><br></pre></td></tr></table></figure></p>
+        
+          <p class="article-more-link">
+            <a href="../../2018/06/05/Python-2018-06-05-PyDictObject/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/06/05/Python-2018-06-05-PyDictObject/" data-id="cjxo5e6pv0033z16dncjaqnwf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
+    
+
+<article id="post-Python-2018-06-04-PyListObject" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="../../2018/06/04/Python-2018-06-04-PyListObject/" class="article-date">
+  <time datetime="2018-06-03T16:00:00.000Z" itemprop="datePublished">2018-06-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/python/">python</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="../../2018/06/04/Python-2018-06-04-PyListObject/">python中的列表对象</a>
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-PyListObject对象"><a href="#1-PyListObject对象" class="headerlink" title="1. PyListObject对象"></a>1. PyListObject对象</h2><p><code>PyListObject</code> 对象可以有效地支持插入,添加,删除等操作,在 Python 的列表中,无一例外地存放的都是 <code>PyObject</code> 的指针。所以实际上,你可以这样看待 Python 中的列表: <code>vector&lt;PyObject*&gt;</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[listobject.h]</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	PyObject_VAR_HEAD</span><br><span class="line">	<span class="comment">/* Vector of pointers to list elements. list[0] is ob_item[0],etc.*/</span></span><br><span class="line">	PyObject **ob_item;</span><br><span class="line">	<span class="keyword">int</span> allocated;</span><br><span class="line">&#125; PyListObject;</span><br></pre></td></tr></table></figure>
+<p><code>PyObject_VAR_HEAD</code>中的 <code>ob_size</code> 和 <code>allocated</code> 都和内存的管理有关，类似于C++ 中 <code>vector</code> 的 <code>size</code> 和 <code>capacity</code> ，<code>allocated</code>存放的是当前已经申请到的内存数量，而<code>ob_size</code>是实际存储的元素个数。因此一定满足：</p>
+<ol>
+<li>0 &lt;= ob_size &lt;= allocatted</li>
+<li>len(list) == ob_size</li>
+<li>ob_item == NULL 则 ob_size == allocated == 0</li>
+</ol>
+        
+          <p class="article-more-link">
+            <a href="../../2018/06/04/Python-2018-06-04-PyListObject/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/06/04/Python-2018-06-04-PyListObject/" data-id="cjxo5e6pt0032z16dpmhsi0vo" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="../13/">&laquo; 上一页</a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../12/">12</a><a class="page-number" href="../13/">13</a><span class="page-number current">14</span><a class="page-number" href="../15/">15</a><a class="page-number" href="../16/">16</a><span class="space">&hellip;</span><a class="page-number" href="../28/">28</a><a class="extend next" rel="next" href="../15/">下一页 &raquo;</a>
+  </nav>
+
+
+<!-- 文章目录 --> 
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../tags/database/" style="font-size: 10px;">database</a> <a href="../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../fancybox/jquery.fancybox.css">
+  <script src="../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>高斯判别模型（GDA）原理与推导 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="GDA原理Gaussian Discriminant Analysis模型的理论十分简单，这里写这篇文章实际上是为后面GMM和EM算法做铺垫。另外，这篇文章是第一篇加上generative标签的文章，指的是生成式模型，因此也会在这里重点说明一下生成式和判别式的区别。 Generative 与 Discriminative判别式模型对条件概率$$$P(Y|X)$$$建模，不关注数据分布，重点关注类间">
+<meta name="keywords" content="tools,machinelearning,maths,model,generative">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高斯判别模型（GDA）原理与推导">
+<meta property="og:url" content="https://protao.github.io/2018/05/24/机器学习-2018-05-24-GaussianDiscriminantAnalysis/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="GDA原理Gaussian Discriminant Analysis模型的理论十分简单，这里写这篇文章实际上是为后面GMM和EM算法做铺垫。另外，这篇文章是第一篇加上generative标签的文章，指的是生成式模型，因此也会在这里重点说明一下生成式和判别式的区别。 Generative 与 Discriminative判别式模型对条件概率$$$P(Y|X)$$$建模，不关注数据分布，重点关注类间">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-31T14:43:43.139Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高斯判别模型（GDA）原理与推导">
+<meta name="twitter:description" content="GDA原理Gaussian Discriminant Analysis模型的理论十分简单，这里写这篇文章实际上是为后面GMM和EM算法做铺垫。另外，这篇文章是第一篇加上generative标签的文章，指的是生成式模型，因此也会在这里重点说明一下生成式和判别式的区别。 Generative 与 Discriminative判别式模型对条件概率$$$P(Y|X)$$$建模，不关注数据分布，重点关注类间">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-机器学习-2018-05-24-GaussianDiscriminantAnalysis" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-05-23T16:00:00.000Z" itemprop="datePublished">2018-05-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/机器学习/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      高斯判别模型（GDA）原理与推导
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="GDA原理"><a href="#GDA原理" class="headerlink" title="GDA原理"></a>GDA原理</h2><p>Gaussian Discriminant Analysis模型的理论十分简单，这里写这篇文章实际上是为后面GMM和EM算法做铺垫。另外，这篇文章是第一篇加上generative标签的文章，指的是生成式模型，因此也会在这里重点说明一下生成式和判别式的区别。</p>
+<h2 id="Generative-与-Discriminative"><a href="#Generative-与-Discriminative" class="headerlink" title="Generative 与 Discriminative"></a>Generative 与 Discriminative</h2><p>判别式模型对条件概率$$$P(Y|X)$$$建模，不关注数据分布，重点关注类间的分类超平面，SVM就是典型的判别式模型，在PGM中典型的就是CRF，这点特别容易弄错，尽管CRF是无向概率图模型，属于马尔科夫网络，对无向边给定联合概率分布，但是求解计算计算概率的时候通过除以归一化因子得到条件概率，这里先说这么多，后面会有文章详细总结。还有神经网络也是判别式，现在的神经网络就是利用强大的高维拟合能力得到分类面。而生成式模型则是对数据与标签的联合概率进行建模，然后来了新的数据之后，根据贝叶斯公式，利用类别先验概率和给定数据后的似然进行分类，典型的模型包括，NaiveBayes，HMM，还有这里介绍的GDA，以及后面介绍的GMM。</p>
+<a id="more"></a>
+<h3 id="GDA解析式推导"><a href="#GDA解析式推导" class="headerlink" title="GDA解析式推导"></a>GDA解析式推导</h3><h4 id="建立模型"><a href="#建立模型" class="headerlink" title="建立模型"></a>建立模型</h4><p>原理其实很简单，认为每个类别来自于一个高斯分布$$$Gaussian(\mu, \Sigma)$$$.<br>而不同的类别的先验概率是一个Multinoulli分布，在二分类任务就就是一个bernoulli分布，参数是$$$\phi$$$，前面已经提到，GDA是生成式模型，那么就是对联合概率$$$P(X,Y)$$$(在下面的推导的第二步中很明显的看出来)进行建模。<br>$$$P(X)=\sum_yP(X,Y=y)=P(X|Y=0)P(Y=0)+P(X|Y=1)P(Y=1)$$$，其中，$$$P(Y)=\phi^y(1-\phi)^{1-y}$$$， <strong> 即$$$\phi$$$是类别1的概率 </strong>。</p>
+<p>$$ P(X|Y=0)=\frac{1}{(2\pi)^{n/2}|\Sigma_0|^{1/2}}exp\Big(-\frac{1}{2}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0)\Big) $$<br>$$ P(X|Y=1)=\frac{1}{(2\pi)^{n/2}|\Sigma_1|^{1/2}}exp\Big(-\frac{1}{2}(x-\mu_1)^T\Sigma_1^{-1}(x-\mu_1)\Big) $$<br>上面公式中，n是特征维数。把上面这两个条件概率整合到一起：<br>$$ P(X|Y)=P(X|Y=0)^{1-y}*P(X|Y=1)^y $$</p>
+<h4 id="对数似然"><a href="#对数似然" class="headerlink" title="对数似然"></a>对数似然</h4><p>对数似然为：</p>
+<p>$$ l(\theta)=l(\phi,\mu_0,\mu_1,\Sigma_0,\Sigma_1) $$<br>$$ =log\prod_{i=1}^mP(x_i,y_i;\phi,\mu_0,\mu_1,\Sigma_0,\Sigma_1) $$<br>$$ =log\prod_{i=1}^mP(x_i|y_i;\phi,\mu_0,\mu_1,\Sigma_0,\Sigma_1)P(y_i;\phi) $$<br>$$ =\sum_{i=0}^m\Big[logP(x_i|y_i;\phi,\mu_0,\mu_1,\Sigma_0,\Sigma_1)+logP(y_i;\phi)\Big] $$<br>$$ =\sum_{i=0}^m\Big[(1-y^{(i)})logP(X|Y=0)+y^{(i)}logP(X|Y=1)+y^{(i)}log\phi+(1-y^{(i)})log(1-\phi)\Big] $$<br>其中累加和内部共有四项，其中给定类别标签的条件概率我没有展开，但是也可以轻易的看出来，$$$\mu_0$$$和$$$\Sigma_0$$$只与第一项有关，$$$\mu_1$$$和$$$\Sigma_1$$$只与第二项有关，先验概率$$$\phi$$$只与后两项有关。后面做GMM推导的时候就会发现，我们公式在这里，可以直接去进行极大似然的推导，因此实际上无需迭代，通过解析方法可以直接得到模型参数，下面就通过极大似然估计对模型参数进行估计。另外，在后面的推导中，a用表示1类的数据数，b表示0类的数据数，（在更正式的推导中使用的是指示函数）。</p>
+<h4 id="参数估计：-phi"><a href="#参数估计：-phi" class="headerlink" title="参数估计：$$$\phi$$$"></a>参数估计：$$$\phi$$$</h4><p>对于$$$\phi$$$，我们只关心后两项，直接从全参数的极大似然中去掉无关的前两项：<br>$$ l(\phi)=\sum_{i=0}^m[y^{(i)}log\phi+(1-y^{(i)})log(1-\phi)] $$<br>$$ l(\phi)=\sum_{class1}log\phi+\sum_{class0}log(1-\phi) $$<br>$$ l(\phi)=alog\phi+blog(1-\phi) $$<br>$$ \frac{\partial l(\phi)}{\partial\phi}=\frac{a}{\phi}+\frac{b}{1-\phi} $$<br>令上式等于0，可以解得$$$\hat{\phi}=\frac{a}{a+b}=\frac{a}{m}$$$，即1类在总样本中占得比例，从最大似然的思想考虑，这个结论应该是理所应当的。</p>
+<h3 id="参数估计：-mu"><a href="#参数估计：-mu" class="headerlink" title="参数估计：$$$\mu$$$"></a>参数估计：$$$\mu$$$</h3><p>对于$$$\mu_0$$$，我们只关心第一项，对于$$$\mu_1$$$，我们只关心第二项，这里只进行$$$\mu_0$$$的推导，$$$\mu_1$$$根据对称性同理易得。类似于上面的推导，我们在推导中只保留相关项即第一项，后三项忽略。<br>$$ l(\mu_0)=\sum_{i=0}^m(1-y^{(i)})logP(X|Y=0) $$<br>$$ l(\mu_0)=\sum_{i=0}^m(1-y^{(i)})log\bigg(\frac{1}{(2\pi)^{n/2}|\Sigma_0|^{1/2}}exp(-\frac{1}{2}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0))\bigg) $$<br>$$ l(\mu_0)=\sum_{i=0}^m(1-y^{(i)})\Big(-\frac{1}{2}log\big((2\pi)^n|\Sigma_0|\big)-\frac{1}{2}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0)\Big) $$<br>删除掉与$$$\mu_0$$$无关的项，另外当y等于1的时候，累加项为0,，因此：<br>$$ l(\mu_0)=\sum_{class0}\Big(-\frac{1}{2}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0)\Big) $$<br>$$ \frac{\partial l(\mu_0)}{\mu_0}=-\frac{1}{2}\sum_{class0}\Big(\frac{\partial}{\partial\mu_0}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0)\Big) $$<br>$$ \frac{\partial l(\mu_0)}{\mu_0}=\sum_{class0}\Big(\Sigma_0^{-1}(x-\mu_0)\Big) $$<br>$$ \frac{\partial l(\mu_0)}{\mu_0}=\Sigma_0^{-1}\sum_{class0}\Big(x-\mu_0\Big) $$<br>令上式为0，解得$$$\hat\mu_0=\frac{\sum_{class0}x^{(i)}}{b}$$$，实际上就是所有0类样本的均值向量，其实就是把0类样本单拿出来，对其进行高斯建模，求解参数。</p>
+<h4 id="参数估计：-Sigma"><a href="#参数估计：-Sigma" class="headerlink" title="参数估计：$$$\Sigma$$$"></a>参数估计：$$$\Sigma$$$</h4><p>对于$$$\Sigma_0$$$，依然是拿掉无关项，进行极大似然推导。<br>$$ l(\Sigma_0)=\sum_{i=0}^m(1-y^{(i)})logP(X|Y=0) $$<br>$$ l(\Sigma_0)=\sum_{i=0}^m(1-y^{(i)})log\bigg(\frac{1}{(2\pi)^{n/2}|\Sigma_0|^{1/2}}exp(-\frac{1}{2}(x^{(i)}-\mu_0)^T\Sigma_0^{-1}(x^{(i)}-\mu_0))\bigg) $$<br>$$ l(\Sigma_0)=\sum_{i=0}^m(1-y^{(i)})\Big(-\frac{1}{2}log\big((2\pi)^n|\Sigma_0|\big)-\frac{1}{2}(x^{(i)}-\mu_0)^T\Sigma_0^{-1}(x^{(i)}-\mu_0)\Big) $$<br>$$ l(\Sigma_0)=-\frac{1}{2}\sum_{class0}\Big(nlog(2\pi)^n+log|\Sigma_0|+(x^{(i)}-\mu_0)^T\Sigma_0^{-1}(x^{(i)}-\mu_0)\Big) $$<br>$$ \frac{\partial l(\Sigma_0)}{\partial \Sigma_0}=-\frac{1}{2}\sum_{class0}\Big(\frac{\partial}{\partial \Sigma_0}log|\Sigma_0|+\frac{\partial}{\partial \Sigma_0}(x^{(i)}-\mu_0)^T\Sigma_0^{-1}(x^{(i)}-\mu_0)\Big)$$<br>依然令上式为零，不过这里后续的推到依然有些困难，上面$$$\mu_0$$$的推导过程中用到了矩阵求导，不过比较简单，我没有多提，这里用到了两处矩阵求导，需要提一下，分别是：<br>$$ \frac{\partial|\Sigma|}{\partial\Sigma}=|\Sigma|\Sigma^{-1} $$<br>$$ \frac{\partial\Sigma^{-1}}{\partial\Sigma}=-\Sigma^{-2} $$<br>继续导数为零的推导：<br>$$\frac{\partial l(\Sigma_0)}{\partial \Sigma_0}=-\frac{1}{2}\sum_{class0}\Big(\frac{\partial}{\partial \Sigma_0}log|\Sigma_0|+\frac{\partial}{\partial \Sigma_0}(x^{(i)}-\mu_0)^T\Sigma_0^{-1}(x^{(i)}-\mu_0)\Big)=0$$<br>$$ \sum_{class0}\Big(\frac{\partial}{\partial \Sigma_0}log|\Sigma_0|+\frac{\partial}{\partial \Sigma_0}(x^{(i)}-\mu_0)^T\Sigma_0^{-1}(x^{(i)}-\mu_0)\Big)=0 $$<br>$$ \sum_{class0}\Big(\frac{1}{|\Sigma_0|}|\Sigma_0|\Sigma_0^{-1}+(x^{(i)}-\mu_0)(x^{(i)}-\mu_0)^T(-\Sigma_0^{-2})\Big)=0 $$<br>$$ \sum_{class0}\Big(\Sigma_0-(x^{(i)}-\mu_0)(x^{(i)}-\mu_0)^T\Big)=0 $$<br>$$ \Sigma_0=\frac{1}{b}\sum_{class0}(x^{(i)}-\mu_0)(x^{(i)}-\mu_0)^T $$</p>
+<p>推导到这里，可以看出来，实际上就是对0类样本求解样本协方差，结合我们的高斯分布假设，这一结论依然是顺理成章，结合前面的推导，其实和对高斯样本的参数估计对比，GDA运用于分类唯一的就是加入了类别的先验概率$$$\phi$$$的分析，因此实际上GDA是一种很简单的模型。</p>
+<p>另外，在CS229中讲的GDA实际上多个不同的高斯分布是共享协方差矩阵的，如果做出这样的假设，对于数据的要求实际上就更少了，这样的话，对协方差的推导就会有一点点变化：<br>$$ \Sigma=\frac{1}{m}\sum_{i=0}^{m}(x^{(i)}-\mu_{y_i})(x^{(i)}-\mu_{y_i})^T $$</p>
+<h2 id="与LR分类器的区别"><a href="#与LR分类器的区别" class="headerlink" title="与LR分类器的区别"></a>与LR分类器的区别</h2><p>如果把$$$p(y=1|x)$$$看作是关于x的函数的话，那么可以表示为LogisticRegression的形式。假设$$$p(x|y)$$$是共享协方差矩阵的多个高斯分布的话，那么$$$p(y|x)$$$就是一个LR模型，但是反之不成立。也就是说GDA是LR的特例，如果具有更强的假设，因此如果数据符合GDA的假设，使用GDA模型是具有更高的渐进效率(asymptotically efficient)的，并且可以使用更少的数据。与之形成对比的是，LR分类器对数据做了更弱的假设，因此变得更加鲁棒且对于模型假设是否成立不那么敏感。</p>
+<h2 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> linalg</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> stats</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets.samples_generator <span class="keyword">import</span> make_blobs</span><br><span class="line"></span><br><span class="line"><span class="comment"># 超参数设定</span></span><br><span class="line">n=<span class="number">2</span> <span class="comment"># 两个特征即二维数据</span></span><br><span class="line">class_num=<span class="number">5</span> <span class="comment"># 几类数据(可以在2~6之间调节以观察实验结果)</span></span><br><span class="line"></span><br><span class="line">X, y = make_blobs(n_samples=<span class="number">1000</span>, centers=class_num, n_features=n,cluster_std=<span class="number">0.7</span>)</span><br><span class="line"></span><br><span class="line">color=[<span class="string">'green'</span>, <span class="string">'red'</span>, <span class="string">'blue'</span>, <span class="string">'yellow'</span>, <span class="string">'black'</span>,<span class="string">'yellow'</span>]</span><br><span class="line">x_min = min(X[:,<span class="number">0</span>])<span class="number">-1</span></span><br><span class="line">x_max = max(X[:,<span class="number">0</span>])+<span class="number">1</span></span><br><span class="line">y_min = min(X[:,<span class="number">1</span>])<span class="number">-1</span></span><br><span class="line">y_max = max(X[:,<span class="number">1</span>])+<span class="number">1</span></span><br><span class="line">plt.xlim(x_min, x_max)</span><br><span class="line">plt.ylim(y_min, y_max)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据初步可视化</span></span><br><span class="line">plt.scatter(X[:,<span class="number">0</span>],X[:,<span class="number">1</span>],s=<span class="number">2</span>,c=list(map(<span class="keyword">lambda</span> x:color[x], y)))</span><br><span class="line"><span class="comment">#plt.show()</span></span><br><span class="line"></span><br><span class="line">label_X = []</span><br><span class="line">mu = []</span><br><span class="line">sigma = []</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gaussian_pdf</span><span class="params">(x, mu, sigma)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> (linalg.det(sigma)*(np.pi*<span class="number">2</span>)**<span class="number">2</span>)**(<span class="number">-0.5</span>) * math.exp(<span class="number">-0.5</span>*np.dot(np.dot((x-mu).reshape(<span class="number">1</span>,<span class="number">2</span>),linalg.inv(sigma)),(x-mu).reshape(<span class="number">2</span>,<span class="number">1</span>)))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(class_num):</span><br><span class="line">    label_X.append(X[y==i])</span><br><span class="line">    mu.append(sum(label_X[i])/len(label_X[i]))</span><br><span class="line">    sigma.append(sum(np.dot(a.reshape((<span class="number">2</span>,<span class="number">1</span>)), a.reshape((<span class="number">1</span>,<span class="number">2</span>))) <span class="keyword">for</span> a <span class="keyword">in</span> label_X[i]-mu[i])/len(label_X[i]))</span><br><span class="line"></span><br><span class="line">sample_num = <span class="number">100</span></span><br><span class="line">x = np.linspace(x_min, x_max, sample_num)</span><br><span class="line">y = np.linspace(y_min, y_max, sample_num)</span><br><span class="line">X,Y = np.meshgrid(x,y)</span><br><span class="line"></span><br><span class="line">Z=[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(class_num):</span><br><span class="line">    Z.append(np.array(list(map(partial(gaussian_pdf, mu=mu[i], sigma=sigma[i]), list(zip(X.flatten(),Y.flatten()))))).reshape(X.shape))</span><br><span class="line"></span><br><span class="line"><span class="comment">#plt.scatter(X,Y,c=sum(Z), alpha=0.4, marker=".") #不好看</span></span><br><span class="line">Z=np.dstack(Z)</span><br><span class="line">plt.scatter(X,Y,c=Z.argmax(axis=<span class="number">2</span>), alpha=<span class="number">0.1</span>, marker=<span class="string">"."</span>);</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>注：</p>
+<ol>
+<li><code>make_blob</code>函数生成的分布具有相同的协方差。另外生成数据的函数有<code>make_classification</code>和<code>make_gaussian_quantiles</code>。前者特点是可以生成冗余的特征（和其他某几个特征线性相关）或者重复特征，可以生成脏数据（类别标记错误）等等，很强大。后者感觉和<code>make_blobs</code>差不多。</li>
+<li>生成散点图用scatter，我总是记成plot函数</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 生成三维存在线性相关的数据</span></span><br><span class="line">X, y = make_classification(n_samples=<span class="number">1000</span>, n_features=<span class="number">3</span>, n_informative=<span class="number">3</span>, n_redundant=<span class="number">0</span>, n_repeated=<span class="number">0</span>, n_classes=<span class="number">2</span>, n_clusters_per_class=<span class="number">1</span>, weights=<span class="keyword">None</span>, flip_y=<span class="number">0.01</span>, class_sep=<span class="number">1.0</span>, hypercube=<span class="keyword">True</span>, shift=<span class="number">0.0</span>, scale=<span class="number">1.0</span>, shuffle=<span class="keyword">True</span>, random_state=<span class="keyword">None</span>)</span><br><span class="line">fig=plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, projection=<span class="string">'3d'</span>)</span><br><span class="line">ax.scatter3D(X[:,<span class="number">0</span>],X[:,<span class="number">1</span>],X[:,<span class="number">2</span>],c=y)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>参考</p>
+<ol>
+<li><a href="https://www.cnblogs.com/jcchen1987/p/4424436.html" target="_blank" rel="noopener">高斯判别分析实现与分析</a></li>
+<li><a href="http://sklearn.apachecn.org/cn/0.19.0/auto_examples/datasets/plot_random_dataset.html#sphx-glr-auto-examples-datasets-plot-random-dataset-py" target="_blank" rel="noopener">sklearn文档：Plot randomly generated classification dataset</a></li>
+<li></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/05/24/机器学习-2018-05-24-GaussianDiscriminantAnalysis/" data-id="cjxo5e6sf0049z16dsa6fa7bc" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/generative/">generative</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/maths/">maths</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/model/">model</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/tools/">tools</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../27/机器学习-2018-05-27-EMAlgorithm/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          EM算法原理与推导
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../21/程序员的玩具-2018-5-21-BashNote-4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">锋利的Bash(4):三剑客(相识)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

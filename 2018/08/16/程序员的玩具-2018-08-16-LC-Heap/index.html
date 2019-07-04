@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>LeetCode刷题笔记——Heap | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="703. Kth Largest Element in a Stream入门题目，没啥，会想到只保留前k个元素，每次来和最小元素比较，然后就由最小想到优先队列。注意的是初始化，我用的heapq中的nlargest函数，慢了一些？还有就是初始化的时候可能不足k个，后面加的时候直接加就行。 451. Sort Characters By Frequency一个就是要把元素及其计数关联起来，我直接用一个">
+<meta name="keywords" content="algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode刷题笔记——Heap">
+<meta property="og:url" content="https://protao.github.io/2018/08/16/程序员的玩具-2018-08-16-LC-Heap/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="703. Kth Largest Element in a Stream入门题目，没啥，会想到只保留前k个元素，每次来和最小元素比较，然后就由最小想到优先队列。注意的是初始化，我用的heapq中的nlargest函数，慢了一些？还有就是初始化的时候可能不足k个，后面加的时候直接加就行。 451. Sort Characters By Frequency一个就是要把元素及其计数关联起来，我直接用一个">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/Heap-LC1.png">
+<meta property="og:updated_time" content="2019-03-26T02:15:11.635Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LeetCode刷题笔记——Heap">
+<meta name="twitter:description" content="703. Kth Largest Element in a Stream入门题目，没啥，会想到只保留前k个元素，每次来和最小元素比较，然后就由最小想到优先队列。注意的是初始化，我用的heapq中的nlargest函数，慢了一些？还有就是初始化的时候可能不足k个，后面加的时候直接加就行。 451. Sort Characters By Frequency一个就是要把元素及其计数关联起来，我直接用一个">
+<meta name="twitter:image" content="https://protao.github.io/img/Heap-LC1.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-程序员的玩具-2018-08-16-LC-Heap" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-08-16T11:43:46.000Z" itemprop="datePublished">2018-08-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LeetCode刷题笔记——Heap
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="703-Kth-Largest-Element-in-a-Stream"><a href="#703-Kth-Largest-Element-in-a-Stream" class="headerlink" title="703. Kth Largest Element in a Stream"></a>703. Kth Largest Element in a Stream</h3><p>入门题目，没啥，会想到只保留前k个元素，每次来和最小元素比较，然后就由最小想到优先队列。<br>注意的是初始化，我用的heapq中的nlargest函数，慢了一些？还有就是初始化的时候可能不足k个，后面加的时候直接加就行。</p>
+<h3 id="451-Sort-Characters-By-Frequency"><a href="#451-Sort-Characters-By-Frequency" class="headerlink" title="451. Sort Characters By Frequency"></a>451. Sort Characters By Frequency</h3><p>一个就是要把元素及其计数关联起来，我直接用一个tuple就可以，把计数当做第一个元素。然后建堆是O(N),依次弹出最小元素是O(NlogN)。<br>但是应该想到可以使用BucketSort的。。。<br>另外一个单行实现的方法也是很Pythonic了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">''</span>.join([char * count <span class="keyword">for</span> char, count <span class="keyword">in</span> Counter(s).most_common()])</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="347-Top-K-Frequent-Elements"><a href="#347-Top-K-Frequent-Elements" class="headerlink" title="347. Top K Frequent Elements"></a>347. Top K Frequent Elements</h3><p>和上一题451很像，直接模仿那个单行python解决的。</p>
+<h3 id="692-Top-K-Frequent-Words"><a href="#692-Top-K-Frequent-Words" class="headerlink" title="692. Top K Frequent Words"></a>692. Top K Frequent Words</h3><p>和451类似。</p>
+<h3 id="378-Kth-Smallest-Element-in-a-Sorted-Matrix"><a href="#378-Kth-Smallest-Element-in-a-Sorted-Matrix" class="headerlink" title="378. Kth Smallest Element in a Sorted Matrix"></a>378. Kth Smallest Element in a Sorted Matrix</h3><p>这道题感觉和之前做过的一个在这样的有序二维数组中找指定元素那道题很像。然后这样特殊的有序数组肯定可以利用起他自身比较严格的限制。不然之间按个遍历用703就解决了。我的思路和遍历一个Graph很像，是用一个堆维护下一个要访问的元素，每次从里面取堆顶，然后把这次访问的元素的下面和右边的元素进堆，然后标记为已访问，然后重复这样的操作k次就行。<br>然后Discussion中有很多python代码也使用一行写的。。。但是要全部读进去然后排序，并不优雅。有一个还行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list(heapq.merge(*matrix))[k<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<p>但是结合堆的建堆复杂度，也是要全部读进去，然后O(n^2)。<br>然后下面这个链接中的解法符合我的思路，就是既然数据结构上有更严格的限制，就要利用起来加速算法。他的Solution中给出了一种针对这种二维数组的比较好的二分搜索的方法，每次对半分二维数组的时间复杂度是O(n)。<br><a href="https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/discuss/85173/Share-my-thoughts-and-Clean-Java-Code" target="_blank" rel="noopener">Share my thoughts and Clean Java Code</a></p>
+<h3 id="313-Super-Ugly-Number"><a href="#313-Super-Ugly-Number" class="headerlink" title="313. Super Ugly Number"></a>313. Super Ugly Number</h3><p>前面的题都是开胃菜，后面的题才开始有意思起来。这道题我就是模仿264(Ugly Number II)做的，但是直接超时，然后分析原因。用<code>cProfile</code>和<code>pstats</code>分析时间效率。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cProfile, pstats</span><br><span class="line">n=<span class="number">10000</span></span><br><span class="line">primes=[(含有<span class="number">100</span>个素数)]</span><br><span class="line">cProfile.run(<span class="string">"Solution().nthSuperUglyNumber(n, primes)"</span>,<span class="string">"timeit"</span>)</span><br><span class="line">p = pstats.Stats(<span class="string">'timeit'</span>)</span><br><span class="line">p.sort_stats(<span class="string">'time'</span>)</span><br><span class="line">p.print_stats()</span><br></pre></td></tr></table></figure></p>
+<p>会发现原始代码的瓶颈在与每次都要取堆顶元素，然后把堆顶元素乘以每一个素数然后尝试推进堆中。就对当前我写的代码进行复杂度分析，假设H是堆的大小，H是一个不断增长的数并且略小于N×K，K是primes中元素个数，在上面的用例中N=10000，K=100，最后的堆的大小是652519。这里就不负责任的假设，最后的堆的大小是NK乘以一个常数$$$\alpha$$$，那么最后总的复杂度是$$$O(Nlog(H)+N\alpha Klog(H)+NK)$$$，共有的因子N是由于最外层的循环，要不停的从堆中弹出元素知道弹出N个。</p>
+<p>执行上面的代码，会发现，复杂度分析中的NK，出现在lambda函数中，其次执行了662518次heappush。堆中维护这么多元素是完全没有必要的，怎么避免呢？</p>
+<p>要么就是用264中我最初的想法，不要提前全部乘以所有的因子，每次只乘以一个因子，然后下次从下一个因子开始乘并且保证每次都有一个数要乘以primes数组中的最小值。但是又懒得去实现了。。。然后看到了下面这篇文章。<br><a href="https://leetcode.com/problems/super-ugly-number/discuss/76301/Python-generators-on-a-heap" target="_blank" rel="noopener">Python, generators on a heap</a><br>这篇文章真的挺牛逼。。。我只看了第一种解法。<br>重点是heapq.merge函数的效率，该函数接收iterable列表，返回迭代器，然后每次取merge返回的迭代器的第一个元素。注意的是，merge函数的输入在后面会不停的改，但是merge不不关心的，因为迭代器还没有yield到那里。这个函数每次对多个iterable的队首中选择一个最小的，然后去该iterable的下一个位置，然后yield住，至于iterable后面又append了多少个元素，只要我还没有跑到那里，我就不关心。注意的是，merge函数要求每个iterable要有序，那么这里可以做到吗。这要理解每个iterable中存放的是什么。实际上有多少个prime，就有多少个iterable，因为下一个元素肯定是来自于之前的某个元素乘以一个prime得到的，我就对每个prime维护一个队列，这有点像264时我最开始的思路，但是要更好。</p>
+<h3 id="215-Kth-Largest-Element-in-an-Array"><a href="#215-Kth-Largest-Element-in-an-Array" class="headerlink" title="215. Kth Largest Element in an Array"></a>215. Kth Largest Element in an Array</h3><p>对于该题，我个人的理解是，可以使用快排，时间效率是O(nlogn)，空间复杂度是O(n)；可以使用快排中的partition方法，时间复杂度是O(n)，空间复杂度是O(n)；也可以使用优先队列，时间复杂度是O(nlogk)，空间复杂度是O(k)。理论上来说，partition的最坏情况的渐进时间复杂度常数是2，那么如果堆很大，使得堆的深度远大于2的时候，Partition的时间效率应该表现的更好的。但是我实际做出来的实验是堆排序始终优于partition，这点我不太明白。</p>
+<p>另外，基于堆的解法的时间复杂度也没有和k表现出对数关系，我每次使用一个随机打乱的二百万个元素组成的数组，然后逐渐藏大k，观察程序运行时间。实验结果如下。</p>
+<p><img src="/img/Heap-LC1.png" alt></p>
+<p>这个现象也不太明白。</p>
+<h3 id="659-Split-Array-into-Consecutive-Subsequesces"><a href="#659-Split-Array-into-Consecutive-Subsequesces" class="headerlink" title="659. Split Array into Consecutive Subsequesces"></a>659. Split Array into Consecutive Subsequesces</h3><p>思路就是，我们需要有能力拿到以某个数结尾的都有哪些子串，然后把当前这个数加到最短串中，然后更新我们的数据结构。然是这个明显空间效率不是常数，时间效率也要大于线性。Submission中有一个解法常数空间线性时间，屌屌的，没看。<br>找了一个python解法，没有用到堆，思路是往前看往后看，往前看没有子串可以append的时候，往后看后面有没有连续的两个元素可以放在这个元素后面，如果没有可以快速失败，因此需要预先遍历一遍对元素计数。<br>但是跑起来的结果和我的时间差不多。估计是因为我的虽然用到堆了，但是每个堆都很小，趋于线性时间。而且我的没有预先扫描的过程。</p>
+<h3 id="767-Reorganize-String"><a href="#767-Reorganize-String" class="headerlink" title="767. Reorganize String"></a>767. Reorganize String</h3><p>思路直接，拿最多的，计数减一个，如果和前面的不一样，计数减一后如果计数依然大于零再放回堆里，然后把该字符接到字符串后面。如果和字符串之前一个一样，就再出堆一个字符像前面一样的操作，然后别忘了把先拿出来的再放回去。</p>
+<h3 id="743-Network-Delay-Time"><a href="#743-Network-Delay-Time" class="headerlink" title="743. Network Delay Time"></a>743. Network Delay Time</h3><p>其实就是单源最短路径问题，我直接想到的就是Dijkstra算法，然后正好用前一阵在书上看到的<code>IndexMinHeap</code>试试手，理论上跑起来应该是更快一些的因为不会维护无用的路径，每次拿出来堆顶直接就能用，而Solution中的解法还需要看一下是没有访问的点才可以用，堆中也维护了更多的点。</p>
+<p>但是由于自己写的<code>IndexMinHeap</code>效率应该是没有内建的<code>heapq</code>高的，然后测试用例中的图可能也不是太大，实际运行起来我的要慢一些。</p>
+<h3 id="373-Find-K-Pairs-with-Smallest-Sums"><a href="#373-Find-K-Pairs-with-Smallest-Sums" class="headerlink" title="373. Find K Pairs with Smallest Sums"></a>373. Find K Pairs with Smallest Sums</h3><h3 id="355-Design-Twitter"><a href="#355-Design-Twitter" class="headerlink" title="355. Design Twitter"></a>355. Design Twitter</h3><p>业务上没啥，没考虑很复杂的性能问题，以实现需求为第一要务。对象内部维护一个计数器，每当有人发twitter时，计数器减一，这样越新的twitter计数值越小。然后每个人发过的twitter维护一个队列，需要刷twitter时拉取数据，用heapq.merge函数，只需要10次操作。<br>注意自己始终是关注自己的，还有就是自己不能取消关注没有关注的人，这些加上条件判断就好。</p>
+<p>参考：<br><a href="http://python.jobbole.com/85381/" target="_blank" rel="noopener">python性能分析大全</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/08/16/程序员的玩具-2018-08-16-LC-Heap/" data-id="cjxo5e7du006ez16dynvoe3g3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../程序员的玩具-2018-08-16-PriorityQueue/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          从优先队列到贪心算法
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../13/机器学习-2018-10-13-PCA-AE/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">PCA 与 autoencoder</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

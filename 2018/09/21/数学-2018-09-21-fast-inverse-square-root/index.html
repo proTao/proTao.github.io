@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>快速平方根倒数计算 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="对于计算机中的数值计算来说，很多情况我们认为简单的运算对于计算机来说可能并没有那么简单。对于计算机体系结构和底层的实现，我了解的非常浅薄，这里只是为了引出Q_rsqrt算法谈谈自己的理解。首先可以知道的是，目前来说，对于加法和移位，计算机可以高效的完成，因为这两种操作对于CPU的计算单元会有高效的硬件实现。对于减法同样可以以和加法差不多的指令周期内完成，因为数值在计算机内以补码形式形式存放，加法和">
+<meta name="keywords" content="maths,algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速平方根倒数计算">
+<meta property="og:url" content="https://protao.github.io/2018/09/21/数学-2018-09-21-fast-inverse-square-root/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="对于计算机中的数值计算来说，很多情况我们认为简单的运算对于计算机来说可能并没有那么简单。对于计算机体系结构和底层的实现，我了解的非常浅薄，这里只是为了引出Q_rsqrt算法谈谈自己的理解。首先可以知道的是，目前来说，对于加法和移位，计算机可以高效的完成，因为这两种操作对于CPU的计算单元会有高效的硬件实现。对于减法同样可以以和加法差不多的指令周期内完成，因为数值在计算机内以补码形式形式存放，加法和">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/Q_rsqrt1.jpg">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/0/0d/Float_w_significand_2.svg">
+<meta property="og:image" content="https://protao.github.io/img/Q_rsqrt2.png">
+<meta property="og:image" content="https://protao.github.io/img/Q_rsqrt3.jpg">
+<meta property="og:updated_time" content="2018-09-27T01:02:16.075Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="快速平方根倒数计算">
+<meta name="twitter:description" content="对于计算机中的数值计算来说，很多情况我们认为简单的运算对于计算机来说可能并没有那么简单。对于计算机体系结构和底层的实现，我了解的非常浅薄，这里只是为了引出Q_rsqrt算法谈谈自己的理解。首先可以知道的是，目前来说，对于加法和移位，计算机可以高效的完成，因为这两种操作对于CPU的计算单元会有高效的硬件实现。对于减法同样可以以和加法差不多的指令周期内完成，因为数值在计算机内以补码形式形式存放，加法和">
+<meta name="twitter:image" content="https://protao.github.io/img/Q_rsqrt1.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-数学-2018-09-21-fast-inverse-square-root" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-09-20T16:00:00.000Z" itemprop="datePublished">2018-09-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/数学/">数学</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      快速平方根倒数计算
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对于计算机中的数值计算来说，很多情况我们认为简单的运算对于计算机来说可能并没有那么简单。对于计算机体系结构和底层的实现，我了解的非常浅薄，这里只是为了引出Q_rsqrt算法谈谈自己的理解。首先可以知道的是，目前来说，对于加法和移位，计算机可以高效的完成，因为这两种操作对于CPU的计算单元会有高效的硬件实现。对于减法同样可以以和加法差不多的指令周期内完成，因为数值在计算机内以补码形式形式存放，加法和减法的操作具有高度一致性。对于乘法来说，就要比加法慢上很多，因为乘法在计算机内是通过多次移位与相加组合完成的。而除法是最慢的一种基本操作，迭代的次数与惩罚差不多，但是由于额外的判断操作，其需要的指令周期数可能要是乘法的两倍甚至更多。</p>
+<blockquote>
+<p>(引用自<a href="https://www.guokr.com/question/504855/" target="_blank" rel="noopener">果壳网的讨论</a>)：除法一般都是减法和移位的综合体，就像你用竖式算的一样。里面每一位要进行的判断，时间也就用得多。…… 在没有除法指令的CPU上，也是用类似的程式进行，那就慢得更加多了。在某些优化的情况下，除法可以用乘法代替，但还是比乘法慢。 …… 因为很多处理器没有硬件除法单元。就算有硬件除法单元，也比普通运算慢。因为在硬件上除法使用的是类似CORDIC的方法（与开方、三角函数的CORDIC算法很相似，所以一般都一起共用一个单元，称为SFU），为了达到精度一般要迭代几十次的，花费数十个周期很正常。</p>
+</blockquote>
+<p>对于通过组合四则运算与符合运算，可以进行六种基本初等函数的计算，对于幂运算可以使用快速幂算法将其计算复杂度做到O(logn)，类似的斐波那契数列也可以通过引入矩阵乘法，在对数时间复杂度内计算完毕。而对于$$$e^x$$$，常规做法是使用泰勒展开式$$$1+\frac{x}{1!}+\frac{x^2}{2!}+\frac{x^3}{3!}+…$$$进行逼近。</p>
+<a id="more"></a>
+<h2 id="牛顿法"><a href="#牛顿法" class="headerlink" title="牛顿法"></a>牛顿法</h2><p>对于数值计算，我没有太多的研究。但是牛顿法是数值计算与优化领域一个至关重要的算法，可以用来求解极值，也可以用于求解方程的解。第一次听到这个算法是本科在《具体数学》一书中看到的，第二次是在吴恩达的CS229课程中了解到，第三次是在吴立德老师的《数值优化》课程中学习到。比如说求解$$$\sqrt{x}$$$，就可以用牛顿法来解，将问题转化为$$$x^2-a=0$$$的求解，a是给定的数值。</p>
+<p><img src="/img/Q_rsqrt1.jpg" alt></p>
+<p>这道题是Leetcode中的<a href="https://leetcode.com/problems/sqrtx/description/" target="_blank" rel="noopener">一道题</a>，可以直接使用上面的思路来解决。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> floor</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">mySqrt</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type x: int</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        threshold = <span class="number">1e-6</span></span><br><span class="line">        r = x</span><br><span class="line">        <span class="keyword">while</span> r*r &gt; x:</span><br><span class="line">            new_r = (r + x/r) / <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> abs(new_r-r) &lt; threshold:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            r = new_r</span><br><span class="line">        <span class="keyword">return</span> floor(r)</span><br></pre></td></tr></table></figure></p>
+<p>对于求解平方根的倒数这个问题，同样可以使用上述牛顿法，只不过代理函数为$$$f(x)=\frac{1}{x^2}-a$$$，用牛顿法迭代的解该函数的零值即可。注意代理函数不止一个，使用这个代理函数的优势在于迭代公式有效地避免了除法的计算。<br>$$x_{n+1}=x_n<em>(1.5-\frac{a</em>x_n^2}{2})$$</p>
+<h2 id="快速解法"><a href="#快速解法" class="headerlink" title="快速解法"></a>快速解法</h2><p>对于牛顿法需要不停迭代直到误差收敛，而Quake Engine的作者显然不想这么干。图形引擎中由于需要计算方向向量，需要对一个向量除以自身的模，因此底层需要大量的平方根倒数的运算，在Quake Engine中出现了下面这种高效的优化的代码，能够不需要迭代的计算该函数。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">Q_rsqrt</span><span class="params">( <span class="keyword">float</span> number )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> i;</span><br><span class="line">    <span class="keyword">float</span> x2, y;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">float</span> threehalfs = <span class="number">1.5F</span>;</span><br><span class="line"></span><br><span class="line">    x2 = number * <span class="number">0.5F</span>;</span><br><span class="line">    y  = number;</span><br><span class="line">    i  = * ( <span class="keyword">long</span> * ) &amp;y;                       <span class="comment">// evil floating point bit level hacking</span></span><br><span class="line">    i  = <span class="number">0x5f3759df</span> - ( i &gt;&gt; <span class="number">1</span> );               <span class="comment">// what the fuck?</span></span><br><span class="line">    y  = * ( <span class="keyword">float</span> * ) &amp;i;</span><br><span class="line">    y  = y * ( threehalfs - ( x2 * y * y ) );   <span class="comment">// 1st iteration</span></span><br><span class="line"><span class="comment">//    y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注意到其中最后两行代码就是按照牛顿法的迭代方式计算的，但是为什么之计算了一次？原因在于初值给的好…上面那条你一上来肯定看不懂的代码，就是作者的骚操作，通过这个骚操作，初值就已经是答案的粗略逼近了，之后使用牛顿法就可以高速收敛，源码中甚至将第二次的迭代都给注释掉了。</p>
+<p><a href="https://segmentfault.com/a/1190000006170378" target="_blank" rel="noopener">揭秘·变态的平方根倒数算法</a>这篇文章已经解释的非常好了，我在加上一些自己的思考。</p>
+<p>首先注意<code>i  = * ( long * ) &amp;y;</code>这个步骤是按位赋值，其实就是将一个float的32位比特解释为int。懒得码字了，后面的推导我就写在草稿纸上了。</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/Float_w_significand_2.svg" alt></p>
+<p><img src="/img/Q_rsqrt2.png" alt><br><img src="/img/Q_rsqrt3.jpg" alt></p>
+<p>在推导 2 中我写了计算的流程图，右下角的那个式子就是对$$$log\frac{1}{\sqrt x}$$$的估计值，将其带入到$$$I_r$$$的表达式中，大量的项可以合并，最后得到：<br>$$I_r=3×(127-\epsilon)×2^{22}-\frac{I}{2}$$</p>
+<p>其中 $$$\epsilon$$$ 是在用 $$$B+\epsilon$$$ 估计 $$$log(1+B)$$$ 引入的，为了使估计的误差最小，可以得到 $$$\epsilon$$$ 的最优值为0.043035，将其带入，可以直接得到 $$$I_r$$$ 与 $$$I$$$的对应关系为：<br>$$I_r = 0x5f3759df - \frac{I}{2} $$<br>然后直接把 $$$I_r$$$ 用 float 类型解释就可以得到结果的粗略估计了。还有一些补充内容看参考文章就可以了，我在这里给出我用Python的模拟代码，效率肯定是不高的，就是为了帮助理解。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Float32</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    sign bin : 1 bit and aways 0</span></span><br><span class="line"><span class="string">    expo bins : 8 bits</span></span><br><span class="line"><span class="string">    base bins : 23 bits</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x=<span class="number">1</span>)</span>:</span></span><br><span class="line">        <span class="keyword">assert</span> x &gt; <span class="number">0</span></span><br><span class="line">        self.val = x</span><br><span class="line">        self.expo = <span class="number">0</span></span><br><span class="line">        self.base = <span class="keyword">None</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> <span class="number">1</span> &lt;= x &lt; <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">if</span> x &gt;= <span class="number">2</span>:</span><br><span class="line">                x /= <span class="number">2</span></span><br><span class="line">                self.expo += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                x *= <span class="number">2</span></span><br><span class="line">                self.expo -= <span class="number">1</span></span><br><span class="line">        self.expo = <span class="string">"&#123;:0&gt;8&#125;"</span>.format(bin(<span class="number">127</span>+self.expo)[<span class="number">2</span>:][<span class="number">-8</span>:])</span><br><span class="line">        self.base = <span class="string">"&#123;:0&lt;23&#125;"</span>.format(self._dec2bin(x))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_setBits</span><span class="params">(self, bits)</span>:</span></span><br><span class="line">        <span class="keyword">assert</span> len(bits) == <span class="number">32</span></span><br><span class="line">        self.expo = bits[<span class="number">1</span>:<span class="number">9</span>]</span><br><span class="line">        self.base = bits[<span class="number">9</span>:]</span><br><span class="line">        self.val = <span class="number">2</span>**(int(self.expo,<span class="number">2</span>)<span class="number">-127</span>)*(<span class="number">1</span>+<span class="number">1</span>/int(self.base[::<span class="number">-1</span>], <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Float32: &#123;&#125; [0 &#123;&#125; &#123;&#125;]"</span>.format(self.val, self.expo, self.base)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_dec2bin</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        x -= int(x)</span><br><span class="line">        bins = []</span><br><span class="line">        <span class="keyword">while</span> x:</span><br><span class="line">            x *= <span class="number">2</span></span><br><span class="line">            bins.append(<span class="string">'1'</span> <span class="keyword">if</span> x&gt;=<span class="number">1.0</span> <span class="keyword">else</span> <span class="string">'0'</span>)</span><br><span class="line">            x -= int(x)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>.join(bins)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">toInt32</span><span class="params">(self)</span>:</span></span><br><span class="line">        i = Int32()</span><br><span class="line">        i._setBits(<span class="string">'0'</span> + self.expo + self.base)</span><br><span class="line">        <span class="keyword">return</span> i</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__mul__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> type(x) <span class="keyword">in</span> (Float32, Int32):</span><br><span class="line">            <span class="keyword">return</span> Float32(self.val * x.val)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Float32(self.val * x)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> type(x) <span class="keyword">in</span> (Float32, Int32):</span><br><span class="line">            <span class="keyword">return</span> Float32(self.val + x.val)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Float32(self.val + x)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__sub__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> type(x) <span class="keyword">in</span> (Float32, Int32):</span><br><span class="line">            <span class="keyword">return</span> Float32(self.val - x.val)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Float32(self.val - x)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Int32</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x=<span class="number">1</span>)</span>:</span></span><br><span class="line">        self.bits = <span class="string">"&#123;:0&gt;32&#125;"</span>.format(bin(x)[<span class="number">2</span>:])</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_setBits</span><span class="params">(self, bits)</span>:</span></span><br><span class="line">        self.bits = bits</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">val</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> int(self.bits, base=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @val.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">val</span><span class="params">(self, _val)</span>:</span></span><br><span class="line">        self.bits = <span class="string">"&#123;:0&gt;32&#125;"</span>.format(bin(_val)[<span class="number">2</span>:])</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">toFloat32</span><span class="params">(self)</span>:</span></span><br><span class="line">        f = Float32()</span><br><span class="line">        f._setBits(self.bits)</span><br><span class="line">        <span class="keyword">return</span> f</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Int32: &#123;&#125;, [&#123;&#125; &#123;&#125; &#123;&#125;]"</span>.format(self.val,\</span><br><span class="line">                                        self.bits[<span class="number">0</span>],\</span><br><span class="line">                                        self.bits[<span class="number">1</span>:<span class="number">9</span>],\</span><br><span class="line">                                        self.bits[<span class="number">9</span>:])</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__rshift__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        i = Int32()</span><br><span class="line">        i._setBits(<span class="string">'0'</span> + self.bits[:<span class="number">-1</span>])</span><br><span class="line">        <span class="keyword">return</span> i</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__sub__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> type(x) <span class="keyword">in</span> (Float32, Int32):</span><br><span class="line">            <span class="keyword">return</span> Int32(self.val - x.val)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Int32(self.val - x)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> type(x) <span class="keyword">in</span> (Float32, Int32):</span><br><span class="line">            <span class="keyword">return</span> Int32(self.val + x.val)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Int32(self.val + x)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__mul__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> type(x) <span class="keyword">in</span> (Float32, Int32):</span><br><span class="line">            <span class="keyword">return</span> Int32(self.val * x.val)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Int32(self.val * x)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Q_rsqrt</span><span class="params">(number)</span>:</span></span><br><span class="line">    number = Float32(number)</span><br><span class="line">    x2 = number * <span class="number">0.5</span></span><br><span class="line">    y  = number</span><br><span class="line">    i  = y.toInt32()                <span class="comment"># evil floating point bit level hacking</span></span><br><span class="line"></span><br><span class="line">    i  = Int32(<span class="number">0x5f375a86</span>) - ( i &gt;&gt; <span class="number">1</span> )               <span class="comment"># what the fuck?</span></span><br><span class="line">    y  = i.toFloat32()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        y  = y * ( Float32(<span class="number">1.5</span>) - ( x2 * y * y ) )   <span class="comment"># 1st iteration</span></span><br><span class="line">        <span class="comment"># y  = y * ( Float32(1.5) - ( x2 * y * y ) )   # 2nd iteration, this can be removed</span></span><br><span class="line">    <span class="keyword">return</span> y.val</span><br><span class="line"></span><br><span class="line">x = <span class="number">0.15625</span></span><br><span class="line">print(Q_rsqrt(x))</span><br><span class="line">print(<span class="number">1</span>/x**<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ol>
+<li><a href="https://en.wikipedia.org/wiki/Methods_of_computing_square_roots" target="_blank" rel="noopener">Methods of computing square roots</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Fast_inverse_square_root" target="_blank" rel="noopener">Fast inverse square root</a></li>
+<li><a href="https://blog.csdn.net/weixin_39752599/article/details/78852033" target="_blank" rel="noopener">计算机对加减乘除的计算时间的对比</a></li>
+<li><a href="https://segmentfault.com/a/1190000006170378" target="_blank" rel="noopener">揭秘·变态的平方根倒数算法</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/09/21/数学-2018-09-21-fast-inverse-square-root/" data-id="cjxo5e6rp003yz16dmt5tzvq6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/maths/">maths</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../29/数学-2018-09-29-Sampling/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          采样算法小结
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../19/程序员的玩具-2018-09-19-LC-ReservoirSampling/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">LeetCode刷题笔记——ReserviorSampling</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

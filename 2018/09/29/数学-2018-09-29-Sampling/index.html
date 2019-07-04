@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>采样算法小结 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="均匀采样在采样技术中，在$$$[0, 1)$$$区间内进行均匀采样可以说是采样算法的基石，比如说逆变换采样就是针对CDF函数的值域上进行采样，对离散分布的轮盘赌算法同理是一种离散分布的逆变换采样，拒绝采样中判断对于一个采样是否被接受需要均匀采样，等等等等，不一而足。而均匀采样底层可能是基于真随机源，也可能是基于某种伪随机数生成器的。 常见的伪随机数生成器通常是采用线性同余法，比如gcc中的glib">
+<meta name="keywords" content="maths,algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="采样算法小结">
+<meta property="og:url" content="https://protao.github.io/2018/09/29/数学-2018-09-29-Sampling/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="均匀采样在采样技术中，在$$$[0, 1)$$$区间内进行均匀采样可以说是采样算法的基石，比如说逆变换采样就是针对CDF函数的值域上进行采样，对离散分布的轮盘赌算法同理是一种离散分布的逆变换采样，拒绝采样中判断对于一个采样是否被接受需要均匀采样，等等等等，不一而足。而均匀采样底层可能是基于真随机源，也可能是基于某种伪随机数生成器的。 常见的伪随机数生成器通常是采用线性同余法，比如gcc中的glib">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/sampling1.jpg">
+<meta property="og:image" content="https://protao.github.io/img/sampling2.png">
+<meta property="og:image" content="https://protao.github.io/img/sampling3.png">
+<meta property="og:updated_time" content="2019-05-11T07:05:53.413Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="采样算法小结">
+<meta name="twitter:description" content="均匀采样在采样技术中，在$$$[0, 1)$$$区间内进行均匀采样可以说是采样算法的基石，比如说逆变换采样就是针对CDF函数的值域上进行采样，对离散分布的轮盘赌算法同理是一种离散分布的逆变换采样，拒绝采样中判断对于一个采样是否被接受需要均匀采样，等等等等，不一而足。而均匀采样底层可能是基于真随机源，也可能是基于某种伪随机数生成器的。 常见的伪随机数生成器通常是采用线性同余法，比如gcc中的glib">
+<meta name="twitter:image" content="https://protao.github.io/img/sampling1.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-数学-2018-09-29-Sampling" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-09-28T16:00:00.000Z" itemprop="datePublished">2018-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/数学/">数学</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      采样算法小结
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="均匀采样"><a href="#均匀采样" class="headerlink" title="均匀采样"></a>均匀采样</h2><p>在采样技术中，在$$$[0, 1)$$$区间内进行均匀采样可以说是采样算法的基石，比如说逆变换采样就是针对CDF函数的值域上进行采样，对离散分布的轮盘赌算法同理是一种离散分布的逆变换采样，拒绝采样中判断对于一个采样是否被接受需要均匀采样，等等等等，不一而足。而均匀采样底层可能是基于真随机源，也可能是基于某种伪随机数生成器的。</p>
+<p>常见的伪随机数生成器通常是采用线性同余法，比如gcc中的glibc版本，对于python3，是使用os内置包中的<code>urandom</code>返回随机比特转换为浮点数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Lib/random.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="string">"""Get the next random number in the range [0.0, 1.0)."""</span></span><br><span class="line">    <span class="keyword">return</span> (int.from_bytes(_urandom(<span class="number">7</span>), <span class="string">'big'</span>) &gt;&gt; <span class="number">3</span>) * RECIP_BPF</span><br></pre></td></tr></table></figure>
+<p>其中<code>urandom</code>返回7byte的随机字节，<code>RECIP_BPF</code>的值是$$$\frac{1}{2^{53}}$$$，所以该函数返回一个小数点后有56位的二进制浮点数。</p>
+<a id="more"></a>
+<h2 id="高斯采样"><a href="#高斯采样" class="headerlink" title="高斯采样"></a>高斯采样</h2><p>对于高斯分布，可以使用逆变换采样，但是高斯分布的CDF函数不容易表示，所以，一种常用的数学技巧就是使用二维高斯分布转换为极坐标表示，通常可以得到好的形式。由于正态分布的性质，我们只关注标准正态分布采样。</p>
+<p>$$P(x, y) = P(x)P(y) = \frac{1}{2\pi}e^{-\frac12(x^2+y^2)}$$</p>
+<p>作极坐标变换：<br>$$x=rcos\theta$$<br>$$y=rsin\theta$$</p>
+<p>由于：<br><img src="/img/sampling1.jpg" alt><br>所以：<br>$$dxdy=rdrd\theta$$</p>
+<p>求积分后，$$$\theta$$$在积分中被消掉，r的积分上限成为积分结果的唯一变量：<br>$$F(R) = 1-e^{-\frac12R^2}$$<br>R的取值范围是0到正无穷，值域是$$$[0, 1]$$$，该函数其实就是对R的CDF函数，该函数的逆运算容易获得，即：<br>$$invF(r) = \sqrt{-2ln(1-r)}$$<br>因为r服从0到1范围内的均匀分布，因此上式等价于：<br>$$invF(r) = \sqrt{-2ln(r)}$$<br>此时，对二维高斯分布的笛卡尔坐标系的采样已经被成功转换成了极坐标系中的采样，并且该过程容易计算：<br>$$x = \sqrt{-2ln(r_1)} <em> cos(2\pi r_2)$$<br>$$y = \sqrt{-2ln(r_1)} </em> sin(2\pi r_2)$$</p>
+<p>这种计算方式就是对高斯分布进行采样的Box-Muller算法，python内建的gauss随机数函数就是基于该算法实现的。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gauss</span><span class="params">(self, mu, sigma)</span>:</span></span><br><span class="line">    <span class="string">"""Gaussian distribution.</span></span><br><span class="line"><span class="string">    mu is the mean, and sigma is the standard deviation.  This is</span></span><br><span class="line"><span class="string">    slightly faster than the normalvariate() function.</span></span><br><span class="line"><span class="string">    Not thread-safe without a lock around calls.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># When x and y are two variables from [0, 1), uniformly</span></span><br><span class="line">    <span class="comment"># distributed, then</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#    cos(2*pi*x)*sqrt(-2*log(1-y))</span></span><br><span class="line">    <span class="comment">#    sin(2*pi*x)*sqrt(-2*log(1-y))</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment"># are two *independent* variables with normal distribution</span></span><br><span class="line">    <span class="comment"># (mu = 0, sigma = 1).</span></span><br><span class="line">    <span class="comment"># (Lambert Meertens)</span></span><br><span class="line">    <span class="comment"># (corrected version; bug discovered by Mike Miller, fixed by LM)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Multithreading note: When two threads call this function</span></span><br><span class="line">    <span class="comment"># simultaneously, it is possible that they will receive the</span></span><br><span class="line">    <span class="comment"># same return value.  The window is very small though.  To</span></span><br><span class="line">    <span class="comment"># avoid this, you have to use a lock around all calls.  (I</span></span><br><span class="line">    <span class="comment"># didn't want to slow this down in the serial case by using a</span></span><br><span class="line">    <span class="comment"># lock here.)</span></span><br><span class="line"></span><br><span class="line">    random = self.random</span><br><span class="line">    z = self.gauss_next</span><br><span class="line">    self.gauss_next = <span class="keyword">None</span></span><br><span class="line">    <span class="keyword">if</span> z <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        x2pi = random() * TWOPI</span><br><span class="line">        g2rad = _sqrt(<span class="number">-2.0</span> * _log(<span class="number">1.0</span> - random()))</span><br><span class="line">        z = _cos(x2pi) * g2rad</span><br><span class="line">        self.gauss_next = _sin(x2pi) * g2rad</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> mu + z*sigma</span><br></pre></td></tr></table></figure></p>
+<p>下面是我自己基于numpy实现的向量化版本：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">BoxMuller</span><span class="params">(mu=<span class="number">0</span>, sigma=<span class="number">1</span>, iter=<span class="number">1000</span>)</span>:</span></span><br><span class="line">    rand1 = np.random.random(size=(iter,))</span><br><span class="line">    rand2 = np.random.random(size=(iter,))</span><br><span class="line">    x = np.sqrt(<span class="number">-2</span>*np.log(rand1)) * np.sin(<span class="number">2</span>*np.pi*rand2)</span><br><span class="line">    <span class="comment"># y = np.sqrt(-2*np.log(rand1)) * np.sin(2*np.pi*rand2)</span></span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure></p>
+<p>在Box-Muller算法中涉及到三角函数的计算，这种计算比较复杂，因此一种替代算法×××××使用如下替代：<br>$$sin(\theta) = x/\sqrt{x^2+y^2} = x/\sqrt{r}$$<br>$$cos(\theta) = y/\sqrt{x^2+y^2} = y/\sqrt{r}$$</p>
+<p>此时计算函数为：<br>$$x = \sqrt{-2ln(r_1)} <em> x_/\sqrt{r}$$<br>$$y = \sqrt{-2ln(r_1)} </em> y_/\sqrt{r}$$</p>
+<p>哎嘿？x和y不是要输出的吗？怎么在式子的右端也出现了，注意，这里的$$$x_$$$和$$$x$$$是两个变量，$$$x_$$$和$$$y_$$$是通过均匀分布生成的采样点，他们的作用只是为了替代原有的$$$\theta$$$以及三角函数，注意这样得到的$$$(x_,y_)$$$的范围输于一个方形区域，我们需要的是一个圆形区域，所以需要拒绝采样（后面会提到）将$$$x^2+y^2\gt 1$$$的采样点过滤掉。这种算法被称为<strong>Marsaglia polar method</strong>，下面是我基于numpy实现的向量化版本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_reject_unit_round</span><span class="params">(iter=<span class="number">1000</span>)</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    x_samples = [<span class="keyword">None</span>] * iter</span><br><span class="line">    y_samples = [<span class="keyword">None</span>] * iter</span><br><span class="line">    r_samples = [<span class="keyword">None</span>] * iter</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> count &lt; iter:</span><br><span class="line">        flag = <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">while</span> flag:</span><br><span class="line">            x = random()*<span class="number">2</span><span class="number">-1</span></span><br><span class="line">            y = random()*<span class="number">2</span><span class="number">-1</span></span><br><span class="line">            r = x ** <span class="number">2</span> + y ** <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> <span class="number">0</span> &lt; r &lt;= <span class="number">1</span>:</span><br><span class="line">                flag = <span class="keyword">False</span></span><br><span class="line">                x_samples[count] = x</span><br><span class="line">                y_samples[count] = y</span><br><span class="line">                r_samples[count] = r</span><br><span class="line">        count += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> np.array(x_samples), np.array(y_samples), np.array(r_samples)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MarsagliaPolar</span><span class="params">(mu=<span class="number">0</span>,  sigma=<span class="number">1</span>, iter=<span class="number">1000</span>)</span>:</span></span><br><span class="line">    x, y, r = _reject_unit_round(iter)</span><br><span class="line">    <span class="keyword">return</span> x * np.sqrt(<span class="number">-2</span> * np.log(r) / r)</span><br></pre></td></tr></table></figure>
+<h3 id="轮盘赌采样"><a href="#轮盘赌采样" class="headerlink" title="轮盘赌采样"></a>轮盘赌采样</h3><p>其实就是离散版本的逆变换采样，思路十分简单的，在遗传算法中会用到这个算法，下面是我实现的轮盘赌采样。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> bisect <span class="keyword">import</span> bisect_left</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> accumulate</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">roulette_sampling</span><span class="params">(p:dict, n)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> type(p) <span class="keyword">is</span> dict</span><br><span class="line">    samples = [<span class="keyword">None</span>] * n</span><br><span class="line">    keys = list(p.keys())</span><br><span class="line">    values = p.values()</span><br><span class="line">    cdf = list(accumulate(values))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        random_p = random()</span><br><span class="line">        index = bisect_left(cdf, random_p)</span><br><span class="line">        samples[i] = keys[index]</span><br><span class="line">    <span class="keyword">return</span> samples</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">test_p = &#123;<span class="string">'a'</span>:<span class="number">0.1</span>, <span class="string">'b'</span>:<span class="number">0.3</span>, <span class="string">'c'</span>:<span class="number">0.6</span>&#125;</span><br><span class="line">print(Counter(roulette_sampling(test_p, <span class="number">10000</span>)))</span><br></pre></td></tr></table></figure>
+<h2 id="拒绝采样"><a href="#拒绝采样" class="headerlink" title="拒绝采样"></a>拒绝采样</h2><p>如下代码所示，是对一个混合高斯分布进行拒绝采样的代码。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">p</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> (st.norm.pdf(x, loc=<span class="number">30</span>, scale=<span class="number">10</span>) + st.norm.pdf(x, loc=<span class="number">80</span>, scale=<span class="number">20</span>)) / <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">q</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> st.norm.pdf(x, loc=<span class="number">50</span>, scale=<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rejection_sampling</span><span class="params">(p, q, xs, iter=<span class="number">1000</span>, draw=False)</span>:</span></span><br><span class="line">    samples = []</span><br><span class="line">    k = max(p(xs) / q(xs))</span><br><span class="line">    <span class="keyword">if</span> draw:</span><br><span class="line">        plt.plot(xs, p(xs))</span><br><span class="line">        plt.plot(xs, k*q(xs))</span><br><span class="line">        <span class="comment"># plt.show()</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(iter):</span><br><span class="line">        z = np.random.normal(<span class="number">50</span>, <span class="number">30</span>)</span><br><span class="line">        u = np.random.uniform(<span class="number">0</span>, k*q(z))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> u &lt;= p(z):</span><br><span class="line">            samples.append(z)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> np.array(samples)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    xs = np.arange(<span class="number">-50</span>, <span class="number">151</span>)</span><br><span class="line">    s = rejection_sampling(p, q, xs, iter=<span class="number">10000</span>, draw=<span class="keyword">True</span>)</span><br><span class="line">    sns.distplot(s, norm_hist=<span class="keyword">True</span>)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure></p>
+<p>对于拒绝采样来说，最关键的一步是找到一个合适的上界分布，既要能够完全包裹住被采样分布，又不能使间隔太大导致拒绝率过高。比如单纯的对高斯分布进行采样，如果使用均匀分布作为上界分布q就不是一个好的选择，因为定义域是负无穷到正无穷，这样的话均匀分布任一点的概率都会趋近于0，使得缩放因子变成无穷大。好一些的上界函数可以使用指数函数。</p>
+<p>步骤为：</p>
+<ol>
+<li>产生0到1上的均匀随机数，通过指数分布CDF的逆函数变换得到符合指数分布的采样样本。</li>
+<li>由于指数分布只能产生正数样本，对于被采样的高斯分布，需要先将其折叠到正半轴上，此时的pdf为：<br>$$p(x)=\frac{2}{\sqrt{2\pi}}e^{\frac12x^2}(x\ge0)$$</li>
+<li>计算扩张因子，然后计算接受率，经过计算，接受率为$$$A(x)=exp\big(\frac12(x-1)^2\big)$$$，并产生0到1的均匀随机数，小于接受率，则接受该采样，否则拒绝。</li>
+<li>产生0到1上的随机数，如果大于0.5，则将本次产生的采样点翻转为负数。</li>
+</ol>
+<p>上述是实用指数分布进行拒绝采样的过程，实际上有更为高效的针对高斯分布的拒绝采样方法，即Ziggurat方法，作为补充参考。</p>
+<h2 id="重要性采样"><a href="#重要性采样" class="headerlink" title="重要性采样"></a>重要性采样</h2><p>这个采样算法更多的是用于计算期望或者用于逼近积分。</p>
+<h2 id="MCMC"><a href="#MCMC" class="headerlink" title="MCMC"></a>MCMC</h2><p>全称是Markov Chain Monte Carlo，即马尔科夫链蒙特卡洛方法。蒙特卡洛方法是一系列随机方法，所谓蒙特卡洛模拟（Monte Carlo simulations），是指一种通过重复生成随机数来估计固定参数的方法。通过生成随机数并对其进行一些计算，蒙特卡洛模拟能够为某一无法直接计算（或者直接计算成本过于高昂）的参数提供近似值。</p>
+<h3 id="Metropolis-Hastings-Sampling"><a href="#Metropolis-Hastings-Sampling" class="headerlink" title="Metropolis-Hastings Sampling"></a>Metropolis-Hastings Sampling</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> scipy.special <span class="keyword">as</span> ss</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">beta_s</span><span class="params">(x, a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x**(a<span class="number">-1</span>)*(<span class="number">1</span>-x)**(b<span class="number">-1</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">beta</span><span class="params">(x, a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> beta_s(x, a, b)/ss.beta(a, b)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_mcmc</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    cur = np.random.rand()</span><br><span class="line">    states = [cur]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>**<span class="number">5</span>):</span><br><span class="line">        next, u = np.random.rand(<span class="number">2</span>)</span><br><span class="line">        <span class="keyword">if</span> u &lt; np.min((beta_s(next, a, b)/beta_s(cur, a, b), <span class="number">1</span>)):</span><br><span class="line">            states.append(next)</span><br><span class="line">            cur = next</span><br><span class="line">    x = np.arange(<span class="number">0</span>, <span class="number">1</span>, <span class="number">.01</span>)</span><br><span class="line">    plt.figure(figsize=(<span class="number">10</span>, <span class="number">5</span>))</span><br><span class="line">    plt.plot(x, beta(x, a, b), lw=<span class="number">2</span>, label=<span class="string">'real dist: a=&#123;&#125;, b=&#123;&#125;'</span>.format(a, b))</span><br><span class="line">    plt.hist(states[<span class="number">-1000</span>:], <span class="number">25</span>, normed=<span class="keyword">True</span>, label=<span class="string">'simu mcmc: a=&#123;&#125;, b=&#123;&#125;'</span>.format(a, b))</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    plot_mcmc(<span class="number">0.1</span>, <span class="number">0.1</span>)</span><br><span class="line">    plot_mcmc(<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    plot_mcmc(<span class="number">2</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>主要思想是对于一个达到稳态的马尔科夫链，如果其收敛时的概率是我们想要采样的分布，就不停地进行游走生成采样点就好了。但是很难直接构造出一个符合我们需要的马尔科夫链，因此我们就在转移的时候加上接受率，使得我们的转移概率符合一直平稳条件。</p>
+<p><img src="/img/sampling2.png" alt><br><img src="/img/sampling3.png" alt></p>
+<p>顺便一提，关于拒绝采样，leetcode上也有两道相关的题目，分别是<a href="https://leetcode.com/problems/implement-rand10-using-rand7/description/" target="_blank" rel="noopener">470</a>和<a href="https://leetcode.com/problems/generate-random-point-in-a-circle/description/" target="_blank" rel="noopener">478</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform" target="_blank" rel="noopener">Box–Muller transform</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method" target="_blank" rel="noopener">Marsaglia polar method</a></li>
+<li><a href="https://baijiahao.baidu.com/s?id=1588750123445231830&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">无需数学知识：快速了解马尔可夫链蒙特卡洛方法</a></li>
+<li><a href="https://blog.csdn.net/lanchunhui/article/details/50452515" target="_blank" rel="noopener">MCMC（Markov Chain Monte Carlo）的理解与实践（Python）</a></li>
+<li><a href="https://cosx.org/2013/01/lda-math-mcmc-and-gibbs-sampling" target="_blank" rel="noopener">LDA-math-MCMC 和 Gibbs Sampling</a></li>
+<li><a href="http://www.cnblogs.com/daniel-D/p/3388724.html" target="_blank" rel="noopener">从随机过程到马尔科夫链蒙特卡洛方法</a></li>
+<li><a href="https://github.com/wiseodd/MCMC/tree/master/algo" target="_blank" rel="noopener">github 上一个简单的实现</a></li>
+<li><a href="https://www.jianshu.com/p/28d32aa7cc45" target="_blank" rel="noopener">MCMC方法小记</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/09/29/数学-2018-09-29-Sampling/" data-id="cjxo5e6rx0042z16dqaugy0t4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/maths/">maths</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../10/01/程序员的玩具-2018-10-01-LC-BinarySearch/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          LeetCode刷题笔记——BinarySearch
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../21/数学-2018-09-21-fast-inverse-square-root/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">快速平方根倒数计算</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

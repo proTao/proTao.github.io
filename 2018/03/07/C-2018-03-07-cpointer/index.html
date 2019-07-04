@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>C与指针读书笔记 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="第一章 快速上手1.1 简介 使用#if 0 与#endif 比/和/能更好的完成逻辑上删除代码的功能。 预处理指令由预处理器解释，预处理器读入源代码，根据预处理指令对其进行修改，然后把修改过得源代码交给编译器。 C 函数的参数传递规则：所有传给函数的参数都是值传递。  1.2 常见的字段函数：putchar、getchar、ctrcpy、ctrncpy、strcat、strchr、strstr">
+<meta name="keywords" content="reading">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C与指针读书笔记">
+<meta property="og:url" content="https://protao.github.io/2018/03/07/C-2018-03-07-cpointer/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="第一章 快速上手1.1 简介 使用#if 0 与#endif 比/和/能更好的完成逻辑上删除代码的功能。 预处理指令由预处理器解释，预处理器读入源代码，根据预处理指令对其进行修改，然后把修改过得源代码交给编译器。 C 函数的参数传递规则：所有传给函数的参数都是值传递。  1.2 常见的字段函数：putchar、getchar、ctrcpy、ctrncpy、strcat、strchr、strstr">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/cover/c_pointer.png">
+<meta property="og:image" content="https://protao.github.io/img/preprocessing.png">
+<meta property="og:image" content="https://protao.github.io/img/macro_and_function.png">
+<meta property="og:updated_time" content="2019-06-26T03:34:15.575Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C与指针读书笔记">
+<meta name="twitter:description" content="第一章 快速上手1.1 简介 使用#if 0 与#endif 比/和/能更好的完成逻辑上删除代码的功能。 预处理指令由预处理器解释，预处理器读入源代码，根据预处理指令对其进行修改，然后把修改过得源代码交给编译器。 C 函数的参数传递规则：所有传给函数的参数都是值传递。  1.2 常见的字段函数：putchar、getchar、ctrcpy、ctrncpy、strcat、strchr、strstr">
+<meta name="twitter:image" content="https://protao.github.io/img/cover/c_pointer.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-C-2018-03-07-cpointer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-03-06T16:00:00.000Z" itemprop="datePublished">2018-03-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/C/">C++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      C与指针读书笔记
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/c_pointer.png" alt></p>
+<h2 id="第一章-快速上手"><a href="#第一章-快速上手" class="headerlink" title="第一章 快速上手"></a>第一章 快速上手</h2><h3 id="1-1-简介"><a href="#1-1-简介" class="headerlink" title="1.1 简介"></a>1.1 简介</h3><ol>
+<li>使用#if 0 与#endif 比/<em>和</em>/能更好的完成逻辑上删除代码的功能。</li>
+<li>预处理指令由预处理器解释，预处理器读入源代码，根据预处理指令对其进行修改，然后把修改过得源代码交给编译器。</li>
+<li>C 函数的参数传递规则：所有传给函数的参数都是值传递。</li>
+</ol>
+<h3 id="1-2"><a href="#1-2" class="headerlink" title="1.2"></a>1.2</h3><ol>
+<li>常见的字段函数：putchar、getchar、ctrcpy、ctrncpy、strcat、strchr、strstr</li>
+</ol>
+<h2 id="第三章-数据"><a href="#第三章-数据" class="headerlink" title="第三章 数据"></a>第三章 数据</h2><h3 id="3-1-基本数据类型"><a href="#3-1-基本数据类型" class="headerlink" title="3.1 基本数据类型"></a>3.1 基本数据类型</h3><ol>
+<li>四种：整形、浮点型、指针和聚合类型。（注意没有布尔类型，任何非零值都是 true，包括负数）。</li>
+<li>整形包括字符、短整型、整形和长整型。都可以再分为 signed 和 unsigned。</li>
+</ol>
+<h3 id="3-4-常量"><a href="#3-4-常量" class="headerlink" title="3.4 常量"></a>3.4 常量</h3><ol>
+<li><code>int const *p</code>可以修改指针的值，不能修改它指向的值。</li>
+<li><code>int * const p</code>指针不能修改，但是可以修改它指向的值。</li>
+<li><code>#define</code> 也是创建常量的手段。</li>
+</ol>
+<h3 id="3-5-作用域"><a href="#3-5-作用域" class="headerlink" title="3.5 作用域"></a>3.5 作用域</h3><ol>
+<li>代码块作用域、文件作用域、原型作用域、函数作用域</li>
+<li>链接属性：external、internal、none。extern 和 static 可以用于修改链接属性。具有 external 属性的实体常称为全局变量。<a id="more"></a></li>
+<li>存储类型：普通内存、运行时堆栈、硬件寄存器。static 使存储类型变成静态。</li>
+<li>文件作用域内声明的变量默认链接属性是 external。存储类型是 static。局部变量的链接属性是 none，存储类型是 auto。external 的一定 static。</li>
+<li>关于 static：当用于函数定义或者是代码块之外的变量声明时，作用是将标识符的链接属性从 external 修改为 internal，但标识符的存储类型和作用于不受影响，此时该标识符只能在该源文件中访问。当用于代码块内部的变量声明时，static 将自动变量修改为静态变量，但是链接属性和作用域不受影响。此时该变量在执行之前创建，在整个执行期间存活。静态变量只会初始化一次，如果没有手动初始化，默认赋值为 0。</li>
+<li>尽管全局变量在程序执行之前创建，但是其作用域仍然在声明之后。</li>
+</ol>
+<h2 id="第四章-语句"><a href="#第四章-语句" class="headerlink" title="第四章 语句"></a>第四章 语句</h2><h2 id="第六章-指针"><a href="#第六章-指针" class="headerlink" title="第六章 指针"></a>第六章 指针</h2><h2 id="第七章-函数"><a href="#第七章-函数" class="headerlink" title="第七章 函数"></a>第七章 函数</h2><h3 id="7-2-函数声明"><a href="#7-2-函数声明" class="headerlink" title="7.2 函数声明"></a>7.2 函数声明</h3><ol>
+<li>在头文件内定义函数原型（函数声明），并且将其 include 至函数定义文件与函数使用文件，这样的好处在于：函数原型具有文件作用域，避免多次调用不匹配，修改时只修改原型</li>
+<li>没有 return 或者 return 没有语句的函数被称为过程</li>
+</ol>
+<h3 id="7-3-函数参数"><a href="#7-3-函数参数" class="headerlink" title="7.3 函数参数"></a>7.3 函数参数</h3><ol>
+<li>所有参数都是传值调用，这意味着函数会获得参数值的一份拷贝。</li>
+</ol>
+<h3 id="7-4-ADT-与黑盒"><a href="#7-4-ADT-与黑盒" class="headerlink" title="7.4 ADT 与黑盒"></a>7.4 ADT 与黑盒</h3><ol>
+<li>设计与实现抽象数据类型（ADT），通过限制函数和数据定义的作用域，这个技巧也被称为黑盒设计。使用头文件声明函数接口原型，然后在实现文件中定义 static 函数限制其作用域在该文件内部。</li>
+</ol>
+<h3 id="7-5-递归"><a href="#7-5-递归" class="headerlink" title="7.5 递归"></a>7.5 递归</h3><ol>
+<li>注意递归和堆栈的互相替代性。</li>
+<li>尾递归最好转换为循环避免堆栈开销。</li>
+</ol>
+<h3 id="7-6-可变参数列表"><a href="#7-6-可变参数列表" class="headerlink" title="7.6 可变参数列表"></a>7.6 可变参数列表</h3><ol>
+<li>使用 stdarg 宏：函数声明内的参数位置加上省略号，函数内预先定义<code>va_list</code>类型变量，使用<code>va_start</code>获取这个可变参数，使用<code>va_arg</code>依次获取<code>va_list</code>中的参数值，最后用<code>va_end</code>关闭变量。</li>
+</ol>
+<h2 id="第八章-数组"><a href="#第八章-数组" class="headerlink" title="第八章 数组"></a>第八章 数组</h2><h3 id="8-1-一维数组"><a href="#8-1-一维数组" class="headerlink" title="8.1 一维数组"></a>8.1 一维数组</h3><ol>
+<li><p>数组名的类型是指向该数组类型的指针，数组名的值是第一个元素的地址。但是数组与指针不能完全画等号，例如数组具有确定数量的元素而指针只是一个标量值，只有当数组名在表达式中使用时编译器才会为他产生一个指针常量。注意是指针常量！</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>];</span><br><span class="line"><span class="keyword">int</span> b[<span class="number">10</span>];</span><br><span class="line">a = b;</span><br><span class="line"><span class="keyword">int</span> *c;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上面的语句错误，由于在表达式中数组名是指针常量，编译器会提示左值不可修改。另外*a 表达式合法，然而*b 却是非法的因为*b 将会访问内存中一个不确定的位置。c++可以通过编译，a++却不行，理由同样是因为 a 在表达式中是一个常量。</p>
+</li>
+<li>只有在两种情况下，数组名并不用指针常量表示：</li>
+<li>下标引用与间接访问除了操作优先级以外完全等同。因此 2[a]和 a[2]是完全一样的，因为他们都等于<code>*(a+2)</code>或者<code>*(2+a)</code>,但是由于编译的原因，在遍历数组的情况下，使用指针的方式更快。</li>
+<li><p>如果一个函数形参接受一个数组，那么把这个形参声明为指针或者数组都是完全等价的，函数内部会得到一个指针的拷贝，因此声明为指针更准确一些。因此在函数内去对数组形参进行 sizeof 操作得到的只是指针的大小而不是数组的长度。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> *a;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d"</span>,<span class="keyword">sizeof</span>(a));<span class="comment">//4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> a[<span class="number">30</span>];</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d"</span>,<span class="keyword">sizeof</span>(a));<span class="comment">//30</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用花括号初始化数组，花括号内元素小于数组大小时，后面不足的元素默认为 0。使用大括号初始化数组时，数组长度可以省略，数组大小将自动匹配大括号内元素个数。</p>
+</li>
+<li><p>在一个代码块内部多次运行到大数组的初始化代价不可忽视，如果没有必要，可以将其声明为 static。</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="keyword">char</span> a[] = &#123;<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"><span class="keyword">char</span> b[] = <span class="string">"abc"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//3</span></span><br><span class="line"><span class="keyword">char</span> *c = <span class="string">"abc"</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上述两种对于字符串的初始化方法等价，“ABC”在上述情况下不是字符串常量，而是字符列表的简略写法。</p>
+</li>
+</ol>
+<h3 id="8-2-多维数组"><a href="#8-2-多维数组" class="headerlink" title="8.2 多维数组"></a>8.2 多维数组</h3><ol>
+<li><p>多维数组可以认为是数组的数组。</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">使用&#123;1,2,3,4,5,6,7,8,9,10,11,12&#125;初始化也可以，不过下面的方式更好</span></span><br><span class="line"><span class="comment">另外，提供初始值的时候，第一位长度可以省略。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">int</span> d[][<span class="number">4</span>] = &#123; &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;, &#123;<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;, &#123;<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>&#125; &#125;;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ++d[<span class="number">0</span>][<span class="number">3</span>]); <span class="comment">//output:5</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>多维数组是行主序的，如上述代码，到一行的最后一个元素时，继续+1 会自动转到下一行。</p>
+</li>
+<li>多维数组的数组名是一个指向数组的指针。</li>
+<li>下标引用只是间接访问表达式的一种伪装形式。这句话对于多维数组同样适用。例如 a[2][3]实际上等价于<em>(</em>(a+2)+3)。</li>
+<li><p>指向数组的指针：</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//right</span></span><br><span class="line"><span class="keyword">int</span> v[<span class="number">10</span>], *vp = v;</span><br><span class="line"></span><br><span class="line"><span class="comment">//error</span></span><br><span class="line"><span class="keyword">int</span> m[<span class="number">3</span>][<span class="number">10</span>], *mp = m;</span><br><span class="line"></span><br><span class="line"><span class="comment">//right</span></span><br><span class="line"><span class="comment">//p 是一个指向整形数组的指针，并指向 m 的第一行</span></span><br><span class="line"><span class="keyword">int</span> m[<span class="number">3</span>][<span class="number">10</span>];</span><br><span class="line"><span class="keyword">int</span> (*p)[<span class="number">10</span>] = matrix;</span><br><span class="line"></span><br><span class="line"><span class="comment">//do not write like this</span></span><br><span class="line"><span class="comment">//也许编译器不能指出错误，但是当 p 与整数进行运算时，比如 p+a，a 要乘以指针元素的长度，但是此时指针元素长度为 0。</span></span><br><span class="line"><span class="keyword">int</span> (*p)[] = matrix;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>作为函数参数的多维数组：(前两种正确，第三种不正确)</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> m[<span class="number">3</span>][<span class="number">10</span>];</span><br><span class="line"> ...</span><br><span class="line"> void func1(int (*p)[10]);</span><br><span class="line"> <span class="function"><span class="keyword">void</span> <span class="title">func2</span><span class="params">(<span class="keyword">int</span> p[][<span class="number">10</span>])</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">void</span> <span class="title">func3</span><span class="params">(<span class="keyword">int</span> **p)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指针数组与指向数组的指针:这么理解，第一个式子中*p 先结合，说明 p 是指针，然后是（指向数组的）指针，第二个式子中，下标操作符优先级更高，所以 a 先是一个数组，然后是（数组内元素是指针的）数组。</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="keyword">int</span> (*p)[<span class="number">10</span>];</span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"><span class="keyword">int</span> *a[<span class="number">10</span>];</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>逗号下标有时不会报错，因为逗号表达式的值为最后一个逗号后面的值，所以 a[1,2]在有些机器中等价于 a[2].</p>
+</li>
+</ol>
+<h2 id="第九章-字符串、字符和字节"><a href="#第九章-字符串、字符和字节" class="headerlink" title="第九章 字符串、字符和字节"></a>第九章 字符串、字符和字节</h2><h3 id="9-1-字符串基础"><a href="#9-1-字符串基础" class="headerlink" title="9.1 字符串基础"></a>9.1 字符串基础</h3><ol>
+<li>字符串的长度不包括 UNL 字节。</li>
+<li>include string.h 并非必须，但是加上是好的。因为有了头文件中定义的原型，编译器可以更好地执行错误检查。</li>
+</ol>
+<h3 id="9-2-字符串长度"><a href="#9-2-字符串长度" class="headerlink" title="9.2 字符串长度"></a>9.2 字符串长度</h3><ol>
+<li>strlen 返回的是无符号整形，尽量不要使用无符号整形进行运算，因为计算出来的结果永远是非负数，如果你想计算出负数，那程序就会有错。同样无符号数与有符号数一起计算还是有问题，最好的方法就是强制类型转换。</li>
+</ol>
+<h3 id="9-3-不受限制的字符串函数"><a href="#9-3-不受限制的字符串函数" class="headerlink" title="9.3 不受限制的字符串函数"></a>9.3 不受限制的字符串函数</h3><ol>
+<li>参数是 char*</li>
+<li>字符串复制：strcpy，字符串连接 strcat，字符串比较 strcmp（返回值是两个字符串的字典序比较）。</li>
+<li>避免源字符串和目标字符串位置发生重叠，注意由于不检查长度，只通过<code>\0</code>判断结尾，因为是不安全的，可能溢出。</li>
+<li>返回值是目标函数的指针，这使得这类函数可以嵌套调用，但是这样会使可读性变差。</li>
+</ol>
+<h3 id="9-4-长度受限的字符串函数"><a href="#9-4-长度受限的字符串函数" class="headerlink" title="9.4 长度受限的字符串函数"></a>9.4 长度受限的字符串函数</h3><ol>
+<li>与不受限制的区别是这里的三个函数多了一个 size 参数，比如复制函数会恰好复制过去 size 个字节，不够补零，过了就不要，注意不自动填充结束符。strcat 会添加结束符。</li>
+</ol>
+<h3 id="9-5-字符串查找"><a href="#9-5-字符串查找" class="headerlink" title="9.5 字符串查找"></a>9.5 字符串查找</h3><ol>
+<li>单个字符查找：strchr 和 strrchr</li>
+<li>字符组查找：strpbrk</li>
+<li>子串查找：strstr</li>
+</ol>
+<h3 id="9-6-高级字符串查找"><a href="#9-6-高级字符串查找" class="headerlink" title="9.6 高级字符串查找"></a>9.6 高级字符串查找</h3><ol>
+<li>字符串前缀查找：strspn 和 strcspn</li>
+<li>查找标记：strtok</li>
+</ol>
+<h3 id="9-7-错误信息"><a href="#9-7-错误信息" class="headerlink" title="9.7 错误信息"></a>9.7 错误信息</h3><ol>
+<li>`char *strerror(int error_code);</li>
+</ol>
+<h3 id="9-8-字符操作"><a href="#9-8-字符操作" class="headerlink" title="9.8 字符操作"></a>9.8 字符操作</h3><ol>
+<li>ctype.h 文件中，一种用于字符分类，一种用于字符大小写测试与转换。</li>
+</ol>
+<h3 id="内存操作"><a href="#内存操作" class="headerlink" title="内存操作"></a>内存操作</h3><ol>
+<li>字符串操作遇到<code>\0</code>就会停止，如果想直接操作内存，使用 mem 系列函数</li>
+</ol>
+<h2 id="第十章-结构和联合"><a href="#第十章-结构和联合" class="headerlink" title="第十章 结构和联合"></a>第十章 结构和联合</h2><h3 id="10-1-结构基础知识"><a href="#10-1-结构基础知识" class="headerlink" title="10.1 结构基础知识"></a>10.1 结构基础知识</h3><ol>
+<li>结构变量在表达式中不是指针，可以作为返回值，类似于数组，使用花括号初始化。</li>
+<li><p>结构声明,下面两种定义几乎等价。区别在于 Simple 是类型名还是结构标签。在后续的声明终会体现出来。</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line"><span class="keyword">int</span> a;</span><br><span class="line"><span class="keyword">char</span> b;</span><br><span class="line"><span class="keyword">float</span> c;</span><br><span class="line">&#125; Simple1;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Simple2</span>&#123;</span></span><br><span class="line"><span class="keyword">int</span> a;</span><br><span class="line"><span class="keyword">char</span> b;</span><br><span class="line"><span class="keyword">float</span> c;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Simple1</span> <span class="title">s1</span>;</span></span><br><span class="line">Simple2 s2;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>.</code>操作符对结构成员进行直接访问，<code>-&gt;</code>操作符对结构指针的成员进行间接访问。</p>
+</li>
+<li>结构的自引用与互引用： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//error</span><br><span class="line">struct SELF1 &#123;</span><br><span class="line">    struct SELF1 s1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//right</span><br><span class="line">struc SELF2 &#123;</span><br><span class="line">    struct SELF2 *s2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//right</span><br><span class="line">struct A;</span><br><span class="line">struct B &#123;</span><br><span class="line">    struct A *a;</span><br><span class="line">&#125;</span><br><span class="line">struct A &#123;</span><br><span class="line">    struct B *b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="10-3-结构的存储分配"><a href="#10-3-结构的存储分配" class="headerlink" title="10.3 结构的存储分配"></a>10.3 结构的存储分配</h3><ol>
+<li>当结构需要字对齐时，对结构体内各个成员进行重拍会有更高的空间利用率。</li>
+<li><p>sizeof 得到一个结构体的占用空间，offsetof 宏（定义于 stddef.h）确定某个成员的偏移量。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stddef.h&gt;</span><br><span class="line">struct ALIGN &#123;</span><br><span class="line">    char a;</span><br><span class="line">    int b;</span><br><span class="line">    char c;</span><br><span class="line">&#125;</span><br><span class="line">offset(struct ALIGN, b); // output: 4</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="10-4-作为函数参数的结构"><a href="#10-4-作为函数参数的结构" class="headerlink" title="10.4 作为函数参数的结构"></a>10.4 作为函数参数的结构</h3><ol>
+<li>值传递效率比较低，要先复制到堆栈中，然后丢弃。传指针的话更好，因为只需要压栈一个 4 字节。如果对这个指针的间接访问超过三四次，把指针声明为寄存器变量更有效率。若不希望修改，就声明为 const。此时声明为：<code>void func(register Struct const *p);</code></li>
+</ol>
+<h3 id="10-5-位段（bit-field）"><a href="#10-5-位段（bit-field）" class="headerlink" title="10.5 位段（bit field）"></a>10.5 位段（bit field）</h3><ol>
+<li>位段的声明和结构类似，但他的成员是一个或多个位的字段，这些字段实际存储于整型中。因此位段成员必须声明为 int、signed int 或者 unsigned int，其次在成员名后加上冒号和整数，指定位数。</li>
+<li><p>在源代码中使用位段更为清晰，但是在目标代码中无论是否使用位段，移位操作和屏蔽操作都是必须的，位段提供的唯一优点是简化源代码。</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 假设已知磁盘寄存器在 0xc0200142 位置进行访问</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过位段方式</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DISK_REGISTER ((struct DISK_REGISTER_FORMAT *)0xc0200142)</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">DISK_REGISTER_FORMAT</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> command :<span class="number">5</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> sector  :<span class="number">5</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> track   :<span class="number">9</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">DISK_REGISTER-&gt;sector = new_sector;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="10-6-联合"><a href="#10-6-联合" class="headerlink" title="10.6 联合"></a>10.6 联合</h3><ol>
+<li>联合的所有成员引用的是内存中的相同位置。如果联合中的成员具有不同的长度，联合的长度就是它最长成员的长度。</li>
+<li>联合变量可以被初始化，但是这个初始值必须是联合中第一个成员的类型，并且在一堆花括号里面。</li>
+</ol>
+<h2 id="第十一章-动态内存分配"><a href="#第十一章-动态内存分配" class="headerlink" title="第十一章 动态内存分配"></a>第十一章 动态内存分配</h2><h3 id="11-1-为什么使用动态内存分配"><a href="#11-1-为什么使用动态内存分配" class="headerlink" title="11.1 为什么使用动态内存分配"></a>11.1 为什么使用动态内存分配</h3><ol>
+<li>正常时候声明数组时要用一个编译时就能确定的常量指定数组长度。</li>
+</ol>
+<h3 id="11-2-molloc-和-free"><a href="#11-2-molloc-和-free" class="headerlink" title="11.2 molloc 和 free"></a>11.2 molloc 和 free</h3><ol>
+<li>这两个函数维护一个可用内存池，molloc 提取一块连续的内存并返回一个指向这块内存的（void*）指针，返回后根据使用目的进行强制类型转换。两个函数都在 stdlib.h 中声明。如果可用内存池不足以满足请求，molloc 就向操作系统请求更多内存，如果操作系统无法提供，返回值就是 NULL。参数的单位是字节。</li>
+</ol>
+<h3 id="11-3-calloc-和-realloc"><a href="#11-3-calloc-和-realloc" class="headerlink" title="11.3 calloc 和 realloc"></a>11.3 calloc 和 realloc</h3><ol>
+<li>calloc：<code>void* calloc(size_t num_elements, size_t element_size)</code>。和 molloc 的区别在于首先参数不同，其次 calloc 会将内存初始化为 0。</li>
+<li>realloc:<code>void realloc(void *ptr, size_t new_size)</code>。改变内存大小。</li>
+</ol>
+<h3 id="11-4-使用动态分配的内存"><a href="#11-4-使用动态分配的内存" class="headerlink" title="11.4 使用动态分配的内存"></a>11.4 使用动态分配的内存</h3><h3 id="11-5-常见错误"><a href="#11-5-常见错误" class="headerlink" title="11.5 常见错误"></a>11.5 常见错误</h3><ol>
+<li>对一个动态分配返回的指针创建了一个拷贝，然后其中一个 free 后，其他的指针仍然试图访问这块内存。</li>
+</ol>
+<h2 id="第十二章-使用结构和指针"><a href="#第十二章-使用结构和指针" class="headerlink" title="第十二章 使用结构和指针"></a>第十二章 使用结构和指针</h2><h3 id="12-1-链表"><a href="#12-1-链表" class="headerlink" title="12.1 链表"></a>12.1 链表</h3><h3 id="12-2-单链表"><a href="#12-2-单链表" class="headerlink" title="12.2 单链表"></a>12.2 单链表</h3><h3 id="12-3-双链表"><a href="#12-3-双链表" class="headerlink" title="12.3 双链表"></a>12.3 双链表</h3><h2 id="第十三章-高级指针话题"><a href="#第十三章-高级指针话题" class="headerlink" title="第十三章 高级指针话题"></a>第十三章 高级指针话题</h2><h3 id="13-1-进一步探讨指向指针的指针"><a href="#13-1-进一步探讨指向指针的指针" class="headerlink" title="13.1 进一步探讨指向指针的指针"></a>13.1 进一步探讨指向指针的指针</h3><h3 id="13-2-高级声明"><a href="#13-2-高级声明" class="headerlink" title="13.2 高级声明"></a>13.2 高级声明</h3><blockquote>
+<p>原则是：在 C 中，声明以表达式推论的形式进行分析。</p>
+</blockquote>
+<ol>
+<li><code>int *f;</code>把 f 声明为指向整形的指针。其具体声明过程是将（<em>f）声明为整型，因此，`int </em>f, g;`语句把 f 声明为指针，g 声明为一般整型。</li>
+<li>同理<code>int *f();</code>认为 f 先和具有更高优先级的函数调用操作符结合，然后间接访问得到一个整型，因此，f 的返回值是 int 的指针。</li>
+<li>而<code>int (*f)();</code>中 f 先进行间接访问，然后再执行函数调用，因此，f 是函数指针。这样的话<code>int *(*f)();</code>也好理解了，是一个返回 int 指针的函数指针。</li>
+<li><code>int *f[];</code>因为下标优先级更高，先对 f 进行数组元素访问，再进行间接访问，因此 f 是指针的数组。</li>
+<li>最后两个较复杂的<code>int (*f)(int, float);</code>和<code>int *(*g[])(int, float);</code>前者把 f 声明为一个返回 int 的函数指针，后者把 g 声明成一个函数指针数组，指向的函数返回值是 int 指针。</li>
+<li>使用 unix 程序 cdecl 帮助理解</li>
+</ol>
+<h3 id="13-3-函数指针"><a href="#13-3-函数指针" class="headerlink" title="13.3 函数指针"></a>13.3 函数指针</h3><ol>
+<li><p>主要的两个用途是转换表(jump table)和作为参数传递给另外一个函数。函数指针同样需要初始化，初始化时的&amp;操作符可选，因为<strong>函数名被使用时总是由编译器将其转换为函数指针</strong>。在函数指针的初始化之前具有 f 的原型是很重要的，否则编译器无法检查 f 的类型是否与 pf 所指向的类型一致。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int f(int);</span><br><span class="line">int (*pf)(int) = &amp;f;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="2">
+<li><p>使用三种方式调用函数 f</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int ans;</span><br><span class="line"></span><br><span class="line">ans = f(25);</span><br><span class="line">ans = (*pf)(25);</span><br><span class="line">ans = pf(25);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一条语句简单的执行函数，然而真正的执行过程是 f 首先被转换为一个函数指针指向函数在内存中的位置，然后通过调用操作符调用该函数，执行开始于这个地址的代码。</li>
+<li>第二条语句先通过间接访问将函数指针转换为函数名。然而这个转换不是真正需要的，因为编译器在执行函数时又会转化为函数指针。</li>
+<li>第三条语句显示了函数指针是怎样使用的，因为编译器需要的是一个函数指针，因此直接执行效果相同。</li>
+</ul>
+</li>
+<li><strong>回调函数</strong>使回调函数的参数是 void*， 在回调函数内部进行强制类型转换。</li>
+<li><strong>转移表</strong>：根据不同的操作数调用不同的函数，详见原书。</li>
+</ol>
+<h3 id="13-4-命令行参数"><a href="#13-4-命令行参数" class="headerlink" title="13.4 命令行参数"></a>13.4 命令行参数</h3><p>（略）</p>
+<h3 id="13-5-字符串常量"><a href="#13-5-字符串常量" class="headerlink" title="13.5 字符串常量"></a>13.5 字符串常量</h3><ol>
+<li>当一个字符串常量出现在表达式中时它的值是一个指针常量。编译器把这些指定字符的一份拷贝存放在内存的某个位置，并存储指向第一个字符的指针。因此<code>&quot;xyz&quot;+1</code>的值是指向’y’的指针</li>
+</ol>
+<h2 id="第十四章-预处理器"><a href="#第十四章-预处理器" class="headerlink" title="第十四章 预处理器"></a>第十四章 预处理器</h2><p>预处理是编译的第一个阶段，包括删除注释、插入#include 内容，定义和替换#define 内容以及一些条件编译的工作。</p>
+<h3 id="14-1-预定义符号"><a href="#14-1-预定义符号" class="headerlink" title="14.1 预定义符号"></a>14.1 预定义符号</h3><p><img src="/img/preprocessing.png" alt></p>
+<h3 id="14-2-define"><a href="#14-2-define" class="headerlink" title="14.2 #define"></a>14.2 #define</h3><ol>
+<li><p>#define 包括了一个规定，允许把参数替换到文本中，这种实现通常称为<strong>宏</strong>。宏的声明方式：<code>#define name(param_list) stuff</code>。所有宏定义最好按照希望的执行顺序加上括号，包括最外面也要加括号，以防可能错误的执行顺序。</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SQUARE(x) x * x</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d\n"</span>, SQUARE(<span class="number">5</span>)); <span class="comment">//output 25</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a = <span class="number">5</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d\n"</span>, SQUARE(a + <span class="number">1</span>)); <span class="comment">//output 11</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 第二次执行失败是因为宏被替换为 a + 1 * a + 1 = 11</span></span><br><span class="line"><span class="comment">* 在宏中加括号可以正确运行</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>宏和函数：</p>
+<ul>
+<li>宏的好处是没有调用和返回的代价，不需要确定的参数类型，不好的地方在于宏太长并且大量替换的时候会大幅增加程序长度。另外，一部分功能只能通过宏实现：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MALLOC(num, type) \</span></span><br><span class="line">        ((type*)<span class="built_in">malloc</span>((n)*<span class="keyword">sizeof</span>(type)))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p><img src="/img/macro_and_function.png" alt></p>
+<ol start="3">
+<li>使用<code>#undef</code> 移除一个宏定义</li>
+<li>使用<code>#define</code> 的流程：检查是否已经被定义，如果是，他们会被替换；替换文本；全部替换后检查是否还有被<code>#define</code> 的符号，如果有，返回上一步。</li>
+</ol>
+<h3 id="14-3-条件编译"><a href="#14-3-条件编译" class="headerlink" title="14.3 条件编译"></a>14.3 条件编译</h3><ol>
+<li>基本结构是<code>#if</code> 和 <code>#endif</code>。<code>#if</code> 后面必须是一个常量表达式。通过条件编译可以更好地完成调试的工作。</li>
+<li>条件编译的另一个用途是选择不同的代码部分，需要配合<code>#elif</code> 和<code>#else</code>。</li>
+<li><code>#indef</code>、<code>#ifndef</code></li>
+</ol>
+<h3 id="14-4-文件包含"><a href="#14-4-文件包含" class="headerlink" title="14.4 文件包含"></a>14.4 文件包含</h3><h3 id="14-5-其他指令"><a href="#14-5-其他指令" class="headerlink" title="14.5 其他指令"></a>14.5 其他指令</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/03/07/C-2018-03-07-cpointer/" data-id="cjxo5e6ng001gz16dz4g026j2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../08/程序员的玩具-2018-03-08-hexo/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          hexo使用体验
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../02/03/机器学习-2019-02-03-RNN/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CS224笔记之循环神经网络</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

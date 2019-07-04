@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>锋利的Bash(2) | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="数组参考：  初级一点的bash数组教程 高级一点的15 个 Bash Array 数组教程  我这里就总结几点我觉得主要注意的地方:  数组特点数组下标从0开始，支持负数索引，使用[*]或[@]将数组转化为字符串列表（这两个是存在区别的，后面说)，否则只是通过$符号只能拿到下标为0的元素。计算长度时，被删除（unset）的元素不计入长度12345678910declare -a arrayarr">
+<meta name="keywords" content="tools,shell,linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="锋利的Bash(2)">
+<meta property="og:url" content="https://protao.github.io/2018/05/09/程序员的玩具-2018-05-09-BashNote-2/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="数组参考：  初级一点的bash数组教程 高级一点的15 个 Bash Array 数组教程  我这里就总结几点我觉得主要注意的地方:  数组特点数组下标从0开始，支持负数索引，使用[*]或[@]将数组转化为字符串列表（这两个是存在区别的，后面说)，否则只是通过$符号只能拿到下标为0的元素。计算长度时，被删除（unset）的元素不计入长度12345678910declare -a arrayarr">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-24T13:39:09.769Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="锋利的Bash(2)">
+<meta name="twitter:description" content="数组参考：  初级一点的bash数组教程 高级一点的15 个 Bash Array 数组教程  我这里就总结几点我觉得主要注意的地方:  数组特点数组下标从0开始，支持负数索引，使用[*]或[@]将数组转化为字符串列表（这两个是存在区别的，后面说)，否则只是通过$符号只能拿到下标为0的元素。计算长度时，被删除（unset）的元素不计入长度12345678910declare -a arrayarr">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-程序员的玩具-2018-05-09-BashNote-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-05-08T16:00:00.000Z" itemprop="datePublished">2018-05-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      锋利的Bash(2)
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>参考：</p>
+<ol>
+<li>初级一点的<a href="http://www.jb51.net/article/101241.htm" target="_blank" rel="noopener">bash数组教程</a></li>
+<li>高级一点的<a href="https://blog.csdn.net/liufei_learning/article/details/8000570" target="_blank" rel="noopener">15 个 Bash Array 数组教程</a></li>
+</ol>
+<p>我这里就总结几点我觉得主要注意的地方:</p>
+<ol>
+<li>数组特点<br>数组下标从0开始，支持负数索引，使用[*]或[@]将数组转化为字符串列表（<strong>这两个是存在区别的，后面说</strong>)，否则只是通过$符号只能拿到下标为0的元素。计算长度时，被删除（unset）的元素不计入长度<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">declare</span> -a array</span><br><span class="line">array[0]=<span class="string">'a'</span></span><br><span class="line">array[1]=<span class="string">'bb'</span></span><br><span class="line">array[2]=<span class="string">'ccc'</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#array[*]&#125;</span> : <span class="variable">$&#123;array[*]&#125;</span></span><br><span class="line"><span class="built_in">echo</span> first element : <span class="variable">$array</span></span><br><span class="line"><span class="built_in">unset</span> array[0]</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#array[*]&#125;</span> : <span class="variable">$&#123;array[*]&#125;</span></span><br><span class="line"><span class="built_in">echo</span> first element : <span class="variable">$array</span></span><br><span class="line"><span class="built_in">echo</span> last element : <span class="variable">$&#123;array[-1]&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<a id="more"></a>
+<ol start="2">
+<li><p>数组和字符串的类似之处<br>都支持切片，因为数组可以通过<code>@</code>符号转换为字符串，一次可以使用字符串的替换（类似于sed的语法）功能。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 切出从下标2开始的长度为2的片</span></span><br><span class="line">s=<span class="string">"i am so hot hoot"</span></span><br><span class="line">a=(i am so hot hoot)</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;s:2:2&#125;</span> <span class="comment"># am</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a[@]:2:2&#125;</span> <span class="comment"># so hot</span></span><br><span class="line"><span class="comment"># 替换</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;s/hot/cold&#125;</span></span><br><span class="line">aa=<span class="variable">$&#123;a[*]/hot/cold&#125;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$aa</span> <span class="comment"># 会输出全部内容，也就是说aa是字符串了</span></span><br><span class="line"><span class="comment"># 删除</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;s/ho*t/&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数组和字符串的长度计算方式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">s=<span class="string">"a b c"</span></span><br><span class="line">a=(<span class="string">"aa"</span> <span class="string">"bb"</span> <span class="string">"cc"</span>)</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#s&#125;</span> <span class="comment"># output:5</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#a[@]&#125;</span> <span class="comment"># output:3</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关联数组<br>Bash支持关联数组，它可以使用字符串作为数组索引，有时候采用字符串索引更容易理解。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assArray=([lucy]=beijing [yoona]=shanghai)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>参考<a href="https://blog.csdn.net/sunnyyoona/article/details/51526312" target="_blank" rel="noopener">shell数组与关联数组</a></p>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>bash中用$使用一个字符串变量的时候就直接当做吧字符串的内容替换到变量所在位置就行。并且可以使用forin直接遍历被空格分割的字符串内容，这个是很容易理解的。<br>但是结合数组的时候就会有一点混乱。</p>
+<ol>
+<li><p>数组作为参数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">bb=(a1 a2 a4 a6)</span><br><span class="line">cc=<span class="string">"a1 a2 a3"</span></span><br><span class="line"><span class="keyword">function</span> f</span><br><span class="line">&#123;</span><br><span class="line">        <span class="built_in">echo</span> 参数个数： <span class="variable">$#</span></span><br><span class="line">        <span class="built_in">echo</span> 第一个参数： <span class="variable">$1</span></span><br><span class="line">        <span class="built_in">echo</span> 第二个参数： <span class="variable">$2</span></span><br><span class="line">        <span class="built_in">echo</span> 所有参数列表： $*</span><br><span class="line">        <span class="built_in">echo</span></span><br><span class="line">&#125;</span><br><span class="line">f <span class="variable">$bb</span></span><br><span class="line">f <span class="variable">$&#123;bb[@]&#125;</span></span><br><span class="line">f <span class="variable">$&#123;bb[*]&#125;</span></span><br><span class="line">f <span class="string">"<span class="variable">$&#123;bb[@]&#125;</span>"</span></span><br><span class="line">f <span class="string">"<span class="variable">$&#123;bb[*]&#125;</span>"</span> <span class="comment"># 这个方式可以吧数组作为一个整体传进函数</span></span><br><span class="line">f <span class="variable">$cc</span></span><br><span class="line">f <span class="string">"<span class="variable">$cc</span>"</span></span><br><span class="line">f <span class="string">"<span class="variable">$cc</span>[*]"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>返回值<br>第一、return是返回值，但是只能用#?在下一条命令捕获，不能直接传递给自定义变量。第二、return作为返回状态值只能是整数。第三、某些版本的bash脚本中不支持return，只能用exit退出。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> f</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"stdout value"</span></span><br><span class="line">    <span class="built_in">return</span> 1</span><br><span class="line">&#125;</span><br><span class="line">a=`f`</span><br><span class="line">b=$?</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$a</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$b</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>解释：双引号包含时，”$*”的参数被当做一个整体，而”$@”还是遍历每一个参数</p>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>涉及到字符串或者说文本的处理是我认为bash中最复杂的地方。仅仅是通过${str}的处理就可以完成绝大多数的任务，这个部分也只介绍这种相关方法。</p>
+<p>参考：<br><a href="https://www.cnblogs.com/gaochsh/p/6901809.html" target="_blank" rel="noopener">shell字符串操作详解</a><br><a href="http://www.jb51.net/article/56563.html" target="_blank" rel="noopener">Shell脚本8种字符串截取方法总结</a><br><a href="https://blog.csdn.net/shmilyringpull/article/details/7631106" target="_blank" rel="noopener">shell中的${}，##和%%的使用</a></p>
+<ol>
+<li><p>基本操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">a=asd123qwe456asd123qwe456</span><br><span class="line"><span class="comment"># 切片</span></span><br><span class="line"><span class="comment"># 下标从0开始，支持负数索引，-1表示最后一个字符</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a:1&#125;</span> <span class="comment"># sd123qwe456asd123qwe456</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a:1:3&#125;</span> <span class="comment"># sd1</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a:0-6:3&#125;</span> <span class="comment"># 从-6开始往右数3个：qwe，注意0是必须的</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;var:(-6):3&#125;</span> <span class="comment"># 或者使用括号</span></span><br><span class="line"><span class="comment"># 删除</span></span><br><span class="line"><span class="comment"># #/##/%/%%分别表示在串头、串尾删除最短、最长子串</span></span><br><span class="line"><span class="comment"># 星号匹配任意字符、支持正则</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a#asd[0-9]&#125;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a##*asd&#125;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a%%456*&#125;</span></span><br><span class="line"><span class="comment">#替换</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a/#asd/ASD&#125;</span> <span class="comment"># 替换前缀</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a/%456/123&#125;</span> <span class="comment"># 替换后缀</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a/asd/ASD&#125;</span> <span class="comment"># 替换第一个</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a//asd/ASD&#125;</span> <span class="comment"># 全部替换</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>expr<br>可以使用<code>info expr</code>查看文档。支持字符串操作和数值计算。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">expr index 12345 234 <span class="comment"># 子串位置，下标从1开始</span></span><br><span class="line">expr match 12345asd [0-9]* <span class="comment"># 从头匹配最大长度</span></span><br><span class="line">expr length 12345 <span class="comment"># 计算长度</span></span><br><span class="line">expr asd123qwe456 : asd[0-9]* <span class="comment"># 6:从头匹配的正则长度</span></span><br><span class="line">expr asd123qwe456 : <span class="string">'\(asd[0-9]*\)'</span> <span class="comment"># 从头匹配到的字串，要加上引号并把想输出的分组用\(\)括起来，为啥加引号不知道。</span></span><br><span class="line">expr substr abcde 2 3 <span class="comment"># bcd，下标从1开始</span></span><br><span class="line">expr index + length g <span class="comment"># 加号对关键字进行转义</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="echo"><a href="#echo" class="headerlink" title="echo"></a>echo</h2><p><code>-n</code>参数表示不在结尾加换行符<br><code>-e</code>参数表示对转义字符进行解释，否则不解释，接受的转移字符有：</p>
+<ul>
+<li>\r 光标移至行首，但不换行</li>
+<li>\t 插入tab</li>
+<li>\f 换行但光标仍旧停留在原来的位置</li>
+<li>\b 删除前一个字符</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> -n <span class="string">"123"</span> &gt; result</span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\r456\f123"</span> &gt;&gt; result</span><br><span class="line"><span class="comment"># 控制显示颜色：echo -e "\033[字背景颜色；文字颜色m字符串\033[0m"</span></span><br><span class="line"><span class="comment"># 字颜色：30—–37，字背景颜色范围：40—–47</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\033[41;37m 红底白字 \033[0m"</span></span><br></pre></td></tr></table></figure>
+<h2 id="cut"><a href="#cut" class="headerlink" title="cut"></a>cut</h2><p><code>-d</code>：分隔符<br><code>-c</code>：按字符分割<br><code>-f</code>：第几个字段（从1开始， 支持多个字段）<br><code>--complement</code>：输出未被选中的字段<br><code>--out-delimiter=</code>：指定输出分隔符</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"1;2;33;444;55;6"</span> | cut -d \; -f 2,4 <span class="comment"># output:2;444，还会用原分隔符进行分割</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"1;2;33;444;55;6"</span> | cut -c 2,4 <span class="comment"># output:;;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"1;2;33;444;55;6"</span> | cut --complement -d \; -f 2,4</span><br></pre></td></tr></table></figure>
+<h2 id="paste按列合并文件"><a href="#paste按列合并文件" class="headerlink" title="paste按列合并文件"></a>paste按列合并文件</h2><p><code>-d</code>：指定分隔符<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> -e <span class="string">"1\n2\n3"</span> &gt; 1</span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"4\n5\n6"</span> &gt; 2</span><br><span class="line">paste 1 2</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/05/09/程序员的玩具-2018-05-09-BashNote-2/" data-id="cjxo5e7dk0063z16d0ukv82u5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/tools/">tools</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../21/程序员的玩具-2018-5-21-BashNote-4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          锋利的Bash(4):三剑客(相识)
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../07/大数据-2018-05-07-CardinalityEstimation/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">基数估计：FM算法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

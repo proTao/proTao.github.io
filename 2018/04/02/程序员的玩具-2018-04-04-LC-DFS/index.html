@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Leetcode刷题笔记——DFS | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="与回溯法的区别：就目前做的 104 Max Depth of Binary Tree 和 690 Employee Importance 两道easy来看，DFS适用于求标量情况，写成从子节点向上规约的算法，代码极其简洁。而回溯法不受限于求标量，也可以枚举所有解等情况，这种时候回溯法更加适合，但是从代码上来看要较复杂一些，回溯法是一种自顶向下探索的方法。 涉及最短路径的时候，回溯法与BFS更有优势">
+<meta name="keywords" content="algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leetcode刷题笔记——DFS">
+<meta property="og:url" content="https://protao.github.io/2018/04/02/程序员的玩具-2018-04-04-LC-DFS/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="与回溯法的区别：就目前做的 104 Max Depth of Binary Tree 和 690 Employee Importance 两道easy来看，DFS适用于求标量情况，写成从子节点向上规约的算法，代码极其简洁。而回溯法不受限于求标量，也可以枚举所有解等情况，这种时候回溯法更加适合，但是从代码上来看要较复杂一些，回溯法是一种自顶向下探索的方法。 涉及最短路径的时候，回溯法与BFS更有优势">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-09-21T06:11:03.367Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Leetcode刷题笔记——DFS">
+<meta name="twitter:description" content="与回溯法的区别：就目前做的 104 Max Depth of Binary Tree 和 690 Employee Importance 两道easy来看，DFS适用于求标量情况，写成从子节点向上规约的算法，代码极其简洁。而回溯法不受限于求标量，也可以枚举所有解等情况，这种时候回溯法更加适合，但是从代码上来看要较复杂一些，回溯法是一种自顶向下探索的方法。 涉及最短路径的时候，回溯法与BFS更有优势">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-程序员的玩具-2018-04-04-LC-DFS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-04-02T01:30:21.000Z" itemprop="datePublished">2018-04-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Leetcode刷题笔记——DFS
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>与回溯法的区别：<br>就目前做的 104 Max Depth of Binary Tree 和 690 Employee Importance 两道easy来看，DFS适用于求标量情况，写成从子节点向上规约的算法，代码极其简洁。而回溯法不受限于求标量，也可以枚举所有解等情况，这种时候回溯法更加适合，但是从代码上来看要较复杂一些，回溯法是一种自顶向下探索的方法。</p>
+<p>涉及最短路径的时候，回溯法与BFS更有优势。</p>
+<a id="more"></a>
+<p>题目（112. Path Sum）表现了DFS的另外一种可能性，Backtrack方案每一步都是试探性的，而DFS更有一种破釜沉舟的感觉，该节点不对之后直接划分为子问题，这个也许是更根本的区别，而自顶向下和自底而上的区别不那么明显了，自底向上其实也是干净利落的划分问题，父节点直接采用子节点返回的值。</p>
+<p>实际上可以认为回溯法是一种启发式的贪心算法，启发规则是DFS的试探前进，而DFS的方法目前刷题来看常用的是先序和后序，先序的话是一种分治的思想，后续也是分治，但是更突出归并的特点。但是就像前面说的分治法在递归公式的拆分下问题划分的斩钉截铁，而回溯法则是小心翼翼一直为自己保留退路。这么看的话利用公式的组合数那道题其实是后序DFS解法</p>
+<p>从编程上看，我习惯的回溯法不需要返回值，只是需要在deeper函数中传递当前状态，解保存在外部变量中，而后序DFS常常需要定义返回值，通过逻辑表达式和if/else三目运算符可以使代码非常简练，但是可读性会一定程度的变差.</p>
+<p>(109. Convert Sorted List to Binary Search Tree)和(99. Recover Binary Search Tree)这两道题都是考察BST的理解，对BST的一个很好的处理方式就是中序遍历。其中99题与98题一脉相承，98题我用了两种方式实现，一种就是根据BST定义对问题进行分治，确定左子树全部小于根节点且右子树全部大于根节点并进行递归。另一种思路就是检查中序遍历序列是否是有序的。而这种思路很容易的转移到99题，找到中序遍历序列的失序元素并对其进行调整，要求是使用O(1)的额外空间，这样实际上树问题就转化为数组问题，当然实际上由于函数的递归调用，还是会用到O(logn)的额外空间。而109题则是我觉得比99题更有味道的一道题，一个较为简单的思路是每次找到链表的中点，然后递归建立树，此时时间消耗是o(nlogn)(每个深度的时间复杂度是O(n)，深度是logn)，此时明显不能接受的地方就是靠前的链表被多次遍历。可是如果用额外的数据结构去存储就失去了这道题的意义，既然给了链表说明可萌有隐性业务约束，不然直接遍历一遍转化为数组直接变成了108题了。在Discussion中看到一个大神的做法需要只需要遍历一遍链表就能生成BST。之所以把这两道题放到一起，是因为我觉得这两组题（算上他们的前置题目）实际上是BST中序遍历的正反两种形式，说是正反两种，实际上都是幌子，如果将中序遍历中对节点的操作抽象标记为Operation，那么实际上就是我们在算法书上看见的中序遍历的套路。<code>Inorder(root-&gt;left);Operation(root);Inorder(root-&gt;right)</code>。只不过这两道题一个Operation是取值，另一个是赋值。关键就在于最开始没有树的时候怎么确定DFS策略。这棵树的确没有，是要让我们自己建立的，我们思考的困哪在于链表形式的结构我们不知道何时会停止。但是如果我们想到一个关键点，这个问题就迎刃而解了。就是给定元素个数和统一BST风格（当元素个数是偶数个时，是选择让左子树更高还是右子树更高），BST的形状实际上就唯一确定了。而考虑108题，实际上我们也是利用元素个数确定树的形状。考虑到这里，该问题就已经变成了一个<strong>重新赋值确定形状的抽象BST</strong>的问题。</p>
+<p>对于(116. Populating Next Right Pointers in Each Node)(117. Populating Next Right Pointers in Each Node II)(199. Binary Tree Right Side View)一组题目，都是可以用Backtrack套路轻易解决的问题，但是三道题都是有着一些共同点，比如都可以不通过递归回溯实现，可以通过层次遍历的方式解决。这几道题都针对树同层元素做文章，也就使得如果采用回溯法，由于保存路劲的要求，需要额外的O(longN)的空间需求，N是树的节点个树。116和117可是通过只维护指针缩减为O(1)的空间效率。另外由于116严格的问题形式，同样可以写出启发式的分治解法，而117就难以做到，看了Discuss才理解别人通过指针实现的分层遍历。而199明显可以通过栈的方式替代递归，而我仍然采用的是BackTrack套路，不过这道题由于需要保存最后的解，Backtrack带来的空间消耗是别的方法也无法绕过的，因此就不尝试另外的方法实现了（其实是懒）。</p>
+<h2 id="实现中的python-tips"><a href="#实现中的python-tips" class="headerlink" title="实现中的python tips"></a>实现中的python tips</h2><ol>
+<li>（104. Maximum Depth of Binary Tree）使用<code>x is None</code>来判断x是不是None，==是判断值的，is是判断引用的，两个列表内容一致==就会返回True，而所有的None都是引用None常量。使用sys.getrefcount查看引用计数。假设x是一个有val属性的对象，但是x可能是None，print(x and x.val)能够在x存在时输出x的值，否则输出None。对于and表达式的规则，总结为：x or y 的值只可能是x或y.  x为真就是x, x为假就是y。x and y 的值只可能是x或y.  x为真就是y, x为假就是x</li>
+<li>(111. minimum depth of binary  tree) 最大正整数是啥</li>
+<li>(112. Path Sum) 当逻辑表达式中的元素可能为None时，在逻辑表达式后面放一个默认值，比如这道题中的<code>root.left and deeper(root.left, current_sum+root.left.val) or root.right and deeper(root.right, current_sum+root.right.val)</code>这个表达式，如果root的左节点存在但是递归返回False，右节点不存在，此时表达式直接被短路，返回None，因此一定要在后面加上一个or False作为默认值，但是假设逻辑表达式的各个元素一定是True或者False的话就没有关系。</li>
+<li>(513. Find Bottom Left Tree Value) 注意最后的return表达式，在and/or的逻辑表达式中，注意运算优先级，if/else三目运算符的优先级更高，所以要加上括号。</li>
+<li>(756. Pyramid Transition Matrix) 在<a href="http://python.jobbole.com/87832/" target="_blank" rel="noopener">永远别写for循环</a>一文中，提到的很多替代for循环的方法，当然Python代码的风格不是为了简练而简练，核心要义是<strong>优美胜过丑陋，显式胜过隐式</strong>，还有<strong>扁平胜过嵌套</strong>，因此如果写出了一层一层的for循环还有if、else语句，真的很不python。这道题中，需要通过for循环对一个列表中的符合条件的每个元素进行处理，这种时候可以使用带if的列表生成式来代替。</li>
+<li>(105. Construct Binary Tree from Preorder and Inorder Traversal) 在之前的Backtrack的题目中大部分我都是直接在path的基础上切片或用加法操作生成一个新数组进行传参，这道题的话一个加速的手段就是把inorder中的值和下标建立索引，然而如果每次生成新的子列表的话，这个索引就不能用了，所以改为传递新的子数组在原数组中的左右界，这样减小了每次传参时建立新数组的开销，也能重复利用下表索引，这个技巧对于C程序员应该是驾轻就熟的。</li>
+<li>(301. Remove Invalid Parentheses) 对于一个字符串s，想要获取其最后一个字符，也许s[-1:]是比s[-1]更好的方式，因为前者在s为空的情况下也能正常工作。</li>
+<li>(124    Binary Tree Maximum Path Sum) 一开始跑了一遍超出在最大深度了也不知道怎么搞的，后来再一跑又没事了，记录一下调整最大递归栈的方式：<code>import sys; sys.setrecursionlimit(1000000))</code>。</li>
+<li>对结构体排序并以结构体中某个字段为排序键：<code>sort(struct, key=lambda x:x.key_field)</code></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/04/02/程序员的玩具-2018-04-04-LC-DFS/" data-id="cjxo5e7d9005qz16d2s2fcuq2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../19/Python-2018-04-19-Decorator/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          python中的装饰器
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../01/Python-2018-04-01-PythonTrick/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">仓鼠一样收集到的python技巧</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

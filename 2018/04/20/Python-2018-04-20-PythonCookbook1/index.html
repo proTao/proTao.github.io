@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Python Cookbook3 (1)数据结构与算法 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. 解压序列赋值给多个变量基本用法很简单，注意的是这种解压赋值可以用在任何可迭代对象上面,而不仅仅是列表或者元组。 包括字符串, 文件对象, 迭代器和生成器。12a, b, c = &quot;abc&quot;x1, x2, x3 = range(3) # 我也不知道这有啥用 2. 解压可迭代对象赋值给多个变量扩展的迭代解压语法是专门为解压不确定个数或任意个数元素的可迭代对象而设计的。星号表达式在迭代元素为可变">
+<meta name="keywords" content="reading,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Cookbook3 (1)数据结构与算法">
+<meta property="og:url" content="https://protao.github.io/2018/04/20/Python-2018-04-20-PythonCookbook1/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="1. 解压序列赋值给多个变量基本用法很简单，注意的是这种解压赋值可以用在任何可迭代对象上面,而不仅仅是列表或者元组。 包括字符串, 文件对象, 迭代器和生成器。12a, b, c = &quot;abc&quot;x1, x2, x3 = range(3) # 我也不知道这有啥用 2. 解压可迭代对象赋值给多个变量扩展的迭代解压语法是专门为解压不确定个数或任意个数元素的可迭代对象而设计的。星号表达式在迭代元素为可变">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/cover/python3_cookbook_cover.png">
+<meta property="og:updated_time" content="2019-05-15T14:38:05.405Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python Cookbook3 (1)数据结构与算法">
+<meta name="twitter:description" content="1. 解压序列赋值给多个变量基本用法很简单，注意的是这种解压赋值可以用在任何可迭代对象上面,而不仅仅是列表或者元组。 包括字符串, 文件对象, 迭代器和生成器。12a, b, c = &quot;abc&quot;x1, x2, x3 = range(3) # 我也不知道这有啥用 2. 解压可迭代对象赋值给多个变量扩展的迭代解压语法是专门为解压不确定个数或任意个数元素的可迭代对象而设计的。星号表达式在迭代元素为可变">
+<meta name="twitter:image" content="https://protao.github.io/img/cover/python3_cookbook_cover.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-Python-2018-04-20-PythonCookbook1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-04-19T16:00:00.000Z" itemprop="datePublished">2018-04-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/读书笔记/">读书笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python Cookbook3 (1)数据结构与算法
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/python3_cookbook_cover.png" alt></p>
+<h3 id="1-解压序列赋值给多个变量"><a href="#1-解压序列赋值给多个变量" class="headerlink" title="1. 解压序列赋值给多个变量"></a>1. 解压序列赋值给多个变量</h3><p>基本用法很简单，注意的是这种解压赋值可以用在任何可迭代对象上面,而不仅仅是列表或者元组。 包括字符串, 文件对象, 迭代器和生成器。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a, b, c = <span class="string">"abc"</span></span><br><span class="line">x1, x2, x3 = range(<span class="number">3</span>) <span class="comment"># 我也不知道这有啥用</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="2-解压可迭代对象赋值给多个变量"><a href="#2-解压可迭代对象赋值给多个变量" class="headerlink" title="2. 解压可迭代对象赋值给多个变量"></a>2. 解压可迭代对象赋值给多个变量</h3><p>扩展的迭代解压语法是专门为解压不确定个数或任意个数元素的可迭代对象而设计的。星号表达式在迭代元素为可变长元组的序列时是很有用的。星号表达式一定可以得到一个列表，即使没有元素分配给他。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">data = (</span><br><span class="line">    (<span class="string">'scores'</span>, <span class="number">98</span>,<span class="number">97</span>,<span class="number">99</span>),</span><br><span class="line">    (<span class="string">'names'</span>, <span class="string">'tom'</span>,<span class="string">'jack'</span>),</span><br><span class="line">    (<span class="string">'ages'</span>, )</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> tag, *content <span class="keyword">in</span> data:</span><br><span class="line">    print(<span class="string">"&#123;&#125;:&#123;&#125;"</span>.format(tag, content))</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h3 id="3-保留最后n个元素"><a href="#3-保留最后n个元素" class="headerlink" title="3. 保留最后n个元素"></a>3. 保留最后n个元素</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">search</span><span class="params">(lines,   pattern,    history=<span class="number">5</span>)</span>:</span></span><br><span class="line">    previous_lines  =   deque(maxlen=history)</span><br><span class="line">    <span class="keyword">for</span> li  <span class="keyword">in</span>  lines:</span><br><span class="line">        <span class="keyword">if</span>  pattern <span class="keyword">in</span>  li:</span><br><span class="line">            <span class="keyword">yield</span>   li, previous_lines</span><br><span class="line">        previous_lines.append(li)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">r'./cookbook/somefile.txt'</span>)    <span class="keyword">as</span>  f:</span><br><span class="line">    <span class="keyword">for</span> line,   prevlines   <span class="keyword">in</span>  search(f,   <span class="string">'python'</span>,   <span class="number">5</span>):</span><br><span class="line">        <span class="keyword">for</span> pline   <span class="keyword">in</span>  prevlines:</span><br><span class="line">            print(pline,    end=<span class="string">''</span>)</span><br><span class="line">        print(line, end=<span class="string">''</span>)</span><br><span class="line">        print(<span class="string">'-'</span>   *   <span class="number">20</span>)</span><br></pre></td></tr></table></figure>
+<p>我们在写查询元素的代码时,通常会使用包含yield表达式的生成器函数,也就是我们上面示例代码中的那样。这样可以将搜索过程代码和使用搜索结果代码解耦。<br>在队列两端插入或删除元素时间复杂度都是O(1),而在列表的开头插入或删除元素的时间复杂度为O(N)。</p>
+<h3 id="4-查找最大或最小的n个元素"><a href="#4-查找最大或最小的n个元素" class="headerlink" title="4. 查找最大或最小的n个元素"></a>4. 查找最大或最小的n个元素</h3><p><code>import heapq</code>，使用heapq进行堆结构的相关操作。<br>复习一下堆：堆需要几个基本操作（上浮 shift_up、下沉 shift_down、插入 push、弹出 pop、取顶 top、堆排序 heap_sort），其中上浮在插入时用到，下沉在弹出时用到。通常只取出最大或最小的几个元素时，堆结构会用到。</p>
+<h3 id="5-优先级队列"><a href="#5-优先级队列" class="headerlink" title="5. 优先级队列"></a>5. 优先级队列</h3><p>这里需要用到一个trick就是元组之间也是可以比较的，只要元组之间对应的元素均可以比较。<br>因此实现一个优先级队列需要维护一个最小堆，然后堆元素为(-priority, index, val)。index是一个自增1的序号，保证先插入的元素先弹出。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 原书中使用类来实现，但是后文提到过，如果只有少量的数据需要存储，可以使用闭包来实现</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">makeHeap</span><span class="params">()</span>:</span></span><br><span class="line">    data = []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">top</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            res = data[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">return</span> res</span><br><span class="line">        <span class="keyword">except</span> Exception:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">res</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(e)</span>:</span></span><br><span class="line">        heapq.heappush(data, e)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">return</span> heapq.heappop(data)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">()</span>:</span></span><br><span class="line">        print(data)</span><br><span class="line">    res.top = top</span><br><span class="line">    res.push = push</span><br><span class="line">    res.pop = pop</span><br><span class="line">    res.show = show</span><br><span class="line">    <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure></p>
+<h3 id="6-字典中的键映射多个值"><a href="#6-字典中的键映射多个值" class="headerlink" title="6. 字典中的键映射多个值"></a>6. 字典中的键映射多个值</h3><p>没啥，就是以容器作为键。<br>有几个对于字典的小技巧，设置取值失败或设置初值的简易函数，比如setdefault和get，使用defaultdict代码会很简单，但是普通的访问会使得defaultdict新增数据。比如假设d = defaultdict(list)中没有键1，访问d[1]后会导致在d中创建一个{1: []}。</p>
+<h3 id="7-字典排序"><a href="#7-字典排序" class="headerlink" title="7. 字典排序"></a>7. 字典排序</h3><p>使用collections模块中的OrderedDict类，在迭代操作的时候它会保持元素被插入时的顺序,当你想要构建一个将来需要序列化或编码成其他格式的映射的时候,OrderedDict是非常有用的。比如,你想精确控制以JSON编码后字段的顺序,你可以先使用OrderedDict来构建这样的数据。<br>OrderedDict内部维护着一个根据键插入顺序排序的双向链表。每次当一个新的元素插入进来的时候,它会被放到链表的尾部。对于一个已经存在的键的重复赋值不会改变键的顺序。需要注意的是,一个OrderedDict的大小是一个普通字典的两倍,因为它内部维护着另外一个链表。</p>
+<h3 id="8-字典的运算"><a href="#8-字典的运算" class="headerlink" title="8. 字典的运算"></a>8. 字典的运算</h3><p>如果你在一个字典上执行普通的数学运算,你会发现它们仅仅作用于键,而不是值。<br>例如求最大值：思路是使用zip<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">prices=&#123;</span><br><span class="line">	<span class="string">'ACME'</span>:	<span class="number">45.23</span>,</span><br><span class="line">	<span class="string">'AAPL'</span>:	<span class="number">612.78</span>,</span><br><span class="line">	<span class="string">'IBM'</span>:	<span class="number">205.55</span>,</span><br><span class="line">	<span class="string">'HPQ'</span>:	<span class="number">37.20</span>,</span><br><span class="line">	<span class="string">'FB'</span>:	<span class="number">10.75</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">prices_sorted = sorted(zip(prices.values(), prices.keys()))//排列或其他类似的操作</span><br></pre></td></tr></table></figure></p>
+<h3 id="9-查找两字典的相同键"><a href="#9-查找两字典的相同键" class="headerlink" title="9. 查找两字典的相同键"></a>9. 查找两字典的相同键</h3><p>为了寻找两个字典的相同点,可以简单的在两字典的keys()或者items()方法返回结果上执行集合操作。直接通过<code>-</code>,<code>&amp;</code>等操作符。keys方法返回字典键的一个视图，键视图的一个很少被了解的特性就是它们也支持集合操作,比如集合并、交、差运算。所以,如果你想对集合的键执行一些普通的集合操作,可以直接使用键视图对象而不用先将它们转换成一个set。字典的items()方法返回一个包含(键,值)对的元素视图对象。这个对象同样也支持集合操作,并且可以被用来查找两个字典有哪些相同的键值对。</p>
+<h3 id="10-删除序列相同元素并保持顺序"><a href="#10-删除序列相同元素并保持顺序" class="headerlink" title="10. 删除序列相同元素并保持顺序"></a>10. 删除序列相同元素并保持顺序</h3><p>这个其实就是leetcode中很常见的数组题，需要注意的是，如果写一个函数，可以用生成器来写，即用yield代替return</p>
+<h3 id="11-命名切片"><a href="#11-命名切片" class="headerlink" title="11. 命名切片"></a>11. 命名切片</h3><p>一般来讲,代码中如果出现大量的硬编码下标值会使得可读性和可维护性大大降低。比如,如果你回过来看看一年前你写的代码,你会摸着脑袋想那时候自己到底想干嘛啊。这里的解决方案是一个很简单的方法让你更加清晰的表达代码到底要做什么。内置的slice(start, stop, step)函数创建了一个切片对象(具有start，stop， step属性),可以被用在任何切片允许使用的地方。<br>可以使用切片对象的indices方法调整切片对象避免索引溢出。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = slice(<span class="number">5</span>,<span class="number">50</span>,<span class="number">2</span>)</span><br><span class="line">s = <span class="string">"helloworld"</span></span><br><span class="line">s[a.indices(len(s))] <span class="comment"># 'w','r','d'</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="12-序列中出现最多的元素"><a href="#12-序列中出现最多的元素" class="headerlink" title="12. 序列中出现最多的元素"></a>12. 序列中出现最多的元素</h3><p>collections.Counter类就是专门为这类问题而设计的,它甚至有一个有用的most_common(n)方法直接给了你答案。这个在leetcode类似题目的别人的Solution中已经见到过<br>作为输入, Counter 对象可以接受任意的 hashable 序列对象。在底层实现上,一个 Counter 对象就是一个字典,将元素映射到它出现的次数上。<br>Counter 对象在几乎所有需要制表或者计数数据的场合是非常有用的工具。在解决这类问题的时候你应该优先选择它,而不是手动的利用字典去实现。<br>Counter对象重载了运算符，两个Counter对象是可以进行数学运算的。</p>
+<h3 id="13-通过某个关键字排序一个字典列表"><a href="#13-通过某个关键字排序一个字典列表" class="headerlink" title="13. 通过某个关键字排序一个字典列表"></a>13. 通过某个关键字排序一个字典列表</h3><p>复杂结构的排序我们之前就见到过，然而使用itemgetter()方式会比lambda表达式运行的稍微快点。因此,如果你对性能要求比较高的话就使用itemgetter()方式。<br>sorted接受一个callable对象作为排序键参数，itemgetter()函数就是负责创建这个 callable 对象的。itemgetter接受一个结构类型，基本等价于中括号操作，实际上可以传给itemgetter一个字典键名称,一个整形值或者任何能够传入一个对象的 <strong>getitem</strong>() 方法的值。如果你传入多个索引参数给itemgetter() ,它生成的 callable 对象会返回一个包含所有元素值的元组。</p>
+<h3 id="14-排序不支持原生比较的对象"><a href="#14-排序不支持原生比较的对象" class="headerlink" title="14. 排序不支持原生比较的对象"></a>14. 排序不支持原生比较的对象</h3><p>和上面差不多，不过这里所谓“对象”，和上面的区别就在于上面的排序键是字典中的某个键对应的值，所以使用operator.itemgeeter代替<strong>getitem</strong>方法，这里以对象的某个属性为排序键，实际上就是使用“点”操作符，所以用operator.attrgetter代替<strong>getattribute</strong>方法。<br>类似于itemgetter，attrgetter可以接受多个键参数，返回一个可比较的键元组。</p>
+<h3 id="15-通过某个字段将记录分组"><a href="#15-通过某个字段将记录分组" class="headerlink" title="15. 通过某个字段将记录分组"></a>15. 通过某个字段将记录分组</h3><p>使用itertools中的groupby<br>groupby() 函数扫描整个序列并且查找连续相同值(或者根据指定key函数返回值相同)的元素序列。在每次迭代的时候,它会返回一个值和一个迭代器对象,这个迭代器对象可以生成元素值全部等于上面那个值的组中所有对象。因此一个非常重要的准备步骤是要根据指定的字段将数据排序。因为 groupby() 仅仅检查连续的元素,如果事先并没有排序完成的话,分组函数将得不到想要的结果。</p>
+<h3 id="16-过滤序列元素"><a href="#16-过滤序列元素" class="headerlink" title="16. 过滤序列元素"></a>16. 过滤序列元素</h3><p>方法1: 列表推导<br>方法2：生成器表达式<br>方法3：filter，该函数创建一个迭代器<br>方法4：itertools.compress，输入两个序列，前者是数据序列，后者是指示序列，指示序列元素为True时，yield出数据序列中对应的元素。</p>
+<h3 id="17-从字典中提取子集"><a href="#17-从字典中提取子集" class="headerlink" title="17. 从字典中提取子集"></a>17. 从字典中提取子集</h3><p>直接字典推导</p>
+<h3 id="18-映射名称到序列元素"><a href="#18-映射名称到序列元素" class="headerlink" title="18. 映射名称到序列元素"></a>18. 映射名称到序列元素</h3><p>意义在于避免代码中的magic number，和前面提到过得将切片命名是一样的道理，即给下标命名。<br>collections.namedtuple() 函数通过使用一个普通的元组对象来帮你解决这个问题。这个函数实际上是一个返回Python中标准元组类型子类的一个<strong>工厂方法</strong>。你需要传递一个类型名和你需要的字段给它,然后它就会返回一个类,你可以初始化这个类,为你定义的字段传递值等。尽管namedtuple的实例看起来像一个普通的类实例,但是它跟元组类型是可交换的,支持所有的普通元组操作,比如索引和解压。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Record = namedtuple(<span class="string">"Person"</span>, [<span class="string">'name'</span>, <span class="string">'age'</span>, <span class="string">'gender'</span>,<span class="string">'lover'</span>])</span><br><span class="line">p1 = Record(<span class="string">"Zhang Yongtao"</span>,<span class="number">24</span>,<span class="string">'m'</span>,<span class="string">'Huang Ying'</span>)</span><br><span class="line">print(p1[<span class="number">0</span>])</span><br><span class="line">print(p1.name)</span><br><span class="line"></span><br><span class="line"><span class="comment"># trick:参数的解压</span></span><br><span class="line">r = (<span class="string">"Huang Ying"</span>,<span class="number">24</span>,<span class="string">'f'</span>,<span class="string">'Zhang Yongtao'</span>)</span><br><span class="line">p2 = Record(*r)</span><br><span class="line"></span><br><span class="line">r = dict(name=<span class="string">"Sun Qi"</span>,age=<span class="number">23</span>,gender=<span class="string">'m'</span>,lover=<span class="keyword">None</span>)</span><br><span class="line">p3 = Record(**r)</span><br></pre></td></tr></table></figure></p>
+<p>命名元组另一个用途就是作为字典的替代,因为字典存储需要更多的内存空间。如果你需要构建一个非常大的包含字典的数据结构,那么使用命名元组会更加高效。但是需要注意的是,不像字典那样,一个命名元组是不可更改的。</p>
+<p>如果你真的需要改变然后的属性,那么可以使用命名元组实例的 _replace() 方法, 它会创建一个全新的命名元组并将对应的字段用新的值取代。<br>最后要说的是,如果你的目标是定义一个需要更新很多实例属性的高效数据结构,那么命名元组并不是你的最佳选择。这时候你应该考虑定义一个包含 <strong>slots</strong> 方法的类。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p3 = p3._replace(lover=<span class="string">"Chen Zhenguo"</span>) <span class="comment"># 返回新的对象，因为nametuple不可变</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="19-转化并同时计算数据"><a href="#19-转化并同时计算数据" class="headerlink" title="19. 转化并同时计算数据"></a>19. 转化并同时计算数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">s = sum((x * x <span class="keyword">for</span> x <span class="keyword">in</span> nums))	<span class="comment"># 显示的传递一个生成器表达式对象</span></span><br><span class="line">s = sum(x * x <span class="keyword">for</span> x <span class="keyword">in</span> nums)	<span class="comment"># 更加优雅的实现方式,省略了括号</span></span><br><span class="line">s = sum([x * x <span class="keyword">for</span> x <span class="keyword">in</span> nums])	<span class="comment"># 不好的方式：多一个步骤,先创建一个额外的列表。</span></span><br></pre></td></tr></table></figure>
+<h3 id="20-合并多个字典或映射"><a href="#20-合并多个字典或映射" class="headerlink" title="20. 合并多个字典或映射"></a>20. 合并多个字典或映射</h3><p>现在假设你必须在两个字典中执行查找操作(比如先从a中找,如果找不到再在b中找)。一个非常简单扼要解决方案就是使用collections模块中的ChainMap类。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">a = &#123;<span class="string">'x'</span>: <span class="number">1</span>, <span class="string">'z'</span>: <span class="number">3</span>&#125;</span><br><span class="line">b = &#123;<span class="string">'y'</span>: <span class="number">2</span>, <span class="string">'z'</span>: <span class="number">4</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> ChainMap</span><br><span class="line">c = ChainMap(a,b)</span><br><span class="line">print(c[<span class="string">'x'</span>])	<span class="comment"># Outputs 1 (from a)</span></span><br><span class="line">print(c[<span class="string">'y'</span>])	<span class="comment"># Outputs 2 (from b)</span></span><br><span class="line">print(c[<span class="string">'z'</span>])	<span class="comment"># Outputs 3 (from a)</span></span><br></pre></td></tr></table></figure></p>
+<p>一个ChainMap接受多个字典并将它们在逻辑上变为一个字典。然后,这些字典并不是真的合并在一起了,ChainMap类只是在内部创建了一个容纳这些字典的列表并重新定义了一些常见的字典操作来遍历这个列表。大部分字典操作都是可以正常使用的。<br>因此，如果出现重复键,那么第一次出现的映射值会被返回。对于字典的更新或删除操作总是影响的是列表中第一个字典。</p>
+<p>作为ChainMap的替代,你可能会考虑使用update()方法将两个字典合并。这样也能行得通,但是它需要你创建一个完全不同的字典对象(或者是破坏现有字典结构)。同时,如果原字典做了更新,这种改变不会反应到新的合并字典中去。ChianMap使用原来的字典,它自己不创建新的字典。</p>
+<hr>
+<ol>
+<li><a href="https://www.zhihu.com/question/19794855/answer/129270643" target="_blank" rel="noopener">知乎：怎样才算是精通python</a></li>
+<li><a href="http://python.jobbole.com/85319/" target="_blank" rel="noopener">Python格式化字符串</a></li>
+<li><a href="http://python.jobbole.com/86481/" target="_blank" rel="noopener">Python3.5 协程究竟是个啥</a></li>
+<li><a href="http://www.jb51.net/article/55748.htm" target="_blank" rel="noopener">python多重继承新算法C3介绍</a></li>
+<li><a href="http://python.jobbole.com/86787/" target="_blank" rel="noopener">Python: 你不知道的 super</a></li>
+<li><a href="https://www.cnblogs.com/duanv/p/5947525.html" target="_blank" rel="noopener">python的类变量与实例变量以及<strong>dict</strong>属性</a></li>
+<li><a href="http://www.jb51.net/article/86749.htm" target="_blank" rel="noopener">详解Python中 <strong>get</strong>和<strong>getattr</strong>和<strong>getattribute</strong>的区别</a></li>
+<li><a href="http://python.jobbole.com/85176/" target="_blank" rel="noopener">Python黑魔法————描述器</a></li>
+<li><a href="https://www.zhihu.com/question/20021164" target="_blank" rel="noopener">Python中的classmethod和staticmethod有什么具体用途</a></li>
+<li><a href="https://www.zhihu.com/question/26930016" target="_blank" rel="noopener">如何理解python装饰器</a></li>
+<li><a href="https://www.cnblogs.com/cicaday/p/python-decorator.html" target="_blank" rel="noopener">详解python的装饰器</a></li>
+<li><a href="http://python.jobbole.com/84095/" target="_blank" rel="noopener">Python <strong>getattribute</strong> vs <strong>getattr</strong> 浅谈</a></li>
+<li><a href="http://python.jobbole.com/85685/" target="_blank" rel="noopener">你真的理解Python中MRO算法吗？</a></li>
+<li><a href="https://blog.csdn.net/weixin_35955795/article/details/53053762" target="_blank" rel="noopener">关于python中inspect模块的一些探究</a></li>
+<li><a href="http://python.jobbole.com/85126/" target="_blank" rel="noopener">Python “黑魔法” 之 Meta Classes</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/04/20/Python-2018-04-20-PythonCookbook1/" data-id="cjxo5e6p9002tz16dff8y3g3q" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../21/Python-2018-04-21-PythonCookbook4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Python Cookbook3 (4)迭代器与生成器
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../19/Python-2018-04-19-Decorator/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python中的装饰器</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

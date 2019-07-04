@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>从优先队列到贪心算法 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="优先队列需求在算法设计中，我们常有求一个容器中的最小值或最大值的需求。比如求一个有100万(后面用N表示总元素数目)的元素的数组中的最大值，我们会只维护当前最大值，然后遍历数组中的每一个元素并更新最大值。那么，如果需要求前K大元素或者第K大元素，（为了方便思考，可以简单的假设K=10）。如果用排序的方法解决该问题就会显得太过臃肿，O(nlogn)的时间复杂度暂且不提，如果使用内部排序，更要付出能">
+<meta name="keywords" content="algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从优先队列到贪心算法">
+<meta property="og:url" content="https://protao.github.io/2018/08/16/程序员的玩具-2018-08-16-PriorityQueue/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="优先队列需求在算法设计中，我们常有求一个容器中的最小值或最大值的需求。比如求一个有100万(后面用N表示总元素数目)的元素的数组中的最大值，我们会只维护当前最大值，然后遍历数组中的每一个元素并更新最大值。那么，如果需要求前K大元素或者第K大元素，（为了方便思考，可以简单的假设K=10）。如果用排序的方法解决该问题就会显得太过臃肿，O(nlogn)的时间复杂度暂且不提，如果使用内部排序，更要付出能">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/PQ1.png">
+<meta property="og:updated_time" content="2018-08-16T14:32:22.612Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从优先队列到贪心算法">
+<meta name="twitter:description" content="优先队列需求在算法设计中，我们常有求一个容器中的最小值或最大值的需求。比如求一个有100万(后面用N表示总元素数目)的元素的数组中的最大值，我们会只维护当前最大值，然后遍历数组中的每一个元素并更新最大值。那么，如果需要求前K大元素或者第K大元素，（为了方便思考，可以简单的假设K=10）。如果用排序的方法解决该问题就会显得太过臃肿，O(nlogn)的时间复杂度暂且不提，如果使用内部排序，更要付出能">
+<meta name="twitter:image" content="https://protao.github.io/img/PQ1.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-程序员的玩具-2018-08-16-PriorityQueue" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-08-16T11:55:33.000Z" itemprop="datePublished">2018-08-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      从优先队列到贪心算法
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h2 id="优先队列"><a href="#优先队列" class="headerlink" title="优先队列"></a>优先队列</h2><h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>在算法设计中，我们常有求一个容器中的最小值或最大值的需求。比如求一个有100万(后面用N表示总元素数目)的元素的数组中的最大值，我们会只维护当前最大值，然后遍历数组中的每一个元素并更新最大值。那么，如果需要求前K大元素或者第K大元素，（为了方便思考，可以简单的假设K=10）。如果用排序的方法解决该问题就会显得太过臃肿，O(nlogn)的时间复杂度暂且不提，如果使用内部排序，更要付出能存下整个数组的存储代价。那么简单的扩展求最大值的方法，只维护K个变量，然后从头遍历数组，每次拿到一个新的元素就更新当前的K个变量。如果用数组存放这k个元素，此时的时间复杂度是O(KN)。这时我们实际上是一直保持这K个元素有序的，再次放宽限制，如果只需要知道前K个元素是哪K个的话，每次只需要用最小的元素和新来的元素比就行，比最小的元素大的话就有了被我们维护的资格，把它加入容器并踢出最小元素就可以了。</p>
+<a id="more"></a>
+<p>除了这种简单的情况，比如后面的一些常用的贪心算法，或者操作系统内部进行任务调度的时候经常遇到需要拿到最小元素的需求。通常来说，满足该需求的该数据结构至少需要有添加，取最小值，删除最小值的操作接口。最简单的实现方法无非就是前面说的用一个数组。但是数组是不能避免某一项操作是O(n)的时间复杂度的，无论是让数组有序还是无序。</p>
+<p>维护一个树形结构是一个可行的思路。堆的基本概念就不具体展开了。对于堆实际上还有很多的优化，比如对于合并操作继续优化的话，可以得到二项式堆。各自操作的时间效率如下表。</p>
+<p><img src="/img/PQ1.png" alt></p>
+<h3 id="最大堆的基本操作"><a href="#最大堆的基本操作" class="headerlink" title="最大堆的基本操作"></a>最大堆的基本操作</h3><p>假设堆的存储结构由数组实现，因为堆的树形结构满足紧凑的完全二叉树，</p>
+<ul>
+<li>push：将元素加入数组尾，然后上浮。</li>
+<li>pop：将堆顶元素与数组尾元素交换，pop数组尾元素进临时变量，将堆顶元素下沉，然后返回临时变量。</li>
+<li>minElement：O(1)，直接返回堆顶。</li>
+<li>up：O(logn), 将下层的较大元素与其父节点进行交换</li>
+<li>down：O(logn), 将上层的较小元素与其较大的孩子节点进行交换</li>
+</ul>
+<h3 id="建堆"><a href="#建堆" class="headerlink" title="建堆"></a>建堆</h3><h3 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h3><p>有了上面的优先队列的思想后，可以想到，堆排序其实是选择排序的简单扩展。只需要将数组初始化为堆，然后把不断的执行选择最小元素即可。注意的是把选出的元素放到堆的数组尾部，然后让堆不再维护该部分即可。</p>
+<h3 id="例题：LC215-Kth-Largest-Element-in-an-Array"><a href="#例题：LC215-Kth-Largest-Element-in-an-Array" class="headerlink" title="例题：LC215. Kth Largest Element in an Array"></a>例题：LC215. Kth Largest Element in an Array</h3><p>见另一篇博客。</p>
+<h3 id="高级结构"><a href="#高级结构" class="headerlink" title="高级结构"></a>高级结构</h3><h4 id="Binomial-Heap（二项堆）"><a href="#Binomial-Heap（二项堆）" class="headerlink" title="Binomial Heap（二项堆）"></a>Binomial Heap（二项堆）</h4><p>未完待续</p>
+<h4 id="斐波那契堆"><a href="#斐波那契堆" class="headerlink" title="斐波那契堆"></a>斐波那契堆</h4><p>未完待续</p>
+<h4 id="IndexMinHeap"><a href="#IndexMinHeap" class="headerlink" title="IndexMinHeap"></a>IndexMinHeap</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MinHeap</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.N = <span class="number">0</span></span><br><span class="line">        self.pq = [<span class="keyword">None</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.N == <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">size</span><span class="params">(size)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.N</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        print(<span class="string">"IndexMinHeap Insert"</span>, index)</span><br><span class="line">        self.N += <span class="number">1</span></span><br><span class="line">        self.pq.append(key)</span><br><span class="line">        self._swim(self.N)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delMin</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._exch(<span class="number">1</span>, self.N)</span><br><span class="line">        self.N -= <span class="number">1</span></span><br><span class="line">        res = self.pq.pop()</span><br><span class="line">        self._sink(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_comp</span><span class="params">(self, i, j)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.pq[i] &gt; self.pq[j]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_exch</span><span class="params">(self, i, j)</span>:</span></span><br><span class="line">        self.pq[i], self.pq[j] = self.pq[j], self.pq[i]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_swim</span><span class="params">(self, k)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> k &gt; <span class="number">1</span> <span class="keyword">and</span> self._comp(k&gt;&gt;<span class="number">1</span>, k):</span><br><span class="line">            self._exch(k&gt;&gt;<span class="number">1</span> , k)</span><br><span class="line">            k = k&gt;&gt;<span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_sink</span><span class="params">(self, k)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> k &lt;&lt; <span class="number">1</span> &lt;= self.N:</span><br><span class="line">            j = k &lt;&lt; <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> j &lt; self.N <span class="keyword">and</span> self._comp(j, j+<span class="number">1</span>):</span><br><span class="line">                j += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> self._comp(k, j):</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            self._exch(k, j)</span><br><span class="line">            k = j</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> str(self.pq[<span class="number">1</span>:])</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IndexMinHeap</span><span class="params">(MinHeap)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.keys = &#123;&#125;</span><br><span class="line">        self.qp = &#123;&#125;</span><br><span class="line">        MinHeap.__init__(self)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">contains</span><span class="params">(self, index)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> index <span class="keyword">in</span> qp</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert</span><span class="params">(self, index, key)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        index: name or index</span></span><br><span class="line"><span class="string">        key: weight, the value used to compare in the heap</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        print(<span class="string">"IndexMinHeap Insert"</span>, index, <span class="string">"with weight"</span>, key)</span><br><span class="line">        self.N += <span class="number">1</span></span><br><span class="line">        self.pq.append(index)    <span class="comment"># position -&gt; index</span></span><br><span class="line">        self.qp[index] = self.N  <span class="comment"># index -&gt; position</span></span><br><span class="line">        self.keys[index] = key <span class="comment"># index -&gt; weight</span></span><br><span class="line">        self._swim(self.N)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delMin</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._exch(<span class="number">1</span>, self.N)</span><br><span class="line">        indexOfMin = self.pq.pop()</span><br><span class="line">        self.N -= <span class="number">1</span></span><br><span class="line">        self._sink(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">del</span> self.keys[indexOfMin]</span><br><span class="line">        <span class="keyword">del</span> self.qp[indexOfMin]</span><br><span class="line">        <span class="keyword">return</span> indexOfMin</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">change</span><span class="params">(self, index, key)</span>:</span></span><br><span class="line">        self.keys[index] = key</span><br><span class="line">        self._swim(self.qp[index])</span><br><span class="line">        self._sink(self.qp[index])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">keyOf</span><span class="params">(self, index)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.keys[index]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, index)</span>:</span></span><br><span class="line">        i = self.qp[index];</span><br><span class="line">        self.n -= <span class="number">1</span></span><br><span class="line">        self._exch(i, self.n);</span><br><span class="line">        self._swim(i);</span><br><span class="line">        self._sink(i);</span><br><span class="line">        self.keys[index] = null;</span><br><span class="line">        self.qp[index] = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"最近节点"</span>, a.minIndex())</span><br><span class="line">        print(<span class="string">"最近距离"</span>, a.minWeight())</span><br><span class="line">        print([(i, self.keys[i]) <span class="keyword">for</span> i <span class="keyword">in</span> self.pq[<span class="number">1</span>:]])</span><br><span class="line">        print(<span class="string">"pq"</span>, self.pq)</span><br><span class="line">        print(<span class="string">"qp"</span>, self.qp)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_comp</span><span class="params">(self, i, j)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.keys[self.pq[i]] &gt; self.keys[self.pq[j]]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_exch</span><span class="params">(self, i, j)</span>:</span></span><br><span class="line">        self.pq[i], self.pq[j] = self.pq[j], self.pq[i]</span><br><span class="line">        self.qp[self.pq[i]] = i</span><br><span class="line">        self.qp[self.pq[j]] = j;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">minWeight</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.keys[self.pq[<span class="number">1</span>]]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">minIndex</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.pq[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    a = IndexMinHeap()</span><br><span class="line">    a.insert(<span class="string">'a'</span>, <span class="number">5</span>)</span><br><span class="line">    a.insert(<span class="string">'b'</span>, <span class="number">3</span>)</span><br><span class="line">    a.insert(<span class="string">'c'</span>, <span class="number">6</span>)</span><br><span class="line">    a.insert(<span class="string">'d'</span>, <span class="number">2</span>)</span><br><span class="line">    a.show()</span><br><span class="line">    print(a.keyOf(<span class="string">'a'</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    a.change(<span class="string">'a'</span>, <span class="number">1</span>)</span><br><span class="line">    a.show()</span><br><span class="line">    print(a.keyOf(<span class="string">'a'</span>))</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"delete the nearlest node"</span>)</span><br><span class="line">    print(a.delMin())</span><br></pre></td></tr></table></figure>
+<h3 id="与算法的结合"><a href="#与算法的结合" class="headerlink" title="与算法的结合"></a>与算法的结合</h3><h4 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h4><h4 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h4><hr>
+<p>参考：</p>
+<ol>
+<li><a href="https://algs4.cs.princeton.edu/24pq/IndexMinPQ.java.html" target="_blank" rel="noopener">java 实现的索引最小堆</a></li>
+<li>《算法（第四版）》</li>
+<li>《算法十八讲》卜东波</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/08/16/程序员的玩具-2018-08-16-PriorityQueue/" data-id="cjxo5e7dm0066z16d3gtkkode" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../17/机器学习-2018-08-17-point/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          统计机器学习要点总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="../程序员的玩具-2018-08-16-LC-Heap/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">LeetCode刷题笔记——Heap</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

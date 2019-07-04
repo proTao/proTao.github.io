@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>《Effective C++》第一部分：让自己习惯C++ | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="C 是一种简单的语言。它真正提供的只有有宏、指针、结构、数组和函数。不管什么问题,C 都靠宏、指针、结构、数组和函数来解决。而 C++不是这样。 条款1：视 C++ 为一个语言联邦提要 C++ 高效编程守则视状况而变化，取决于你使用 C++ 的哪一个部分。  解释C++ 非常复杂，我们可以将其看作是一个多重泛型编程语言，同时支持过程式、面向对象、函数式、泛型、以及元编程。因此我们最好将 C++">
+<meta name="keywords" content="reading,C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Effective C++》第一部分：让自己习惯C++">
+<meta property="og:url" content="https://protao.github.io/2019/01/07/C-2019-01-07-Effective-CPP-I/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="C 是一种简单的语言。它真正提供的只有有宏、指针、结构、数组和函数。不管什么问题,C 都靠宏、指针、结构、数组和函数来解决。而 C++不是这样。 条款1：视 C++ 为一个语言联邦提要 C++ 高效编程守则视状况而变化，取决于你使用 C++ 的哪一个部分。  解释C++ 非常复杂，我们可以将其看作是一个多重泛型编程语言，同时支持过程式、面向对象、函数式、泛型、以及元编程。因此我们最好将 C++">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/cover/effcpp_cover.jpg">
+<meta property="og:updated_time" content="2019-06-26T03:33:58.791Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Effective C++》第一部分：让自己习惯C++">
+<meta name="twitter:description" content="C 是一种简单的语言。它真正提供的只有有宏、指针、结构、数组和函数。不管什么问题,C 都靠宏、指针、结构、数组和函数来解决。而 C++不是这样。 条款1：视 C++ 为一个语言联邦提要 C++ 高效编程守则视状况而变化，取决于你使用 C++ 的哪一个部分。  解释C++ 非常复杂，我们可以将其看作是一个多重泛型编程语言，同时支持过程式、面向对象、函数式、泛型、以及元编程。因此我们最好将 C++">
+<meta name="twitter:image" content="https://protao.github.io/img/cover/effcpp_cover.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-C-2019-01-07-Effective-CPP-I" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2019-01-07T07:23:51.000Z" itemprop="datePublished">2019-01-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/C/">C++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《Effective C++》第一部分：让自己习惯C++
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/effcpp_cover.jpg" alt></p>
+<p>C 是一种简单的语言。它真正提供的只有有宏、指针、结构、数组和函数。不管什么问题,C 都靠宏、指针、结构、数组和函数来解决。而 C++不是这样。</p>
+<h3 id="条款1：视-C-为一个语言联邦"><a href="#条款1：视-C-为一个语言联邦" class="headerlink" title="条款1：视 C++ 为一个语言联邦"></a>条款1：视 C++ 为一个语言联邦</h3><h4 id="提要"><a href="#提要" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>C++ 高效编程守则视状况而变化，取决于你使用 C++ 的哪一个部分。</li>
+</ol>
+<h4 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h4><p>C++ 非常复杂，我们可以将其看作是一个多重泛型编程语言，同时支持过程式、面向对象、函数式、泛型、以及元编程。因此我们最好将 C++ 看作是多个纯粹的次级语言的复合而非单一语言。次语言内部规则简单而明确，这有助于我们理解 C++。主要的次语言包括：</p>
+<ul>
+<li><code>C</code>。C 终究是 C++ 的基础，因此不可能不谈到 C，C++ 中的基本语法基于代码块、预处理器、内置数据类型、指针等等元素都来自与C。但是如果像使用 C 一样的使用 C++ ，就会暴露出 C 自身的一些局限性，比如没有模板、没有异常、没有重载。</li>
+<li><code>Object-Oriented C++</code>。是 C++ 主要对 C 的升级部分，是面向对象原则在 C++ 上的最直接实施。</li>
+<li><code>Template C++</code>。他带来了全新的编程泛型，也就是所谓的<em>template metaprogramming</em>(TMP，模板元编程)。TMP规则很少与 C++ 主流变成相互影响。【$$$\Rightarrow Item48$$$】</li>
+<li><code>STL</code>。主要涉及对容器、迭代器、算法以及函数对象的规约。</li>
+</ul>
+<a id="more"></a>
+<p>四个次语言各自有自身的最佳编程范式，因此 C++ 高效编程守则取决于你使用 C++ 的哪一部分。比如，纯 C 部分中使用内置类型时，传值比传引用更高效，然而在 object-oriented C 中由于构造和析构函数的存在，传常量引用的方式右边的更好。而在 STL 中，迭代器和函数都是基于指针的，因此，传值方式又变成较优方式了。【$$$\Rightarrow Item20$$$】</p>
+<h3 id="条款2：尽量以-const，enum，inline-替换-define"><a href="#条款2：尽量以-const，enum，inline-替换-define" class="headerlink" title="条款2：尽量以 const，enum，inline 替换 #define"></a>条款2：尽量以 const，enum，inline 替换 #define</h3><h4 id="提要-1"><a href="#提要-1" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>对于单纯常量，最好以 const 对象或者 enum 替换 #define。</li>
+<li>对于形似函数的宏，最好改用 inline 函数替换 #define。</li>
+</ol>
+<h4 id="解释-1"><a href="#解释-1" class="headerlink" title="解释"></a>解释</h4><p>该原则的实质其实是<strong>尽量用编译器而不用预处理</strong>。宏定义导致符号在编译阶段已经完全消失，因为都被预处理替换为对应的值了。这样的话如果出错，编译器无法给我们原始的变量名信息来帮助我们定位错误。</p>
+<p>宏定义可以简单的用常量来替换。除此之外，用宏来实现函数的效果也不是好的做法，直接用类型模板的<strong>inline</strong>函数可以实现同样的效果，好处是可预计的行为和类型安全。因为用了类型模板，为了防止拷贝构造带来的代价，可以使用常量引用的方式传参以及返回。【$$$\Rightarrow Item20$$$】</p>
+<p>需要说的一种特殊情况是<strong>常量指针</strong>。常量丁一式通常放在头文件内以被不同的文件引用，因此有必要将指针<strong>自身</strong>修饰为const类型。【$$$\Rightarrow Item3$$$】</p>
+<p>另外一种特殊情况是类内的常量。为了确保该常量只存在一份拷贝，需要 static 关键字。一般类的静态成员需要在类内（头文件中）声明，类外（实现文件中）定义并给出初值（有的编译器也可以在类内直接提供初值）。有的时候，我们在编译时就需要使用一些类内常量的值，比如定义一个常量表示长度，然后另一个数组变量需要使用该长度，但是此时还没有初值。补偿做法是使用“<strong>enum hack</strong>”，enum 的行为十分类似于 define。【$$$\Rightarrow Item18; 48$$$】</p>
+<h3 id="条款3：尽可能使用-const"><a href="#条款3：尽可能使用-const" class="headerlink" title="条款3：尽可能使用 const"></a>条款3：尽可能使用 const</h3><h4 id="提要-2"><a href="#提要-2" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>使用 const 声明可以帮助编译器检测出错误用法。const 可被施加于任何作用域内的对象、函数参数、函数返回类型、成员函数本体。</li>
+<li>编译器强制实施bitwise constness，但是我们在编写程序时应考虑到logical constness。</li>
+<li>当 const 成员和 non-const 成员函数有着实质等价的表现时，令 non-const 版本调用 const 版本可以避免代码重复。</li>
+</ol>
+<h4 id="解释-2"><a href="#解释-2" class="headerlink" title="解释"></a>解释</h4><p>使用 const 的好处在于它允许指定一种<strong>语意上</strong>的约束————“某种对象不能被修改”————并且由编译器具体来实施这种约束。</p>
+<p>const和指针的结合初学者很容易记混，看到这里的读者按理来说不应分不清这两者，如果真的有点忘了，可以参考我的<a href="https://protao.github.io/2019/04/01/C-2019-04-01-Tricks/">C++备忘录</a>的第26条。</p>
+<p>STL迭代器的作用就像一个<code>T*</code>指针，将迭代器用const修饰是让迭代器自身为常量，即不可以改变其指向，但是指向的东西可以改变。如果希望迭代器指的东西不可改动，那就使用<code>const_iterator</code>。</p>
+<p>对于函数，const也有很多用武之地。const作用于参数和局部变量的情况无需多说，const作用于函数返回值的情况却不多见，但是这有时可以避免很多无意中导致的错误，并且可以保证我们定义出“良好的用户自定义类型”。【$$$\Rightarrow Item24;18$$$】</p>
+<p>最复杂的场景，莫过于const成员函数了，const 使得该成员函数可以作用于 const 对象身上。更详细的说，第一，他们可以使接口变得清晰：我们可以放心的使用 const 成员函数并相信他们不会修改对象的局部数据。第二，我们都知道“<strong>pass-by-reference-to</strong>-const”方式可以改善效率，而const成员函数是唯一可以对常量对象进行操作的办法。请注意，const成员函数是会导致重载的发生的。【$$$\Rightarrow Item20$$$】</p>
+<p>等等！回头看上面写的第一条：“我们可以放心的使用 const 成员函数并相信他们不会修改对象的局部数据。”但是…我们真的可以这么放心吗？</p>
+<p>那要看我们对于“const”如何定义规则。对于这个问题，主要有两种声音，“physical constness”派和“logical constness”派，前者其实就是形式主义，后者更像是实质主义。在法律上形式合法和实质合法同等重要，但是通常，形式审查更加简单、效率更高；而实质审查会更灵活、更正义，但是也更复杂。C++ 遵循的规则呢，正是“physical constness”，也就是说，一个 const 成员函数，只要没有对 non-static 成员变量进行赋值，那就符合规则。</p>
+<p>但是，这就有漏洞可循了，看下面的代码片。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Text</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Text(<span class="keyword">char</span>* pp): pText(pp) &#123;&#125;;</span><br><span class="line">    <span class="keyword">char</span>&amp; <span class="keyword">operator</span>[](<span class="built_in">std</span>::<span class="keyword">size_t</span> position) <span class="keyword">const</span> &#123;<span class="keyword">return</span> pText[position]; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">char</span>* pText;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">const</span> Text <span class="title">t</span><span class="params">(<span class="string">"hello"</span>)</span></span>;</span><br><span class="line">    <span class="keyword">char</span>* pc = &amp;t[<span class="number">0</span>];</span><br><span class="line">    *pc = <span class="string">'H'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到上面的const成员函数没有赋值操作，不违反编译器的“形式审查”，因此编译通过，但是在我的环境中，执行时却出现了令人恼火的“段错误”，这是因为，尽管该函数自身保持了对象的物理上的常量性，但是却将内部环境暴露出来。【$$$\Rightarrow Item28$$$】</p>
+<p>另外，“logical constness”派主张只要类的使用者察觉不到对象改变队可以，比如一些从const成员方法，会修改自身出于效率考虑的缓存或计数器等变量时，外界是感受不到这种改动的。对于这种情况，C++提供了关键字<code>mutable</code>来修饰成员变量，对于mutable的变量，编译器在 const 方法内不再对其进行形式审查。</p>
+<p>最后，我们提到过，const成员函数会导致重载的发生，假设一个函数非常量和常量两个版本中有大量的重复代码（比如参数检验，记录日志等等）怎么办？【$$$\Rightarrow Item30$$$】</p>
+<p>很简单的答案：代理。但是是在const版本中调用non-const版本，还是反过来？答案是唯一的，是在non-const版本中调用const版本，原因应该不用多说，大家想一想就能明白。但是思路很简单，代码确有一定难度，因为这个过程中要用到强制转型（casting），而使用 casting 一般是一个糟糕的想法。【$$$\Rightarrow Item27$$$】</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>&#123;</span></span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span>&amp; <span class="keyword">operator</span>[](<span class="built_in">std</span>::<span class="keyword">size_t</span> position) <span class="keyword">const</span>&#123;</span><br><span class="line">    <span class="comment">// 一大堆业务代码</span></span><br><span class="line">    <span class="keyword">return</span> text[position];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>&amp; <span class="keyword">operator</span>[](<span class="built_in">std</span>::<span class="keyword">size_t</span> position) &#123;</span><br><span class="line">    	<span class="keyword">return</span> <span class="keyword">const_cast</span>&lt;<span class="keyword">char</span>&amp;&gt;( <span class="comment">// 将返回值的const去除</span></span><br><span class="line">        <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> TextBlock&amp;&gt;(*<span class="keyword">this</span>) <span class="comment">//将*this加上const，否则op[]会递归调用非const版本</span></span><br><span class="line">        [position] <span class="comment">// 调用 const 版本</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="条款4：确定对象被使用前已先被初始化"><a href="#条款4：确定对象被使用前已先被初始化" class="headerlink" title="条款4：确定对象被使用前已先被初始化"></a>条款4：确定对象被使用前已先被初始化</h3><h4 id="提要-3"><a href="#提要-3" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>为内置型对象进行手工初始化，因为C++不保证初始化他们。</li>
+<li>构造函数使用member initialization list，而不是在函数体内进行赋值。并且初始化顺序应当与类内的声明次序一致。</li>
+<li>为了避免跨编译单元的初始化次序问题，使用local static对象替换non-local static对象。</li>
+</ol>
+<h4 id="解释-3"><a href="#解释-3" class="headerlink" title="解释"></a>解释</h4><p>首先，你可以搞清楚“定义”、“声明”、“初始化”之间的关系吗？如果不行，请看一下<a href="https://protao.github.io/2019/04/01/C-2019-04-01-Tricks/">C++备忘录</a>的第27条。其次，你可以分清局部静态变量和非局部静态变量吗？如果不行，请移步<a href="https://protao.github.io/2019/04/01/C-2019-04-01-Tricks/">C++备忘录</a>的第29条。</p>
+<p>纯C程序员可能认为初始化会带来运行时成本，但是 C++ 中应该记住一个简单的规则：永远在使用对象前将其初始化。对于没有成员的内置类型，必须立刻手工完成此事。对于内置类型之外的其他东西，责任落在了构造函数的头上。</p>
+<p>但是使用构造函数中的<strong>初始化</strong>而不是<strong>赋值</strong>，简单地说就是使用<strong>成员初始列</strong>。区别在于，如果在成员在进入构造函数前会调用各自的default构造函数，而使用成员初始列的话，则会利用初始值各自调用<strong>拷贝构造</strong>。这里的原则是，为了清晰，对于所有的成员变量，都放在初始列中，对于一些没有初值的成员，也要放进去，区别是让其括号内没有处置，这样就调用成员的default构造函数了。</p>
+<p>又时有的类有大量的成员，还有多个构造函数，这样的话，可能会有很多初始列是重复的。一个小技巧是对于内置变量，不放在初始列中也可以，因为他们的复制和初始化的代价是一样的，可以统一把他们放到一个小的私有函数中，在后再构造函数中调用它来避免丑陋的重复。</p>
+<p>最后一种更复杂的情况就是不同编译单元内定义的非局部静态变量的初始化次序问题。问题就出现在，不同编译单元之间的费局部静态对象的初始化顺序是不被编译器保证的。这样的话，当一个编译单元内的non-local static对象的初始化涉及其他的编译单元内的non-local static对象时，就会有问题，因为那个对象可能还没有初始化。</p>
+<p>解决方法就是将non-local static对象变成local static对象。即，把它们放到函数中，然后返回引用。你看出来了吗，这其实就是一个singleton模式！这有效的原因是：C++保证，函数内的局部静态对象会在“函数调用期间且首次遇到该对象的定义时”进行初始化。这还带来一个额外的好处就是，如果这个singleton函数不被真正调用，就绝不会带来构造和析构成本。</p>
+<p>这种singleton函数是如此简单，使得他们很容易成为一个inline函数。【$$$\Rightarrow Item30$$$】</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2019/01/07/C-2019-01-07-Effective-CPP-I/" data-id="cjxo5e6oq002jz16dptjge8nu" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../10/C-2019-01-10-C-Primer18/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          《C++Primer》第十八章：用于大型程序的工具
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../../2018/12/29/C-2018-12-29-C-Primer17/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">《C++Primer》第十七章：标准库特殊设施</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

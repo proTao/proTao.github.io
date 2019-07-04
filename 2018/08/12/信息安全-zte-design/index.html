@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>项目报告——innerEye1 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、整体架构图系统整体架构分为三个部分，如下图所示，包括数据预处理、特征提取、异常用户检测。  二、预处理第二部分详细说明基于统计的特征提取，其中由于对于 uri 的自动标注得到的特征子模块较复杂，因此在 2.2.3 小节单独叙述。 2.1 数据格式原始数据中包含 27 个字段，实际使用的字段共计 18 个。下图展示了各个字段的含义与示例值。  2.2 数据清洗主要步骤：  过滤掉不是 27 个字">
+<meta name="keywords" content="security">
+<meta property="og:type" content="article">
+<meta property="og:title" content="项目报告——innerEye1">
+<meta property="og:url" content="https://protao.github.io/2018/08/12/信息安全-zte-design/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="一、整体架构图系统整体架构分为三个部分，如下图所示，包括数据预处理、特征提取、异常用户检测。  二、预处理第二部分详细说明基于统计的特征提取，其中由于对于 uri 的自动标注得到的特征子模块较复杂，因此在 2.2.3 小节单独叙述。 2.1 数据格式原始数据中包含 27 个字段，实际使用的字段共计 18 个。下图展示了各个字段的含义与示例值。  2.2 数据清洗主要步骤：  过滤掉不是 27 个字">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/2018/08/12/信息安全-zte-design/temp4.png">
+<meta property="og:image" content="https://protao.github.io/2018/08/12/信息安全-zte-design/temp3.png">
+<meta property="og:image" content="https://protao.github.io/2018/08/12/信息安全-zte-design/temp2.png">
+<meta property="og:image" content="https://protao.github.io/2018/08/12/信息安全-zte-design/temp1.png">
+<meta property="og:updated_time" content="2019-01-02T14:52:19.556Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="项目报告——innerEye1">
+<meta name="twitter:description" content="一、整体架构图系统整体架构分为三个部分，如下图所示，包括数据预处理、特征提取、异常用户检测。  二、预处理第二部分详细说明基于统计的特征提取，其中由于对于 uri 的自动标注得到的特征子模块较复杂，因此在 2.2.3 小节单独叙述。 2.1 数据格式原始数据中包含 27 个字段，实际使用的字段共计 18 个。下图展示了各个字段的含义与示例值。  2.2 数据清洗主要步骤：  过滤掉不是 27 个字">
+<meta name="twitter:image" content="https://protao.github.io/2018/08/12/信息安全-zte-design/temp4.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-信息安全-zte-design" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-08-12T08:35:28.000Z" itemprop="datePublished">2018-08-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/信息安全/">信息安全</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      项目报告——innerEye1
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、整体架构图"><a href="#一、整体架构图" class="headerlink" title="一、整体架构图"></a>一、整体架构图</h2><p>系统整体架构分为三个部分，如下图所示，包括数据预处理、特征提取、异常用户检测。</p>
+<p><img src="temp4.png" alt></p>
+<h2 id="二、预处理"><a href="#二、预处理" class="headerlink" title="二、预处理"></a>二、预处理</h2><p>第二部分详细说明基于统计的特征提取，其中由于对于 uri 的自动标注得到的特征子模块较复杂，因此在 2.2.3 小节单独叙述。</p>
+<h3 id="2-1-数据格式"><a href="#2-1-数据格式" class="headerlink" title="2.1 数据格式"></a>2.1 数据格式</h3><p>原始数据中包含 27 个字段，实际使用的字段共计 18 个。下图展示了各个字段的含义与示例值。</p>
+<p><img src="temp3.png" alt></p>
+<h3 id="2-2-数据清洗"><a href="#2-2-数据清洗" class="headerlink" title="2.2 数据清洗"></a>2.2 数据清洗</h3><p>主要步骤：</p>
+<ol>
+<li>过滤掉不是 27 个字段的记录。</li>
+<li>过滤掉下载图片的记录。</li>
+<li>统一 Windows 和 Unix 的换行符。</li>
+<li>转换响应吗格式。</li>
+<li>删除日志中的 agent 字段（大幅压缩空间）。</li>
+<li>重新检验字段数是否一致并删除格式不正确的记录。</li>
+</ol>
+<h3 id="2-3-Uri提取"><a href="#2-3-Uri提取" class="headerlink" title="2.3 Uri提取"></a>2.3 Uri提取</h3><p>在<code>pre.py</code>中实现该部分功能。目标是从原始日志中分理出Uri字段。</p>
+<h3 id="2-4-网络结构提取"><a href="#2-4-网络结构提取" class="headerlink" title="2.4 网络结构提取"></a>2.4 网络结构提取</h3><p>在<code>pre.py</code>中实现该部分功能。目标是从原始日志中提取源IP与目的IP的连接关系，然后重构内网关系图。</p>
+<p>在此基础上还需要进行全权重处理操作：对所有的密集连接的IP，弱化其权重。</p>
+<h2 id="三、特性提取"><a href="#三、特性提取" class="headerlink" title="三、特性提取"></a>三、特性提取</h2><h3 id="3-1-用户统计特征提取"><a href="#3-1-用户统计特征提取" class="headerlink" title="3.1 用户统计特征提取"></a>3.1 用户统计特征提取</h3><p>以下代码展示了特征抽取部分通过统计方法提取到的特征向量。统计特征向量主要包括两个部分：行为特征、uri特征。uri特征部分中的label部分比较复杂，在2.2.3小结单独叙述。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># initial</span></span><br><span class="line">feature = []             <span class="comment"># 定长 1D：最终返回的 user feature</span></span><br><span class="line"></span><br><span class="line">session_length = []      <span class="comment"># 1D：每个 session 的 action 个数</span></span><br><span class="line">duration = []            <span class="comment"># 1D：每个 session 的持续时间 (ms)</span></span><br><span class="line">port = set()             <span class="comment"># 1D：使用过的端口集合</span></span><br><span class="line">category_features = &#123;&#125;   <span class="comment"># dict of 2D：bash 预处理中被 sed 过的 category 特征</span></span><br><span class="line">action_delta = []        <span class="comment"># 2D：一个 session 中每个 action 之间的间隔时长 (ms)</span></span><br><span class="line">session_month = []       <span class="comment"># 1D：session 的开始时间是几月</span></span><br><span class="line">session_twohour = []     <span class="comment"># 1D：session 的开始时间是哪个时辰</span></span><br><span class="line">session_weekday = []     <span class="comment"># 1D：session 的开始时间是周几</span></span><br><span class="line">len2 = []                <span class="comment"># 1D：不区分是哪个 session，全部 flatten 到一维数组中，该数组长度是该 user 的 action 总数</span></span><br><span class="line">                         <span class="comment"># 只对于len2来说，也有0的存在，还是只处理非零部分，零的部分可能是由于非200的http请求</span></span><br><span class="line">len1 = []                <span class="comment"># 1D：同上（由于稀疏，只计算非零部分）</span></span><br><span class="line">uri_chrlen = []          <span class="comment"># 1D：同 len2 (uri feature)</span></span><br><span class="line">uri_len = []             <span class="comment"># 1D：同 len2 (uri feature)</span></span><br><span class="line">max_query_value = []     <span class="comment"># 1D：同 len1 (uri feature)</span></span><br><span class="line">count_query = []         <span class="comment"># 1D：同 len1 (uri feature)</span></span><br><span class="line">query_chrlen = []        <span class="comment"># 1D：同 len1 (uri feature)</span></span><br><span class="line">query_parts = []         <span class="comment"># 1D：同 len1 (uri feature)</span></span><br><span class="line">labels = []              <span class="comment"># 2D: 对于 label，先仅仅是当做类别处理</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-2-1-session特征"><a href="#2-2-1-session特征" class="headerlink" title="2.2.1 session特征"></a>2.2.1 session特征</h4><ol>
+<li>session_length：session 的长度构成的序列。</li>
+<li>duration：session 的持续时间构成的序列。</li>
+<li>action_delta：session 中每个报文的间隔时间构成的序列。</li>
+<li>session_month：session 行为发生的月份构成的序列。</li>
+<li>session_twohour：session 行为发生的时间构成的序列。</li>
+<li>session_weekday：session 行为是否发生在工作日构成的序列。</li>
+<li>length：record 的报文长度构成的序列。不区分是哪个 session，全部 flatten 到一维数组中，该数组长度是该 user 的 action 总数。只处理非零部分，零的部分可能是由于非 200 的 http 请求导致的数据稀疏性。</li>
+<li>port：使用的用户端口。</li>
+<li>category_features：session 被自动标注的可能的行为类型。后面详细说明标注方法。</li>
+</ol>
+<h3 id="3-2-uri语义特征提取"><a href="#3-2-uri语义特征提取" class="headerlink" title="3.2 uri语义特征提取"></a>3.2 uri语义特征提取</h3><p>用户在一个 HTTP 访问中的目标 uri 包含了重要的信息，因此需要单独对其进行处理。</p>
+<ol>
+<li>uri_chrlen：字符级别的的 uri 长度。</li>
+<li>uri_len：字段级别的 uri 长度。</li>
+<li>max_query_value：query 字段实质为一个键值对，对该部分进行提取特征的原因是考虑到对于某些脆弱的系统，可以利用 uri 的 query 进行注入。</li>
+<li>count_query：query 个数。</li>
+<li>query_chrlen：query 字符级别的长度。</li>
+<li>query_parts：query 中的 “?” 数目。</li>
+</ol>
+<h4 id="2-2-3-session-label与自动标注算法"><a href="#2-2-3-session-label与自动标注算法" class="headerlink" title="2.2.3 session label与自动标注算法"></a>2.2.3 session label与自动标注算法</h4><ol>
+<li>labels：自动标注的 uri 的 label。</li>
+</ol>
+<p>该部分是基于主题模型的算法，常见的应用是自动将语义类似的文本降维成为主体分布向量。常见应用是新闻自动分类。比如将带有“政府”，“政策”，“条例”，“国家”，“形势”的文本归属为一类，将带有“疾病”，“疫苗”，“防治”，“感染”的文本聚到一类，等等等等。我们看到这些例子就会知道前者表示与政治相关的文本，后者表示医学相关的文本。该算法的目标就是将一个文本转化为一个d维向量，该向量表示对于d个主题，该文本分别与每个主题的相关程度。这里的相关性矩阵使用 tfidf 进行重要性加权。</p>
+<p>一般这种类型的任务需要构建一个词语与句子的相关矩阵，在本场景下，词指的就是一个 uri 中的 field，句子指的就是一个 uri。该算法的有效性基于词语的共闲背后的逻辑。比如在 uri 中，css 常常与 layout 共同出现；file 常常与 upload 共同出现。有了相关性矩阵后，即可使用主题模型对 uri 提取特征向量。</p>
+<p>使用的算法是 LDA（Latent Dirichlet Allocation）算法。最简单的主题模型是 LSA 算法，该算法对共现矩阵进行奇异值分解；分解的矩阵分别表示文档和主题的相关性与主题与词语的相关性。改进的算法是pLSA ，对分解加上概率的归一化限制，即对分解后的矩阵加上概率化解释，表示一个文档有可能属于若干个主题，属于不同主题的概率服从多项式分布，更好的对一词多义现象进行处理；LDA 是对 pLSA 的贝叶斯化版本。</p>
+<p>在系统中，该部分分别在<code>pre.sh</code>和<code>SessionLabel.py</code>中实现，得到降维后的矩阵存放于<code>tfidf.pkl</code>缓存文件。然后简单的使用 <code>Kmeans</code> 算法对 <code>Session</code> 进行标注，本质实际上是认为一个 uri 最后可能的主题就是它真正的主题。</p>
+<h3 id="3-3-Network-特征提取"><a href="#3-3-Network-特征提取" class="headerlink" title="3.3 Network 特征提取"></a>3.3 Network 特征提取</h3><h4 id="3-3-1-Embedding-基本思想"><a href="#3-3-1-Embedding-基本思想" class="headerlink" title="3.3.1 Embedding 基本思想"></a>3.3.1 Embedding 基本思想</h4><p>网络嵌入方法（Network Embedding）旨在学习网络中节点的低维度潜在表示，所学习到的特征表示可以用作基于图的各种任务的特征，例如分类，聚类，链路预测和可视化。</p>
+<p>由于信息网络可能包含数十亿个节点和边缘，因此在整个网络上执行复杂的推理过程可能会非常棘手。因此有人提出了用于解决该问题的一种方法是网络嵌入（Network Embedding）。NE 的中心思想就是找到一种映射函数，该函数将网络中的每个节点转换为低维度的潜在表示。</p>
+<p>总的来说，NE 具有如下几个特征：</p>
+<ol>
+<li><strong>可扩展性（Scalability）</strong>：真实网络规模通常很大，因此网络嵌入算法应该能够在短时间内处理大规模网络。</li>
+<li><strong>社区感知（Community aware）</strong>：潜在表示之间的距离应表示用于评估网络的相应成员之间的相似性的度量。这就要求同质网络能够泛化。</li>
+<li><strong>低维（Low dimensional）</strong>当标记数据稀缺时，低维模型更好地推广并加速收敛和推理。</li>
+<li><strong>连续性（Continuous）</strong>：需要潜在的表示来模拟连续空间中的社区特征与结构特征。</li>
+</ol>
+<p>本质上 Embedding 可以看做是一种降维技术，但是有两个问题。其一、传统的降维技术难以扩展至大规模结构化数据，比如传统的 PCA 就是基于线性假设，无法处理数据中的流形特征。其二，网络结构不同于常见的数据样本，特征存在于其链接结构中，重点是将其表示为计算机可以处理的数据向量。传统基于统计的特征工程方法，往往是手动提取节点的度、邻居信息、三角形信息来处理，这种处理方法低效而且以处理者的认知和经验作为上限。网络嵌入就是解决这两个问题的。</p>
+<p>对于图嵌入有以下两个方向的研究：其一是以 deepwalk 为先河的基于 Random Walk 与 Word Embedding 结合的方法，<strong>在本模块中采纳的即为这种方法</strong>。其二是从传统机器学习方法中的非线性降维技术中推广而来的 embedding 技术。其三就是基于深度学习的技术，比如图卷积神经网络、GANS plus NE 等等。以下详细介绍本模块中使用的方法。</p>
+<h3 id="3-2-DeepWalk-算法"><a href="#3-2-DeepWalk-算法" class="headerlink" title="3.2 DeepWalk 算法"></a>3.2 DeepWalk 算法</h3><p>DeepWalk 通过将节点视为单词并生成短随机游走作为句子来弥补网络嵌入和单词嵌入之间的差距。然后，可以将诸如 word2vec 之类的神经语言模型应用于这些随机游走以获得网络嵌入。</p>
+<p>把以节点$$$v_i$$$为起点的随机游走记作$$$W_{vi}$$$。随机游走是一个由随机变量$$$W^1_{vi}$$$,$$$W^2_{vi}$$$,…,$$$W^n_{vi}$$$决定的随机过程，使得$$$W^{k+1}_{vi}$$$是从节点$$$v_k$$$的相邻节点中随机选择的。随机游走在内容推荐和社团发现中被用于衡量相似度。它们也是在输入图的大小的次线性时间内计算局部社团结构信息的一类输出敏感算法的基础。</p>
+<p>由于这种与局部结构的联系，于是使用随机游走序列作为从网络中提取信息的基本工具。除了捕获社团信息，使用随机游走作为算法的基础也提供了两个不错的属性：首先，局部探索容易并行化。许多随机游走（在不同的线程、处理器或机器上）可以同时探索一个图的不同部分。其次，依靠从短随机游走获得的信息，可以适应图形结构的小变化而不需要全局重新计算。可以用次线性时间在变化的区域进行新的随机游走来迭代更新学习的模型。</p>
+<p>之前用在线随机游走作为捕获图结构的雏形，现在需要一种合适的方法来捕获这些信息。如果连通图的度分布遵循幂定律（即无尺度），观测到在节点出现在短随机游走中的频率也将遵循幂定律分布。自然语言中的词频遵循类似的分布，语言建模技术可以解释这种分布行为。</p>
+<h3 id="3-3-3-Skip-Gram-模型"><a href="#3-3-3-Skip-Gram-模型" class="headerlink" title="3.3.3 Skip-Gram 模型"></a>3.3.3 Skip-Gram 模型</h3><p>该模型的基本思想是：如果两个不同的“单词”具有非常相似的“上下文”（也就是说，他们周围可能出现哪些“单词”），那么我们的模型需要为这两个单词输出非常相似的结果。因此，如果两个“单词”向量相似，那么网路将会为这个两个“单词”输出相似的上下文。假设两个“单词”有相同的上下文，那么我们的网络将会学习相似的向量。</p>
+<p>上下文指的就是对于序列来说，某个序列中的元素的前后若干个其他元素，结合到该模型与 network 的结合，那么节点的上下文实际上就是某个节点的附近的若干个节点。</p>
+<p>可以认为该模型的本质是一个单隐层、以 Softmax 作为输出激活函数、以交叉熵作为损失函数的上下文自编码器。</p>
+<p><img src="temp2.png" alt></p>
+<h3 id="3-3-4-算法使用"><a href="#3-3-4-算法使用" class="headerlink" title="3.3.4 算法使用"></a>3.3.4 算法使用</h3><p>该部分工作的实现基于OpenNE开源工具, 下面是具体调用方式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 OpenNE/src/main.py --method deepWalk --weighted --representation-size <span class="number">16</span> --clf-ratio <span class="number">0.9</span> --number-walks <span class="number">30</span> --walk-length <span class="number">6</span> --windows-size <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>method：算法类型。</li>
+<li>weighted：是否是加权图。</li>
+<li>representation-size：embedding 向量的大小。</li>
+<li>clf-ratio：holdout验证集的比例。</li>
+<li>number-walks：每个节点作为起点的随机游走的次数。</li>
+<li>walk-length：随机游走的长度。</li>
+<li>windows-size：上下文窗口的大小。</li>
+</ul>
+<p>以上参数通过 <code>sklearn.model_selection.GridSearchCV</code> 搜索得到。</p>
+<h2 id="四、异常用户检测"><a href="#四、异常用户检测" class="headerlink" title="四、异常用户检测"></a>四、异常用户检测</h2><h3 id="4-1-特征合成"><a href="#4-1-特征合成" class="headerlink" title="4.1 特征合成"></a>4.1 特征合成</h3><p>直接基于特征文件进行合成，将两组特征文件使用<code>paste</code>命令进行连接。</p>
+<h3 id="4-2-特征降维"><a href="#4-2-特征降维" class="headerlink" title="4.2 特征降维"></a>4.2 特征降维</h3><p>降维算法使用<code>PCA</code>。PCA是一种线性的鲁棒的降维手段。<code>PCA</code>用于对一组连续正交分量中的多变量数据集进行方差最大方向的分解。<code>PCA</code> 被通常实现为一个变换对象， 通过 <code>fit</code> 方法可以降维成 n 个主方向， 并且可以将新的数据投影到这些主方向中。</p>
+<p>在实际实现中，PCA被实现为另一种方法，即基于<code>SVD</code>的方法。通过丢弃具有较低奇异值的奇异向量成分，将数据降维到低维空间并保留大部分方差是等价于<code>PCA</code>的原理的。</p>
+<p>简单地说，主成分分析（PCA）的原理就是将一个高维向量x,通过一个特殊的特征向量矩阵U，投影到一个低维的向量空间中，表征为一个低维向量y，并且仅仅损失了一些次要信息。也就是说，通过低维表征的向量和特征向量矩阵，可以基本重构出所对应的原始高维向量。</p>
+<h3 id="4-3-离群点检测算法"><a href="#4-3-离群点检测算法" class="headerlink" title="4.3 离群点检测算法"></a>4.3 离群点检测算法</h3><h4 id="4-3-1-算法原理"><a href="#4-3-1-算法原理" class="headerlink" title="4.3.1 算法原理"></a>4.3.1 算法原理</h4><p>传统意义上，很多的分类问题试图解决两类或者多类情况，机器学习应用的目标是采用训练数据，将测试数据属于哪个类进行区分。但是如果只有一类数据，而目标是得到数据集中大多数样本的共有特点并依次检测出正常点和异常点的区别的话，该问题就属于 Outlier Detection。OVSVM 是一种基于 SVM 的方法，目标是将所有的数据点与零点在特征空间 F 分离开，并且最大化分离超平面到零点的距离。这产生一个 binary 函数能够获取特征空间中数据的概率密度区域。当处于训练数据点区域时，返回 +1，处于其他区域返回 -1.</p>
+<p>该问题的优化目标与传统二分类 SVM 略微不同，但依然很相似。SVM 的目标是在参数空间中搜索最优决策超平面将正负类样本分割开，OCSVM 的目标是搜索得到一个最优的超平面将训练样本点分割出来。因此在基于SVM 的约束优化问题形式下，得到 OCSVM 的求解目标。</p>
+<p>$$<br>\min_{w,\zeta_{i},\rho}\frac{1}{2}||w||^{2}+\frac{1}{\nu n}\sum_{i=1}^{n}{[\zeta_{i}}-\rho]<em>+ \ \tag{1} s.t. (w^{T}\phi(x</em>{i}))&gt;\rho-\zeta_{i},i=1,…,n \ \zeta_{i}&gt;0 $$</p>
+<p>上述公式中$$$[x]_+$$$表示SVM使用的Hinge Loss。代表对于正常样本不计算损失函数，只对于错误样本计算损失，这里的错误样本就是被超平面划分出来的异常点。</p>
+<p>上述公式中的$$$\zeta_{i}$$$ 表示松弛变量。对于OCSVM，松弛变量是一个非常重要的参数，如果没有松弛变量是检测不到异常样本的，松弛变量实际上反映了一个样本点的异常强度。</p>
+<p>上述公式中的$$$\nu$$$ 类似于二分类SVM中的 C ，在原始的SVM中，C的作用是调整模型正则化的能力，C越大，模型的bias越大，variance越小。在OCSVM中，C的作用是调节异常点和正常点的比例。</p>
+<p>上述公式中的 $$$\phi$$$ 是高维映射函数，用于将点映射到高维空间。使得模型从线性模型转为非线性模型。众所周知，对于SVM并不显式的定义映射函数，而是通过将原问题转化为对偶问题的特殊形式后引入kernel trick。对于kernel trick的原理不展开说明。在具体使用中，我们需要调节的参数只有两个，在后面具体说明。</p>
+<p>采用Lagrange技术并且采用dot-product calculation，确定函数变为：</p>
+<p>$$f(x)=sign((w^{T}\phi(x_{i}))-\rho)=sign(\sum_{i=1}^{n}{\alpha_{i}K(x,x_{i})}-\rho) \tag{2}$$</p>
+<p>这个方法创建了一个参数为 $$$w,\rho$$$ 的超平面，该超平面与特征空间中的零点距离最大，并且将零点与所有的数据点分隔开。</p>
+<h4 id="4-3-2-算法使用"><a href="#4-3-2-算法使用" class="headerlink" title="4.3.2 算法使用"></a>4.3.2 算法使用</h4><p>算法使用基于<code>sklearn.svm.OneClassSVM</code>实现，首先对输入特征进行降维操作。降维方法选择的<code>PCA</code>算法，通过数据降维后的方差作为评估指标。<br><img src="temp1.png" alt></p>
+<p>具体超参数设置如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OneClassSVM(nu=<span class="number">0.005</span>, kernel=<span class="string">'rbf'</span>, shrinking=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure></p>
+<p>第一个参数nu对应了OCSVM中的正则化系数，简单的理解就是异常点的惩罚系数的权重，或者可以更直白的理解为异常点的大致比例，这里设置为0.5%。</p>
+<p>第二个参数是 kernel trick 中使用的具体核函数，这里使用高斯径向基函数作为核函数，比线性函数更好的捕获距离与聚类的概念。还有一个参数是 gamma，这里未作调整，直接使用特征数的倒数作为默认值。</p>
+<p>第三个参数对应 SVM 的加速计算算法 shrinking，这里只做简单介绍。<strong>Shrinking技术</strong> 的根本思想是如果能预知哪些变量对应着支持向量，则只要在这些样本上训练就够了，其他样本可不予考虑，这不影响训练结果，但降低了问题的规模并有助于迅速求解。进一步，如果能预知哪些变量在边界上(即 a=C )，则这些变量可保持不动，只对其他变量进行优化，从而使问题的规模更小，训练时间大大降低。这就是 Shrinking 技术。Shrinking 技术基于这样一个事实：支持向量只占训练样本的少部分，并且大多数支持向量的拉格朗日乘子等于 C。实践表明，它对大规模问题，尤其是支持向量的比例很小或者多数支持向量在边界上的情形很有效。其优点是，每个子问题都能用解析方法得到最优解，不需要调用其他优化子程序，于是算法的收敛速度大大提高。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/08/12/信息安全-zte-design/" data-id="cjxo5e6qr003iz16d7v9dk0sr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/security/">security</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../信息安全-2018-08-15-innerEye/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          项目报告——innerEye
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../07/23/程序员的玩具-2018-07-23-LC-DynamicProgram/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">LeetCode刷题笔记——DynamicProgram</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

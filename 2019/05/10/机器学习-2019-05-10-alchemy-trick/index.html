@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>仓鼠一般搜集到的炼丹技巧 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="原理部分 取值很大的数据（比网络权重初值大很多）和没有标准化的数据一样不安全，可能导致大的梯度使网络不能收敛。 如果数据点有冗余，要让他们都出现在训练集中而不是有的在训练集有的在测试集，要确保训练集和测试集没有交集。 一般来说，对于神经网络，将缺失值设置为0是安全的。网络能够从数据中学到0意味着缺失数据，并且会忽略这个值。注意，如果测试数据中可鞥有缺失值，而网络实在没有缺失值的数据上训练的，那么">
+<meta name="keywords" content="machinelearning,algorithm,trick,deeplearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="仓鼠一般搜集到的炼丹技巧">
+<meta property="og:url" content="https://protao.github.io/2019/05/10/机器学习-2019-05-10-alchemy-trick/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="原理部分 取值很大的数据（比网络权重初值大很多）和没有标准化的数据一样不安全，可能导致大的梯度使网络不能收敛。 如果数据点有冗余，要让他们都出现在训练集中而不是有的在训练集有的在测试集，要确保训练集和测试集没有交集。 一般来说，对于神经网络，将缺失值设置为0是安全的。网络能够从数据中学到0意味着缺失数据，并且会忽略这个值。注意，如果测试数据中可鞥有缺失值，而网络实在没有缺失值的数据上训练的，那么">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/cover/hamster.jpeg">
+<meta property="og:updated_time" content="2019-07-04T04:18:20.673Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="仓鼠一般搜集到的炼丹技巧">
+<meta name="twitter:description" content="原理部分 取值很大的数据（比网络权重初值大很多）和没有标准化的数据一样不安全，可能导致大的梯度使网络不能收敛。 如果数据点有冗余，要让他们都出现在训练集中而不是有的在训练集有的在测试集，要确保训练集和测试集没有交集。 一般来说，对于神经网络，将缺失值设置为0是安全的。网络能够从数据中学到0意味着缺失数据，并且会忽略这个值。注意，如果测试数据中可鞥有缺失值，而网络实在没有缺失值的数据上训练的，那么">
+<meta name="twitter:image" content="https://protao.github.io/img/cover/hamster.jpeg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-机器学习-2019-05-10-alchemy-trick" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2019-05-09T16:00:00.000Z" itemprop="datePublished">2019-05-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/C/">C++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      仓鼠一般搜集到的炼丹技巧
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/hamster.jpeg" alt></p>
+<h2 id="原理部分"><a href="#原理部分" class="headerlink" title="原理部分"></a>原理部分</h2><ol>
+<li>取值很大的数据（比网络权重初值大很多）和没有标准化的数据一样不安全，可能导致大的梯度使网络不能收敛。</li>
+<li>如果数据点有冗余，要让他们都出现在训练集中而不是有的在训练集有的在测试集，要确保训练集和测试集没有交集。</li>
+<li>一般来说，对于神经网络，将缺失值设置为0是安全的。网络能够从数据中学到0意味着缺失数据，并且会忽略这个值。注意，如果测试数据中可鞥有缺失值，而网络实在没有缺失值的数据上训练的，那么网络不可能学会忽略缺失值。在这种情况下，你应该人为生成一些有缺失项的训练样本：多次复制一些训练样本然后删除测试数据中可能缺失的某些特征。</li>
+</ol>
+<a id="more"></a>
+<ol start="4">
+<li>一个K-fold Validation的变体，多次使用K折交叉验证并且每次打乱数据。</li>
+<li>在验证集上进行模型选择本身就是一种超参数的学习。</li>
+<li>对于简单的回归任务，使用MAE作为metric，使用MSE作为loss。MAE具有更好的可理解性。</li>
+<li>中间层的neuron数不能少于多分类任务的类别数目。</li>
+<li>多分类任务可以不用onehot对标签编码，直接使用keras中的sparse_categorical_crossentropy进行交叉熵的计算。</li>
+<li>对于序列分类问题，可以用联结主义时序分类损失函数（CTC）。</li>
+<li>具有多个输出的神经网络可能具有多个损失函数，每个输出对应一个损失函数。但是梯度下降过程必须基于单个标量进行。因此此时需要将所有的损失函数取平均，变成一个标量值。</li>
+<li>在keras中，贯序Sequential模型是最简单的结构，可以使用函数式API定义其他变体网络拓扑，比如双分支、多头、Inception模块。</li>
+<li>TensorFlow是一种使用符号微分（Symbolic Differentiation）的现代框架来实现的神经网络工具。</li>
+<li>Momentum解决了SGD的两个问题：收敛速度和局部极小。</li>
+<li>最好记住，低维表示中形成的直觉在实践中不一定适用于高维空间，这在历史上一直是深度学习研究的问题来源。</li>
+<li>图像张量的形状有两种约定，channels-last（Tensorflow）和channels-first（Theano）</li>
+<li>对于数据张量，第 0 轴被称为批量轴（batch-axis）。</li>
+<li>深度学习的好处是将多阶段流程替换为一个简单的、端到端的深度学习模型。在实践中两个利器是GBM用于浅层学习，DeepLearning用于感知问题。</li>
+<li>特征工程的本质：不是一味地加入更多的特征，而是用更简单的方式表述问题，从而使问题变得更容易。通常需要深入理解问题。深度学习可以自动提取出有用的特征，但是这不意味着特征工程不重要了，因为：（1）良好的特征可以使用更少的资源更优雅的解决问题。（2）良好的特征可以用更少的数据解决问题，因为深度学习需要大量的数据。</li>
+<li>机器学习的根本问题是优化和泛化之间的对立。最优的解决方法是获取更多的数据。</li>
+<li>在深度学习中，模型的capacity指的是可学习参数的个数。</li>
+<li>关于Occam’s razor原理，就记住一句话，一个事情的两种解释，简单的那个更可能正确。即假设更少的那一个。具体到机器学习中，什么叫更简单的模型？要么就是参数值的熵更小，此时我们用正则化。要么就是参数更少，那就选用VC更低的模型，还有dropout。（注：可以从模型集成的角度理解dropout）</li>
+<li>对于正则化，一定要注意，还增加了模型的bias，就好像“三短一长选最长”。在keras中正则化项只在训练时计算，因此训练损失要比测试损失大。</li>
+<li>测试时，dropout层的输出值要按照dropout rate缩小。</li>
+<li>实践中，类似于简单统计机器学习使用最简单的线性模型开始做起，深度学习也要先搭建一个很简单的略优于随机模型的模型，这被称为获得<strong>统计功效(statistic power)</strong>，并成为我们模型的baseline。然后类似于使用零值定理寻找零点，我们需要从欠拟合跨越到过拟合并逐渐去逼近二者平衡的那个临界值。但是注意，这个过程是迭代进行的，我们通过验证集对模型进行评估，反复使用验证集后，机会发生信息泄露，最终使得模型对验证集的过拟合。</li>
+<li>接上一点，对于一个简单、可理解并且鲁棒的基准模型十分重要，这意味着我们在后续使用更复杂的模型时，可以使我们有信心说，继续增加模型的复杂度合理并且有收益的。比如9比1的不平衡问题，我们的基准分类模型就是0.9的正确率，因为我们可以简单的预测所有的样本都是大类而得到90%的正确率，这个基准在有的时候并不是那么容易达到。在LSTM一章还有一个例子就是预测气温，简单的使用昨天此时的温度来预测可以达到相当好的效果，实验中一个全连接的wangluo网络没有能达到这个基准，尽管模型空间中涵盖了这个简单的预测方法。<strong>因为，如果学习算法没有被硬编码要求去寻找特定类型的简单模型，那么有时候参数学习是无法找到简单问题的简单解决方案的。</strong></li>
+<li>Normalization 是一大类方法，用于让机器学习模型看到的不同样本在彼此之间更加相似，这有助于模型的学习与对新数据的泛化。BN层的原理是，训练过程中在内部保存已读取每批数据均值和方差的指数移动平均值。其主要成果是有助于梯度传播。通常在卷积层或者<code>Dense</code>层之后使用。</li>
+<li><strong>深度可分离卷积</strong>（depthwise separable convolution），让模型更加轻量（参数少），速度更快（浮点数计算少），任务性能还可以提升。方法就是先对输入的每个通道单独进行空间卷积，然后得到的层叠加起来，在进行1×1的通道卷积。这相当于将空间特征学习与通道特征学习分离开。可以认为是卷积层的无痛替代产品。</li>
+</ol>
+<h2 id="图像与卷积网络"><a href="#图像与卷积网络" class="headerlink" title="图像与卷积网络"></a>图像与卷积网络</h2><ol>
+<li>Dense层和Conv层最主要的区别在于Dense从输入学习全局模式，Conv层学到的是局部模式。这使得有两个衍生特性，一个是卷及神经网络的模式具有平移不变性（先不说这个模式的缺点，比如Hitton提出的capsule），实际上就是权重共享，各个位置的局部窗口共享卷积核，这使得模型对数据的利用更高效，泛化能力更强。其次就是特征具有层次结构。注意这种平移不变性实际上是导致最后得到的 1×1×n 的feature map中就是一个感知特定结构是否出现以及出现强度的特征，后面加dense意味着这个特征向量中元素的位置不重要。</li>
+<li>卷积层的输出是特征图，也叫响应图。</li>
+<li>padding的参数是”valid”表示不填充，”same”表示使输出和输入的大小一致，默认值是”valid”。</li>
+<li>对于卷积设置stride=2，等于是做了二倍的下采样，实践中大于一的步长用的不多，想要下采样的话使用pooling代替。pooling同样不影响所谓的平移不变性。考虑一个人脸图片，眼睛的位置上是嘴，嘴的位置上是眼睛，人类看这个图片会知道这不是人脸，但是卷积神经网络会认为这个有很大概率是人脸。</li>
+<li>pooling的主要作用是，（1）扩大高层neuron的感知野。（2）减少最后的feature map的元素个数。一种可能的代替方案是，可以使用带孔卷积核（dilated kernel），同样可以在不增加参数量的情况下扩大感受野。</li>
+<li>对于图片推荐使用 keras 中的<code>keras.preprocessing.ImageDataGenerator</code>，可以批量的指定预处理操作。其中的<code>flow</code>方法对一个图片样本构成的batch进行指定预处理，<code>flow_from_directory</code>以文件夹路径作为输入参数，返回一个无限生成器。然后使用<code>fit_generator</code>直接接受一个数据生成器并开始训练。这个<code>ImageDataGenerator</code>还可以方便的完成Data Augment。</li>
+<li>使用预训练的网络进行迁移学习是深度学习的一个重要优势。使用预训练网络有两种方法：<strong>特征提取</strong>(feature extraction)和<strong>微调模型</strong>(fine-tuning)。特征提取就是复用已有模型的卷积核，越低层的卷积核得到的特征越具有通用性，而Dense层通常不能复用。特征提取就是完全不改变预训练模型的卷积基，只利用卷积基提取特征或者在卷积基后面接一个自己的dense+dropout分类器，后者的好处是可以使用data-augment。fine-tuning是在后面接上自己的分类器并在训练好之后，解冻模型的最后几层卷积层，再训练几轮。</li>
+<li>可视化卷积网络有三个可能的方向：（1）可视化response map。（2）可视化filter。（3）可视化类激活的热力图。</li>
+</ol>
+<h2 id="文本序列与LSTM"><a href="#文本序列与LSTM" class="headerlink" title="文本序列与LSTM"></a>文本序列与LSTM</h2><ol>
+<li>Keras内置的<code>keras.preprocessing.text</code>可以对文本进行预处理。其中Tokenizer类，</li>
+<li>SimpleRNN 非常好理解。</li>
+<li>对于Embedding层，可以使用预训练好的 embedding 向量，也可以自己训练。类似于 CNN 的预训练，如果是使用已经训练好的 embedding 层，需要在训练时将其冻结，可以在最后解冻并进行fine-tuning。</li>
+<li>GRU是2014年提出的对LSTM的一种简化。</li>
+<li>在dropout可以加到循环神经网络内部。但是每个时间步的dropout掩码应该一致。</li>
+<li>双向 RNN 就是同时有两个RNN，不过一个的输入序列是正常的序列，另一个是反序。比如序列是12345，其中第二个RNN用54321来训练，然后输出对两个RNN进行合并。对于双向RNN不要盲目，比如对于温度预测的任务，可以先用反向RNN进行试验，发现效果大打折扣，这很容易理解，因为越近的温度越有预测意义，那么双向RNN可能对问题没有帮助。而对于文本，由于结构性，词语的重要性并不是与位置正相关，使用反向RNN进行测试，发现得到了类似的分数，但是由于二者的表示很不相同，类似于集成学习的思想，使用双向RNN对于我们的任务就会有帮助。</li>
+<li>recurrent attention 和 sequence masking 是 NLP 的deeplearning 中非常有用的技术。</li>
+<li>对于卷积神经网络，也可以应用到序列建模中，不过卷积窗变成一维的向量。Conv1D具有同样具有全局的平移不变性，这使得对于温度预测来说Conv1D仍然不是一个好方法，因为靠后的数据和靠前的数据重要性不一样，但是卷及神经网络却同等对待，但是对于情感分析来说，Conv1D完全可以胜任，因为关于情感的词出现在句子中哪个位置，通常都是一样的。</li>
+<li>CNN的好处是比循环神经网络更快，因此可以考虑叠加CNN与RNN，在RNN前面使用CNN，缩短长序列，将CNN作为特征提取的手段，CNN可以将长的输入序列转换为高级特征组成的更短序列。然后将CNN的输出作为RNN的输入，就能有效的利用起CNN的<strong>速度</strong>和RNN的<strong>顺序敏感性</strong>。</li>
+</ol>
+<h2 id="未归类"><a href="#未归类" class="headerlink" title="未归类"></a>未归类</h2><ol>
+<li>使用LSTM或者GRU</li>
+<li>循环状态中涉及到矩阵的反复乘法，因此涉及到这种操作的矩阵初始化为正交矩阵很有帮助。</li>
+<li>其他的参数初始化为很小的值，一旦值过大，就会导致激活后的导数很小，这就容易使得神经元“死亡”。</li>
+<li>LSTM中，对于forget gate的bias设置为1，或者其他大小合适的正数。这意味着我们期望默认的初始状态，模型能更倾向于记住东西（这么一想，似乎叫做don‘t forget gate更合适一点）。因为学者发现LSTM的关键因素是遗忘门,而 Jozefowicz et al. (2015) 发现向 LSTM 遗忘门加入 1 的偏置(由 Gerset al. (2000) 提倡) 能让 LSTM 变得与已探索的最佳变种一样健壮。</li>
+<li>更适合自适应学习率的算法，比如Adam，Adadelta等。</li>
+<li>防止梯度爆炸，对梯度进行剪裁（1，或者5都是合理的值）。</li>
+<li>在垂直方向上进行dropout。所谓垂直，指的是，如果是多层的RNN，那么在不同层之间加上dropout，而不是在同一层的不同时间步上进行dropout。在水平方向上进行dropout也不是不合理，但是方式要更精巧一些，比如以固定的掩码的方式等等。</li>
+<li>curriculum learning，是机器学习中的一个训练策略，简单说就是先学习简单训练数据，再学习复杂训练数据。</li>
+<li>可以使用预训练好的词向量用于具体NLP任务中，如果数据足够，可以继续训练词向量，这样可以使得词向量的表示更贴合当前任务，比如good和bad在单纯的word2vec中位置可能很近，但是用于情感分析的任务中并继续训练词向量可以将good和bad分得更开。</li>
+<li>hierachical softmax的问题在于树结构的计算形式无法利用GPU的计算能力。</li>
+<li>为什么正则项不考虑bias？bias项的目的是帮助预测向类分布的方向倾斜，从而起到非均匀先验的作用。添加正则化会阻止bias的这种功能。</li>
+<li>二分类任务时，在model最后一层使用max-margin损失实际上是结合了SVM。</li>
+<li>使用孪生网络（Siamese Network）刻画相似性，更好的方式是Triplet Network，模型的能力更强。与Siamese Network一样，Triplet Network适用于解决样本类别很多（或不确定），然而训练数据集的样本数又很少的情况（如人脸识别、人脸验证）。</li>
+<li>在使用基于窗口的模型时，窗口内的多个词向量可以连接，可以求和，还可以使用autoencoder的方式，这个方式是在cs2242017的期中复习的第三篇文档上看到的。需要在损失函数中加上重构损失。好处在于如果窗口内的词是“not bad”，词袋模型可能会认为这是一个负向的词。而重构损失防止网络忽略其中一个x1或x2的贡献。换句话说，它迫使网络捕捉x1和x2的“联合意义”。</li>
+<li>sigmoid函数具有“压缩性”，忘了这个词对不对了。。。就是说不停迭代x=f(x)，最后x会趋于定值，正弦、余弦函数都具有类似特性。</li>
+<li>一种对于softmax的正则化方法：对于每一个类的参数向量（就是softmax参数矩阵的一行），限制其最大norm是s，如果范数大于s了，就缩放其norm。不是很常用的方法。</li>
+<li>在RNN中，初始化很重要，甚至初始化的顺序很重要。在cs224的作业中，颠倒W和U的初始化顺序会影响是否出现梯度爆炸现象。</li>
+<li>对于序列建模使用循环神经网络，如RNN。递归神经网络代表循环网络的另一个扩展,它被构造为深的树状结构而不是 RNN 的链状结构,因此是不同类型的计算图。递归网络的一个明显优势是,对于具有相同长度 τ 的序列,深度(通过非线性操作的组合数量来衡量)可以急剧地从 τ 减小为 O(logτ)，这有助于解决长期依赖的问题。</li>
+<li>由每个节点执行的计算无须是传统的人工神经计算(所有输入的仿射变换后跟一个单调非线性)。节点不一定是传统的单层线性加元素级非线性的运算构成，张量运算和双线性形式（cs224中提到双线性是uWv这种形式是双线性，是在介绍attention的计算时提到的）也是可选的节点的运算方式，在这之前人们已经发现当概念是由连续向量(嵌入)表示时,这种方式有利于建模概念之间的联系。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2019/05/10/机器学习-2019-05-10-alchemy-trick/" data-id="cjxo5e6t6004jz16dyqbab942" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/trick/">trick</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../17/C-2019-05-17-Effective-CPP-III/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          《Effective C++》第三部分：资源管理
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../08/Python-2019-05-08-SICP2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python中使用函数构建对象</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

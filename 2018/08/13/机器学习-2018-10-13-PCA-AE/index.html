@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>PCA 与 autoencoder | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、PCA的基本原理PCA是最简单的一种降维手段，目标就是找到一个最好的投影方向，然后把所有的d维的点都投影到这个方向上，如果投影这一次不够，那么就再找出一个次好的方向，这个次好的方向的搜索空间是第一个主方向的正交子空间。以此类推，每次能够捕获的信息都递减，当找到了d个新的方向后，此时转换后的样本点和新的样本点所拥有的信息完全一致，只不过是换了一种表示，本质上是做了一个可逆的线性变换。通常来说我们">
+<meta name="keywords" content="machinelearning,maths,algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PCA 与 autoencoder">
+<meta property="og:url" content="https://protao.github.io/2018/08/13/机器学习-2018-10-13-PCA-AE/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="一、PCA的基本原理PCA是最简单的一种降维手段，目标就是找到一个最好的投影方向，然后把所有的d维的点都投影到这个方向上，如果投影这一次不够，那么就再找出一个次好的方向，这个次好的方向的搜索空间是第一个主方向的正交子空间。以此类推，每次能够捕获的信息都递减，当找到了d个新的方向后，此时转换后的样本点和新的样本点所拥有的信息完全一致，只不过是换了一种表示，本质上是做了一个可逆的线性变换。通常来说我们">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/pca1.png">
+<meta property="og:image" content="https://protao.github.io/img/pca2.png">
+<meta property="og:image" content="https://protao.github.io/img/pca3.png">
+<meta property="og:image" content="https://protao.github.io/img/pca4.png">
+<meta property="og:image" content="https://protao.github.io/img/pca5.png">
+<meta property="og:image" content="https://protao.github.io/img/pca6.png">
+<meta property="og:image" content="https://protao.github.io/img/pca7.png">
+<meta property="og:image" content="https://protao.github.io/img/pca8.png">
+<meta property="og:image" content="https://protao.github.io/img/pca10.png">
+<meta property="og:image" content="https://protao.github.io/img/pca9.png">
+<meta property="og:updated_time" content="2019-05-11T07:05:53.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PCA 与 autoencoder">
+<meta name="twitter:description" content="一、PCA的基本原理PCA是最简单的一种降维手段，目标就是找到一个最好的投影方向，然后把所有的d维的点都投影到这个方向上，如果投影这一次不够，那么就再找出一个次好的方向，这个次好的方向的搜索空间是第一个主方向的正交子空间。以此类推，每次能够捕获的信息都递减，当找到了d个新的方向后，此时转换后的样本点和新的样本点所拥有的信息完全一致，只不过是换了一种表示，本质上是做了一个可逆的线性变换。通常来说我们">
+<meta name="twitter:image" content="https://protao.github.io/img/pca1.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-机器学习-2018-10-13-PCA-AE" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-08-12T16:00:00.000Z" itemprop="datePublished">2018-08-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/机器学习/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PCA 与 autoencoder
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、PCA的基本原理"><a href="#一、PCA的基本原理" class="headerlink" title="一、PCA的基本原理"></a>一、PCA的基本原理</h2><p>PCA是最简单的一种降维手段，目标就是找到一个最好的投影方向，然后把所有的d维的点都投影到这个方向上，如果投影这一次不够，那么就再找出一个次好的方向，这个次好的方向的搜索空间是第一个主方向的正交子空间。以此类推，每次能够捕获的信息都递减，当找到了d个新的方向后，此时转换后的样本点和新的样本点所拥有的信息完全一致，只不过是换了一种表示，本质上是做了一个可逆的线性变换。通常来说我们只需要找到d’个主方向，每个方向用一个d维向量表示，这d’个方向又被称为<strong>“主成分”</strong>。那么如何找到主成分呢，通常有两种推导方法，下面进行分别列出。</p>
+<h3 id="1-基于最大方差"><a href="#1-基于最大方差" class="headerlink" title="1. 基于最大方差"></a>1. 基于最大方差</h3><p>为什么要最大化方差呢？因为从信号处理的角度考虑，通常认为信号具有较大方差，噪声具有较小方差，信号与噪声之比称为信噪比，信噪比越大认为信号的质量越好。</p>
+<p><img src="/img/pca1.png" alt></p>
+<a id="more"></a>
+<p>对协方差矩阵进行特征分解后可以得到d个主成分，取前d’个主成分对应的特征向量作为投影方向。此时的信息保留比为：<br>$$\eta = \sqrt\frac {\sum_{i=1}^{d’}\lambda_i}{\sum_{i=1}^{d}\lambda_i}$$</p>
+<h3 id="2-基于最小重构（投影）误差"><a href="#2-基于最小重构（投影）误差" class="headerlink" title="2. 基于最小重构（投影）误差"></a>2. 基于最小重构（投影）误差</h3><p><img src="/img/pca2.png" alt></p>
+<h3 id="3-从重构的角度解释PCA"><a href="#3-从重构的角度解释PCA" class="headerlink" title="3. 从重构的角度解释PCA"></a>3. 从重构的角度解释PCA</h3><p>首先解释一下下面的图，图片来自于李宏毅老师的课件。图中标的是X矩阵中的一个列向量代表一个样本点，但是通常在编程中一个行向量是样本点，这里我也不对原图进行改动了，下面都基于假设，X矩阵中一个行向量代表一个样本点。<br>x降维之后得到的新的低维向量是u(前面推导中记作x波浪号，这里使用u表示)。其中u每一维的含义就是对应的主成分的重构权重。即下图的u矩阵中的行向量中的各个元素。U矩阵的行向量就是投影后的样本。C矩阵中的每个行向量都是一个主成分。</p>
+<p><img src="/img/pca3.png" alt><br><img src="/img/pca4.png" alt></p>
+<p>真正在做的时候，使用SVD得到如上结果，即$X=U\Sigma C$，其中的$$$U’=U\Sigma$$$就是投影得到的特征向量，记作$$$X=U’C$$$。因为K时是小于N的，因此信息有缺失，等式两边不是完全相等的。做变换：<br>$$ X\approx U’C $$<br>$$XC^T=U’CC^T$$<br>$$XC^T=U’$$<br>$$XC^TC=U’C\approx X$$<br>损失时出现在$$$C^T$$$这里。最后一个式子实际上就是上图表示的autoencoder的原理。</p>
+<h2 id="4-代码展示"><a href="#4-代码展示" class="headerlink" title="4. 代码展示"></a>4. 代码展示</h2><p>基于tensorflow实现的PCA。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> preprocessing</span><br><span class="line"></span><br><span class="line"><span class="comment"># from https://github.com/eliorc/Medium/blob/master/PCA-tSNE-AE.ipynb</span></span><br><span class="line"><span class="comment"># reference http://projector.tensorflow.org/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TF_PCA</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, dtype=tf.float32, n_dimensions=None, keep_info=None)</span>:</span></span><br><span class="line">        self.dtype = dtype</span><br><span class="line">        self.n_dimensions = n_dimensions</span><br><span class="line">        self.keep_info = keep_info</span><br><span class="line">        self.graph = <span class="keyword">None</span></span><br><span class="line">        self.X = <span class="keyword">None</span></span><br><span class="line">        self.u = <span class="keyword">None</span></span><br><span class="line">        self.singular_values = <span class="keyword">None</span></span><br><span class="line">        self.sigma = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        self.graph = tf.Graph()</span><br><span class="line">        <span class="keyword">with</span> self.graph.as_default():</span><br><span class="line">            self.X = tf.placeholder(self.dtype, shape=(<span class="keyword">None</span>, data.shape[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Perform SVD</span></span><br><span class="line">            singular_values, u, components = tf.svd(self.X)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Create sigma matrix</span></span><br><span class="line">            sigma = tf.diag(singular_values)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> tf.Session(graph=self.graph) <span class="keyword">as</span> session:</span><br><span class="line">            self.u, self.singular_values, self.sigma, self.components = session.run(</span><br><span class="line">                                                                [u, singular_values, sigma, components],</span><br><span class="line">                                                                feed_dict=&#123;self.X: data&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.keep_info:</span><br><span class="line">            <span class="comment"># Normalize singular values</span></span><br><span class="line">            normalized_singular_values = self.singular_values / sum(self.singular_values)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Create the aggregated ladder of kept information per dimension</span></span><br><span class="line">            ladder = np.cumsum(normalized_singular_values)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Get the first index which is above the given information threshold</span></span><br><span class="line">            index = next(idx <span class="keyword">for</span> idx, value <span class="keyword">in</span> enumerate(ladder) <span class="keyword">if</span> value &gt;= keep_info) + <span class="number">1</span></span><br><span class="line">            self.n_dimensions = index</span><br><span class="line"></span><br><span class="line">        print(<span class="string">"cache information"</span>, sum(self.singular_values[:self.n_dimensions])/sum(self.singular_values))</span><br><span class="line">        <span class="keyword">with</span> self.graph.as_default():</span><br><span class="line">            most_components = tf.slice(self.components, (<span class="number">0</span>,<span class="number">0</span>), (self.components.shape[<span class="number">0</span>], self.n_dimensions))</span><br><span class="line">            new_data = tf.placeholder(dtype=self.dtype, shape=(<span class="keyword">None</span>, data.shape[<span class="number">1</span>]))</span><br><span class="line">            pca = tf.matmul(new_data, most_components)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> tf.Session(graph=self.graph) <span class="keyword">as</span> session:</span><br><span class="line">            <span class="keyword">return</span> session.run(pca, feed_dict=&#123;new_data: data&#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reconstruct</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="keyword">with</span> self.graph.as_default():</span><br><span class="line">            weight = tf.placeholder(self.dtype, shape=(data.shape[<span class="number">0</span>], self.n_dimensions))</span><br><span class="line">            components = tf.slice(tf.transpose(self.components), </span><br><span class="line">                                  [<span class="number">0</span>, <span class="number">0</span>], </span><br><span class="line">                                  [self.n_dimensions, self.components.shape[<span class="number">1</span>]])</span><br><span class="line">            re_vector = tf.matmul(weight, components)</span><br><span class="line">            </span><br><span class="line">        weight_value = self.transform(data)</span><br><span class="line">        <span class="keyword">with</span> tf.Session(graph=self.graph) <span class="keyword">as</span> session:</span><br><span class="line">            <span class="keyword">return</span> session.run(re_vector, feed_dict=&#123;weight: weight_value&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">"/media/tao/文档/学习/电子书/tensorflow/TensorFlow实战Google深度学习框架/1.0.0/Chapter05/datasets/MNIST_data"</span>, one_hot=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">scaler = preprocessing.StandardScaler()</span><br><span class="line">scaler.fit(mnist.train.images)</span><br><span class="line">data = mnist.train.images - scaler.mean_</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">131</span>)</span><br><span class="line">ax.imshow(mnist.train.images[<span class="number">0</span>].reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">ax.set_title(<span class="string">"before scale"</span>)</span><br><span class="line">ax = fig.add_subplot(<span class="number">132</span>)</span><br><span class="line">ax.imshow(data[<span class="number">0</span>].reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">ax.set_title(<span class="string">"after scale"</span>)</span><br><span class="line">ax = fig.add_subplot(<span class="number">133</span>)</span><br><span class="line">ax.imshow(scaler.mean_.reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">ax.set_title(<span class="string">"mean image"</span>)</span><br><span class="line">fig.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/img/pca5.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pca = TF_PCA(n_dimensions=<span class="number">14</span>*<span class="number">14</span>)</span><br><span class="line">pca.fit(data)</span><br><span class="line"></span><br><span class="line">a = pca.reconstruct(data[<span class="number">0</span>].reshape((<span class="number">1</span>,<span class="number">784</span>)))</span><br><span class="line">plt.imshow((a+scaler.mean_).reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br></pre></td></tr></table></figure>
+<pre><code>cache information 0.7495891560740073
+</code></pre><p><img src="/img/pca6.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reduced_mnist = pca.transform(data)</span><br><span class="line">plt.scatter(reduced_mnist[:,<span class="number">0</span>], reduced_mnist[:,<span class="number">1</span>],c=mnist.train.labels)</span><br></pre></td></tr></table></figure>
+<pre><code>cache information 0.7495891560740073
+</code></pre><p><img src="/img/pca7.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">fig = plt.figure()</span><br><span class="line">fig.add_subplot(<span class="number">331</span>).imshow(pca.components[:,<span class="number">0</span>].reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">fig.add_subplot(<span class="number">332</span>).imshow(pca.components[:,<span class="number">1</span>].reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">fig.add_subplot(<span class="number">333</span>).imshow(pca.components[:,<span class="number">2</span>].reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">fig.add_subplot(<span class="number">334</span>).imshow(pca.components[:,<span class="number">3</span>].reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">fig.add_subplot(<span class="number">335</span>).imshow(pca.components[:,<span class="number">4</span>].reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">fig.add_subplot(<span class="number">336</span>).imshow(pca.components[:,<span class="number">5</span>].reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">fig.add_subplot(<span class="number">337</span>).imshow(pca.components[:,<span class="number">6</span>].reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">fig.add_subplot(<span class="number">338</span>).imshow(pca.components[:,<span class="number">7</span>].reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">fig.add_subplot(<span class="number">339</span>).imshow(pca.components[:,<span class="number">8</span>].reshape((<span class="number">28</span>,<span class="number">28</span>)))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/img/pca8.png" alt="png"></p>
+<p>代码的实现基本重现了上面的原理，<code>transform</code>和<code>reconstruct</code>函数分别就是右乘投影矩阵或者投影矩阵的转置。其实就是autoencoder做的事情。但是注意一点，不同的是如果真的做一个autoencoder这么训练的话是没有PCA的效果好的，因为这样训练出来的autoencoder的encoder和decoder之间没有关系，但是实际上对于PCA二者参数是一样的，另外PCA的线性变换矩阵还要满足正交的要求。因此实际做出来的autocoder没有PCA效果好，但是好在autoencoder可以往deep方向加强。在网上都很多多层去噪自编码器的keras或者tensorflow实现，这里就不贴出来了。下面这个图片是我自己做的实验，使用降噪自编码器重构图片之后，得到的效果。</p>
+<p><img src="/img/pca10.png" alt></p>
+<p>另外PCA的最大的缺点是只能进行线性的降维，处理不了流行问题。因此有很多非线性降维的手段，这个另作总结。对于PCA也可以利用kernel trick变形为KPCA解决非线性问题。</p>
+<p><img src="/img/pca9.png" alt></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/08/13/机器学习-2018-10-13-PCA-AE/" data-id="cjxo5e6t1004gz16dciyudeuf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/maths/">maths</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../16/程序员的玩具-2018-08-16-LC-Heap/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          LeetCode刷题笔记——Heap
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../12/信息安全-2018-08-15-innerEye/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">项目报告——innerEye</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

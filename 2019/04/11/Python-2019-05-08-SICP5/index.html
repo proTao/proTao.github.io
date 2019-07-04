@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>SICP5 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、python中的迭代器首先要区分开迭代器和可迭代对象，前者是指实现了__next__和StopIteration迭代器协议的python对象，后者是指可以使用iter得到其迭代器的对象。比如，iter(range(n))可以获得range对象的迭代器，实际上使用iter可以从任何可迭代对象中获得迭代器，迭代器唯一能做的就是next直到StopIteration。所有的迭代器都是可迭代对象，意">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SICP5">
+<meta property="og:url" content="https://protao.github.io/2019/04/11/Python-2019-05-08-SICP5/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="一、python中的迭代器首先要区分开迭代器和可迭代对象，前者是指实现了__next__和StopIteration迭代器协议的python对象，后者是指可以使用iter得到其迭代器的对象。比如，iter(range(n))可以获得range对象的迭代器，实际上使用iter可以从任何可迭代对象中获得迭代器，迭代器唯一能做的就是next直到StopIteration。所有的迭代器都是可迭代对象，意">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/generator.png">
+<meta property="og:image" content="https://protao.github.io/img/iterator_pattern_uml_diagram.jpg">
+<meta property="og:image" content="https://protao.github.io/2019/04/img/stream1.png">
+<meta property="og:image" content="https://protao.github.io/2019/04/img/stream2.png">
+<meta property="og:updated_time" content="2019-05-10T09:58:13.105Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SICP5">
+<meta name="twitter:description" content="一、python中的迭代器首先要区分开迭代器和可迭代对象，前者是指实现了__next__和StopIteration迭代器协议的python对象，后者是指可以使用iter得到其迭代器的对象。比如，iter(range(n))可以获得range对象的迭代器，实际上使用iter可以从任何可迭代对象中获得迭代器，迭代器唯一能做的就是next直到StopIteration。所有的迭代器都是可迭代对象，意">
+<meta name="twitter:image" content="https://protao.github.io/img/generator.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-Python-2019-05-08-SICP5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2019-04-10T16:00:00.000Z" itemprop="datePublished">2019-04-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/python/">python</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SICP5
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/generator.png" alt="生成器迭代器的关系"></p>
+<h2 id="一、python中的迭代器"><a href="#一、python中的迭代器" class="headerlink" title="一、python中的迭代器"></a>一、python中的迭代器</h2><p>首先要区分开迭代器和可迭代对象，前者是指实现了<code>__next__</code>和<code>StopIteration</code>迭代器协议的python对象，后者是指可以使用<code>iter</code>得到其迭代器的对象。比如，<code>iter(range(n))</code>可以获得range对象的迭代器，实际上使用iter可以从任何可迭代对象中获得迭代器，迭代器唯一能做的就是next直到StopIteration。所有的迭代器都是可迭代对象，意思是你可以从一个迭代器中得到一个迭代器，因此你可以遍历一个迭代器。通常对迭代器使用<code>iter</code>方法返回的是该迭代器自身。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">it1 = iter(a)</span><br><span class="line">it2 = iter(it1)<span class="comment"># 其实it1和it2是同一个对象的两个引用</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>enumerate、zip、reversed和其他一些内置函数会返回迭代器。生成器（无论来自生成器函数还是生成器表达式）是一种创建迭代器的简单方法，python对根据<code>yield</code>关键字自动实现迭代器协议。注意下面的代码中，a不是一个元组，a是一个生成器对象。生成器表达式是列表推倒式的生成器版本，看起来像列表推导式，但是它返回的是一个生成器对象而不是列表对象。看到这里可能有点乱，这些对象的具体关系可以看文章的封面图，自己想一下<code>range</code>对象在图的什么位置？（图片来源于：<a href="https://nvie.com/posts/iterators-vs-generators/" target="_blank" rel="noopener">Iterables vs. Iterators vs. Generators</a>）</p>
+<!-- more -->
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+<p><code>range</code>（当然了，迭代器也是惰性的），却不是迭代器，因为迭代器中的元素是消耗的，然后<code>range</code>对象却不是，而且<code>range</code>对象还实现了长度和下标的方法，因此更准确的来看，<code>range</code>更像是一个列表，只不过是惰性求值的。因为<code>range</code>本身不是迭代器，因为无法对于<code>range</code>调用<code>range</code>函数。与迭代器不同的是，我们可以遍历一个 range 对象而不「消耗」它。range 对象在某种意义上是「惰性的」，因为它不会生成创建时包含的每个数字，相反，当我们在循环中需要的时候，它才将这些数字返回给我们。如果你想要一个 range 对象的描述，可以称它们为懒序列，range 是序列（如列表，元组和字符串），但并不包含任何内存中的内容，而是通过实时计算来返回需要的值。迭代器的特点是，当遍历它时，这些元素将从迭代器中被消耗掉，有时候这个特性可以派上用场（以特殊的方式处理迭代器）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">a = range(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这一段代码可以多次执行</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">    print(a)</span><br><span class="line"></span><br><span class="line">print(<span class="number">5</span> <span class="keyword">in</span> a)</span><br><span class="line">print(<span class="number">5</span> <span class="keyword">in</span> a)</span><br><span class="line"></span><br><span class="line">b = iter([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">print(<span class="number">2</span> <span class="keyword">in</span> b)</span><br><span class="line">print(<span class="number">2</span> <span class="keyword">in</span> b)</span><br></pre></td></tr></table></figure>
+<p>迭代器不需要事先准备好整个迭代过程中的所有元素，仅仅在迭代到某个元素时才计算该元素，而在这之前或之后，元素可以不存在或销毁，因此迭代器是一种重要的<strong>节省内存</strong>的方式，这一点在无限流数据中体现的更为明显。迭代器另外的好处是，提供一种方法顺序访问一个聚合对象中各个元素, 而又无须暴露该对象的内部表示，这种好处本身来源于python中所谓的“迭代器协议”实际上是实现了设计模式中的迭代器模式，这种设计模式用于以不同的方式来遍历整个整合对象，把在元素之间游走的责任交给迭代器，而不是聚合对象。使用迭代器模式，可以帮助我们：(1)访问一个聚合对象的内容而无须暴露它的内部表示。 (2)需要为聚合对象提供多种遍历方式。(3)为遍历不同的聚合结构提供一个统一的接口。迭代器模式的类图如下：</p>
+<p><img src="/img/iterator_pattern_uml_diagram.jpg" alt="迭代器模式类图"></p>
+<h2 id="二、设计一个惰性序列"><a href="#二、设计一个惰性序列" class="headerlink" title="二、设计一个惰性序列"></a>二、设计一个惰性序列</h2><p>这里我们设计一个惰性求值的懒序列，主要思想与代码参考《SICP-python描述》一书。如果让我们设计一个<code>range</code>对象，最简单的设计思想就是维护上下界与<code>__iter__</code>接口，求指定下标的值可以直接用<code>start+index*step</code>得到，长度也可以使用<code>(end-start)/step</code>求得。但是如果是更复杂的懒序列呢？比如我想实现一个输出素数的懒序列该如何实现？下面的设计中使用递归的思路完成对懒序列的实现，可以在其中发现函数式编程思想的影子。下面的<code>Stream</code>类使用<strong>延时计算</strong>的方法模拟了一个流对象，然而并没有显式的直接维护其局部状态，并不断地对其进行更新或者赋值，我们要做的只维护当前值与计算下一个值的方法，这种结构无法随机访问，但是非常适合顺序访问，因此也很容易实现它的迭代器接口。</p>
+<p>在python中，有很多接受可迭代对象并返回迭代器的函数，例如<code>map</code>、<code>filter</code>、<code>reduce</code>等，这些函数都是基于一个考虑：对于序列，可以应用某种操作，但又不会带来将序列作为表的操作带来的某种代价。利用流结构可以兼顾两者：序列操作的优雅性与增量计算的高效性。这里用到了一个思想，即偏序对是我们构建一切的基石。我们使用偏序对构建序列，即把序列看作两部分：第一个元素与剩余元素构成的序列，这样的话递归的形式就自然而然的出现了。然而递归的部分我们不会真的存储起来，而是存储递归部分的计算方法，等到需要的时候才真正的计算出来。但是这个区别对于使用者是完全透明的，也就是说，作为一种数据抽象，流和表完全一致，两者不同的地方在于元素的求值时间，一个是在构造时，一个是在使用时。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> memory_profiler <span class="keyword">import</span> profile</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Stream</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""A lazily computed recursive list."""</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, first, compute_rest, empty=False)</span>:</span></span><br><span class="line">        self.first = first</span><br><span class="line">        self._compute_rest = compute_rest</span><br><span class="line">        self.empty = empty</span><br><span class="line">        self._rest = <span class="keyword">None</span></span><br><span class="line">        self._computed = <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">rest</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Return the rest of the stream, computing it if necessary."""</span></span><br><span class="line">        <span class="keyword">assert</span> <span class="keyword">not</span> self.empty, <span class="string">'Empty streams have no rest.'</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self._computed:</span><br><span class="line">            self._rest = self._compute_rest(self.first)</span><br><span class="line">            self._computed = <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">return</span> self._rest</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.empty:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">'&lt;empty stream&gt;'</span></span><br><span class="line">        <span class="keyword">if</span> self._rest:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">'Stream(&#123;0&#125;, \n&#123;1&#125;)'</span>.format(repr(self.first), repr(self._rest))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">'Stream(&#123;0&#125;, \n&#123;1&#125;)'</span>.format(repr(self.first), repr(self._compute_rest))</span><br><span class="line"></span><br><span class="line">Stream.empty = Stream(<span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_next_integer</span><span class="params">(first)</span>:</span></span><br><span class="line">    print(<span class="string">"&#123;&#125; -&gt; lazy computing -&gt; &#123;&#125;"</span>.format(first, first+<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> Stream(first+<span class="number">1</span>, make_next_integer)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">map_stream</span><span class="params">(fn, s)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> s.empty:</span><br><span class="line">        <span class="keyword">return</span> s</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compute_rest</span><span class="params">(first)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> map_stream(fn, s._compute_rest(first))</span><br><span class="line">    new_val = fn(s.first)</span><br><span class="line">    <span class="keyword">return</span> Stream(new_val, compute_rest)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">filter_stream</span><span class="params">(fn, s)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> s.empty:</span><br><span class="line">        <span class="keyword">return</span> s</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compute_rest</span><span class="params">(first)</span>:</span></span><br><span class="line">        debugframe() <span class="comment"># 1</span></span><br><span class="line">        <span class="keyword">return</span> filter_stream(fn, s._compute_rest(first))</span><br><span class="line">    <span class="keyword">if</span> fn(s.first):</span><br><span class="line">        <span class="keyword">return</span> Stream(s.first, compute_rest)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> compute_rest(s.first)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">primes</span><span class="params">(pos_stream)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">not_divible</span><span class="params">(x)</span>:</span></span><br><span class="line">        print(<span class="string">"try divide"</span>, pos_stream.first)</span><br><span class="line">        <span class="keyword">if</span> x % pos_stream.first != <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(x, <span class="string">"%"</span>, pos_stream.first, <span class="string">"!=0"</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compute_rest</span><span class="params">(first)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> primes(filter_stream(not_divible, pos_stream.rest))</span><br><span class="line">    <span class="keyword">return</span> Stream(pos_stream.first, compute_rest)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">truncate_stream</span><span class="params">(s, k)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> s.empty <span class="keyword">or</span> k == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> Stream.empty</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compute_rest</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">return</span> truncate_stream(s.rest, k<span class="number">-1</span>)</span><br><span class="line">    <span class="keyword">return</span> Stream(s.first, compute_rest)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stream_to_list</span><span class="params">(s)</span>:</span></span><br><span class="line">    r = []</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> s.empty:</span><br><span class="line">        r.append(s.first)</span><br><span class="line">        s = s.rest</span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">debugframe</span><span class="params">()</span>:</span></span><br><span class="line">    frame = sys._getframe()</span><br><span class="line">    f_count = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> frame.f_back:</span><br><span class="line">        name = frame.f_code.co_name</span><br><span class="line">        <span class="keyword">if</span> name == <span class="string">"&lt;module&gt;"</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        print(<span class="string">"[&#123;&#125;]"</span>.format(name))</span><br><span class="line">        frame = frame.f_back</span><br></pre></td></tr></table></figure>
+<p>执行<code>show1</code>和<code>show2</code>函数可以看出来，<code>map_stream</code>和<code>filter_stream</code>这两个函数其实是为返回的Stream绑定了新的“延时函数”，这个新的函数中通过闭包绑定了旧的延时递推函数以及新的过滤或者映射函数。</p>
+<p>重点看<code>filter_stream</code>函数，这个函数其实是干了这么一个事，在函数内部弄了一个新的<code>compute_rest</code>函数，用这个函数替换原来的<code>Stream</code>中的延时函数。特殊的是，这个新的<code>compute_rest</code>是一个闭包，并绑定了<code>filter_stream</code>和<code>Stream</code>原始的延时求值函数，而filter_stream`也是一个闭包。用图来表示是这样的。</p>
+<p><img src="../../img/stream1.png" alt></p>
+<p>新的<code>Stream</code>每次访问属性<code>rest</code>的时候，就是执行这个新的闭包版本的<code>compute_rest</code>，然后这个函数会通过原func和当前的first计算出新的<code>Stream</code>，然后执行绑定其上的<code>filter_stream</code>，判断当前的Stream符不符合要求，不符合要求的话会递归的执行<code>filter_stream</code>，直到遇到符合要求的。可以通过在注释为1的执行<code>debugframe</code>函数输出函数调用栈观察这种现象。</p>
+<p>了解了这一点之后再看primes函数，该函数实现了一个惰性的基于埃拉托斯特尼筛法的素数序列。每次要执行<code>rest</code>函数时才会计算。不过需要注意的是，该函数在哪里执行了筛法？可以执行以下代码段：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pos = Stream(<span class="number">2</span>, make_next_integer)</span><br><span class="line">p = primes(pos)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">    p = p.rest</span><br><span class="line">    print(<span class="string">"="</span>*<span class="number">20</span>)</span><br></pre></td></tr></table></figure>
+<p>可以清楚地看到，每次执行是，函数栈的深度会越来越大，是因为<code>filter</code>函数每次都会进行一次新的绑定。如下图所示。</p>
+<p><img src="../../img/stream2.png" alt></p>
+<h2 id="三、构建数据处理管道"><a href="#三、构建数据处理管道" class="headerlink" title="三、构建数据处理管道"></a>三、构建数据处理管道</h2><p>我们使用协程,引入了一种不同的方式来解构复杂的计算。它是一种针对有序数据的任务处理方式。就像子过程那样,协程会计算复杂计算的一小步。但是,在使用协程时,没有主函数来协调结果。反之,协程会自发链接到一起来组成流水线。可能有一些协程消耗输入数据,并把它发送到其它协程。也可能有一些协程,每个都对发送给它的数据执行简单的处理步骤。最后可能有另外一些协程输出最终结果。</p>
+<p>协程和子过程的差异是概念上的:子过程在主函数中位于下级,但是协程都是平等的,它们协作组成流水线,不带有任何上级函数来负责以特定顺序调用它们。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gen_str</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="string">"""a string generator, using s as a seed</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    salt = <span class="string">"usbdhcgsta"</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        s = s[<span class="number">1</span>:] + salt[i]</span><br><span class="line">        <span class="keyword">yield</span> s</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">producer_str</span><span class="params">(start, next_str, next_coroutine)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    start是一个种子</span></span><br><span class="line"><span class="string">    next_str是父生成器</span></span><br><span class="line"><span class="string">    next_coroutine是子生成器</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">for</span> s <span class="keyword">in</span> next_str(start):</span><br><span class="line">        print(<span class="string">"&#123;&#125; -&gt; &#123;&#125; : &#123;&#125;"</span>.format(next_str.__name__, next_coroutine.__name__, s))</span><br><span class="line">        next_coroutine.send(s)</span><br><span class="line">    next_coroutine.close()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">filter_start</span><span class="params">(start, next_coroutine)</span>:</span></span><br><span class="line">    print(<span class="string">"start [filter_start]"</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            s = (<span class="keyword">yield</span>)</span><br><span class="line">            print(<span class="string">"[filter receive] : "</span>, s)</span><br><span class="line">            <span class="keyword">if</span> s.startswith(start):</span><br><span class="line">                print(<span class="string">"[filter -&gt; &#123;&#125;]:&#123;&#125;"</span>.format(next_coroutine.__name__, s))</span><br><span class="line">                next_coroutine.send(s)</span><br><span class="line">    <span class="keyword">except</span> GeneratorExit:</span><br><span class="line">        next_coroutine.close()</span><br><span class="line">        print(<span class="string">"[filter_start] done"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">consumer_print</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"start [consumer_print]"</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            s = (<span class="keyword">yield</span>)</span><br><span class="line">            print(<span class="string">"-&gt;[consumer_print] : &#123;&#125;"</span>.format(s))</span><br><span class="line">    <span class="keyword">except</span> GeneratorExit:</span><br><span class="line">        print(<span class="string">"[consumer_print] done!"</span>)</span><br><span class="line"></span><br><span class="line">myprinter = consumer_print()</span><br><span class="line">next(myprinter) <span class="comment"># start it</span></span><br><span class="line"></span><br><span class="line">myfilter = filter_start(<span class="string">"p"</span>, myprinter)</span><br><span class="line">next(myfilter) <span class="comment"># start it</span></span><br><span class="line"></span><br><span class="line">producer_str(<span class="string">"apple"</span>, gen_str, myfilter)</span><br><span class="line"><span class="string">"""输出为：</span></span><br><span class="line"><span class="string">start [consumer_print]</span></span><br><span class="line"><span class="string">start [filter_start]</span></span><br><span class="line"><span class="string">gen_str -&gt; filter_start : ppleu</span></span><br><span class="line"><span class="string">[filter receive] :  ppleu</span></span><br><span class="line"><span class="string">[filter -&gt; consumer_print]:ppleu</span></span><br><span class="line"><span class="string">-&gt;[consumer_print] : ppleu</span></span><br><span class="line"><span class="string">gen_str -&gt; filter_start : pleus</span></span><br><span class="line"><span class="string">[filter receive] :  pleus</span></span><br><span class="line"><span class="string">[filter -&gt; consumer_print]:pleus</span></span><br><span class="line"><span class="string">-&gt;[consumer_print] : pleus</span></span><br><span class="line"><span class="string">gen_str -&gt; filter_start : leusb</span></span><br><span class="line"><span class="string">[filter receive] :  leusb</span></span><br><span class="line"><span class="string">gen_str -&gt; filter_start : eusbd</span></span><br><span class="line"><span class="string">[filter receive] :  eusbd</span></span><br><span class="line"><span class="string">gen_str -&gt; filter_start : usbdh</span></span><br><span class="line"><span class="string">[filter receive] :  usbdh</span></span><br><span class="line"><span class="string">gen_str -&gt; filter_start : sbdhc</span></span><br><span class="line"><span class="string">[filter receive] :  sbdhc</span></span><br><span class="line"><span class="string">gen_str -&gt; filter_start : bdhcg</span></span><br><span class="line"><span class="string">[filter receive] :  bdhcg</span></span><br><span class="line"><span class="string">gen_str -&gt; filter_start : dhcgs</span></span><br><span class="line"><span class="string">[filter receive] :  dhcgs</span></span><br><span class="line"><span class="string">gen_str -&gt; filter_start : hcgst</span></span><br><span class="line"><span class="string">[filter receive] :  hcgst</span></span><br><span class="line"><span class="string">gen_str -&gt; filter_start : cgsta</span></span><br><span class="line"><span class="string">[filter receive] :  cgsta</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+<p>注意后续有其他处理协程的函数内部，需要负责将后续的携程关闭，否则后续的协程会一直等待。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/00143208573480558080fa77514407cb23834c78c6c7309000" target="_blank" rel="noopener">廖雪峰：异步IO</a><br>详见<a href="https://blog.csdn.net/IaC743nj0b/article/details/79547122" target="_blank" rel="noopener">Python：range 对象并不是迭代器</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2019/04/11/Python-2019-05-08-SICP5/" data-id="cjxo5e6qg003cz16dwfph9px9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../14/Python-2019-04-15-PyFrameObject/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          python中的字节码对象初探
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../01/C-2019-04-01-Tricks/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">仓鼠一般搜集到的C++技巧</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

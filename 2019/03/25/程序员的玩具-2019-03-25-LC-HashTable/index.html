@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>LeetCode刷题笔记——HashTable | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="705/706. Design HashSet/HashMap这里主要是参考了python源码中对dict的实现，可以参考我的博客中对python内建dict的相关文章。这里主要采用的策略是：  使用开放寻址法解决冲突 使用与python内部一致的二次哈希函数 桶数按照实际使用量“used”进行控制 负载因子的阈值设置为2/3 因为元素都是数字，所以使用字符串“dummy”表示dummy态的桶">
+<meta name="keywords" content="algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode刷题笔记——HashTable">
+<meta property="og:url" content="https://protao.github.io/2019/03/25/程序员的玩具-2019-03-25-LC-HashTable/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="705/706. Design HashSet/HashMap这里主要是参考了python源码中对dict的实现，可以参考我的博客中对python内建dict的相关文章。这里主要采用的策略是：  使用开放寻址法解决冲突 使用与python内部一致的二次哈希函数 桶数按照实际使用量“used”进行控制 负载因子的阈值设置为2/3 因为元素都是数字，所以使用字符串“dummy”表示dummy态的桶">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-11T07:05:53.421Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LeetCode刷题笔记——HashTable">
+<meta name="twitter:description" content="705/706. Design HashSet/HashMap这里主要是参考了python源码中对dict的实现，可以参考我的博客中对python内建dict的相关文章。这里主要采用的策略是：  使用开放寻址法解决冲突 使用与python内部一致的二次哈希函数 桶数按照实际使用量“used”进行控制 负载因子的阈值设置为2/3 因为元素都是数字，所以使用字符串“dummy”表示dummy态的桶">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-程序员的玩具-2019-03-25-LC-HashTable" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2019-03-24T16:00:00.000Z" itemprop="datePublished">2019-03-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LeetCode刷题笔记——HashTable
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="705-706-Design-HashSet-HashMap"><a href="#705-706-Design-HashSet-HashMap" class="headerlink" title="705/706. Design HashSet/HashMap"></a>705/706. Design HashSet/HashMap</h2><p>这里主要是参考了python源码中对dict的实现，可以参考我的博客中对python内建dict的相关文章。这里主要采用的策略是：</p>
+<ol>
+<li>使用开放寻址法解决冲突</li>
+<li>使用与python内部一致的二次哈希函数</li>
+<li>桶数按照实际使用量“used”进行控制</li>
+<li>负载因子的阈值设置为2/3</li>
+<li>因为元素都是数字，所以使用字符串“dummy”表示dummy态的桶</li>
+</ol>
+<a id="more"></a>
+<p>看了一下提交中最快的方法是封装了python自己的dict的接口，这个不予比较，也肯定比不过。另外的实现方法是固定的桶数，每个桶是一个动态数组，不出意外，在数据量远大于桶数的时候，这种方法实现的哈希表的时间复杂度会变成平方级别。因此使用随机数据进行测试，方法是随机产生1:3:1的插入、查找与删除操作，操作次数与时间的关系如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>100</th>
+<th>200</th>
+<th>500</th>
+<th>1000</th>
+<th>10000</th>
+<th>20000</th>
+<th>40000</th>
+<th>80000</th>
+<th>160000</th>
+<th>320000</th>
+<th>500000</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>动态哈希表</td>
+<td>0.00043133900180691853</td>
+<td>0.0009461890003876761</td>
+<td>0.0026909899970632978</td>
+<td>0.00474665700312471</td>
+<td>0.05380460600281367</td>
+<td>0.1239928860013606</td>
+<td>0.3027137169992784</td>
+<td>0.9117266799948993</td>
+<td>3.3329256319993874</td>
+<td>14.875687354004185</td>
+<td>30.45249983100075</td>
+</tr>
+<tr>
+<td>静态哈希表</td>
+<td>0.0016315299944835715</td>
+<td>0.002342113002669066</td>
+<td>0.005659467999066692</td>
+<td>0.01336817800620338</td>
+<td>0.1381508459962788</td>
+<td>0.2928399669981445</td>
+<td>0.5868546249985229</td>
+<td>1.156653906997235</td>
+<td>2.358773715001007</td>
+<td>5.801840243002516</td>
+<td>8.933496708006714</td>
+</tr>
+</tbody>
+</table>
+<h2 id="136-Single-Number-bangbang"><a href="#136-Single-Number-bangbang" class="headerlink" title="136. Single Number (bangbang)"></a>136. Single Number <em>(bangbang)</em></h2><p>使用哈希表解决这道题的话再简单不过了。但是题目中的额外要求是不使用额外空间。这个想起来就有点费劲了，看所属的类别有“Bit Manipulation”，以为是用BitMap但是这个实际上也是会随着空间的增长而增长的啊……死活就没想到异或操作，答案也是十分的简单。具体看位操作的相关文章。</p>
+<h2 id="49-Group-Anagrams"><a href="#49-Group-Anagrams" class="headerlink" title="49. Group Anagrams"></a>49. Group Anagrams</h2><p>这道题的目标是把属于“Anagrams”的词分组，“Anagrams”是指颠倒字母而成的词。因此“Anagram”实际上是定义了一种<strong>等价关系</strong>。现在要做的就是给我一个字符串，我能计算出一个哈希函数，同一个等价类的哈希函数要一样，不同的等价类的一定不能一样。官方给了一个思路是利用排序后的字符串。但是这样效率有些低，我感觉利用数学性质应该也可以找到一个好的哈希函数，我自己往位图的方向想了想，没想出来比较好的。看到评论区中给了一个叫好的思路，就是利用质数的性质。任何一个数的因式分解是唯一的，因此没有两种不同构成的因式分解可以计算出一个数。利用这个性质可以在线性时间计算一个字符串的键。</p>
+<h2 id="36-Valid-Sudoku"><a href="#36-Valid-Sudoku" class="headerlink" title="36. Valid Sudoku"></a>36. Valid Sudoku</h2><p>需要三个类型set，分别保证同一个数字不出现在同一行、同一列和同一个3*3的格子中。</p>
+<h2 id="652-Find-Duplicate-Subtrees-bangbang"><a href="#652-Find-Duplicate-Subtrees-bangbang" class="headerlink" title="652. Find Duplicate Subtrees (bangbang)"></a>652. Find Duplicate Subtrees (<em>bangbang</em>)</h2><p>这道题想要快速判断一个子树是否已经出现，最好的方法就是想一个函数，可以将同一个子树映射为相同的key，不同的子树不会映射到同一个key。我一开始想的方法是利用质数，具体方法是一个树的id等于（左子树的id×质数a+右子树的id×质数2+根节点的值×质数3），这个没有啥理论依据，但是我感觉看起来可行。然而实际的提交结果不对，会比答案中的多找到一些重复子树。这也就意味着一些不同的树计算出了相同的id。然后看了solution的思路，倒是很简单的……也是利用递归的思路，不过一个树的id等于（左子树的id，右子树的id，根节点的值）构成的元组。我想利用质数相乘的方法就是想把这三者结合，这个方法直接就不结合，简单粗暴而有效！并且维护一个map负责将三元组映射为一个数字，找到没有的三元组就分配一个新的数字就行。直接维护三元组行吗？不行的，因此必须在每一步把三元组压缩为一个id才能保证每一个节点都可以用一个三元组表示，要是只用三元组会导致复杂的树会被表示为一个多层嵌套的三元组，得不偿失。<br>另外代码中参考别人的实现用了两个Counter和defaultdict的小技巧。前者可以不把未见元素初始化为零，Counter会自己做这个工作；后者可以把defaultdict的工厂函数设置为自身的<code>__len__</code>方法完成自动分配递增id的功能。</p>
+<h2 id="3-Longest-Substring-Without-Repeating-Characters-bangbang"><a href="#3-Longest-Substring-Without-Repeating-Characters-bangbang" class="headerlink" title="3. Longest Substring Without Repeating Characters (bangbang)"></a>3. Longest Substring Without Repeating Characters (<em>bangbang</em>)</h2><p>这道题重新做比我之前的时间效率大大提高……这次的思路是这样的：首先要维护当前的最长子串，然后因为遇到一个新的字符的时候要判断是否已经出现过，因此这个子串用 map 来存，这个map负责把字符关联到他的下标。用 map 又有一个问题，就是map是无序的，我知道了一个字符重复了，那么我需要把在这个字符之前出现的字符全部从子串中删掉。这个问题其实也好解决，因为我知道当前子串的长度，也知道被重复的字符的下标，也是到新遇到的字符的下标，这样我就可以知道要被删除的部分的下标范围，然后就更新就可以了。看Solution中管这个叫sliding window方法，我也没仔细看……</p>
+<h2 id="454。4Sum-II"><a href="#454。4Sum-II" class="headerlink" title="454。4Sum II"></a>454。4Sum II</h2><p>把两个列表的和的所有可能性存为集合是效率最高的。因为第一个步骤————建集合的时间复杂度是平方，第二个步骤————遍历另外两个的复杂度是平方，此时总的复杂度是最小的。如果减小任意一个步骤的复杂度，势必会导致另一个步骤的复杂度上升，使得总的复杂度上升。</p>
+<h2 id="347-Top-K-Frequent-Elements"><a href="#347-Top-K-Frequent-Elements" class="headerlink" title="347. Top K Frequent Elements"></a>347. Top K Frequent Elements</h2><p>一看见top k，就想到要用堆，这里不详细写了。我是用的<code>Counter.most_common</code>取得巧。</p>
+<h2 id="380-Insert-Delete-GetRandom-O-1"><a href="#380-Insert-Delete-GetRandom-O-1" class="headerlink" title="380. Insert Delete GetRandom O(1)"></a>380. Insert Delete GetRandom O(1)</h2><p>我的思路是一个数组A存元素的值，一个map存倒排索引，将元素映射至A中的位置，插入时在尾端插入，更新map，删除时需要走点心，利用数组的无序性，把被删除的元素和最后的元素交换就可以安全的缩小数组长度。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2019/03/25/程序员的玩具-2019-03-25-LC-HashTable/" data-id="cjxo5e7ff007nz16dta6vi27u" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../26/程序员的玩具-2019-03-26-LC-BitManipulation/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          LeetCode刷题笔记——Bit Manipulation
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../23/程序员的玩具-2019-03-23-LC-BFS/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">LeetCode刷题笔记——BFS</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

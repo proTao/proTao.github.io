@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>HMM模型之二————Viterbi算法 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="第二个问题：Viterbi算法土方法现在来到了第二个问题，我吃了三天食堂都是红烧肉，我想知道这三天的大厨最有可能是谁，怎么办？直观的思路还是使用枚举法（没办法啊。。。我总是想出这么简单naive的小白算法）。但是前面已经讨论，这种算法无论是从效率上还是逼格上都太低，因此我们考虑其他的方法。 还算好但是不常用的方法我们上一篇文章提到了我们可以用前向变量和后向变量搭配使用求解t时刻内部变量是\(S_i">
+<meta name="keywords" content="machinelearning,algorithm,nlp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HMM模型之二————Viterbi算法">
+<meta property="og:url" content="https://protao.github.io/2017/03/29/机器学习-2017-3-29-ViterbiAlgorithm/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="第二个问题：Viterbi算法土方法现在来到了第二个问题，我吃了三天食堂都是红烧肉，我想知道这三天的大厨最有可能是谁，怎么办？直观的思路还是使用枚举法（没办法啊。。。我总是想出这么简单naive的小白算法）。但是前面已经讨论，这种算法无论是从效率上还是逼格上都太低，因此我们考虑其他的方法。 还算好但是不常用的方法我们上一篇文章提到了我们可以用前向变量和后向变量搭配使用求解t时刻内部变量是\(S_i">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/viterbibacktrack.png">
+<meta property="og:updated_time" content="2018-05-24T13:39:09.769Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HMM模型之二————Viterbi算法">
+<meta name="twitter:description" content="第二个问题：Viterbi算法土方法现在来到了第二个问题，我吃了三天食堂都是红烧肉，我想知道这三天的大厨最有可能是谁，怎么办？直观的思路还是使用枚举法（没办法啊。。。我总是想出这么简单naive的小白算法）。但是前面已经讨论，这种算法无论是从效率上还是逼格上都太低，因此我们考虑其他的方法。 还算好但是不常用的方法我们上一篇文章提到了我们可以用前向变量和后向变量搭配使用求解t时刻内部变量是\(S_i">
+<meta name="twitter:image" content="https://protao.github.io/img/viterbibacktrack.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-机器学习-2017-3-29-ViterbiAlgorithm" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2017-03-28T16:00:00.000Z" itemprop="datePublished">2017-03-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/机器学习/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      HMM模型之二————Viterbi算法
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="第二个问题：Viterbi算法"><a href="#第二个问题：Viterbi算法" class="headerlink" title="第二个问题：Viterbi算法"></a>第二个问题：Viterbi算法</h2><h3 id="土方法"><a href="#土方法" class="headerlink" title="土方法"></a>土方法</h3><p>现在来到了第二个问题，我吃了三天食堂都是红烧肉，我想知道这三天的大厨最有可能是谁，怎么办？直观的思路还是使用枚举法（没办法啊。。。我总是想出这么简单naive的小白算法）。但是前面已经讨论，这种算法无论是从效率上还是逼格上都太低，因此我们考虑其他的方法。</p>
+<h3 id="还算好但是不常用的方法"><a href="#还算好但是不常用的方法" class="headerlink" title="还算好但是不常用的方法"></a>还算好但是不常用的方法</h3><p>我们上一篇文章提到了我们可以用前向变量和后向变量搭配使用求解t时刻内部变量是\(S_i\)且输出观测序列O的概率，那么算出t时刻全部的内部状态的各自的概率，那么概率最大的那个就是t时刻最有可能的内部状态，对每个时刻都进行这样的计算不就可以得到最有可能的内部序列的吗？还是上次我们提到的例子，我吃到了三天红烧肉，想求出隐藏的后厨序列，下面已经给出计算好的前向变量和后向变量。</p>
+<table>
+<thead>
+<tr>
+<th>前向变量</th>
+<th>t=1</th>
+<th>t=2</th>
+<th>t=3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大爷(i=1)</td>
+<td>0.54</td>
+<td>0.0018</td>
+<td>0.00549</td>
+</tr>
+<tr>
+<td>大叔(i=2)</td>
+<td>0.03</td>
+<td>0.0552</td>
+<td>0.011142</td>
+</tr>
+<tr>
+<td>大哥(i=3)</td>
+<td>0</td>
+<td>0.0393</td>
+<td>0.004701</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>后向变量</th>
+<th>t=1</th>
+<th>t=2</th>
+<th>t=3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大爷(i=1)</td>
+<td>0.368</td>
+<td>0.16</td>
+<td>1</td>
+</tr>
+<tr>
+<td>大叔(i=2)</td>
+<td>0.487</td>
+<td>0.23</td>
+<td>1</td>
+</tr>
+<tr>
+<td>大哥(i=3)</td>
+<td>0.487</td>
+<td>0.23</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>那么第一天是大爷的“概率”：<br>$$ \alpha_{t=1}(1)*\beta_{t=1}(1) = 0.54*0.368=0.19872 $$</p>
+<p>第一天是大叔的“概率”：<br>$$ \alpha_{t=1}(2)*\beta_{t=1}(2) = 0.03*0.487=0.01461 $$<br>而第一天不可能是大哥，所以我们可以认为第一天最有可能的是大爷。此处的概率一词加了引号是因为只是形式意义上的一种可能性的表示，但是不满足概率的归一化的要求。<br>以此类推，计算第二天第三天，得到最有可能的后厨序列是：大爷-大叔-大叔。这有什么问题呢？</p>
+<a id="more"></a>
+<p>“问题在于在可能性很多的时候可能出现各个时刻得到的最大的可能的内部状态，但是相邻的两个内部状态可能之间的转换概率很小或者甚至为零。”大部分的教材上都是差不多这个理由，但是我这里也是实在不能给出一个这个算法的反例，毕竟前向后向变量也考虑到了序列之间转换的问题，可能出现这种情况要求大量的内部状态。这里不深究啦，毕竟我们有更好的算法。（摊手）</p>
+<h3 id="主角登场：维特比算法"><a href="#主角登场：维特比算法" class="headerlink" title="主角登场：维特比算法"></a>主角登场：维特比算法</h3><p>我们想要计算最有可能的内部状态序列，也就是说求解该式\(argmax_XP(X|O,\mu)\)。Viterbi算法是一种动态规划算法，类似于其他动态规划算法，关键思路用比较“傻”的方式，可以这么说：“如果我选你了，我也要选你最好的方式”。这句话可能不太像人话，但是举个例子可能更好理解。假设我想去很远的一个地方，中间要休息好几次，我不知道最优路径，但是我假设要去A地休息，我也会选择最近的路去A，假设去A的途中要路过B，我也会选择最近的路去B，这是很直观的想法，问题在于我不知道是否要去A或者B。<br>类似的思路，我们可以定义Viterbi变量</p>
+<blockquote>
+<p>$$ \delta_t(i)=\max_{q_1q_2…q_{t-1}}P(q_1q_2…q_{t-1},q_t=S_i,O_1O_2…O_t|\mu) $$</p>
+</blockquote>
+<p>这个变量所表示的是**在时间t时，模型沿着最佳路径到达内部状态Si，使得输出观察序列$O_1O_2…O_t$的最大概率**。<br>假设我只考虑第一天，那么只需要计算第一个内部变量的初始概率乘以对应的输出概率，选取最大值就好了。但是我不知道真正的最有内部序列的第一个状态是不是就是这时算出的最大可能状态，没关系，我把第一步计算出的内部状态的概率记下来，以备后用。计算第二步的时候对每个可能的状态考虑所有上一步的可能性，并选择最大的状态，然后也全部记录下来（不但要记录那个最大概率，也要记录得到最大概率的上一步的选择）。知道计算第i步的时候我只考虑第i-1步就可以，因为我知道i-1步及其之前记录的概率已经是经过选择的最好路径了。这样直到最后一步就得到了最优内部状态序列。我不知道有没有讲明白，talk is cheap，tell you the （伪）code。</p>
+<ul>
+<li><p>初始化：<br>$$ \delta_{t=1}(i)=\pi_i*b_{i,o_1}，(1\leq i\leq N) $$</p>
+</li>
+<li><p>递归计算：<br>$$ \delta_{t}(j)=max_i[\delta_{t-1}(i)*a_{i,j}]*b_{j,o_t} $$<br>$$ \varphi_{t}(j)=argmax_i[\varphi_{t-1}(i)*a_{i,j}]*b_{j,o_t} $$</p>
+</li>
+<li><p>结束<br>$$ Q_t=argmax_i[\delta_T(i)] $$<br>$$ p(Q_T)=max[\delta_T(i)] $$</p>
+</li>
+<li><p>回溯路径<br>$$ Q_t = \varphi_{t+1}(q_{t+1}) $$</p>
+</li>
+</ul>
+<p>这里重复给出HMM之大学食堂的两个概率矩阵：</p>
+<table>
+<thead>
+<tr>
+<th>转移概率</th>
+<th>大爷</th>
+<th>大叔</th>
+<th>大哥</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大爷</td>
+<td>0</td>
+<td>0.3</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td>大叔</td>
+<td>0.1</td>
+<td>0.4</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>大哥</td>
+<td>0.1</td>
+<td>0.4</td>
+<td>0.5</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>输出概率</th>
+<th>蕉</th>
+<th>西</th>
+<th>肉</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大爷</td>
+<td>0.1</td>
+<td>0.3</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>大叔</td>
+<td>0.3</td>
+<td>0.4</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>大哥</td>
+<td>0.6</td>
+<td>0.3</td>
+<td>0.1</td>
+</tr>
+</tbody>
+</table>
+<p>来个栗子，还是计算前三天都吃到红烧肉的最有可能的内部序列。</p>
+<ul>
+<li>t=1时刻<br>$$ \delta_{t=1}(1)=\pi_1*b_{1,o_1}=0.9*0.6=0.54 $$<br>$$ \delta_{t=1}(2)=\pi_2*b_{2,o_1}=0.1*0.3=0.03 $$<br>$$ \delta_{t=1}(3)=\pi_3*b_{3,o_1}=0*0.1=0 $$</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Viterbi变量</th>
+<th>t=1</th>
+<th>t=2</th>
+<th>t=3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大爷</td>
+<td>0.54</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>大叔</td>
+<td>0.03</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>大哥</td>
+<td>0</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>这是此时的以矩阵形式写出的Viterbi变量，由于t=1时不需要从上一时刻的维特比变量中选择最大路径，因此直接计算就可以。</p>
+<ul>
+<li>t=2时刻<br>$$ \delta_{t=2}(1)=\max_i[\delta_{t=1}(i) * a_{i,1}] * b_{1,o_2} = 0.03 * 0.1 * 0.6=0.0018 $$<br>选择的上一个最佳Viterbi变量是\(\delta_{t=1}(2)\)<br>$$ \delta_{t=2}(2)=\max_i[\delta_{t=1}(i) * a_{i,2}] * b_{2,o_2} = 0.54 * 0.3 * 0.3=0.0486 $$<br>（选择的上一个最佳Viterbi变量是\(\delta_{t=1}(1)\)）<br>$$ \delta_{t=2}(3)=\max_i[\delta_{t=1}(i) * a_{i,3}] * b_{3,o_2} = 0.54 * 0.7 * 0.1=0.0378 $$<br>（选择的上一个最佳Viterbi变量是\(\delta_{t=1}(1)\)）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Viterbi变量</th>
+<th>t=1</th>
+<th>t=2</th>
+<th>t=3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大爷</td>
+<td>0.54</td>
+<td>0.0018（From 2）</td>
+<td></td>
+</tr>
+<tr>
+<td>大叔</td>
+<td>0.03</td>
+<td>0.0486（From 1）</td>
+<td></td>
+</tr>
+<tr>
+<td>大哥</td>
+<td>0</td>
+<td>0.0378（From 1）</td>
+</tr>
+</tbody>
+</table>
+<p>这是此时的以矩阵形式写出的Viterbi变量，并且此时的每一个节点计算后要存储自己是通过上一时刻的哪一个变量计算得到，方便最后一步的回溯。</p>
+<ul>
+<li>t=3时刻<br>$$ \delta_{t=3}(1)=\max_i[\delta_{t=2}(i)*a_{i,1}]*b_{1,o_2} = 0.486*0.1*0.6=0.02916 $$<br>（选择的上一个最佳Viterbi变量是\(\delta_{t=2}(2)\)）<br>$$ \delta_{t=3}(2)=\max_i[\delta_{t=2}(i)*a_{i,2}]*b_{2,o_2} = 0.486*0.4*0.3=0.05832 $$<br>（选择的上一个最佳Viterbi变量是\(\delta_{t=2}(2)\)）<br>$$ \delta_{t=3}(3)=\max_i[\delta_{t=2}(i)*a_{i,3}]*b_{3,o_2} = 0.486*0.5*0.1=0.0243 $$<br>（选择的上一个最佳Viterbi变量是\(\delta_{t=2}(2)\)）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Viterbi变量</th>
+<th>t=1</th>
+<th>t=2</th>
+<th>t=3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大爷</td>
+<td>0.54</td>
+<td>0.0018（From 2）</td>
+<td>0.02916（From 2）</td>
+</tr>
+<tr>
+<td>大叔</td>
+<td>0.03</td>
+<td>0.0486（From 1）</td>
+<td>0.05832（From 2）</td>
+</tr>
+<tr>
+<td>大哥</td>
+<td>0</td>
+<td>0.0378（From 1）</td>
+<td>0.0243（From 2）</td>
+</tr>
+</tbody>
+</table>
+<p>那么计算到最后一步时，我们就算“填好”这个算法中最重要的表格，那么这个算法就已经完成了一大大半的。根据维特比变量的定义，最后一步的维特比变量表示的是“在最后时刻时，模型沿着最佳路径到达最后一个内部状态\(S_i\)，使得输出观察序列\(O_1O_2…O_t\)的最大概率”，那么我们在最后一个时刻的所有我维特比变量中选择最大的一个也就得到了所有可能的内部状态序列中，“输出观察序列\(O_1O_2…O_t\)的最大概率”。<br>回顾一下这类算法的思想，就是假设我在路径中间选择一个要经过的内部点，那么我到达这个内部点的路径一定要选择最优路径。这就使得我们最后一列维特比变量中在选择最大的一个时，就可以回溯找到到达这一点的最优路径。在这个栗子中就是这样婶儿的：</p>
+<p><img src="/img/viterbibacktrack.png" alt="回溯"></p>
+<p>得到内部状态最优序列：大爷-大叔-大叔，和我们的好一点的土方法的结果一样嘿！当然了，我们在前面说过，第二种土方法不是不好，但是有可能陷入局部最优而找不到全局最优解，那么既然我们有更好的Viterbi为什么不用呢？</p>
+<h2 id="第三个问题：Baum-Welch算法（未完待续）"><a href="#第三个问题：Baum-Welch算法（未完待续）" class="headerlink" title="第三个问题：Baum-Welch算法（未完待续）"></a>第三个问题：Baum-Welch算法（未完待续）</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2017/03/29/机器学习-2017-3-29-ViterbiAlgorithm/" data-id="cjxo5e6rv0041z16daef9msjl" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/nlp/">nlp</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../04/12/机器学习-2017-4-12-BaumWalch/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          HMM模型之三——Baum-Walch算法
+        
+      </div>
+    </a>
+  
+  
+    <a href="../机器学习-2017-3-10-HMM/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">HMM模型之一(v2.0)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

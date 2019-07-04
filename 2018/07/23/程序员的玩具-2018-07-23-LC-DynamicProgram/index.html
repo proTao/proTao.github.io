@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>LeetCode刷题笔记——DynamicProgram | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="这篇文章只是我把刷题时的思路记录下来，没有考虑排版与图文并茂。以后可能会有更新。目前只包括中等难度的题，后面再刷再加。题目后面有bangbang后缀的，意味着我觉得这道题挺棒棒的… 基本思路碰到一个问题,如果这个问题太大了以致于搞不定,看能不能把它变小,把它规整成小问题去解决,这是考虑问题最基本的想法。比如说给你一个长度为 n 的数组,n 个数太多了我们不会做,我们可以先尝试一个数能不能做,然后两">
+<meta name="keywords" content="algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode刷题笔记——DynamicProgram">
+<meta property="og:url" content="https://protao.github.io/2018/07/23/程序员的玩具-2018-07-23-LC-DynamicProgram/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="这篇文章只是我把刷题时的思路记录下来，没有考虑排版与图文并茂。以后可能会有更新。目前只包括中等难度的题，后面再刷再加。题目后面有bangbang后缀的，意味着我觉得这道题挺棒棒的… 基本思路碰到一个问题,如果这个问题太大了以致于搞不定,看能不能把它变小,把它规整成小问题去解决,这是考虑问题最基本的想法。比如说给你一个长度为 n 的数组,n 个数太多了我们不会做,我们可以先尝试一个数能不能做,然后两">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-22T16:03:11.808Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LeetCode刷题笔记——DynamicProgram">
+<meta name="twitter:description" content="这篇文章只是我把刷题时的思路记录下来，没有考虑排版与图文并茂。以后可能会有更新。目前只包括中等难度的题，后面再刷再加。题目后面有bangbang后缀的，意味着我觉得这道题挺棒棒的… 基本思路碰到一个问题,如果这个问题太大了以致于搞不定,看能不能把它变小,把它规整成小问题去解决,这是考虑问题最基本的想法。比如说给你一个长度为 n 的数组,n 个数太多了我们不会做,我们可以先尝试一个数能不能做,然后两">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-程序员的玩具-2018-07-23-LC-DynamicProgram" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-07-23T13:47:19.000Z" itemprop="datePublished">2018-07-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LeetCode刷题笔记——DynamicProgram
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇文章只是我把刷题时的思路记录下来，没有考虑排版与图文并茂。以后可能会有更新。目前只包括中等难度的题，后面再刷再加。题目后面有bangbang后缀的，意味着我觉得这道题挺棒棒的…</p>
+<h2 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h2><p>碰到一个问题,如果这个问题太大了以致于搞不定,看能不能把它变小,把它规整成小问题去解决,这是考虑问题最基本的想法。<br>比如说给你一个长度为 n 的数组,n 个数太多了我们不会做,我们可以先尝试一个数能不能做,然后两个数能不能做,这样一直进行下去。另外一种对待问题的思路是,我们可以把 n 个数分成左一半和右一半,然后看左半部分会不会做,右半部分会不会做。将大问题分解为小问题去解决,这就是分治的思想。</p>
+<p>动态规划与分治算法的联系:</p>
+<ol>
+<li>动态规划和分治是非常像的,都是要把大问题分解成子问题,然后将子问题的解进行合并起来求原问题的解。</li>
+<li>动态规划一般会枚举所有的子问题,要把所有的子问题都解决一遍,但是它避免了对同一个子问题的重复计算, 那它是怎么避免重复的呢，这就是programming。programming 的意思是说生成一张表,不断的向表中填数,当访问到表中单元时,如果表中有值则直接返回,没有则进行求解并将求到的值填在表中。</li>
+<li>动态规划和贪心一样,都可以典型的求解最优化问题,但是动态规划又不仅仅用于最优化问题的求解,例如 p-value 的计算问题。<br>通常来说,只要我们发现一个问题当中能存在一种递归的性质,我们就可以把它分解成子问题,就能找到一种递归的关系,这个时候就可以用动态规划进行求解。当我们在计算一个原始问题的时候,我们需要把原问题进行扩展,试图发现有意义的递推关系,而确定递推关系的关键就在于确定子问题的一般形式。</li>
+</ol>
+<p>求解一个问题,如果这个问题可以规约,则分治大概可以解决问题。如果他还有最优子结构的性质,则动态规划大概可以解决问题。<strong>因此在碰到一个问题的时候,先观察该问题具有哪些性质,根据不同的性质我们使用不同的策略。</strong></p>
+<a id="more"></a>
+<h3 id="DP经典问题"><a href="#DP经典问题" class="headerlink" title="DP经典问题"></a>DP经典问题</h3><ul>
+<li>编辑距离 (72题) -&gt; Hischberg算法</li>
+<li>背包问题</li>
+<li>LCS问题</li>
+<li>维特比算法</li>
+<li>Bellman-Ford算法 (787题)</li>
+</ul>
+<h3 id="常见分类"><a href="#常见分类" class="headerlink" title="常见分类"></a>常见分类</h3><ul>
+<li>矩阵型</li>
+<li>序列型</li>
+<li>双序列型</li>
+<li>划分型</li>
+<li>区间型</li>
+<li>背包型</li>
+<li>状态压缩型</li>
+<li>树型</li>
+</ul>
+<p>强化学习中存在类似的思想：<br>Bellman equation说的是：“如果从最佳选择的路径的末端截取一小部分，剩下的路径仍然是最佳路径。”</p>
+<h2 id="LC-题目列表"><a href="#LC-题目列表" class="headerlink" title="LC 题目列表"></a>LC 题目列表</h2><h3 id="746"><a href="#746" class="headerlink" title="746"></a>746</h3><p>用了闭包技巧，发现的确在一定程度上可以替代类的实现。但是用了O(n)的空间，这个我想到了可以用常数空间，但是没有写。</p>
+<ol>
+<li><p>子问题划分<br>到了第k阶要考虑别的就是用最小的代价上到顶层，那么上到第k阶花费的最小代价这个就是子问题，只要我能有一个方案，能够以最小的代价到达前k阶的任意一阶，那么我就可以到达第k+1阶。</p>
+</li>
+<li><p>递推公式<br>f(k) = min(f(k-1)+cost(k-1), f(k-2)+cost(k-2))</p>
+</li>
+<li><p>重复子问题</p>
+</li>
+</ol>
+<h3 id="70"><a href="#70" class="headerlink" title="70"></a>70</h3><p>类似于746</p>
+<h3 id="53"><a href="#53" class="headerlink" title="53"></a>53</h3><p><a href="https://blog.csdn.net/lengxiao1993/article/details/52303492" target="_blank" rel="noopener">清晰解题： 寻找最大子数列-Kadane算法</a></p>
+<p>这道题可以仔细琢磨琢磨。</p>
+<p>首先想到的是划分子问题，如果数组长度为n。假设我们知道了长度为k的前缀数组的最大连续子数组，对求解k+1长度的前缀数组有没有帮助？答案是没有的。因为我们不知道第k+1个元素能不能和前面的最大子数组连上。假设k=4是[1,2,3,-1]，或者[-1,1,2,3]，子问题的解都是6，假设后面的元素是1，但是两种情况对应的k=5的子问题的解是不同的，前者是6后者是7。</p>
+<p>那么我后续的思路就是返回一个标志位？标志最大子数组在前缀数组中包不包括最后一个元素，然后标志位为真时f(k+1)=max(f(k),f(k)+A[k+1])，当标志位为假时，f(k+1)=max(f(k),A[k+1])。但是这样又有问题，假设前缀数组是[1,2,-1]，最大子数组是3，然而整个的数组是[1,2,-1,1,1,1,1,1]，那么返回的3，后面连续的1会被忽视。</p>
+<p>如果想要改进上面的问题，必须要解决的问题就是子问题的连贯性，不能断。注意到如果我有一个子数组a，如果他相邻的一个子数组b，b的元素和是正数，那么a和b连接得到的子数组的元素和肯定比a大。那么如果我让a是前k个元素中以k结尾的最大子数组，b是第k+1个元素，令子问题是a，我可以放心的更新子问题，并让k自增1：如果第a+b是正数，那么f(k+1)=f(k)+A[k+1]，如果第a+b是负数，那么意味着前缀数组根本无法用来让子数组变大，令f(k+1)=0。</p>
+<p>[−2, 1, −3, 4, −1, 2, 1, −5, 4]，看这个数组，我始终要维护一个a数组计算子问题，a数组为[0,1,0,4,3,5,6,1,5]，计算这个数组是注意起始条件，a[0]等于0是因为-2与其要还不如不要，对于1来说肯定不希望扩展前面[-2]这个子数组，因此第一个元素是0，第二个元素是1。再注意到，a[3]是4，然后a[4]是3，尽管后面是-1，但是还是要加上-1，因为[4,-1]这个子数组是正数，对于后面的与他相邻的子数组来说，加上他肯定是有好处的，这给了后面希望。然后a数组中最大的就是问题的解。</p>
+<p>而Kadane算法在此问题上更进一步，思路就是我在不停的生成a数组，我想知道a数组的最大值，我完全不需要把他存下来，这实际上就是处理流数据的思路。</p>
+<p>可以看到讨论区排名第一的discussion的思路是：</p>
+<blockquote>
+<p>显然，这是一个优化（求最优解）问题，那么通常情况下这种问题我们可以用DP去解。如果想到了DP，那么接下来就是要找到子问题的形式。首先想到的是子数组A[i..j]中的最大子数组。也是遇到子问题之间无法衔接的问题。</p>
+</blockquote>
+<p>重点还是在子问题形式的提取上，121就是一个很好的很类似的练习题。</p>
+<h3 id="198"><a href="#198" class="headerlink" title="198"></a>198</h3><p>这道题做起来很简单，不过能不能看出这道题就是fibonacci数列？？规约问题的能力可太重要了。反正我是没有。</p>
+<h3 id="303"><a href="#303" class="headerlink" title="303"></a>303</h3><p>对于子数组求和，要一下子想到转化为accumulate函数，能够很大概率将问题转化为线性时间复杂度。这道题想到缓存没啥的，题目提示的已经太明显了，但是一开始我用的是O(n^2)复杂度的常规缓存思路，按照Solution应该是通过的咋没过呢。。。</p>
+<h3 id="338"><a href="#338" class="headerlink" title="338"></a>338</h3><p>这道题子问题比较好定义出来，就是countBits(k)，返回一个长度是k+1的数组，然后在递推countBits(k+1)的时候，思路可就比较多了。我思路的入手点在于，观察到2的正整数次幂的二进制位数都是1，假设求countSum(15)，可以一下子确定的是再返回结果res数组中，第1、2、4、8位都是1，然后第0位是0，然后第3位是第1位加1，第5~7位是1~3位加1，等等。然后我就这么实现了，最后不是特别快，因为IE我需要多维护两个变量表示我当前正在处理的区间。<br>但是上面的思路其实已经可以提炼出一个递推公式了，就是f(x)=f(x-&lt;小于x的最大整数幂&gt;)+1，然后我又实现了，这次还不错，但是还需要多维护一个变量，存储当前的最小整数幂。<br>然后看solution中有一个思路很6，是f(x)=f(x&gt;&gt;1)+f(x%2)，其实区别就在于上面的思路我拆开考虑最高位，下面的思路我拆开考虑最低位，两种都行，但是下面的方法不用多额外维护一个变量。</p>
+<h3 id="413"><a href="#413" class="headerlink" title="413"></a>413</h3><p>子问题f(k)定义为：A[1..k]中以最后一个元素结尾的等差数列的长度与公差还有最后一个元素的值。假设前面返回(l,d,a)意味着前面有一个公差是d的以最后一个元素结尾的l个元素构成等差slice。那么通过判断第k+1个元素与子问题返回的上一个元素的值的差，可以简单的更新子问题。注意的是本来我想写一个子函数求解子问题的，但是后来发现完全没有必要，子问题就是一个递推公式。<br>然后看答案，发现答案给了六种方案，暴力求解给了两种方法，一个O(n^3)的O(n^2)的，然后给了一个递归方法我没看。后面的三种都是基于动态规划的，各有小幅改进。他的方法好的地方是观察到，子问题“以当前元素为结尾的最长等差数列长度”一定是先是递增1，然后突然变成1，利用这个规律，可以减少更新总等差slice的次数，不用每次都更新，只在等差slice断裂，子问题答案为1时更新。但是不好的地方是他的做法每次都要回溯三个元素，我只需要回溯一个，但是我多维护了一个变量就是公差。<br>然后这个就很像回文子串总数那道题，最朴素的思路是三次方，好一点的暴力求解就是平方(利用串的规律：回文子串两边加上同样的字符还是回文，等差数列后面加上一个还是等差)，这样就可以变成平方时间效率，然后基于动态规划的扫描是常数时间效率。</p>
+<h3 id="647-bangbang"><a href="#647-bangbang" class="headerlink" title="647 bangbang"></a>647 <em>bangbang</em></h3><p>最长回文串的变形问题</p>
+<p>最长回文子串直观的想那就是三次方时间效率，拿出所有的子串是平方，判断是不是回文是线性，总的就是三次方。好一点的方式就是扩张的方式检查回文串，遍历所有的对称轴是线性，判断此对称轴下的最长回文串是线性，总和是平方。马拉车算法的时间效率提高到了线性。依靠的就是问题巧妙的预处理和子问题的定义，定义f(k)是以k为轴的回文串的最大长度，并缓存前面所有的子问题的解，那么知道了这些了能不能推导出f(k+1)？后面就是马拉车的精髓了，利用了回文串的对称性，就不展开讲了。</p>
+<p>注意的是，每次需要知道当前回文串最右延伸到哪里，实际上就是求前面子问题的最优解，这个不要每次遍历，要缓存，要记牢！！</p>
+<p>通过马拉车得到一个字符串的所有子问题的解数组之后，能很快的用线性时间将其转化成回文子串总数，因为如果一个回文串的半径是r，我们就知道了以该点为对称轴的共有多少子串了。</p>
+<p>但是实现上我实现的基于马拉车的算法咋还没有solution里面平方级别的算法快！后来我看了一下</p>
+<p><a href="https://segmentfault.com/a/1190000003914228" target="_blank" rel="noopener">最长回文子串——Manacher 算法</a><br><a href="https://segmentfault.com/a/1190000008484167" target="_blank" rel="noopener">Manacher算法</a><br><a href="https://www.zhihu.com/question/40965749/answer/152396279" target="_blank" rel="noopener">最简便的找字符串中最长回文子串的方法是什么？</a></p>
+<h3 id="712"><a href="#712" class="headerlink" title="712"></a>712</h3><p>整道题一打眼就是LCS问题的改版，而我看了一下，跑得快的程序还真的是用LCS套的，我是自己又提炼出了新的子问题和迭代公式，但是比最快的人还要慢很多，我估摸着原因在于for循环和python自带函数的问题，我是一开始用for循环为dp数组边界赋值，使用LCS算法的需要用sum对两个字符串的所有字符的ascii值求和，然后减去最长公共子串的ascii的和，按理说都是两遍线性操作，但是人家就是快。</p>
+<p>之前一直提醒自己用emuerate，这里不就是用这个的最好的地方吗，一旦想到是循环索引还是循环元素的时候，立刻用enumerate。</p>
+<p>看到了参考文章：<br><a href="https://www.cnblogs.com/yd1227/archive/2010/11/23/1885464.html" target="_blank" rel="noopener">python提高效率的心得总结</a></p>
+<h3 id="646-Greedy"><a href="#646-Greedy" class="headerlink" title="646 (Greedy)"></a>646 (<em>Greedy</em>)</h3><p>读完题，明显的区间调度问题，没跑。但是并没有什么乱用，我并不记得区间调度问题。</p>
+<p>然后自己琢磨套路。<br>我开始想的子问题是截止到时间k，最多能排多少个任务（当成任务调度来看）。这种想法有一个弊端，假设在任务分布时间在1000内，但是200到800之间没有任务，那么中间的子问题是没有必要的。更清楚地说，只有任务的开始节点和结束节点考虑子问题有必要。<br>再进一步，任务的开始点有必要吗，会改变子问题的解吗？我觉得不会，只有开到任务的结束点我才可能确定去安排一个新的任务，那开始点有什么用？后面说。<br>那么直观的思路（自己画个图更清晰），两个重要的点：首先我必须以结束点作为键排序，然后就是两个相同结束点的任务，我选择开始晚的一定更好，那么其实我就可以不考虑同一个结束点但是开始较早的任务了。<br>然后遍历本次任务开始点之前的结束点，看看有没有更好的子问题的解，如果有设为那个解+1（因为当前任务也要做）。最后找子问题的解的最大值。这就能看明白了，子问题的意义是做了以这个点结束的任务（后面的不做了）时，我能做的最大任务数。这个思路应该是平方时间效率，提交之后500ms网上，开头排序就设置了nlogn的下限，然后每次遍历前面的子问题，<br>然后优化的话我先想到的优化点是每次都要遍历前面的子问题。如果我把子问题抽象为截止到当前时间点我能做的最多的任务数，其实我就看两个问题就行，一个是当前任务结束到当前任务开始的最晚结束的子问题的解，其实就是上一个子问题的解a(没有这样的人物话，a=0)，另一个就是开始点之前最晚结束子问题的解b，本次子问题的值就是max(a，b+1)</p>
+<p>然后我看了solution。。。虽然也是给了平方时间效率的动规和nlogn的Greedy，但是差距咋这么大么。。</p>
+<p>这个问题本科其实学过。。贪心算法第一个讲的就是这个。<br>调度问题可能需要研究研究。</p>
+<p>这个我觉得可以抽象出一类DP算法中经常遇到的问题，就是假设子问题f(k)中的k是一个一个递增的话，我们从k=0开始一个一个向上算，只要一个字问题只依赖于前面的子问题就可以，但是假设k不是一个一个递增的，假设k是正整数，可以当前子问题中k=10,下一个子问题k=100了，怎么利用常数空间来做？更甚者，假设k是一个非inc的元素构成的向量呢？</p>
+<p><a href="http://python.jobbole.com/86609/" target="_blank" rel="noopener">python二分查找与bisect模块</a></p>
+<h3 id="343-Integer-Break-Greedy-bangbang-math"><a href="#343-Integer-Break-Greedy-bangbang-math" class="headerlink" title="343 Integer Break (Greedy bangbang math)"></a>343 Integer Break (<em>Greedy</em> <em>bangbang</em> <em>math</em>)</h3><p>子问题是f(k)，k=n是可以求解原问题最优解，求f(k+1)时，我们要做的就是从2~(k+1)/2中拆出一部分求解两个子问题的乘积，然后找到最大的子问题拆法，这里可能有疑问，就是我可能拆出大于等于2的因子啊，为什么子问题只需要拆成两个？这里就是DP的核心了，就是我只需要考虑子结构最优即可，我只需要把k拆成k1和k2两部分，至于这两部分是不是需要继续拆我交给子问题解决，当前问题我只考虑两部分怎么拆。这样一来思路就明确了，平方。</p>
+<p>注意边界条件，题目要求至少分成两个整数，所以n=2或3的时候作为特例处理，返回n-1</p>
+<p>但是这个又是一个贪心问题，就是尽可能地拆成2或3，理由需要数学证明，即我把一个数n拆成相等的k份，每份都是整数x，使x^k最大的时候x等于e，2和3是最靠近e的数，3又更靠近一些，所以优先选择3，其次是2。</p>
+<p>参考：<a href="https://leetcode.com/problems/integer-break/discuss/80721/Why-factor-2-or-3-The-math-behind-this-problem" target="_blank" rel="noopener">wyh factor 2 or 3</a></p>
+<h3 id="0-1背包问题"><a href="#0-1背包问题" class="headerlink" title="0/1背包问题"></a>0/1背包问题</h3><p>不需要按照单价排序的。<br>参考《算法十八讲》</p>
+<h3 id="72"><a href="#72" class="headerlink" title="72"></a>72</h3><p>实现了线性空间的搜索，但是怎么回溯还没有实现。</p>
+<p>参考《算法十八讲》<br>参考 <a href="www.matrix67.com/blog/archives/333">编辑距离，拼写检查与度量空间</a></p>
+<h3 id="10"><a href="#10" class="headerlink" title="10"></a>10</h3><p>[TODO]</p>
+<h3 id="357"><a href="#357" class="headerlink" title="357"></a>357</h3><h3 id="638-Shopping-Offers-bagging"><a href="#638-Shopping-Offers-bagging" class="headerlink" title="638 Shopping Offers (bagging)"></a>638 Shopping Offers (<em>bagging</em>)</h3><p>这道题启发我的入手点是把它当做背包问题，只能使用第一个special，然后推只能使用第二个special时的最小花费。<br>思路是完全背包问题，因为offer可以重复使用，去计算使用这个offer获得的收益。<br>递推思路是，如果使用这个offer的套餐不超过我现在的需求，且套餐比单买划算，我就有两种策略，要么使用这个special，然后降低我的需求，然后考虑继续使用这个special的子问题，要么直接放弃这个specal，不改变需求，直接看下一个special。<br>这个思路我觉得还行，看我代码中给的一个别人写的dfs的思路我觉得也特别好，也容易懂。</p>
+<h3 id="486-Predict-The-Winner-bangbang"><a href="#486-Predict-The-Winner-bangbang" class="headerlink" title="486 Predict The Winner (bangbang)"></a>486 Predict The Winner (<em>bangbang</em>)</h3><p>首先要理解题意：在博弈过程中每个人都会做出最佳决策的情况下，先手能否胜出？<br>划分子问题：长度为1的串先手肯定能赢（这个作为特例，不用求解子问题，作为子问题也可以，不过浪费一点点时间，我是将长度为2的串作为基本子问题），长度为2的串也肯定能赢，但是只知道能赢是不能将子问题连接到一起的，实际上思路是这样的，我拿长度为k的字串的头元素为尾元素，然后对手去拿剩下的串构成的子问题的最优解，只要我拿的这个元素比对手的k-1的子问题的答案大就行，那么我要做的就是比较我拿左侧元素和最右侧元素两种策略选取最优即可。总的解题过程就是自底向上填一个三角矩阵。<br>渐进复杂度是n^2</p>
+<h3 id="650-2-Keys-Keyboard-Greedy"><a href="#650-2-Keys-Keyboard-Greedy" class="headerlink" title="650 2 Keys Keyboard (Greedy)"></a>650 2 Keys Keyboard (<em>Greedy</em>)</h3><p>A : None<br>2A : CV<br>3A  : CVV<br>4A  : 2<em>2 -&gt; CV + CV<br>    : 1</em>4 -&gt; CVVV<br>5A  : 1<em>5 -&gt; CVVVV<br>6A  : 2</em>3 -&gt; CV + CVV<br>    : 3<em>2 -&gt; CVV + CV<br>    : 1</em>6 -&gt; CVVVVV<br>7A  : 1<em>7 -&gt; CVVVVVV<br>8A  : 1</em>8 -&gt; CVVVVVVV<br>    : 2<em>4 -&gt; CV + CVVV<br>    : 4</em>2 -&gt; CVCV + CV<br>12A : 1<em>12 -&gt; 12<br>    : 3</em>4 -&gt; 3 + 4<br>    : 4<em>3 -&gt; 4 + 3<br>    : 2</em>6 -&gt; 2 + 6<br>    : 6<em>2 -&gt; 5 + 2<br>14A : 1</em>14 -&gt; 14<br>    : 2<em>7 -&gt; 2 + 7<br>    : 7</em>2 -&gt; 7 + 2<br>24A : 1<em>24 -&gt; 24<br>    : 2</em>12 -&gt; 2 + 12<br>    : 3<em>8 -&gt; 3 + 8<br>    : 4</em>6 -&gt; 4 + 6<br>    : 6<em>4 -&gt; 5 + 4<br>    : 8</em>3 -&gt; 6 + 3<br>    : 12<em>2 -&gt; 7 + 2<br>42A : 1</em>42 -&gt; 42<br>    : 3<em>14 -&gt; 3 + 14<br>    : 14</em>3 -&gt; 9 + 3<br>    : 6<em>7 -&gt; 5 + 7<br>    : 7</em>6 -&gt; 7 + 6<br>递归的思路已经出来了，接下来就是效率的问题。<br>首先，只要能分解，肯定比不分解好，只要能拆成两个数大于1的因子，那么这两个因子的和肯定小于原来的数。（易证）<br>再有，如果能拆成两个因子a和b，而且a大于b，那么拆成&lt;a,b&gt;一定比&lt;b,a&gt;好，因为后面的数是重复，重复的话一定是C加上一串V，但是前面的数已经是解决过的最优子问题了，很有可能小，但是怎么着也不会更差。然后仔细一想，不对！大的数不一定最优子问题就比小的数的最优子问题更好，比如大的数是质数，就像42拆分成6和7。</p>
+<p>但是我这种方法的效率很低，是n^2的效率，这道题实际上可以转化为贪心，Solution中时间最短那那个提交就是。<br>他的方法实际上基于一个观察，这道题等价为将一个纸带不停的折叠，但是每次折叠的长度必须是整数，因此实际上就是做因式分解，将所有质数相加即可。</p>
+<h3 id="120-Triangle"><a href="#120-Triangle" class="headerlink" title="120 Triangle"></a>120 Triangle</h3><p>这道题比较简单，子问题都不用思考，O(n^2)的时间效率，O(n)的空间效率。</p>
+<h3 id="62-Unique-Path"><a href="#62-Unique-Path" class="headerlink" title="62 Unique Path"></a>62 Unique Path</h3><p>这道题比较简单，可以转化为组合数问题，使用scipy.special.comb比较慢，自己实现DP解法，空间代价是O(min(m,n)),时间代价是O(mn)，子问题就是到某一个点的路径数</p>
+<h3 id="494-Target-Sum-bagging"><a href="#494-Target-Sum-bagging" class="headerlink" title="494 Target Sum (bagging)"></a>494 Target Sum (<em>bagging</em>)</h3><p>简单的思路就是用深度递归，去掉最后一个元素，并且改变目标，然后求解子问题。进行了一点优化是预先求出累加和，如果目标值大于累加和，直接返回0。但是超时了，然后加上memoization技巧，成功AC。<br>但是Solution中的DP解法没太明白，但是看了Discuss中的排名最高的那个解法，倒是理解了，十分巧妙，通过一点简单的推理，将该问题转化为背包问题的变体。即从拥有各自价值的一堆物品中，选出恰好为某价值的物品的选法总数。<br>转化DP传统的二维表思路，子问题就是”选择前i个物品，使总价值是w的选择方法数”。递推公式是dp[i][w]=dp[i-1][w]+dp[i-1][w-wi]，就是选不选当前物品这两种可能性。然后Discuss的实现中有两处优化，一是空间缩减为线性，这样就需要对价值倒序更新，因为我们需要的是i-1的dp。其次就是对于价值小于本次物品价值的dp不予更新。<br>都在《背包九讲》中提到过，还是基础更重要。</p>
+<h3 id="64-Minimum-Path-Sum"><a href="#64-Minimum-Path-Sum" class="headerlink" title="64 Minimum Path Sum"></a>64 Minimum Path Sum</h3><p>很简单的题目，类似62。</p>
+<h3 id="392-Is-Subsequence"><a href="#392-Is-Subsequence" class="headerlink" title="392 Is Subsequence"></a>392 Is Subsequence</h3><p>双序列问题，比较简单。注意的一点是明确一下子问题，表达出来：s的前i位和t的前j位是否匹配。递推关系时，如果最后一位一样，尝试两者一起前移一位，缩小问题规模，如果失败或者不一样，只把长串前移一位。<br>跑的时候发现这样效率特别低，比如asd匹配asdqqqqqqqqqqqqqq，就要一直匹配q，然而我们知道需要的是d，所以最后一位不同的时候，直接在长串中去找到d再进行递归。<br>继续琢磨的话可以更快，比如asddd匹配asdddddddd，我们可以直接在后面找最靠左的ddd，然后缩减子问题，但是这个想法我没试，不知道对不对……</p>
+<h3 id="121-Best-Time-to-Buy-and-Sell-Stock"><a href="#121-Best-Time-to-Buy-and-Sell-Stock" class="headerlink" title="121 Best Time to Buy and Sell Stock"></a>121 Best Time to Buy and Sell Stock</h3><p>没有找到明显的动态规划的问题，也就是有一个递推公式，应该不算DP吧。</p>
+<p>不过讨论区提到了一个十分巧妙的思路，类似于Kadane算法。真的很牛逼。思路类似于求一个F(b)-F(a)等价于计算f(x)在区间[a,b]上的积分。</p>
+<p>但是我的思路也不赖，重点是抽象出子问题形式，53题的子问题f(k)解决的是以第k个元素结尾的最大连续子数组，那么这道题的子问题f(k)我抽象成为以第k个元素为价格售出可以获得的最大收益。如果这样，还是会产生子问题之间的递归断裂的问题，比如考虑f(2),[1,5]和[5,9]都会返回4，但是假设第三个元素是6，那么f(3)是可能是5或者1。因此子问题还需要返回更多的信息，我们让子问题f(k)返回第k个元素为价格售出的情况下的购买价格和售出价格就可以了。还是前面的小例子，对于[1,5]返回(1,5)，对于[5,9]返回(5,9)，那么接下来的元素遇到6，f(3)分别更新为(1,6)和(5,6)，没毛病老铁。更具体的说，f(k)返回值是(数组前k各元素的最小值，A[k])</p>
+<h2 id="买卖股票系列"><a href="#买卖股票系列" class="headerlink" title="买卖股票系列"></a>买卖股票系列</h2><h3 id="714-Best-Time-to-Buy-and-Sell-Stock-with-Transaction-Fee-bangbang"><a href="#714-Best-Time-to-Buy-and-Sell-Stock-with-Transaction-Fee-bangbang" class="headerlink" title="714 Best Time to Buy and Sell Stock with Transaction Fee (bangbang)"></a>714 Best Time to Buy and Sell Stock with Transaction Fee (<em>bangbang</em>)</h3><p>这道题我和solution不大一样，子问题我设置为，截止到当前的最大值和最小值，但是这样的话立刻就会有疑问：最大值出现在最小值之前怎么办。这个其实先明确子问题的更新方法后就可以证明不会出现这种情况，更新方法就是一旦今天的价格比之前的最大值低fee还要多，那我就立刻清算之前的交易，然后加到我总的盈利里面，然后以今天的价格同时替代最大值最小值。不然就正常的更新最大值最小值。这里的合理性写一个小等式就可以证明，设置最大值为a，最小值为b，当前价格为p，后面的又一个峰值是x，然后列不等式就行。</p>
+<p>至于前面提到的最大值出现在最小值后面的情况，因为我们一定是最大值比最小值加上交易费还要多我们才会交易，然后假设真的有这样的最小值出现在最大值后面，我们不会直接把最小值更新，而是会先结算之前的交易，实际上这次的最小值就已经不被之前考虑了。</p>
+<p>但是可以看一下给的标准答案，思路真的清晰简洁。就是当前有两种状态，要么手里有股票，要么没有股票，那么就同时维护这两种可能的状态，有新的价格的时候，更新有股票的状态为：max（持股不动手中的现金数，买这次的股票现金减少），不持股的状态更新为：max（按兵不动，卖出并支付手续费）</p>
+<h3 id="309-Best-Time-to-Buy-and-Sell-Stock-with-Cooldown"><a href="#309-Best-Time-to-Buy-and-Sell-Stock-with-Cooldown" class="headerlink" title="309 Best Time to Buy and Sell Stock with Cooldown"></a>309 Best Time to Buy and Sell Stock with Cooldown</h3><p>有了714的基础，这道题很好解决，就是多保存一天的状态，思路和之前的一道DP题，说小偷不能连续偷两家很像。</p>
+<h3 id="688-Knight-Probability-in-Chessboard"><a href="#688-Knight-Probability-in-Chessboard" class="headerlink" title="688 Knight Probability in Chessboard"></a>688 Knight Probability in Chessboard</h3><p>这道题我感觉我并没有用到DP的方法，也就是memoization trick用到了，更像是DFS，但是也是过了，估计是整个leetcode最慢的了。。。看一看Solution中的DP方法，很DP了，不断地更新矩阵，没仔细看，先马后看（吗）。。</p>
+<h3 id="474-Ones-and-Zeros-Greedy-bagging"><a href="#474-Ones-and-Zeros-Greedy-bagging" class="headerlink" title="474 Ones and Zeros (Greedy bagging)"></a>474 Ones and Zeros (<em>Greedy bagging</em>)</h3><p>我把这道题转化为一个二维多重背包问题，就好解了，但是提交之后发现竟然有更快的。看了一下代码，发现更快的是用了贪心，贪心的大概思路明白了，我把我的想法写在了代码StandardSolution类的注释里，但是正确性证明我不懂，不知道为什么这样可以。目前的感觉在于一个原因是所有的物品价值相同。</p>
+<h3 id="740-Delete-and-Earn"><a href="#740-Delete-and-Earn" class="headerlink" title="740 Delete and Earn"></a>740 Delete and Earn</h3><p>还是问题的转化，首先意识到这道题元素的位置不重要，重要的是元素的值，因为一下子会把所有的相邻值的元素全部删除而不管元素在哪里。所以要转化为不同的元素的值与其出现次数的一个元组列表。其次排序也是必须的，这个比较好想，因为为了决定子问题，要看子问题的中是否存在需要删除的相邻元素，排序后这个问题只需要看上一个元素是否相邻。问题转化到这里已经是基础一维动归问题了：即小偷问题。<br>只是还有一点区别：这里的小偷不是相邻的一定不偷，而是会考察元素的值，如果相邻的元素的值的差大于1，那么相邻的也偷，所以子问题递推的时候根据上一个元素分情况讨论就可以。</p>
+<h3 id="312-Burst-Balloons"><a href="#312-Burst-Balloons" class="headerlink" title="312 Burst Balloons"></a>312 Burst Balloons</h3><p>第一次尝试没有写出来，尝试了线性的DP，感觉不太可能，要是抽象成树形解空间感觉可以用Memoization或者backtrack来解，但是没有编码。</p>
+<h3 id="5-Longest-Palindromic-Substring"><a href="#5-Longest-Palindromic-Substring" class="headerlink" title="5 Longest Palindromic Substring"></a>5 Longest Palindromic Substring</h3><p>经过647的考验，这道题应该立刻想到manachers算法，可惜我没有立刻想到，我反映了一下，还尝试自己解，然后没想到好方法，才想到了马拉车。想到马拉车就好办了，我直接把647Solution里面的子函数拿过来用了，不过我也不知道之前咋想的，马拉车里面dp数组存放的是回文串半径，但是我写的马拉车的半径不算中心元素。。。</p>
+<h3 id="63-Unique-Paths-II"><a href="#63-Unique-Paths-II" class="headerlink" title="63 Unique Paths II"></a>63 Unique Paths II</h3><p>和62很像，没啥搞头</p>
+<h3 id="377-Combination-Sum-IV-bagging"><a href="#377-Combination-Sum-IV-bagging" class="headerlink" title="377 Combination Sum IV (bagging)"></a>377 Combination Sum IV (<em>bagging</em>)</h3><p>一开始我以为是bagging问题，转化为完全背包恰好装满的装法数问题，后来发现这道题允许同一种组合的不同顺序，那就不能用背包了。<br>然后思路是转化为回溯，回溯的推导中发现有大量的重复子问题。比如想要计算F([2,3,4],10)，就必须去算F([2,3,4],6)，F([2,3,4],7)，F([2,3,4],8)，这样的话，一个一维会发现由于不同的顺序算不同的解，作为第一个参数的列表自始至终都不会变（如果是不考虑顺序的话，列表在回溯法中会变少，用背包套路解的话又会变大），所以改变的只有target参数，因此这就变成了一维的DP问题。</p>
+<h3 id="516-Longest-Palindromic-Subsequence-bangbang"><a href="#516-Longest-Palindromic-Subsequence-bangbang" class="headerlink" title="516 Longest Palindromic Subsequence (bangbang)"></a>516 Longest Palindromic Subsequence (<em>bangbang</em>)</h3><p><a href="https://leetcode.com/problems/longest-palindromic-subsequence/discuss/99101/Straight-forward-Java-DP-solution" target="_blank" rel="noopener">Solution</a></p>
+<h3 id="96-Unique-Binary-Search-Trees"><a href="#96-Unique-Binary-Search-Trees" class="headerlink" title="96 Unique Binary Search Trees"></a>96 Unique Binary Search Trees</h3><p>由于树自身的递推结构，直接去退递推关系一点毛病也没有。递推关系式得到之后发现并不是以来常数个子问题，而是依赖前面所有的子问题，这一点和277基本如出一辙，唯一不同的就是怎么利用前面的子问题的解上。这样的问题应该可以归为一类：无限制单序列DP问题。这类问题需要线性时间线性空间，与之类似的是限制型单序列DP问题，如斐波那契数列的求解，这种问题需要常数空间线性时间。</p>
+<h3 id="718-Maximum-Length-of-Repeated-Subarray"><a href="#718-Maximum-Length-of-Repeated-Subarray" class="headerlink" title="718    Maximum Length of Repeated Subarray"></a>718    Maximum Length of Repeated Subarray</h3><p>一下子就想到的最长子串匹配，但是不可能这么简单，仔细一看，啊！要求连续子串！连续性问题在前面的单个数组想好多问题中都见过了，这里一样，设置一个历史最大值，然后DP只处理当前连续的子问题解，并对最大值进行维护就行。但是这样得到的效率是MN。Solution给出了一种基于Rabin-Karp算法的解决方案，效率是O((M+N)∗log(min(M,N)))，这种灵性的解法估计想不出来，就这么看看吧。。</p>
+<p><a href="http://www.ituring.com.cn/article/1759" target="_blank" rel="noopener">图说Rabin-Karp字符串查找算法</a></p>
+<h3 id="838"><a href="#838" class="headerlink" title="838"></a>838</h3><p>没有用到动态规划啊，但是题目还挺好玩。</p>
+<h3 id="813-Largest-Sum-of-Average-bangbang"><a href="#813-Largest-Sum-of-Average-bangbang" class="headerlink" title="813 Largest Sum of Average (bangbang)"></a>813 Largest Sum of Average (<em>bangbang</em>)</h3><p>序列切分问题，是不是可以引出一类问题？<br>核心思想是前i个元素分成k个的最优解，依赖于前j个元素分成k-1份的子问题的最优解，其中j是所有大于k-1小于i的整数。<br>用官方example举例来说，【9,1,2,3,9】分成3份的最优解来自于这么几个字问题：<br>    【9,1,2,3】分成两份的最优解 + average（9）<br>    【9,1,2】分成两份的最优解 + average（3,9）<br>    【9,1】分成两份的最优解 + average（2,3,9）</p>
+<h3 id="300-Longest-Increasing-Subsequence-bangbang"><a href="#300-Longest-Increasing-Subsequence-bangbang" class="headerlink" title="300 Longest Increasing Subsequence (bangbang)"></a>300 Longest Increasing Subsequence (<em>bangbang</em>)</h3><p>很不错的题，我开始的思路是就是先找递推关系，比如subQ[1,3,6,7,9,4,10,5,6]可以约减为[1,3,6,7,9,4,10,5]+1，subQ[1,3,6,7,9,4,10,5]就要分情况了，一种是[1,3,6,7,9,4]+1，一种是[1,3,6,7,9,4,10]，因为选了最后的5的话，倒数第二个10肯定要不了了，要么就是先不要5，看看选更大的10会不会带来更大的收益。然后[1,3,6,7,9,4,10]可以直接约减为[1,3,6,7,9,4]+1，此时已经出现重复子问题了，可以用DP做。<br>上面是反着思考，然后要正着写代码，思路就和我的实现一样，从前面所有的子问题中选可以和当前元素构成新的递增序列的子问题的解的最大值，如果没有就赋值1。DP数组的意义就是“以当前元素结尾的递增子序列最长可以多长”，然后返回DP中的最大值就行。</p>
+<p>上面这个思路没问题，本来也可以结束了，但是题目下面问可不可以用nlogn来解决，现在的解法是n^2的时间效率。现在的DP数组肯定是nlogn不了，我直接看的答案。<br>重点是构建有序的DP，这样就可以用二分搜索了，但是我死活也是没能自己想出来。。。<br>新的DP[i]表示长度为i+1的递增序列末尾元素最小是多少，最后DP的长度就是答案。logn出现在DP是有序数组，在更新DP的时候可以二分搜索。</p>
+<p><a href="https://leetcode.com/problems/longest-increasing-subsequence/discuss/74824/JavaPython-Binary-search-O(nlogn" target="_blank" rel="noopener">Java/Python Binary search O(nlogn) time with explanation</a>-time-with-explanation)<br><a href="https://blog.csdn.net/lanchunhui/article/details/51611970" target="_blank" rel="noopener">leetcode（300）—— Longest Increasing Subsequence（最长递增子序列）</a></p>
+<h3 id="213-House-Robber-II"><a href="#213-House-Robber-II" class="headerlink" title="213. House Robber II"></a>213. House Robber II</h3><p>就是用198的套路解就行，就是选第一个不能选最后一个，选最后一个不能选第一个。那就直接掐头用198算一遍，去尾用198算一遍，然后取最大值。</p>
+<h3 id="416-Partition-Equal-Subset-Sum-bangbang"><a href="#416-Partition-Equal-Subset-Sum-bangbang" class="headerlink" title="416. Partition Equal Subset Sum (bangbang)"></a>416. Partition Equal Subset Sum (<em>bangbang</em>)</h3><p>在彪哥的启发下套上了01背包问题。但是看了答案，DFS是比DP更快的解法。还需要研究一下</p>
+<h3 id="698-Partition-to-K-Equal-Sum-Subsets"><a href="#698-Partition-to-K-Equal-Sum-Subsets" class="headerlink" title="698. Partition to K Equal Sum Subsets"></a>698. Partition to K Equal Sum Subsets</h3><p>用416套，但是一个关键的问题就是找到一个子集之后要回溯知道是那几个元素构成了子问题的解，然后找另一个子集的时候不再使用已经使用过的元素。<br>其次，此时的问题不再与物品顺序无关了，我是要从大到小遍历才能保证正确性，最后的时间不是很快，但是没有继续优化。</p>
+<h3 id="279-Perfect-Squares-math-bangbang"><a href="#279-Perfect-Squares-math-bangbang" class="headerlink" title="279. Perfect Squares (math) (bangbang)"></a>279. Perfect Squares (<em>math</em>) (<em>bangbang</em>)</h3><p>DP思路很简单，但是利用的数学方法我没看明白。就是一个数后两位是0直接去掉这个没问题，因为所有的因子加一个零就可以，然后只有n=7时结果是4？为啥？其余的结果不是2就是3？为啥？</p>
+<h3 id="376-Wiggle-Subsequence-bangbang"><a href="#376-Wiggle-Subsequence-bangbang" class="headerlink" title="376. Wiggle Subsequence (bangbang)"></a>376. Wiggle Subsequence (<em>bangbang</em>)</h3><p>找到给定序列中的最长摇摆子序列，我的方法还是直接的记录下以某个元素结尾的最长的摇摆子序列的长度和摇摆方向。<br>Solution中给出了线性时间的方法，很像714，使用两个DP数组进行更新，然后我再定睛一看，这个的更新方式和我的方式没啥区别呀。那么我的应该也不用遍历之前所有的子问题，那我就在代码的33行加了一个break，果然也是accept，那么就是要证明这种最优子性质的成立了。初步的想法是输入序列式nums，如果结果序列中含有第i个元素，那么nums[:i+1]的结果肯定也含有nums[i]。重点是我们不知道到第i个元素时是要往上摇摆还是往下摇摆，那么官方Solution中就使用了两个数组。<br>关键在于为什么只看DP的前一个就行而不是DP的所有前面的子问题，然后又仔细看了一下官方的Solution，发现和我的解法还是不一样的。。。我的dp[i]表示的是一定要以第i个元素结尾的最长摇摆序列，但是Solution中的dp[i]是输入是nums[:i]时的解的长度。</p>
+<h3 id="264-Ugly-Number-II-bangbang"><a href="#264-Ugly-Number-II-bangbang" class="headerlink" title="264. Ugly Number II (bangbang)"></a>264. Ugly Number II (<em>bangbang</em>)</h3><p>这道题刚一拿到懵逼了一下，然后仔细一分析，n是不是ugly的只要看n/2,n/3,n/5的结果是不是True就行，只要有一个子问题是True，那么自己也是True，然后就直接的DP下去了，dp中存放dp[i]是否ugly，然后，超时了。。。<br>然后立刻想到可以优化的地方就是DP数组，因为看到的结果中，越靠后相邻的两个True间隔的越远，那么中间间隔的大量的False实际上可以认为是没有用的判断，那么考虑能不能直接推导出下一个uglynum。思路就是大的ugly肯定是由小的uglynum乘以（2,3,5）之间的某一个数生成的，那么就维护一个列表，这个列表里是还没有用过的小的uglynum和它下一个要乘的因子，每次从这里面拿出一个乘积最小的，然后已经乘到5了就把这个弹出列表，否则就换成一个更大的因子。然后还要注意一定要保证里面有一个因子为2的小uglynum，这样就能保证按顺序生成uglynum。然后由于每次都从这个列表中找最小，使用堆来代替这个列表结构就显而易见了。然后提交可以过。然后发现排名不怎么考前。。。</p>
+<p>然后看见排名靠前Submission，他也是用的堆，但是他比我快了不少，原因我觉得是在这个地方：我用堆维护的是下一个可能的uglynum的因子，然后我手动找出下一个uglynum是多少，而他的解法是直接用heap维护uglynum，一下子把这次可以生成的都拿出来放进堆里，然后从所有已经生成过的uglynum中选一个最小的加入结果列表。当然了，他的解法和下面的解法都用了一些不正大光明的手段。就是：别的语言我不确定，但是leetcode对于python递交的代码每个测试用例会新建一个Solution对象来求解，而这里只运行了一遍，然后把结果放到类变量中了，所以后面的测试用例直接读值就行。</p>
+<p>还有下面这个可以说很灵性了的解法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BeautifulSolution</span>:</span></span><br><span class="line">    ugly = sorted([<span class="number">2</span>**a * <span class="number">3</span>**b * <span class="number">5</span>**c <span class="keyword">for</span> a <span class="keyword">in</span> range(<span class="number">32</span>) <span class="keyword">for</span> b <span class="keyword">in</span> range(<span class="number">20</span>) <span class="keyword">for</span> c <span class="keyword">in</span> range(<span class="number">14</span>)])</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nthUglyNumber</span><span class="params">(self, n)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> Solution.ugly[n - <span class="number">1</span>] <span class="keyword">if</span> n &gt; <span class="number">0</span> <span class="keyword">else</span> <span class="keyword">None</span></span><br></pre></td></tr></table></figure>
+<h3 id="152-Maximum-Product-Subarray"><a href="#152-Maximum-Product-Subarray" class="headerlink" title="152. Maximum Product Subarray"></a>152. Maximum Product Subarray</h3><p>这里DP的思路比较直接，就是之前很常用的子问题表示“以某个元素结束的符合题意的子序列的最优解”，然后递推公式也很好求，只不过需要维护两个数组，一个正的一个负的就行。然后由于每次扩增子问题规模的时候只依赖于上一个子问题，那么空间代价可以从线性降低到常数。然后改动之后时间也提升了，虽然只是从五十几毫秒提升到三十几毫秒，但是打败的submission从35%到99%。感觉是使用元组赋值的Python特性导致的加速？还是列表的访问比单个元素要慢？</p>
+<p>另外发现了一个可能的套路，<strong>遇到连续子序列就有很大概率使用”某个元素结束的符合题意的子序列的最优解”这种DP思想。</strong></p>
+<p><a href="https://leetcode.com/problems/ugly-number-ii/discuss/129552/Python-Elegant-solution-using-min-heap" target="_blank" rel="noopener">[Python] Elegant solution using min-heap</a></p>
+<h3 id="322-Coin-Change"><a href="#322-Coin-Change" class="headerlink" title="322. Coin Change"></a>322. Coin Change</h3><p>找到可能解DP或许更快，像这道题找到最优解，那么BT就慢了。然后就是背包问题常规解法，但是解出来没有特别快啊，看了一下官方Solution，和我的做法一样，那就不管了。</p>
+<h3 id="673-Number-of-Longest-Increasing-Subsequence"><a href="#673-Number-of-Longest-Increasing-Subsequence" class="headerlink" title="673. Number of Longest Increasing Subsequence"></a>673. Number of Longest Increasing Subsequence</h3><p>和300的题目设置基本一样，不过从求最长长度变成了求最长的数量，直接拿到题想用300的nlogn的方法做，后来觉得不好想。<br>然后还是用了序列老套路：dp[i]表示第i个元素结尾的最长递增子序列长度，这个其实就是我做300的思路，然后求数目的话还需要第二个dp数组，保存以该元素结尾的最长递增子序列有多少种可能，然后在dp递推的时候，遍历前面的全部解。好像是有更好的解法的，利用Segment Tree，但是没看，就先这样吧。</p>
+<h3 id="139-Word-Break-bangbang"><a href="#139-Word-Break-bangbang" class="headerlink" title="139. Word Break (bangbang)"></a>139. Word Break (<em>bangbang</em>)</h3><p>这题。。。一开始对于wordDict本来想转化为Trie树，然后在找DP的递推关系的时候发现完全不用，就用applepen举例子，求applepen能不能拆，由于已知pen在wordDict中，因此取决于apple能不能拆，这就找到了递推关系了。然后自底向上的写代码，对字符串的前缀找能和wordDict中的词匹配的长度，然后在dp数组的相应位置标为True，需要找多长的前缀呢？wordDict中最长的就行。实际这里还有优化的余地，假设wordDict只有两个单词，长度为3和5，那么我们只看长为3,5的前缀就行，我也没有这么写，我就是对所有不超过wordDict最长长度的前缀看看在不在wordDict中，然后考虑s[1:],s[2:]以此类推。<br>最后结果还不错。</p>
+<h3 id="808-soup-serving"><a href="#808-soup-serving" class="headerlink" title="808. soup serving"></a>808. soup serving</h3><p>差评的人太多了，不做了！其实是懒了。。。</p>
+<h3 id="91-Decode-Ways"><a href="#91-Decode-Ways" class="headerlink" title="91. Decode Ways"></a>91. Decode Ways</h3><p>递推很简单，就是注意细节，比如边界条件，空串的解码数为1，‘0’的解码数为0。</p>
+<h3 id="523-Continuous-Subarray-Sum"><a href="#523-Continuous-Subarray-Sum" class="headerlink" title="523. Continuous Subarray Sum"></a>523. Continuous Subarray Sum</h3><p>注意！又是连续子数组问题，使用套路DP法。dp表示前i个元素和模k的值，然后如果dp数组中有0且0不是出现在第一个位置，或者dp数组中有两个数相同，且这两个数的位置至少差1，那么就返回True。目前看来完全没有问题，但是还没有考虑k=0时的情景。思路在代码中写得很清楚了，k等于0时意味着数组中至少要有两个连续的0，因此k=0但是数组中没有0，直接False，找到了两个连续的零的话无论k是多少都是True，k=0但是没有两个连续的零，False。这就处理完了k=0的场景。</p>
+<h3 id="221-Maximal-Square-bangbang"><a href="#221-Maximal-Square-bangbang" class="headerlink" title="221. Maximal Square (bangbang)"></a>221. Maximal Square (<em>bangbang</em>)</h3><p>这道题加上棒棒标签不是因为这道题难，而是因为这道题思路很巧妙，可以用一维数组找到最长的连续1作为思考切入点。</p>
+<h3 id="368-Largest-Divisible-Subset"><a href="#368-Largest-Divisible-Subset" class="headerlink" title="368. Largest Divisible Subset"></a>368. Largest Divisible Subset</h3><p>就是一个关键字思想，已经有一个divisible subset的情况下，如果想要往里面添加一个，那么这个数要被比他小的最大的数整除且可以整除比他大的最小的数，为了计算方便，先把数组排序，那么每个新来的数都会比已有的最大元素还大，那么就只需要判断是不是比已有的divisible subset中的最大数还大就行。另外需要注意的就是，这道题需要回溯。</p>
+<h3 id="787-Cheapest-Flights-Within-K-Stops-bangbang"><a href="#787-Cheapest-Flights-Within-K-Stops-bangbang" class="headerlink" title="787. Cheapest Flights Within K Stops bangbang"></a>787. Cheapest Flights Within K Stops <em>bangbang</em></h3><p>比较简单，用BellmanFord算法就可以，注意到这道题没有负权重的边，因此Dijkstra会更快。<br>在实现BellmenFord中，小小的封装了一下dict，使每次key不在dict中时，让dict返回inf，另外，DP过程中发现不再变化时使用early stopping，然后每次对最近的点不更新（注意这一点也是因为没有负边才可以保证）。</p>
+<h3 id="790-Domino-and-Tromino-Tiling"><a href="#790-Domino-and-Tromino-Tiling" class="headerlink" title="790. Domino and Tromino Tiling"></a>790. Domino and Tromino Tiling</h3><p>一开始以为递推式很好求，就是一个棍竖着是上一个子问题，两个棍横着是上上个子问题，两个L拼是上上上个子问题，但是两个L有对称性的问题要乘二，然后我以为就完了。一提交，错了。<br>然后肯定是情况少考虑了，接着琢磨，琢磨出来两个L加上一个棍是subQ(n-4)，然后又直接提交了。。。又跪了。。。<br>然后考虑到两个L加上两个棍是subQ(n-5)的时候才明白，子问题不是有限的，是前面所有子问题都要用上，三个子问题以上需要两个L加上足够的棍来构成一个矩形，然后由于不对称，还要乘二，然后提交，哎。。。TLE了。。。<br>这个倒是立刻想到解法，就是这种大量的求和的情况使用accumulation，前面维护累加和，重要的是不要维护两个数组，要只维护累加和来做这道题，然后递推式的变形还琢磨了一会，就不在这写了，自己现推吧。这种技巧也是可以推广到类似题目上的。这就能把类似于这种需要对之前的子问题求和的DP问题的时间复杂度从N2降低到N。</p>
+<h3 id="837-New-21-Game-bangbang"><a href="#837-New-21-Game-bangbang" class="headerlink" title="837. New 21 Game bangbang"></a>837. New 21 Game <em>bangbang</em></h3><p>这道题一开始真的陷入死胡同了，我的思考历程是W是不变的，N、K是变量，然而每次进入子问题是N、K会同步的变，两者的差值是一个定值，那么就变成一维问题了，就是这个递推关系啊。。。由于可能K会在子问题中小于零，所以一直都没琢磨清楚，一直想的特别复杂，但是这种问题一旦复杂就完蛋了，越简单清晰的算法越不会有错。<br>最后还是尝试给的例子找到了清晰地递推关系。要抓住游戏的思想，大于等于K我就不拿了，大于等于N我就输了。然后K小于等于0时一定赢，直接返回1，给的第三个事例中N和K相差4，就用这个做例子，令n作为子问题的序号。subQ0到subQ4直接初始化为1，因为k小于等于0，直接赢，然后n=5时，k=1，肯定需要抓牌了，那么就要进入子问题的递归，进入subQ1到subQ4，意味着抓到的牌大小是1到5，抓到比5大的就炸了，不考虑。这样的话递推关系就比较清晰了，需要用到子问题求和，利用790中提到的思想，使用accumulate方法。</p>
+<h3 id="801-Minimum-Swaps-To-Make-Sequences-Increasing"><a href="#801-Minimum-Swaps-To-Make-Sequences-Increasing" class="headerlink" title="801. Minimum Swaps To Make Sequences Increasing"></a>801. Minimum Swaps To Make Sequences Increasing</h3><p>我的递推比较复杂，要考虑多种可能，也没看是不是有更好的可能了，决定DP就刷到这里，这道题也是有点仓促。<br>维护两个数组，本次换需要的最小次数和本次不换需要的最小次数。<br>如果可以换页也可以不换，本次的不换等于上次的不换和换中的最小值，换等于上次的不换和换中的最小值+1。<br>如果必须换，本次的换等于上次的不换+1，本次的不换等于上次的换。<br>如果不能换，本次的换等于上次的换+1，本次的不换等与上次的不换。<br>肯定是只有上面这三种情况，想不清楚做一个例子就行，比如A是[0,7,8,10,10,11,12,13,19,18]，B是[4,4,5,7,11,14,15,16,17,20]。试一下就好。</p>
+<h3 id="879-Profitable-Schemes"><a href="#879-Profitable-Schemes" class="headerlink" title="879. Profitable Schemes"></a>879. Profitable Schemes</h3><p>一拿到手我使用回溯法做的，没有找到重复子问题啊。。。<br>然后超时了超的不是一星半点，看讨论区，发现是背包问题，此时的我依旧是懵逼的(´･_･`)。<br>然后今天脑子好乱啊，挖个坑回来填。</p>
+<h2 id="与贪心算法的关系"><a href="#与贪心算法的关系" class="headerlink" title="与贪心算法的关系"></a>与贪心算法的关系</h2><p>在动态规划的时候,需要分解子问题,由于不知道要怎么分,所以需要枚举。如果我们加入一点更严的限制的话,我们就不用枚举了。分治的时候,我们就这么分,不用枚举。动态规划的时候,我们不知道怎么分,所以要枚举。如果我们的问题更特殊一点,就不用枚举了,直接就知道选谁。这是什么算法呢?这就是贪心算法。它是动态规划算法的一个加强的版本。我们在 Bellman − Ford 算法中用到枚举,如果我们加一个条件,我们就知道下家走谁,根本就不用枚举,这就是 Dijkstra 算法。</p>
+<p>讲到这就能总结一下了,我们看看动态规划和贪心到底有什么异同。首先看相同点:</p>
+<ul>
+<li>都是来求解优化的问题</li>
+<li>都有最优子结构这个性质。不要以为最优子结构是动态规划所独有的,其实不是,贪心算法也要利用到这个性质。</li>
+<li>最后一点是最深刻的话,“在每一个贪心算法的背后,几乎总会有一个动态规划的算法,算法这个动态规划算法比较笨拙”。我本科学算法,最先接触的就是贪心算法，而想要理解贪心算法的来由，就要了解动态规划算法，因为前者的确是对后者的一个加强。</li>
+</ul>
+<p>加强动态规划到贪心算法的演化，一个是 BellmanFord 到 Dijkstra 算法之间的关系，一个是看 343 题，或者 650 也还行，能更直观的了解到DP算法加上一些更严格的条件或者更灵性的观察。类似于动态规划算法需要最优子结构的证明，贪心算法需要更强的对贪心选择确实能导致正确解的证明。比如 Dijkstra 算法可以证明满足非负性条件之后通过基本的“relax”操作可以完成最短路径的最优性条件，证明有向图不包含环后，可以使用更快的基于拓扑排序的方法求解单源最短路径，最小支撑树的 Prim 算法和 Kruskal 算法都满足图的切分定理。</p>
+<p>另一方面的感悟是，好的算法一定需要一个配合的好的数据结构支撑，比如DP的787题，我用二维数组实现的BellmanFord算法，虽然观察到了每次递归的最近点不再改变这一现象，在BellmanFord算法中进行了针对性的改进，其实已经离Dijkstra很像了，但是算法书上用队列来实现（见《算法（第四版）》P438），效率会高很多，因为只有上一次迭代中某个点的邻居点发生变动，本次迭代中该点才有可能更新这一观察，避免了二维表大量无用的更新赋值操作。贪心算法的Dijkstra算法，每次要获取离源点最近的点，那么一个优先队列是必不可少的。那么优先队列用什么实现？直接使用堆是一个不错的选择，为了避免堆的合并操作的O(n)的时间代价，使用二项堆（binomial Heap）可以将合并代价降低到对数级别，而专门为Dijkstra算法设计的斐波那契堆可以将该算法优化的更好。</p>
+<p><a href="/img/Dijkstra.png"></a></p>
+<p>最后一点就是算法本身不是那么重要，驱动算法的背后的思想更重要。比如说Prim算法和Dijkstra算法仿佛关系不那么密切，但是二者实际上都是得到图中的一棵树，分别是最小生成树和最短路径数，都使用的基于优先队列的贪心算法，每次取一条最优边加入树中，不同的只不过是优先队列中保存的权重是切分边的权重还是到源点的距离。就好像BFS和DFS都维护各自的数据结构并遵循的算法的基本规则：取数据结构中下一个顶点并将相邻而未访问过的顶点加入数据结构，只不过由于两者数据结构的访问规则的限制的不同而导致了两种算法的不同，我感觉Prim和Dijkstra算法也是这样，算法中一点点核心的改变使得整个算法的目的大相径庭，不过把握着这个核心可以使得用最小的努力去理解这些算法。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>python中提供的functools.lru_cache装饰器可以快速的将函数改为memorization版本。和黄同学讨论时，我们得到的结论是，memoriation的递归和动态规划的区别就在于动态规划没有递归栈。</p>
+<hr>
+<ol>
+<li><a href="https://www.zhihu.com/question/23995189" target="_blank" rel="noopener">什么是动态规划？动态规划的意义是什么？</a></li>
+<li><a href="https://blog.csdn.net/mmc2015/article/details/73558346" target="_blank" rel="noopener">非常好的动态规划总结，DP总结</a></li>
+<li><a href="https://github.com/tianyicui/pack" target="_blank" rel="noopener">背包问题九讲</a></li>
+<li>算法讲义——卜东波</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/07/23/程序员的玩具-2018-07-23-LC-DynamicProgram/" data-id="cjxo5e7e4006mz16dlmnc5v2p" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/algorithm/">algorithm</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../08/12/信息安全-zte-design/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          项目报告——innerEye1
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../06/30/C-2018-06-30-Counting-Objects-in-CPP/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">【译】Counting Objects in C++</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

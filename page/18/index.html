@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="proTao的大脑具现">
+<meta property="og:url" content="https://protao.github.io/page/18/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="proTao的大脑具现">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    
+
+<article id="post-Python-2018-04-23-PythonCookbook8" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="../../2018/04/23/Python-2018-04-23-PythonCookbook8/" class="article-date">
+  <time datetime="2018-04-22T16:00:00.000Z" itemprop="datePublished">2018-04-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/读书笔记/">读书笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="../../2018/04/23/Python-2018-04-23-PythonCookbook8/">Python Cookbook3 (8)类与对象</a>
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/python3_cookbook_cover.png" alt></p>
+<h3 id="1-改变对象的字符串显示"><a href="#1-改变对象的字符串显示" class="headerlink" title="1. 改变对象的字符串显示"></a>1. 改变对象的字符串显示</h3><p>自定义<code>__repr__()</code> 和<code>__str__()</code>通常是很好的习惯,因为它能简化调试和实例输出。例如,如果仅仅只是打印输出或日志输出某个实例,那么程序员会看到实例更加详细与有用的信息。<br><strong>repr</strong>()生成的文本字符串标准做法是需要让eval(repr(x))==x为真。<br>如果<strong>str</strong>()没有被定义,那么就会使用<strong>repr</strong>()来代替输出。</p>
+<h3 id="2-自定义字符串的格式化"><a href="#2-自定义字符串的格式化" class="headerlink" title="2. 自定义字符串的格式化"></a>2. 自定义字符串的格式化</h3><p>如果format时传入对象，会默认执行对象的<strong>format</strong>方法，如果在<strong>format</strong>函数中提供参数，那么在格式化字符串时可以通过冒号传入参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, val)</span>:</span></span><br><span class="line">        self.val = val</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> str(self.val)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"this is my class A"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__format__</span><span class="params">(self,par)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"A(&#123;&#125;) with parameter &#123;&#125;"</span>.format(self.val,par)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"&#123;:hello&#125;"</span>.format(A(<span class="number">1</span>)))</span><br></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="../../2018/04/23/Python-2018-04-23-PythonCookbook8/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/04/23/Python-2018-04-23-PythonCookbook8/" data-id="cjxo5e6pf002xz16d3wx4m6ok" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
+    
+
+<article id="post-Python-2018-04-22-PythonCookbook7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="../../2018/04/22/Python-2018-04-22-PythonCookbook7/" class="article-date">
+  <time datetime="2018-04-21T16:00:00.000Z" itemprop="datePublished">2018-04-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/读书笔记/">读书笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="../../2018/04/22/Python-2018-04-22-PythonCookbook7/">Python Cookbook3 (7)函数</a>
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/python3_cookbook_cover.png" alt></p>
+<h3 id="1-任意数量的位置参数和关键字参数"><a href="#1-任意数量的位置参数和关键字参数" class="headerlink" title="1. 任意数量的位置参数和关键字参数"></a>1. 任意数量的位置参数和关键字参数</h3><p>关键字参数必须全部在位置参数后面<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">anyargs</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">    print(args) <span class="comment"># A tuple</span></span><br><span class="line">    print(kwargs) <span class="comment"># A dict</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="2-强制使用关键字参数"><a href="#2-强制使用关键字参数" class="headerlink" title="2. 强制使用关键字参数"></a>2. 强制使用关键字参数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recv</span><span class="params">(maxsize, *, block)</span>:</span></span><br><span class="line">    <span class="string">'Receives a message'</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">recv(<span class="number">1024</span>, <span class="keyword">True</span>) <span class="comment"># TypeError</span></span><br><span class="line">recv(<span class="number">1024</span>, block=<span class="keyword">True</span>) <span class="comment"># Ok</span></span><br></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="../../2018/04/22/Python-2018-04-22-PythonCookbook7/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/04/22/Python-2018-04-22-PythonCookbook7/" data-id="cjxo5e6pe002wz16df2ygobmo" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
+    
+
+<article id="post-Python-2018-04-21-PythonCookbook3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="../../2018/04/21/Python-2018-04-21-PythonCookbook3/" class="article-date">
+  <time datetime="2018-04-20T16:00:00.000Z" itemprop="datePublished">2018-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/读书笔记/">读书笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="../../2018/04/21/Python-2018-04-21-PythonCookbook3/">Python Cookbook3 (3)数字日期和时间</a>
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/python3_cookbook_cover.png" alt></p>
+<h3 id="1-数字的舍入"><a href="#1-数字的舍入" class="headerlink" title="1. 数字的舍入"></a>1. 数字的舍入</h3><p>使用<code>round</code>函数。round 函数返回离它最近的偶数。也就是说,对 1.5 或者 2.5 的舍入运算都会得到 2。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">print(round(<span class="number">12.3</span>)) <span class="comment"># 12</span></span><br><span class="line">print(round(<span class="number">1.23</span>, <span class="number">1</span>)) <span class="comment"># 1.2</span></span><br><span class="line">print(round(<span class="number">1.25</span>, <span class="number">1</span>)) <span class="comment"># 1.2</span></span><br><span class="line">print(round(<span class="number">1.27</span>, <span class="number">1</span>)) <span class="comment"># 1.3</span></span><br><span class="line">print(round(<span class="number">127</span>, <span class="number">-1</span>)) <span class="comment"># 130</span></span><br></pre></td></tr></table></figure></p>
+<p>如果只希望输出一定的宽度（也会舍入啊？没明白区别在哪），使用<code>format</code>。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">format(<span class="number">1.23456</span>, <span class="string">'0.2f'</span>) <span class="comment"># 1.23</span></span><br><span class="line">format(<span class="number">1.23456</span>, <span class="string">'0.3f'</span>) <span class="comment"># 1.235</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="2-执行精确的浮点数运算"><a href="#2-执行精确的浮点数运算" class="headerlink" title="2. 执行精确的浮点数运算"></a>2. 执行精确的浮点数运算</h3><p>浮点数的一个普遍问题是它们并不能精确的表示十进制数。并且,即使是最简单的数学运算也会产生小的误差。这些错误是由底层 CPU 和 IEEE 754 标准通过自己的浮点单位去执行算术时的特征。由于 Python 的浮点数据类型使用底层表示存储数据,因此你没办法去避免这样的误差。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="number">1.2</span>+<span class="number">2.4</span>) <span class="comment"># 反正不是3.6...</span></span><br></pre></td></tr></table></figure></p>
+<p>使用<code>Decimal</code>模块，再去书里面看。</p>
+<h3 id="3-数字的格式化输出"><a href="#3-数字的格式化输出" class="headerlink" title="3. 数字的格式化输出"></a>3. 数字的格式化输出</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">1234.56789</span></span><br><span class="line">print(format(x, <span class="string">'0.2f'</span>))</span><br><span class="line">print(format(x, <span class="string">'&gt;10.1f'</span>)) <span class="comment"># 10位长度右对齐</span></span><br><span class="line">print(format(x, <span class="string">'&lt;10.1f'</span>)) <span class="comment"># 10位长度左对齐</span></span><br><span class="line">print(format(x, <span class="string">'^10.1f'</span>)) <span class="comment"># 10位长度居中</span></span><br></pre></td></tr></table></figure>
+<p>当指定数字的位数后,结果值会根据 round() 函数同样的规则进行四舍五入后返回。<code>format</code>同样适用于<code>Decimal</code>。</p>
+<hr>
+<ol>
+<li><a href="https://www.zhihu.com/question/19794855/answer/129270643" target="_blank" rel="noopener">知乎：怎样才算是精通python</a></li>
+<li><a href="http://python.jobbole.com/85319/" target="_blank" rel="noopener">Python格式化字符串</a></li>
+<li><a href="http://python.jobbole.com/86481/" target="_blank" rel="noopener">Python3.5 协程究竟是个啥</a></li>
+<li><a href="http://www.jb51.net/article/55748.htm" target="_blank" rel="noopener">python多重继承新算法C3介绍</a></li>
+<li><a href="http://python.jobbole.com/86787/" target="_blank" rel="noopener">Python: 你不知道的 super</a></li>
+<li><a href="https://www.cnblogs.com/duanv/p/5947525.html" target="_blank" rel="noopener">python的类变量与实例变量以及<strong>dict</strong>属性</a></li>
+<li><a href="http://www.jb51.net/article/86749.htm" target="_blank" rel="noopener">详解Python中 <strong>get</strong>和<strong>getattr</strong>和<strong>getattribute</strong>的区别</a></li>
+<li><a href="http://python.jobbole.com/85176/" target="_blank" rel="noopener">Python黑魔法————描述器</a></li>
+<li><a href="https://www.zhihu.com/question/20021164" target="_blank" rel="noopener">Python中的classmethod和staticmethod有什么具体用途</a></li>
+<li><a href="https://www.zhihu.com/question/26930016" target="_blank" rel="noopener">如何理解python装饰器</a></li>
+<li><a href="https://www.cnblogs.com/cicaday/p/python-decorator.html" target="_blank" rel="noopener">详解python的装饰器</a></li>
+<li><a href="http://python.jobbole.com/84095/" target="_blank" rel="noopener">Python <strong>getattribute</strong> vs <strong>getattr</strong> 浅谈</a></li>
+<li><a href="http://python.jobbole.com/85685/" target="_blank" rel="noopener">你真的理解Python中MRO算法吗？</a></li>
+<li><a href="https://blog.csdn.net/weixin_35955795/article/details/53053762" target="_blank" rel="noopener">关于python中inspect模块的一些探究</a></li>
+<li><a href="http://python.jobbole.com/85126/" target="_blank" rel="noopener">Python “黑魔法” 之 Meta Classes</a></li>
+<li><a href="https://blog.csdn.net/IaC743nj0b/article/details/79547122" target="_blank" rel="noopener">Range对象并不是迭代器</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/04/21/Python-2018-04-21-PythonCookbook3/" data-id="cjxo5e6pa002uz16dtbevf9sp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
+    
+
+<article id="post-Python-2018-04-21-PythonCookbook4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="../../2018/04/21/Python-2018-04-21-PythonCookbook4/" class="article-date">
+  <time datetime="2018-04-20T16:00:00.000Z" itemprop="datePublished">2018-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/读书笔记/">读书笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="../../2018/04/21/Python-2018-04-21-PythonCookbook4/">Python Cookbook3 (4)迭代器与生成器</a>
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/python3_cookbook_cover.png" alt></p>
+<h3 id="1-手动遍历迭代器"><a href="#1-手动遍历迭代器" class="headerlink" title="1. 手动遍历迭代器"></a>1. 手动遍历迭代器</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 捕获迭代终止异常</span></span><br><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">it = iter(a)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        ch = next(it)</span><br><span class="line">        print(ch)</span><br><span class="line"><span class="keyword">except</span> StopIteration:</span><br><span class="line">    print(<span class="string">"结束"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为迭代失败设置异常值</span></span><br><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">it = iter(a)</span><br><span class="line">ch = <span class="keyword">True</span></span><br><span class="line"><span class="keyword">while</span> ch:</span><br><span class="line">    ch = next(it,<span class="keyword">None</span>)</span><br><span class="line">    print(ch)</span><br></pre></td></tr></table></figure>
+<p>对于返回的StopIteration异常，我们在迭代中通常使用的 for 语句会自动处理这种细节,所以你无需担心。</p>
+        
+          <p class="article-more-link">
+            <a href="../../2018/04/21/Python-2018-04-21-PythonCookbook4/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/04/21/Python-2018-04-21-PythonCookbook4/" data-id="cjxo5e6pc002vz16du3x59rt0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
+    
+
+<article id="post-Python-2018-04-20-PythonCookbook1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="../../2018/04/20/Python-2018-04-20-PythonCookbook1/" class="article-date">
+  <time datetime="2018-04-19T16:00:00.000Z" itemprop="datePublished">2018-04-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/读书笔记/">读书笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="../../2018/04/20/Python-2018-04-20-PythonCookbook1/">Python Cookbook3 (1)数据结构与算法</a>
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/python3_cookbook_cover.png" alt></p>
+<h3 id="1-解压序列赋值给多个变量"><a href="#1-解压序列赋值给多个变量" class="headerlink" title="1. 解压序列赋值给多个变量"></a>1. 解压序列赋值给多个变量</h3><p>基本用法很简单，注意的是这种解压赋值可以用在任何可迭代对象上面,而不仅仅是列表或者元组。 包括字符串, 文件对象, 迭代器和生成器。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a, b, c = <span class="string">"abc"</span></span><br><span class="line">x1, x2, x3 = range(<span class="number">3</span>) <span class="comment"># 我也不知道这有啥用</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="2-解压可迭代对象赋值给多个变量"><a href="#2-解压可迭代对象赋值给多个变量" class="headerlink" title="2. 解压可迭代对象赋值给多个变量"></a>2. 解压可迭代对象赋值给多个变量</h3><p>扩展的迭代解压语法是专门为解压不确定个数或任意个数元素的可迭代对象而设计的。星号表达式在迭代元素为可变长元组的序列时是很有用的。星号表达式一定可以得到一个列表，即使没有元素分配给他。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">data = (</span><br><span class="line">    (<span class="string">'scores'</span>, <span class="number">98</span>,<span class="number">97</span>,<span class="number">99</span>),</span><br><span class="line">    (<span class="string">'names'</span>, <span class="string">'tom'</span>,<span class="string">'jack'</span>),</span><br><span class="line">    (<span class="string">'ages'</span>, )</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> tag, *content <span class="keyword">in</span> data:</span><br><span class="line">    print(<span class="string">"&#123;&#125;:&#123;&#125;"</span>.format(tag, content))</span><br></pre></td></tr></table></figure></p>
+        
+          <p class="article-more-link">
+            <a href="../../2018/04/20/Python-2018-04-20-PythonCookbook1/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/04/20/Python-2018-04-20-PythonCookbook1/" data-id="cjxo5e6p9002tz16dff8y3g3q" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="../17/">&laquo; 上一页</a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../16/">16</a><a class="page-number" href="../17/">17</a><span class="page-number current">18</span><a class="page-number" href="../19/">19</a><a class="page-number" href="../20/">20</a><span class="space">&hellip;</span><a class="page-number" href="../28/">28</a><a class="extend next" rel="next" href="../19/">下一页 &raquo;</a>
+  </nav>
+
+
+<!-- 文章目录 --> 
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../tags/database/" style="font-size: 10px;">database</a> <a href="../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../fancybox/jquery.fancybox.css">
+  <script src="../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

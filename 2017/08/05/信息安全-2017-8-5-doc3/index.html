@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>RIOT文档三 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Device Identity with DICE and RIoT: Keys and CertificatesAbstract该规范描述了基于TLS协议和X.509客户端证书的加密设备标识和认证方案。协议和证书格式可以由任何类型的安全处理器实现，但是尤其适用于适合于DICE+RIoT的安全架构。没有基于硬件的安全性的设备也可以在软件中实现协议，尽管这样将导致对最终的身份和认证较低的保证。 1.">
+<meta name="keywords" content="security,hash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RIOT文档三">
+<meta property="og:url" content="https://protao.github.io/2017/08/05/信息安全-2017-8-5-doc3/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="Device Identity with DICE and RIoT: Keys and CertificatesAbstract该规范描述了基于TLS协议和X.509客户端证书的加密设备标识和认证方案。协议和证书格式可以由任何类型的安全处理器实现，但是尤其适用于适合于DICE+RIoT的安全架构。没有基于硬件的安全性的设备也可以在软件中实现协议，尽管这样将导致对最终的身份和认证较低的保证。 1.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/2017/08/05/信息安全-2017-8-5-doc3/img/CA.png">
+<meta property="og:image" content="https://protao.github.io/2017/08/05/信息安全-2017-8-5-doc3/img/2.png">
+<meta property="og:image" content="https://protao.github.io/2017/08/05/信息安全-2017-8-5-doc3/img/multilayer.png">
+<meta property="og:updated_time" content="2018-03-15T15:13:06.724Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RIOT文档三">
+<meta name="twitter:description" content="Device Identity with DICE and RIoT: Keys and CertificatesAbstract该规范描述了基于TLS协议和X.509客户端证书的加密设备标识和认证方案。协议和证书格式可以由任何类型的安全处理器实现，但是尤其适用于适合于DICE+RIoT的安全架构。没有基于硬件的安全性的设备也可以在软件中实现协议，尽管这样将导致对最终的身份和认证较低的保证。 1.">
+<meta name="twitter:image" content="https://protao.github.io/2017/08/05/信息安全-2017-8-5-doc3/img/CA.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-信息安全-2017-8-5-doc3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2017-08-05T08:35:28.000Z" itemprop="datePublished">2017-08-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/信息安全/">信息安全</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      RIOT文档三
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Device-Identity-with-DICE-and-RIoT-Keys-and-Certificates"><a href="#Device-Identity-with-DICE-and-RIoT-Keys-and-Certificates" class="headerlink" title="Device Identity with DICE and RIoT: Keys and Certificates"></a><strong>Device Identity with DICE and RIoT: <em>Keys and Certificates</em></strong></h1><h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><p>该规范描述了基于TLS协议和X.509客户端证书的加密设备标识和认证方案。协议和证书格式可以由任何类型的安全处理器实现，但是尤其适用于适合于DICE+RIoT的安全架构。没有基于硬件的安全性的设备也可以在软件中实现协议，尽管这样将导致对最终的身份和认证较低的保证。</p>
+<h1 id="1-Contents"><a href="#1-Contents" class="headerlink" title="1. Contents"></a>1. Contents</h1><p>（略）</p>
+<h1 id="2-Terms-and-Definitions"><a href="#2-Terms-and-Definitions" class="headerlink" title="2. Terms and Definitions"></a>2. Terms and Definitions</h1><p><strong>Alias Key, Credential, and Certificate</strong><br>Alias Key是由设备创建的非对称密钥对，每个新固件版本都要创建新的Alias Key(也可以更频繁的创建)。Alias Key的公钥通过设备的设备DeviceID Key进行认证，以形成Alias Key Certificate。Key和Certificate一起构成了Credential。</p>
+<p><strong>Attestation</strong><br>认证是一个设备的安全配置的加密报告。在这个规范中，认证信息被编码为一个名为固件ID(FWID：Firmware ID)的加密散列值。</p>
+<p><strong>DeviceID Key, Credential, and Certificate</strong><br>设备标识(DeviceID)是一种非对称密钥对，它作为设备的长期标识符。该规范假定DeviceID永远不变。如果供应商提供了一种机制来更改DeviceID，不管是使用远程使用加密协议，还是在重新制造，那么该规范中的协议将把它识别为不同的设备。</p>
+<p>如果DeviceID密钥对是使用DICE+RIoT机制创建的，那么DeviceID将与设备硬件身份和RIoT Core组件联系起来。RIoT Core被认为是不变的，因此DeviceID不会改变。<br>DeviceID公钥可以通过设备厂商认证或自认证以形成DeviceID证书。</p>
+<p><strong>Device Identity Composition Engine (DICE)</strong><br>DICE，是一个硬件/固件的能力，它能生成一个密码学上的唯一值，用于在设备上启动的最低层的软件。<br>兼容DICE的平台支持RIoT风格的安全架构。</p>
+<p><strong>Composite Identity</strong><br>Composite Identity是一种数据结构，它编码了设备的硬件标识(DeviceID)和正在运行的固件(FWID)。</p>
+<p><strong>Compound Device Identity (CDI)</strong><br><a id="more"></a><br>CDI是一个特殊的值，它是一个设备和它启动的RIoT Core的加密标识(例如散列)的惟一值。</p>
+<p><strong>Firmware ID (FWID)</strong><br>The Firmware Identity (FWID)是Firmware Security Descriptor (FSD)的哈希值。</p>
+<p><strong>Firmware Security Descriptor (FSD)</strong><br>固件安全描述符是一个供应商定义的机器可读数据结构，它描述了第1层代码的标识(可能还有其他与安全相关的数据)。RIoT使用FSD来验证它加载的第1层代码。</p>
+<p>FSD可能包括：</p>
+<pre><code>1. Layer1固件镜像
+2. 加密的标明被授权的Layer1的固件的清单文件
+3. 在安全启动实现的环境中，已签名固件的固件版本号
+4. 设备的关键的安全配置
+</code></pre><p>这个文档既没有定义什么状态是安全的，也没有定义它在FSD中是如何表示的。但是，FSD应该是机器可读的，并且应该有一个规范化的表示，可以被散列以形成FWID。</p>
+<p>对于DICE和RIoT体系结构中，以及本文档的上下文中，RIoT CORE被认为是不变的。因此，FSD不包括防暴核心层的标识。(未来的规范可能允许对防暴核心层进行安全更新。)</p>
+<p><strong>Layer</strong><br>许多计算机系统以分阶段的方式启动，每一层都进行身份验证，并加载下一层，提供越来越复杂的运行时服务。<br>在这个规范中，第0层是由处理器启动的第一个代码。在DICE+RIoT系统中，Layer0也被称为RIoT Core，并提供基本的安全服务。简单的设备把所有功能打包进Layer1。更复杂的设备可能包含更多的层。</p>
+<p><strong>Name-Encoded DeviceID</strong><br>Name-Encoded DeviceID是一个可选的字符串，哈希编码了DeviceID public key，并且出现在X509证书中的Issuer Name或者Subject Name字段中。</p>
+<p><strong>RIoT</strong><br>一种针对计算设备提供基础信任服务的安全架构。</p>
+<p><strong>RIoT Core</strong><br>RIoT指的是被处理器用于measure出CDI的那部分代码。反过来，RIoT Core使用CDI来创建DeviceID和其他密钥。虽然该文档主要关注设备的identity，但完整的RIoT实现也可以提供静态数据保护、安全固件更新和其他服务特性。RIoT Core的实现一般都是有设备供应商自行实现。</p>
+<p>本文档中假设RIoT Core不会改变。</p>
+<p><strong>Security Processor</strong></p>
+<p>对密钥和有关操作进行保护的特定处理器。</p>
+<h1 id="3-Overview"><a href="#3-Overview" class="headerlink" title="3. Overview"></a>3. Overview</h1><p>以下部分提供了该规范中定义的协议和证书格式的概述。本节中的协议可以通过软件或硬件安全处理器实现。后面的部分将描述如何在基于RIoT的系统中创建密钥和证书。</p>
+<h2 id="3-1-Protocal-Overview"><a href="#3-1-Protocal-Overview" class="headerlink" title="3.1 Protocal Overview"></a>3.1 Protocal Overview</h2><p>设备通过传输级安全性(TLS)会话与客户端证书进行身份验证，并建立安全的通信。该规范定义了X509客户端证书配置文件和证书链接规则，允许设备对自己及其安全配置进行身份验证(eg：他们正在运行的固件)。</p>
+<p>所有符合标准的设备都被配置或者可以生成一个称为DeviceID的非对称密钥对。该规范假设DeviceID的生命周期与设备的生命周期相同。供应商可能允许DeviceID改变(例如在重新制造或使用其他加密协议时)，但是依赖于此规范中的协议的各方将会将其识别为另外的设备。</p>
+<p>设备还生成了第二个密钥家族，称为Alias Key。与不可更改的DeviceID creditial相比，Alias Key及其凭证的创建更频繁(例如，当设备固件更新或所有者更改时)。</p>
+<p>Alias Key和可选的DeviceID key用x509格式证书进行认证。DeviceID Key的主要功能是验证Alias Key。生成的Alias kay证书中的字段还可以指定固件ID(例如补丁级别或设备固件的散列)来支持认证（attestation）。</p>
+<p>DeviceID公钥本身可以由厂商认证，如果没有供应商认证或要求，它们可能是自我认证的，也可能是未经认证的。在前一种情况下，DeviceID作为从属CA，而在后一种情况下，DeviceID是根CA。设备可以支持多个选项来服务不同的依赖方。参见图1。</p>
+<p><img src="img/CA.png" alt></p>
+<p>在TLS会话中，设备使用当前的Alias key及其证书作为客户端证书进行身份验证。根据认证场景，设备还可以在TLS握手期间发送厂商认证的DeviceID证书链或自我认证的DeviceID证书。如果TLS握手成功，服务器可以从DeviceID证书和来自Alias Key的固件ID中确定DeviceID的公钥部分。</p>
+<p>设备还应该验证服务器TLS证书，本文不详述。</p>
+<h2 id="3-2-DeviceID-and-FWID-Encodings"><a href="#3-2-DeviceID-and-FWID-Encodings" class="headerlink" title="3.2 DeviceID and FWID Encodings"></a>3.2 DeviceID and FWID Encodings</h2><p>该规范定义了一个包含DeviceID(即硬件标识)和FWID(即软件标识)的Conposite Identity数据结构。Conposite Identity包含在Alias Key证书的Alternative Subject Name字段中。</p>
+<h2 id="3-3-TLS-Handshake-and-Certificate-Validation"><a href="#3-3-TLS-Handshake-and-Certificate-Validation" class="headerlink" title="3.3 TLS Handshake and Certificate Validation"></a>3.3 TLS Handshake and Certificate Validation</h2><p>实现此规范的设备通过TLS来认证他们的身份(它们的DeviceID)和它们的安全关键配置(它们的FWID)。希望对客户端进行身份验证的服务器必须请求客户端证书。符合标准的设备将会作出回应:</p>
+<pre><code>1. 生产商CA的证书链
+2. 以DeviceID作为根的证书链
+3. (bare)Alias证书
+</code></pre><p>在TLS握手期间，服务器还应该提供服务器证书。如果服务器证书链无效或不可信，则设备可以终止连接。</p>
+<p>但是具体定义了依赖方使用的策略来验证和授权设备超出了本文档范围。然而，以下的考虑可能是相关的:</p>
+<ol>
+<li><p>All Certificate Chain Processing </p>
+<p> 应实现RFC5280标准，例如：</p>
+<pre><code>- 证书应该在有效期内被签名
+- 等等
+</code></pre><p> DeviceID证书中的DeviceID应该与Alias证书中的CI中的DeviceID一致。</p>
+</li>
+<li><p>Non-Vendor-Certified DeviceIDs    </p>
+<p> 没有生产商签名的证书应该自签名，且DeviceID可识别。</p>
+</li>
+<li><p>Vendor-Certified DeviceIDs</p>
+<p> 有生产商签名，DeviceID证书应该回溯回CA</p>
+</li>
+<li><p>Bare Alias Certificates</p>
+<p> Alias证书签名必须是被CDI中的DeviceID签名得到的。</p>
+</li>
+</ol>
+<p>如果检查上述条件均满足，则可以从Alias证书的Subject Alternative Nave字段中提取出DeviceID和FWID。</p>
+<h2 id="3-4-Attestation"><a href="#3-4-Attestation" class="headerlink" title="3.4 Attestation"></a>3.4 Attestation</h2><p>在该规范的上下文中，认证是通过其固件ID对设备的安全配置进行加密报告。FWID被定义为机器可读的数据结构的散列，称为固件安全描述符，它捕获了供应商认为相关的所有安全关键信息。</p>
+<p>在最简单的情况下，固件安全描述符只是设备上的第1层固件。在这种情况下，FWID将是可更新固件映像的散列。更复杂的固件安全描述符包括识别授权固件、用于认证固件的数字证书的版本号、以及平台配置注册式的安全日志。</p>
+<h2 id="3-5-Bugs-and-Patching"><a href="#3-5-Bugs-and-Patching" class="headerlink" title="3.5 Bugs and Patching"></a>3.5 Bugs and Patching</h2><p>再次说明，本文档中规定，DeviceID在设备的生命周期中不可变，Alias则会比较频繁的更新。</p>
+<p>实现此规范的设备应该为DeviceID的私钥提供最高级别的保护。理想情况下，这将涉及到DICE—+RIOT机制或其他基于硬件的保护。如果DeivceID私钥被公开或用于发出恶意证书(未来的规范可能会处理这种能力)，该规范没有提供任何方法来进行挽救。</p>
+<p>在零日特权升级错误或未知固件漏洞的情况下，没有任何现有的认证计划能够提供关于当前设备安全配置的权威报告。这是因为，如果固件是可开发的，就无法知道实际运行的代码是什么。然而，该规范中描述的认证方法可以证明该设备运行的是最新的固件版本(而不是旧的或未知的软件)。这意味着认证(至少)对旧固件的更新是有用的，因为旧的固件将被测试，并且永远不能模拟更新的固件。</p>
+<h2 id="3-6-Example-DICE-RIoT-Software-Architecture"><a href="#3-6-Example-DICE-RIoT-Software-Architecture" class="headerlink" title="3.6 Example DICE+RIoT Software Architecture"></a>3.6 Example DICE+RIoT Software Architecture</h2><p>本节描述了一个利用DICE和RIoT机制实现的密钥和证书的生成过程。</p>
+<p>DICE基于处理器和ROM，它可以为删层软件提供一个称为(CDI)的秘密，它依赖于硬件设备，以及引导层的身份。RIoT是使用CDI作为设备标识、存储保护和其他安全功能的一族技术。</p>
+<p>图2说明了这么一个架构：一个启用了DICE的处理器运行一个名为RIoT Core的第一个引导程序，它来启动称为Layer 1的剩余设备固件。处理器中的DICE功能创建CDI，并将其传递给RIoT Core。CDI通常是一个32字节的值，它通过各个设备自己的UDS和RIoT Core的measurement生成的加密单向函数。RIoT Core使用CDI来派生额外的密钥和秘密，然后从RAM和寄存器中删除CDI。该规范假定RIoT Core永远不会改变，因此CDI在设备的生命周期中保持不变。</p>
+<p>包含第1层的代码和安全关键配置数据的标识由它的FWID表示。防暴核心层负责确保第1层与由FWID表示的固件安全描述符(FDS)兼容。</p>
+<p>除了Alias Key证书生成之外，RIoT还可以为DeviceID公钥生成自签署的DeviceID证书和自签名证书签名请求(CSR)。</p>
+<p>下面的部分描述了RIoT生成符合该规范的密钥和证书的一种方式。</p>
+<p><img src="img/2.png" alt></p>
+<h2 id="3-7-RIoT-Core-Operations"><a href="#3-7-RIoT-Core-Operations" class="headerlink" title="3.7 RIoT Core Operations"></a>3.7 RIoT Core Operations</h2><p>每次引导RIoT Core都要干下面的活：</p>
+<ol>
+<li><p>计算FWID</p>
+<blockquote>
+<p>通过直接的measurement（镜像的哈希）和间接地measurement（通过FSD生成的证书或是清单）生成FWID。如果FSD失效或是遗失，后续过程应该立刻abort并且cleanup。</p>
+</blockquote>
+</li>
+<li><p>创建DeviceID</p>
+<blockquote>
+<p>RIoT Core使用CDI一个非对称的DeviceID密钥对。在该规范中，假定RIoT Core是不更改的，因此在每次启动时都创建了相同的DeviceID。公钥将会传递给Layer1，私钥在4、5步继续使用。</p>
+</blockquote>
+</li>
+<li><p>创建Alias Key</p>
+<blockquote>
+<p>以CDI和FWID进行确定性生成。然后整个密钥对将会传递给Layer1，公钥部分在第4步还会用到。</p>
+</blockquote>
+</li>
+<li><p>生成Alias Cert</p>
+<blockquote>
+<p>RIoT为Alias Key生成了一个证书，其中在Subject Alternative Name这个字段中写入了CI。然后通过DeviceID签名证书，然后把证书发给Layer1。</p>
+</blockquote>
+</li>
+<li><p>生成DeviceID自签名证书（可选）</p>
+<blockquote>
+<p>通过DeviceID签名DeviceID的证书</p>
+</blockquote>
+</li>
+<li><p>生成CSR</p>
+<blockquote>
+<p>为DeviceID公钥生成CSR，并用DeviceID私钥签署。</p>
+</blockquote>
+</li>
+<li><p>Cleanup<br>清除RAM和寄存器，使得清除CDI和DeviceID。</p>
+</li>
+</ol>
+<h2 id="3-8-Layer1-Behavior"><a href="#3-8-Layer1-Behavior" class="headerlink" title="3.8 Layer1 Behavior"></a>3.8 Layer1 Behavior</h2><p>RIoT Core给Layer 1提供了如下数据：</p>
+<pre><code>1. DevID Pub和DevID Cert
+2. Alias Key Pair
+3. Alias Cert by DeviceID
+4. FSD(可能是显式的，也可能是其他方式）
+</code></pre><p>Layer1也可以加载其他模块，并假定他们通过FSD被授权。最终Layer1可以以TLS为工具，通过来自RIoT Core的密钥和证书来认证自己。</p>
+<p>Layer1应该确保：</p>
+<pre><code>1. 它只使用在这次引导中发布的Alias密钥。也就是说，Layer1的固件不应该使用之前发布的版本的Alias证书。
+2. Alias Key的私钥不能暴露给外部和不受信任的实体。
+3. Alias Key的私钥不能暴露给更早版本的固件。
+</code></pre><p>如果满足了这些条件，使用本规范中描述的协议的各方可以对设备及其当前的安全配置进行验证。</p>
+<h2 id="3-9-Extending-to-Multiple-Layers"><a href="#3-9-Extending-to-Multiple-Layers" class="headerlink" title="3.9 Extending to Multiple Layers"></a>3.9 Extending to Multiple Layers</h2><p>协议和RIoT实现都直接扩展到多层引导，以及在同一主机上运行的多个程序的身份验证。</p>
+<p><img src="./img/multilayer.png" alt></p>
+<p>对于一个运行单片机设备固件的RIoT Core层，RIoT Core为固件生成了一个TLS会话中使用的Alias Key证书和密钥对。</p>
+<p>如果实现了更多的层，则中间层将执行与RIoT Core类似的功能。每个额外的层将为后续层创建一个新的Alias Key，以及编码了后续层的FWID的Alias Key证书。在后续层发布的Alias Key证书是与本层自己的Alias Key(而不是DeviceId Key)签署的。换句话说，额外的层可以看成额外的CA。</p>
+<p>这个方案可以一直扩展到应用程序层，每个应用程序都有一个惟一的Alias Key和对它进行编码的证书。</p>
+<p>在这些情况下，依赖方可以遍历别名证书链，以建立顶层的标识和构成顶层可信计算基础的所有低层的标识。</p>
+<p>（后续略）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2017/08/05/信息安全-2017-8-5-doc3/" data-id="cjxo5e6qj003ez16dealyowuv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/hash/">hash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/security/">security</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../06/信息安全-2017-8-6-doc4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          RIOT文档四
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../04/信息安全-2017-8-4-doc2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">RIOT文档二</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

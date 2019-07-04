@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>《Effective C++》第三部分：资源管理 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="所谓资源就是，我们可以向系统申请并使用的东西，但是将来必须归还给系统。说到这类东西，我们最容易想到的就是动态内存了，除此之外还包括文件描述器（file descriptors）、互斥锁（mutex locks）、数据库连接以及网络套接字。另外提到内存，不仅仅是 new 的基本对象，一些 new 出来的对象或者通过工厂方法得到的对象指针都是属于“内存资源”的范畴。 条款13：以对象管理资源提要 为">
+<meta name="keywords" content="reading,C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Effective C++》第三部分：资源管理">
+<meta property="og:url" content="https://protao.github.io/2019/05/17/C-2019-05-17-Effective-CPP-III/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="所谓资源就是，我们可以向系统申请并使用的东西，但是将来必须归还给系统。说到这类东西，我们最容易想到的就是动态内存了，除此之外还包括文件描述器（file descriptors）、互斥锁（mutex locks）、数据库连接以及网络套接字。另外提到内存，不仅仅是 new 的基本对象，一些 new 出来的对象或者通过工厂方法得到的对象指针都是属于“内存资源”的范畴。 条款13：以对象管理资源提要 为">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/cover/effcpp_cover.jpg">
+<meta property="og:updated_time" content="2019-07-04T04:09:25.945Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Effective C++》第三部分：资源管理">
+<meta name="twitter:description" content="所谓资源就是，我们可以向系统申请并使用的东西，但是将来必须归还给系统。说到这类东西，我们最容易想到的就是动态内存了，除此之外还包括文件描述器（file descriptors）、互斥锁（mutex locks）、数据库连接以及网络套接字。另外提到内存，不仅仅是 new 的基本对象，一些 new 出来的对象或者通过工厂方法得到的对象指针都是属于“内存资源”的范畴。 条款13：以对象管理资源提要 为">
+<meta name="twitter:image" content="https://protao.github.io/img/cover/effcpp_cover.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-C-2019-05-17-Effective-CPP-III" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2019-05-17T07:23:51.000Z" itemprop="datePublished">2019-05-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/C/">C++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《Effective C++》第三部分：资源管理
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/effcpp_cover.jpg" alt></p>
+<p>所谓资源就是，我们可以向系统申请并使用的东西，但是将来必须归还给系统。说到这类东西，我们最容易想到的就是动态内存了，除此之外还包括文件描述器（file descriptors）、互斥锁（mutex locks）、数据库连接以及网络套接字。另外提到内存，不仅仅是 new 的基本对象，一些 new 出来的对象或者通过工厂方法得到的对象指针都是属于“内存资源”的范畴。</p>
+<h3 id="条款13：以对象管理资源"><a href="#条款13：以对象管理资源" class="headerlink" title="条款13：以对象管理资源"></a>条款13：以对象管理资源</h3><h4 id="提要"><a href="#提要" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>为防止资源泄露，请使用RAII对象，他们在构造函数中获得资源并在析构函数中释放资源。</li>
+<li>两个被常使用的RAII类是<code>tr1::shared_ptr</code>和<code>auto_ptr</code>。前者通常是较佳选择，因为他们的复制行为更正常，也可以和标准库容器更好地结合。后者的复制行为会导致被复制者指向null。</li>
+</ol>
+<a id="more"></a>
+<h4 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h4><p>假设一个常见的场景，我们有一个基类和一系列的派生类，并有一个工厂方法动态创建派生类并返回其指针（但是我们通常用基类类型接受这个指针）。注意，工厂函数的调用者本质上是动态申请了资源，根据“谁申请谁释放”的原则，调用者要负责把这个指针 delete 掉。我们又会想，“这个我肯定不会忘啊！”。是这样的，但是问题往往发生在我们不注意的时候，比如我们接到需求修改代码或者接受别人的代码的时候，不注意在 delete 前加上了其他的控制流比如<code>return</code>或者<code>break</code>等，或者加上了可能导致异常的语句，这样，最后那个我们觉得万无一失的<code>delete</code>可能就不会执行了。</p>
+<p>避免问题总是比解决问题更好。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> this_is_a_func &#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">auto_ptr</span>&lt;MyClass&gt; p(MyClassFactory());</span><br><span class="line">	...</span><br><span class="line">	<span class="comment">// 不需要在最后手动 delete</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这便是本条款的核心思想：“以对象管理资源”，这个思想还有一个名字是“资源取得时机就是初始化时机”（<em>Resource Acquisition Is Initialization</em>; RAII）。该思想包含两个关键成分。</p>
+<ol>
+<li><strong>获得资源后立刻放进管理对象。</strong> 具体表现为通过工厂方法得到的动态对象指针，我们<strong>立刻</strong>用其作为管理对象的初值。（也有一些场景用于对管理对象赋值而不是初始化。）这里的立刻，是指在同一个语句内。</li>
+<li><strong>管理对象运用析构函数确保资源被释放。</strong> 不管控制流如果，只要离开作用域，析构函数就会自动执行并释放资源。很少数的情况是资源释放动作导致异常，这个我们前面讨论过了。【$$$\Rightarrow Item8$$$】</li>
+</ol>
+<p><code>auto_ptr</code>自身有一个问题是，由于它会自动销毁所指的对象，因此，当多个智能指针指向同一个对象时就会有重复 delete 同一块内存的问题。C++ 为了预防这个事情，使得<code>auto_ptr</code>的拷贝构造和拷贝赋值运算符执行时会让被复制者指向null。这个奇怪的特点使得他不能和 STL 兼容，也就是<code>auto_ptr</code>放到容器中可能会有奇怪的表现。一个更好的方案是<em>reference-counting smart pointer; RCSP</em>。RCSP 提供了引用计数的功能，<code>tr1::shared_ptr</code>就是 RSCP。（RSCP不能自动解决循环引用。）他们对于复制行为有着合乎常识的表现，因此可以用于 STL 容器。【$$$\Rightarrow Item14; 18; 54$$$】</p>
+<p>上面提到的两个智能指针都是在析构函数内执行<code>delete</code>而不是<code>delete[]</code>，因此，千万不要用他们管理动态分配得到的数组（编译器不会对此报错）。如果你想使用动态分配的数组，那么考虑一下 vector 和 string 吧，如果这两个都不合意，那可以参考 Boost 中的<code>boost::scoped_array</code>和<code>boost::shared_array</code>。【$$$\Rightarrow Item55$$$】</p>
+<p>通常而言这两个智能指针都可以较好的管理资源，但是一旦有他们不能应对的情况出现时，我们就要自己管理的，这就要参考到后两个条款了。</p>
+<p>最后，本文最开始示例代码中的工厂方法是非常容易出错的接口，我们会在条款18中对其进行改良。</p>
+<h3 id="条款14：在资源管理类中小心-coping-行为"><a href="#条款14：在资源管理类中小心-coping-行为" class="headerlink" title="条款14：在资源管理类中小心 coping 行为"></a>条款14：在资源管理类中小心 coping 行为</h3><h4 id="提要-1"><a href="#提要-1" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>复制 RAII 对象必须一并复制它所管理的资源，所以资源的 copying 行为决定了 RAII 对象的 copying 行为。</li>
+<li>常见的 RAII 类的 copying 行为有：禁止复制、引用计数。</li>
+</ol>
+<h4 id="解释-1"><a href="#解释-1" class="headerlink" title="解释"></a>解释</h4><p>条款 13 中我们提到有的时候我们可能需要自己写管理资源的类，但是却没说是什么情况，这里给出一个可能的场景，就是互斥锁。当我们管理的资源需要 delete 时，可以用上文提到的两种智能指针作为资源管理类（这里其实也可以，不过只可以用一种，本条款后半部分会介绍），因为这两种智能指针默认在析构函数中对资源进行 delete。但是对于互斥锁，可能是使用<code>lock(Mutex* p)</code>和<code>unlock(Mutex* p)</code>两个函数来进行资源的获取和释放。此时就要手动实现资源管理类，并在析构函数中对资源进行释放。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Lock</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	explicit Lock(Mutex* pm): mutexPtr(pm)</span><br><span class="line">	&#123; lock(mutexPtr); &#125; <span class="comment">// 获得资源</span></span><br><span class="line">	~Lock() &#123; unlock(mutexPtr); &#125; <span class="comment">// 释放资源</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	Mutex *mutexPtr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用资源管理类</span></span><br><span class="line">Mutex m;</span><br><span class="line">&#123;</span><br><span class="line">	<span class="function">Lock <span class="title">l</span><span class="params">(&amp;m)</span></span>;</span><br><span class="line">	...</span><br><span class="line">	</span><br><span class="line">&#125; <span class="comment">// 退出作用域时自动释放资源</span></span><br></pre></td></tr></table></figure>
+<p>截至到这里都没有问题，但是，我们要考虑一下：<code>Lock</code>类对于复制要表现出怎样的行为？常见的方法有二。</p>
+<ol>
+<li><strong>禁止复制。</strong> 许多时候允许 RAII 对象被复制是不合理的。具体做法我们之前已经见过了。【$$$\Rightarrow Item6$$$】</li>
+<li><strong>引用计数。</strong> 我们不需要手动实现引用计数功能，我们要做的只是让 RAII 类含有<code>tr1::shared_ptr</code>类型的成员即可。我们也不用写<code>Lock</code>类的拷贝构造函数和析构函数，因为<code>tr1::shared_ptr</code>作为 non-static 成员，其默认版本会被自动调用，这已经足够了。但是注意，我们不希望对资源执行<code>delete</code>而是<code>unlock</code>，我们要把这个事情在初始化时，告诉<code>tr1::shared_ptr</code>。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Lock</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	explicit Lock(Mutex* pm): mutexPtr(pm, unlock)</span><br><span class="line">	&#123; lock(mutexPtr.get()); &#125; <span class="comment">// 【$$$\Rightarrow Item15$$$】</span></span><br><span class="line">	<span class="comment">// 注意不需要手动写析构函数了</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="built_in">std</span>::tr1::<span class="built_in">shared_ptr</span>&lt;Mutex&gt; mutexPtr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了上面两种常见的方法，还有一些其他的方法也是可选的方案，比如：</p>
+<ol>
+<li><strong>复制底层资源。</strong> </li>
+<li><strong>转移资源所有权。</strong> 这实际上是<code>auto_ptr</code>的实现策略。</li>
+</ol>
+<h3 id="条款15：在资源管理类中提供对原始资源的访问"><a href="#条款15：在资源管理类中提供对原始资源的访问" class="headerlink" title="条款15：在资源管理类中提供对原始资源的访问"></a>条款15：在资源管理类中提供对原始资源的访问</h3><h4 id="提要-2"><a href="#提要-2" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>APIs 往往要求访问原始资源，所以每一个 RAII 类都应该提供一个“取得其所管理之资源”的办法。</li>
+<li>对原始资源的访问可能经由显式转换或隐式转换。一般而言显式转换比较安全，但是隐式转换对客户比较方便。</li>
+</ol>
+<h4 id="解释-2"><a href="#解释-2" class="headerlink" title="解释"></a>解释</h4><p>该条款的动机是，资源管理类和原始资源的类型是不同的，对于某些只接受原始资源的函数，我们无法传入资源管理类，这会导致编译器报错。比如条款14中，<code>unlock</code>函数只接受<code>Mutex*</code>类型的参数，我们无法传入<code>Lock</code>或者<code>Lock*</code>类型的对象。</p>
+<p>解决方法有两种，一种是像<code>auto_ptr</code>和<code>shared_ptr</code>那样，提供一个主动暴露内部资源的<code>get</code>方法。而且，这些智能指针还重载了指针取值操作符<code>operator-&gt;</code>和<code>operator*</code>，这意味着，这两个操作符都是直接作用在内部资源上的。</p>
+<p>但是，可能接受原始的资源类型的函数太多了，如果每次都手动执行一个<code>get</code>可能太麻烦了。因此另外一种方法是，提供一个隐式转换函数。比如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RAII</span>&#123;</span></span><br><span class="line">	<span class="function"><span class="keyword">operator</span> <span class="title">SomeHandle</span><span class="params">()</span> <span class="keyword">const</span> <span class="comment">//隐式转换函数</span></span></span><br><span class="line"><span class="function">	</span>&#123; <span class="keyword">return</span> h; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	SomeHandle h;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是这种隐式转换可能会被 C++ 以我们不希望的方式使用，最终导致问题。这两种方式哪个更好没有定论，隐式方法更方便却更容易出错，显式方法虽麻烦却更安全。从 C++ 的智能指针来看，似乎显式方法更受到青睐。最后提一句，可能有人会奇怪直接暴露内部资源的<code>get</code>方法是不是破坏了类的封装性？我们要这么考虑，RAII 类的根本目的不是封装资源，而是安全释放资源。【$$$\Rightarrow Item18$$$】</p>
+<h3 id="条款16：成对的使用-new-和-delete-时要采取相同形式"><a href="#条款16：成对的使用-new-和-delete-时要采取相同形式" class="headerlink" title="条款16：成对的使用 new 和 delete 时要采取相同形式"></a>条款16：成对的使用 new 和 delete 时要采取相同形式</h3><h4 id="提要-3"><a href="#提要-3" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>如果在 new 表达式中使用[], 必须在相应的 delete 表达式中也使用[]。如果在 new 表达式中不使用 []，一定不要在相应的 delete 表达式中使用 []。</li>
+</ol>
+<h4 id="解释-3"><a href="#解释-3" class="headerlink" title="解释"></a>解释</h4><p>new 的时候会完成两个动作，第一是申请一块合适大小的内存，第二是对这片内存使用构造函数。使用 delete是执行相反的步骤，即先进行析构再归还内存。【$$$\Rightarrow Item49；51$$$】</p>
+<p>但是对于 delete，最大的问题在于要弄清楚即将被删除的内存之内究竟有多少对象。为了对这二者进行区分，<code>new</code>创建单一对象和<code>new[]</code>创建对象数组所得到的的内存布局是不同的，后者在这段连续内存中的最开始会保存“数组大小”的记录。这两种行为的不同，使得我们必须成对的调用相同形式的<code>new</code>和<code>delete</code>。</p>
+<p>在使用的时候有几个场景要注意。第一，这意味着我们如果在一个类中动态分配内存，那么所有的构造函数都要以同样的方式申请内存，因为构造函数只有一个。第二，对于<code>typedef</code>，尽量不要对数组形式做<code>typedef</code>，如果有这种需求，尽可能使用<code>vector</code>以及<code>string</code>等标准程序库。</p>
+<h3 id="条款17：以独立语句将-new-出来的对象放入-RAII-类"><a href="#条款17：以独立语句将-new-出来的对象放入-RAII-类" class="headerlink" title="条款17：以独立语句将 new 出来的对象放入 RAII 类"></a>条款17：以独立语句将 new 出来的对象放入 RAII 类</h3><h4 id="提要-4"><a href="#提要-4" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>以独立语句将 new 出来的对象存储在智能指针中，如果不这样做，一旦异常发生，有可能导致难以察觉的资源泄露。</li>
+</ol>
+<h4 id="解释-4"><a href="#解释-4" class="headerlink" title="解释"></a>解释</h4><p>假设我们使用<code>tr1::shared_ptr</code>作为 RAII 类，并用它管理动态分配动态分配得到的<code>Widget</code>类。因为 RAII 是指“资源获得即初始化”，我们记住了这一点，把刚获得的对象直接放进<code>tr1::shared_ptr</code>中。但是我们甚至还多做了一步，把获得资源后的<code>tr1::shared_ptr</code>还直接放进了后续的函数中。如下。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">process(<span class="built_in">std</span>::tr1::<span class="built_in">shared_ptr</span>&lt;Widget&gt;(<span class="keyword">new</span> Widget), someMethod());</span><br></pre></td></tr></table></figure>
+<p>上面代码中把<code>someMethod</code>的返回值作为<code>process</code>的第二个参数，这么做会产生一个问题。编译器对这一行代码要做三个事情：一、执行<code>new Widget</code>；二、调用<code>tr1::shared_ptr</code>的构造函数；三、调用<code>someMethod</code>。但是调用<code>someMethod</code>这件事情的执行位置是不确定的（在Java中是确定的顺序），如果编译器将它放在这三件事的中间做，并且<code>someMethod</code>的调用发生了异常，那么<code>new</code>出来的对象的指针就遗失了，因为发生异常时他还没有被放入资源管理对象。为了避免这个问题，方法很简单，确保 RAII 是一个整体即可。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::tr1::<span class="built_in">shared_ptr</span>&lt;Widget&gt; pw&lt;<span class="keyword">new</span> Widget&gt;;</span><br><span class="line">process(pw, someMethod());</span><br></pre></td></tr></table></figure>
+<p>因为编译器对于“跨语句的操作”没有重新排列的自由，因此我们就可以保证资源管理类可以稳妥的拿到被管理的资源。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2019/05/17/C-2019-05-17-Effective-CPP-III/" data-id="cjxo5e6ox002mz16diodbg396" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../26/C-2019-05-26-Effective-CPP-IV/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          《Effective C++》第四部分：设计和声明
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../10/机器学习-2019-05-10-alchemy-trick/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">仓鼠一般搜集到的炼丹技巧</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

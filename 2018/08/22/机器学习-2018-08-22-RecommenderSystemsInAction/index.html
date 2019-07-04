@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>《推荐系统实战》读书笔记 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="第一章 好的推荐系统1.1 什么是推荐系统 数据量很大时，解决商品的长尾问题。类似于搜索引擎，不过搜索引擎的场景是用户知道自己要什么。本质是将用户和物品连接起来。 社会化推荐（好友推荐），基于内容的推荐（通过喜欢的电影中的演员或者导演推荐），协同过滤（找到相似的人）  1.2 个性化推荐系统的应用 电商：提高点击率CTR和转化率CVR。打包销售（cross selling），购买推荐商品的话，连">
+<meta name="keywords" content="bigdata,reading">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《推荐系统实战》读书笔记">
+<meta property="og:url" content="https://protao.github.io/2018/08/22/机器学习-2018-08-22-RecommenderSystemsInAction/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="第一章 好的推荐系统1.1 什么是推荐系统 数据量很大时，解决商品的长尾问题。类似于搜索引擎，不过搜索引擎的场景是用户知道自己要什么。本质是将用户和物品连接起来。 社会化推荐（好友推荐），基于内容的推荐（通过喜欢的电影中的演员或者导演推荐），协同过滤（找到相似的人）  1.2 个性化推荐系统的应用 电商：提高点击率CTR和转化率CVR。打包销售（cross selling），购买推荐商品的话，连">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/cover/RS0.png">
+<meta property="og:image" content="https://protao.github.io/img/RS1.png">
+<meta property="og:image" content="https://protao.github.io/img/RS2.png">
+<meta property="og:image" content="https://protao.github.io/img/RS3.png">
+<meta property="og:image" content="https://protao.github.io/img/RS4.png">
+<meta property="og:image" content="https://protao.github.io/img/RS5.png">
+<meta property="og:image" content="https://protao.github.io/img/RS6.png">
+<meta property="og:updated_time" content="2019-06-26T03:33:04.740Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《推荐系统实战》读书笔记">
+<meta name="twitter:description" content="第一章 好的推荐系统1.1 什么是推荐系统 数据量很大时，解决商品的长尾问题。类似于搜索引擎，不过搜索引擎的场景是用户知道自己要什么。本质是将用户和物品连接起来。 社会化推荐（好友推荐），基于内容的推荐（通过喜欢的电影中的演员或者导演推荐），协同过滤（找到相似的人）  1.2 个性化推荐系统的应用 电商：提高点击率CTR和转化率CVR。打包销售（cross selling），购买推荐商品的话，连">
+<meta name="twitter:image" content="https://protao.github.io/img/cover/RS0.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-机器学习-2018-08-22-RecommenderSystemsInAction" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-08-22T07:23:51.000Z" itemprop="datePublished">2018-08-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/机器学习/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《推荐系统实战》读书笔记
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/RS0.png" alt></p>
+<h2 id="第一章-好的推荐系统"><a href="#第一章-好的推荐系统" class="headerlink" title="第一章 好的推荐系统"></a>第一章 好的推荐系统</h2><h3 id="1-1-什么是推荐系统"><a href="#1-1-什么是推荐系统" class="headerlink" title="1.1 什么是推荐系统"></a>1.1 什么是推荐系统</h3><ul>
+<li>数据量很大时，解决商品的长尾问题。类似于搜索引擎，不过搜索引擎的场景是用户知道自己要什么。本质是将用户和物品连接起来。</li>
+<li>社会化推荐（好友推荐），基于内容的推荐（通过喜欢的电影中的演员或者导演推荐），协同过滤（找到相似的人）</li>
+</ul>
+<h3 id="1-2-个性化推荐系统的应用"><a href="#1-2-个性化推荐系统的应用" class="headerlink" title="1.2 个性化推荐系统的应用"></a>1.2 个性化推荐系统的应用</h3><ul>
+<li>电商：提高点击率CTR和转化率CVR。打包销售（cross selling），购买推荐商品的话，连同原本的商品一起打折。</li>
+<li>电影</li>
+<li>音乐：比较特殊的一个领域。可以免费，大量重复行为，情景和上下文相关。存在一些纯粹的音乐个性化FM网站。</li>
+<li>社交网络：利用社交网络信息进行商品推荐；信息流推荐；推荐好友。Facebook：EdgeRank。</li>
+<li>个性化阅读</li>
+<li>基于位置的服务</li>
+<li>邮箱：这里指的不是垃圾邮件过滤，而是个性化邮件系统，根据用户习惯对邮件进行排序或者设置一个自动筛选得到的高优先级文件夹（谷歌），根据谷歌的研究，这一产品帮助用户节约6%的时间。</li>
+<li>广告：个性化广告现在独立出“计算广告”这一独立学科。</li>
+</ul>
+<a id="more"></a>
+<h3 id="1-3-推荐系统评测"><a href="#1-3-推荐系统评测" class="headerlink" title="1.3 推荐系统评测"></a>1.3 推荐系统评测</h3><ul>
+<li>推荐系统包括三部分：用户、广告主、推荐系统方。推荐系统要使得这三方共赢。</li>
+<li>推荐系统的准确率是十分重要的指标，但是准确的推荐不打表示好的推荐，因为太过保守的推荐系统准确率高，但是不能带来收益，比如只推荐用户加入购物车的物品。</li>
+<li>测评方法<ol>
+<li>离线实验：离线数据集。好处是方便进行试验，坏处是拿不到一些商业指标比如CTR、CVR。</li>
+<li>用户调查</li>
+<li>在线实验：AB测试，将用户分流到新旧算法，比较在线指标。</li>
+</ol>
+</li>
+<li>评测指标<ol>
+<li>用户满意度</li>
+<li>预测准确度：可以使用评分（比如预测用户对物品的打分），也可以使用TopN，有一种说法是评分高的商品用户不一定会主动去看。</li>
+<li>覆盖率：反映了对物品长尾的发掘能力。推荐系统应该是消除马太效应的。使用熵或者Gini Index来评估这个，希望分布越平坦越好。比如热搜榜是具有马太效应的，PageRank也具有，很多迹象表明协同过滤也有马太效应。</li>
+<li>多样性：用户的兴趣可能很多，推荐系统要覆盖多种兴趣。那么推荐列表的多样性定义了物品之间两两的相似度。</li>
+<li>新颖度：去掉用户使用过的物品。然后越不热门可能越新颖。</li>
+<li>惊喜度：推荐的物品和用户的历史关系不大，但是却让用户觉得满意。（不是很成熟）</li>
+<li>信任度：反应用户是否信任该推荐系统，通常通过问卷调查评估。通过给出推荐理由可以在一定程度上提高推荐度。</li>
+<li>实行性</li>
+<li>健壮性：反作弊</li>
+</ol>
+</li>
+</ul>
+<h2 id="第二章-利用用户行为数据"><a href="#第二章-利用用户行为数据" class="headerlink" title="第二章 利用用户行为数据"></a>第二章 利用用户行为数据</h2><p>基于用户行为分析的推荐算法是个性化推荐系统的重要算法，学术界一般将这种类型的算法称为协同过滤算法。顾名思义，协同过滤就是指用户可以齐心协力，通过不断地和网站互动，使自己的推荐列表能够不断过滤掉自己不感兴趣的物品，从而越来越满足自己的需求。</p>
+<h3 id="2-1-用户行为数据简介"><a href="#2-1-用户行为数据简介" class="headerlink" title="2.1 用户行为数据简介"></a>2.1 用户行为数据简介</h3><p>用户行为在个性化推荐系统中一般分两种——显性反馈行为（explicit feedback）和隐性反馈行为（implicit feedback）。显性反馈行为包括用户明确表示对物品喜好的行为。和显性反馈行为相对应的是隐性反馈行为。隐性反馈行为指的是那些不能明确反应用户喜好的行为。最具代表性的隐性反馈行为就是页面浏览行为。用户浏览一个物品的页面并不代表用户一定喜欢这个页面展示的物品，比如可能因为这个页面链接显示在首页，用户更容易点击它而已。相比显性反馈，隐性反馈虽然不明确，但数据量更大。<br><img src="/img/RS1.png" alt></p>
+<h3 id="2-2-用户行为分析"><a href="#2-2-用户行为分析" class="headerlink" title="2.2 用户行为分析"></a>2.2 用户行为分析</h3><ul>
+<li>很多关于互联网数据的研究发现，互联网上的很多数据分布都满足一种称为Power Law③的分<br>布，这个分布在互联网领域也称长尾分布。<br>$$f(x)=\alpha x^k$$</li>
+<li>1932年，哈佛大学的语言学家Zipf在研究英文单词的词频时发现，如果将单词出现的频率按照由高到低排列，则每个单词出现的频率和它在热门排行榜中排名的常数次幂成反比。这个分布称为Zipf定律。</li>
+<li>长尾分布在双对数曲线(横纵坐标轴都是对数)上应该呈直线。</li>
+<li>用户越活跃，越倾向于浏览冷门的物品。老用户喜欢探索。<br>仅仅基于用户行为数据设计的推荐算法一般称为协同过滤算法。学术界对协同过滤算法进行了深入研究，提出了很多方法，比如基于邻域的方法（neighborhood-based）、 隐语义模型（latent factor model）、 基于图的随机游走算法（random walk on graph）等。在这些方法中，最著名的、在业界得到最广泛应用的算法是基于邻域的方法，而基于邻域的方法主要包含<strong>基于用户的协同过滤算法</strong>和<strong>基于用户的协同过滤算法</strong>。</li>
+</ul>
+<h3 id="2-3-实验设计和算法评测"><a href="#2-3-实验设计和算法评测" class="headerlink" title="2.3 实验设计和算法评测"></a>2.3 实验设计和算法评测</h3><p>召回率、准确率、流行度、覆盖率几个方面。</p>
+<h3 id="2-4-基于邻域的算法"><a href="#2-4-基于邻域的算法" class="headerlink" title="2.4 基于邻域的算法"></a>2.4 基于邻域的算法</h3><ul>
+<li>基于邻域的算法分为两大类，一类是基于用户的协同过滤算法，另一类是基于物品的协同过滤算法。协同过滤一个重要的特点就是不考虑内容，而是利用用户和物品之间的交互行为。</li>
+<li>基于用户的协同过滤算法UserCF：计算用户之间相似度时，可能有大部分用户的向量都没有重叠，既没有喜欢的共同物品，那么这种用户之间的相似度肯定为0。可以利用物品到用户的倒排索引表来提高计算效果。原始的UserCF算法只有一个参数即相似用户数K。K越大，流行度越大；K越小，覆盖率越大。</li>
+<li>UserCF的改进为User-IIF算法，如果一个物品被广泛使用，那个这个物品被两个用户同时标记不能说明这两个用户兴趣相似，越小众的物品越能说明用户的兴趣。</li>
+<li>基于物品的协同过滤算法ItemCF：应用非常多。另外，UserCF存在一些问题：随着网站的用户数目越来越大，计算用户兴趣相似度矩阵将越来越困难，而且基于用户的协同过滤很难对推荐结果作出解释。（深入考虑：计算物品之间的相似度就不困难了吗？）</li>
+<li>改进：UserCF-IUF。类似于前面加上IIF，降低一些热门的物品的影响，这里类似的引入IUF，即逆用户频率。比如一个用户开网店，购买了全部物品的80%，那么由于该用户的存在，大量的物品之间产生相似度，使得矩阵变得十分稠密。对于极端的这种用户，直接忽略。对于什么书都看的用户，降低其对于物品相似性的贡献。</li>
+<li>对于物品的相似度矩阵除以最大值进行归一化可以提高准确率。</li>
+<li>UserCF和ItemCF的比较：UserCF给用户推荐那些和他有共同兴趣爱好的用户喜欢的物品，而ItemCF给用户推荐那些和他之前喜欢的物品类似的物品。从这个算法的原理可以看到， UserCF的推荐结果着重于反映和用户兴趣相似的小群体的热点，而ItemCF的推荐结果着重于维系用户的历史兴趣。换句话说， UserCF的推荐更社会化，反映了用户所在的小型兴趣群体中物品的热门程度，而ItemCF的推荐更加个性化，反映了用户自己的兴趣传承。考虑到这点，新闻内容就很适合UserCF，UserCF适合用于新闻推荐的另一个原因是从技术角度考量的。因为作为一种物品，新闻的更新非常快，每时每刻都有新内容出现，而ItemCF需要维护一张物品相关度的表，如果物品更新很快，那么这张表也需要很快更新，这在技术上很难实现。绝大多数物品相关度表都只能做到一天一次更新，这在新闻领域是不可以接受的。而UserCF只需要用户相似性表，虽然UserCF对于新用户也需要更新相似度表，但在新闻网站中，物品的更新速度远远快于新用户的加入速度，而且对于新用户，完全可以给他推荐最热门的新闻，因此UserCF显然是利大于弊。但是，在图书、电子商务和电影网站，ItemCF则能极大地发挥优势。这些网站的物品更新速度不会特别快，一天一次更新物品相似度矩阵对它们来说不会造成太大的损失，是可以接受的。同时，从技术上考虑， UserCF需要维护一个用户相似度的矩阵，而ItemCF需要维护一个物品相似度矩阵。从存储的角度说，如果用户很多，那么维护用户兴趣相似度矩阵需要很大的空间，同理，如果物品很多，那么维护物品相似度矩阵代价较大。而在图书、电子商务网站中，物品的数目则是比较少的。此外，物品的相似度相对于用户的兴趣一般比较稳定，因此使用ItemCF是比较好的选择。</li>
+<li>目前ItemCF存在问题就是如果一个物品太火了，几乎每个人都够买过，那么该物品和任何一个物品的相似度都很大。还有就是无法解决不同领域的物品的相似性问题，比如父辈人都会在吃晚饭时看新闻联播，然后吃完晚饭看央视一套的黄金时段的电视剧，这就使得新闻联播和晚间剧的相似性很大，但是同一时段的其他电视台的新闻节目却和新闻联播相似度很小，仅仅靠用户行为数据是不能解决这个问题的，因为用户的行为表示这种物品之间应该相似度很高。此时，我们只能依靠引入物品的内容数据解决这个问题，比如对不同领域的物品降低权重等。这些就不是协同过滤讨论的范畴了。<br><img src="/img/RS2.png" alt></li>
+</ul>
+<h3 id="2-5-隐语义模型"><a href="#2-5-隐语义模型" class="headerlink" title="2.5 隐语义模型"></a>2.5 隐语义模型</h3><p>该算法最早在文本挖掘领域被提出，用于找到文本的隐含语义。相关的名词有LSI、 pLSA、 LDA和Topic Model。</p>
+<ul>
+<li>隐含语义分析技术从诞生到今天产生了很多著名的模型和方法，其中和该技术相关且耳熟能详的名词有pLSA、 LDA、隐含类别模型（latent class model）、隐含主题模型（latent topic model）、矩阵分解（matrix factorization）。这些技术和方法在本质上是相通的，其中很多方法都可以用于个性化推荐系统。本章将以LFM为例介绍隐含语义分析技术在推荐系统中的应用。</li>
+<li><p>LFM（Latent Factor Model）：其实就是对矩阵进行分解，然后尽可能小损失的分解User-Item效用矩阵。但是这里注意一下，训练数据并不是一个完整的效用矩阵，我们只有效用矩阵中的某些值，包括正类和负类。损失函数如下，就是让在我们有的这些值上尽可能的分解的准确。训练方式可以使用SGD。在隐性反馈数据集上应用LFM解决TopN推荐的第一个关键问题就是如何给每个用户生成负样本。对每个用户，要保证正负样本的平衡（数目相似）。对每个用户采样负样本时，要选取那些很热门，而用户却没有行为的物品。LFM中的重要参数包括：隐特征的个数F，学习速率alpha，正则化参数lambda，正负样本比例ratio。当数据集非常稀疏时，LFM的性能会明显下降，甚至不如UserCF和ItemCF的性能。<br><img src="/img/RS3.png" alt></p>
+</li>
+<li><p>但是， LFM模型在实际使用中有一个困难，那就是它很难实现实时的推荐。在新闻推荐中，冷启动问题非常明显。</p>
+</li>
+<li>LFM和基于邻域的方法的比较。<ol>
+<li><strong>理论基础</strong> LFM具有比较好的理论基础，它是一种学习方法，通过优化一个设定的指标建立最优的模型。基于邻域的方法更多的是一种基于统计的方法，并没有学习过程。</li>
+<li><strong>离线计算的空间复杂度</strong> 基于邻域的方法需要维护一张离线的相关表。在离线计算相关表的过程中，如果用户/物品数很多，将会占据很大的内存。假设有M个用户和N个物品，在计算相关表的过程中，我们可能会获得一张比较稠密的临时相关表（尽管最终我们对每个物品只保留K个最相关的物品，但在中间计算过程中稠密的相关表是不可避免的），那么假设是用户相关表，则需要O(M<em>M)的空间，而对于物品相关表，则需要O(N</em>N)的空间。而LFM在建模过程中，如果是F个隐类，那么它需要的存储空间是O(F*(M+N))，这在M和N很大时可以很好地节省离线计算的内存。在Netflix Prize中，因为用户数很庞大（40多万），很少有人使用UserCF算法（据说需要30 GB左右的内存），而LFM由于大量节省了训练过程中的内存（只需要4 GB），从而成为Netflix Prize中最流行的算法。</li>
+<li><strong>离线计算的时间复杂度</strong> 假设有M个用户、 N个物品、 K条用户对物品的行为记录。那么，UserCF计算用户相关表的时间复杂度是O(N <em> (K/N)^2)，而ItemCF计算物品相关表的时间复杂度是O(M</em>(K/M)^2)。而对于LFM，如果用F个隐类，迭代S次，那么它的计算复杂度是O(K <em> F </em> S)。那么，如果K/N &gt; F<em>S，则代表UserCF的时间复杂度低于LFM，如果K/M&gt;F</em>S，则说明ItemCF的时间复杂度低于LFM。在一般情况下， LFM的时间复杂度要稍微高于UserCF和ItemCF，这主要是因为该算法需要多次迭代。但总体上，这两种算法在时间复杂度上没有质的差别。</li>
+<li><strong>在线实时推荐</strong> UserCF和ItemCF在线服务算法需要将相关表缓存在内存中，然后可以在线进行实时的预测。以ItemCF算法为例，一旦用户喜欢了新的物品，就可以通过查询内存中的相关表将和该物品相似的其他物品推荐给用户。因此，一旦用户有了新的行为，而且该行为被实时地记录到后台的数据库系统中，他的推荐列表就会发生变化。而从LFM的预测公式可以看到， LFM在给用户生成推荐列表时，需要计算用户对所有物品的兴趣权重，然后排名，返回权重最大的N个物品。那么，在物品数很多时，这一过程的时间复杂度非常高，可达O(M<em>N</em>F)。因此， LFM不太适合用于物品数非常庞大的系统，如果要用，我们也需要一个比较快的算法给用户先计算一个比较小的候选列表，然后再用LFM重新排名。另一方面， LFM在生成一个用户推荐列表时速度太慢，因此不能在线实时计算，而需要离线将所有用户的推荐结果事先计算好存储在数据库中。因此，LFM不能进行在线实时推荐，也就是说，当用户有了新的行为后，他的推荐列表不会发生变化。</li>
+<li><strong>推荐解释</strong> ItemCF算法支持很好的推荐解释，它可以利用用户的历史行为解释推荐结果。但LFM无法提供这样的解释，它计算出的隐类虽然在语义上确实代表了一类兴趣和物品，却很难用自然语言描述并生成解释展现给用户。</li>
+</ol>
+</li>
+</ul>
+<h3 id="2-6-基于图的模型"><a href="#2-6-基于图的模型" class="headerlink" title="2.6 基于图的模型"></a>2.6 基于图的模型</h3><ul>
+<li>用户行为很容易用二分图表示，因此很多图的算法都可以用到推荐系统中。本节将重点讨论如何将用户行为用图表示，并利用图的算法给用户进行个性化推荐。基于图的模型（graph-based model）是推荐系统中的重要内容。其实，很多研究人员把基于邻域的模型也称为基于图的模型，因为可以把基于邻域的模型看做基于图的模型的简单形式。</li>
+<li>将用户行为表示为二分图模型后，下面的任务就是在二分图上给用户进行个性化推荐。如果将个性化推荐算法放到二分图模型上，那么给用户u推荐物品的任务就可以转化为度量用户顶点$$$v_u$$$和与$$$v_u$$$没有边直接相连的物品节点在图上的相关性，相关性越高的物品在推荐列表中的权重就越高。一般来说图中顶点的相关性主要取决于：路径数、路径长度、路径上的顶点。相关性高的顶点的特征是：很多路径相连、路径比较短、路径上的顶点出度比较小。</li>
+<li>PersonalRank：假设要给用户u进行个性化推荐，可以从用户u对应的节点$$$v_u$$$开始在用户物品二分图上进行随机游走。游走到任何一个节点时，首先按照概率α决定是继续游走，还是停止这次游走并从$$$v_u$$$节点开始重新游走。如果决定继续游走，那么就从当前节点指向的节点中按照均匀分布随机选择一个节点作为游走下次经过的节点。这样，经过很多次随机游走后，每个物品节点被访问到的概率会收敛到一个数。最终的推荐列表中物品的权重就是物品节点的访问概率。游走到任何一个节点时，首先按照概率α决定是继续游走，还是停止这次游走并从$$$v_u$$$节点开始重新游走。</li>
+<li>上述算法对于收敛状态的求解可以轻松地转换成为如下的矩阵形式，最后转换成一个系数矩阵求逆的问题。<br>$$ r=(1-\alpha)r_0+\alpha M^Tr $$</li>
+</ul>
+<h2 id="第三章-推荐系统冷启动问题"><a href="#第三章-推荐系统冷启动问题" class="headerlink" title="第三章 推荐系统冷启动问题"></a>第三章 推荐系统冷启动问题</h2><h3 id="3-1-冷启动问题简介"><a href="#3-1-冷启动问题简介" class="headerlink" title="3.1 冷启动问题简介"></a>3.1 冷启动问题简介</h3><ul>
+<li>如何在没有大量用户数据的情况下设计个性化推荐系统并且让用户对推荐结果满意从而愿意使用推荐系统，就是冷启动的问题。冷启动问题包括用户冷启动，物品冷启动和系统冷启动。</li>
+<li>可以利用的信息：注册时提供的信息、好友信息、物品内容信息、主动调查问卷、专家知识。</li>
+</ul>
+<h3 id="3-2-利用用户注册信息"><a href="#3-2-利用用户注册信息" class="headerlink" title="3.2 利用用户注册信息"></a>3.2 利用用户注册信息</h3><ul>
+<li>用户注册信息的推荐算法其核心问题是计算每种特征的用户喜欢的物品。也就是说，对于每种特征f，计算具有这种特征的用户对各个物品的喜好程度p(f, i)。因此，我们可以将 p(f, i) 定义为喜欢物品i的用户中具有特征f的比例。然后在分母中加入平滑因子。</li>
+</ul>
+<h3 id="3-3-选择合适的物品启动用户的兴趣"><a href="#3-3-选择合适的物品启动用户的兴趣" class="headerlink" title="3.3 选择合适的物品启动用户的兴趣"></a>3.3 选择合适的物品启动用户的兴趣</h3><ul>
+<li>解决用户冷启动问题的另一个方法是在新用户第一次访问推荐系统时，不立即给用户展示推荐结果，而是给用户提供一些物品，让用户反馈他们对这些物品的兴趣，然后根据用户反馈给提供个性化推荐。那么启动物品具有以下特点：热门、代表性和区分性、启动物品集合需要具有多样性。</li>
+<li>判断物品是不是有区分性可以通过方差来解决。具体就是看喜欢该物品的用户对其他物品的评分方差加上不喜欢该物品的用户对其他物品的评分方差，如果该物品区分的很高，就会使得喜欢该物品的用户喜好很相似，那么方差就会小，不喜欢该物品的用户同理。</li>
+</ul>
+<h3 id="3-4-利用物品的内容信息"><a href="#3-4-利用物品的内容信息" class="headerlink" title="3.4 利用物品的内容信息"></a>3.4 利用物品的内容信息</h3><ul>
+<li>物品冷启动需要解决的问题是如何将新加入的物品推荐给对它感兴趣的用户。物品冷启动在新闻网站等时效性很强的网站中非常重要，因为那些网站中时时刻刻都有新加入的物品，而且每个物品必须能够在第一时间展现给用户，否则经过一段时间后，物品的价值就大大降低了。</li>
+<li>UserCF算法对物品冷启动问题并不非常敏感。因为新物品加入时，总会有一些用户从推荐列表以外的渠道了解到这些新物品。然后通过这些用户，新物品得以在用户中扩散。</li>
+<li>对于ItemCF算法来说，物品冷启动就是一个严重的问题了。因为ItemCF算法的原理是给用户推荐和他之前喜欢的物品相似的物品。ItemCF算法会每隔一段时间利用用户行为计算物品相似度表（一般一天计算一次），在线服务时ItemCF算法会将之前计算好的物品相关度矩阵放在内存中。因此，当新物品加入时，内存中的物品相关表中不会存在这个物品，从而ItemCF算法无法推荐新的物品。那么只能利用物品信息计算对于新物品的相似度。物品的内容可以通过向量空间模型表示，向量的值通过tfidf计算。这个相似度矩阵依旧可以使用倒排表加速计算。</li>
+<li>如果文本很短，关键词很少，向量空间模型就很难计算出准确的相似度。这个其实是稀疏问题，可以通过建立关键词-话题-文本之间的关系解决这个问题。代表性的话题模型有LDA。在使用LDA计算物品的内容相似度时，我们可以先计算出物品在话题上的分布，然后利用两个物品的话题分布计算物品的相似度。比如，如果两个物品的话题分布相似，则认为两个物品具有较高的相似度，反之则认为两个物品的相似度较低。计算分布的相似度可以利用KL散度。</li>
+</ul>
+<h3 id="3-5-发挥专家的作用"><a href="#3-5-发挥专家的作用" class="headerlink" title="3.5 发挥专家的作用"></a>3.5 发挥专家的作用</h3><p>这方面的代表系统是个性化网络电台Pandora和电影推荐网站Jinni。</p>
+<h2 id="第四章-利用用户标签数据"><a href="#第四章-利用用户标签数据" class="headerlink" title="第四章 利用用户标签数据"></a>第四章 利用用户标签数据</h2><p>推荐系统的目的是联系用户的兴趣和物品，这种联系需要依赖不同的媒介。这种联系可能是用户喜欢的物品（ItemCF），可能是用户相似的其他用户（UserCF），也可能是通过一些内容特征，比如物品内容信心中的关键词（ContentItemKNN），或者是隐语义向量（LDA、LFM）。本章讨论标签的作用。</p>
+<ul>
+<li>根据维基百科的定义， 标签是一种无层次化结构的、用来描述信息的关键词，它可以用来描述物品的语义。</li>
+</ul>
+<h3 id="4-1-UGC标签系统的代表应用"><a href="#4-1-UGC标签系统的代表应用" class="headerlink" title="4.1 UGC标签系统的代表应用"></a>4.1 UGC标签系统的代表应用</h3><ul>
+<li>Last.fm、豆瓣、Hulu</li>
+<li>标签系统的最大优势在于可以发挥群体的智能，获得对物品内容信息比较准确的关键词描述，而准确的内容信息是提升个性化推荐系统性能的重要资源。</li>
+</ul>
+<h3 id="4-2-标签系统中的推荐问题"><a href="#4-2-标签系统中的推荐问题" class="headerlink" title="4.2 标签系统中的推荐问题"></a>4.2 标签系统中的推荐问题</h3><p>打标签作为一种重要的用户行为，蕴含了很多用户兴趣信息，因此深入研究和利用用户打标签的行为可以很好地指导我们改进个性化推荐系统的推荐质量。同时，标签的表示形式非常简单，便于很多算法处理。标签系统中的推荐问题主要有以下两个。</p>
+<pre><code>1. 如何利用用户打标签的行为为其推荐物品（基于标签的推荐）？
+2. 如何在用户给物品打标签时为其推荐适合该物品的标签（标签推荐）？
+</code></pre><ul>
+<li>标签符合长尾定律</li>
+</ul>
+<h3 id="4-3-基于标签的推荐系统"><a href="#4-3-基于标签的推荐系统" class="headerlink" title="4.3 基于标签的推荐系统"></a>4.3 基于标签的推荐系统</h3><ul>
+<li>最简单的算法，最基本的思想：同样可以认为标签将用户-物品效用矩阵分解开了。那么评价用户对一个物品的兴趣就是用户-标签矩阵的用户行与标签-物品矩阵的物品列的点积了。</li>
+<li>改进（热门效应）：热门标签中的热门物品就会有很大权重。那么就对热门tag进行惩罚，（user-tag项除以tag来自于用户数）作为user-tag的分数，这就是TagBasedTFIDF，（对tag-item项除以item被标签不同的用户数）作为tag-item的分数就得到TagBasedTFIDF++分数。实验表明，适当惩罚热门标签和热门物品，在增进推荐结果个性化的同时并不会降低推荐结果的离线精度。</li>
+<li>改进（数据稀疏问题）：前面提到，RS的实质就是想用户和物品做联系，Tag-Based RS中用户兴趣和物品的联系是通过二者的标签向量的点乘联系起来的。但是新的用户打过很少的标签，新的物品可能被打了很少的标签。那么我们可以使用标签扩展来解决这个问题，比如书本的标签不到十个，然后找到和已有标签最相似的标签自动扩充至书本的标签集合，直到至少有十个标签。</li>
+<li>改进（标签清理）：假设用户给一个电影打了“差评”的标签，我们不能给这个用户推荐其他具有差评标签的电影。因此要去除:停用词、词根词形或者分隔符导致的同义词、情绪化的词。</li>
+<li>利用图模型解释基于tag的推荐算法。</li>
+<li>基于标签的推荐其最大好处是可以利用标签做推荐解释，这方面的代表性应用是豆瓣的个性化推荐系统。一个用户的兴趣在长时间内是很广泛的，但在某一天却比较具体。因此，我们如果想在某一天击中用户当天的兴趣，是非常困难的。而豆瓣通过标签云，展示了用户的所有兴趣，然后让用户自己根据他今天的兴趣选择相关的标签，得到推荐结果，从而极大地提高了推荐结果的多样性，使得推荐结果更容易满足用户多样的兴趣。</li>
+</ul>
+<h3 id="4-4-给用户推荐标签"><a href="#4-4-给用户推荐标签" class="headerlink" title="4.4 给用户推荐标签"></a>4.4 给用户推荐标签</h3><ul>
+<li>好处在于方便用户输入标签且提高了标签质量</li>
+<li>ItemPopularTags：给用户推荐该物品上最热门的标签。</li>
+<li>UserPopularTags：给用户推荐自己最常用的标签。</li>
+<li>HybridPopularTags：将上面两种结果进行线性加权。</li>
+<li>基于图的标签推荐算法</li>
+</ul>
+<h2 id="第五章-利用上下文信息"><a href="#第五章-利用上下文信息" class="headerlink" title="第五章 利用上下文信息"></a>第五章 利用上下文信息</h2><p>就是结合用户所处的时间、地点、状态、心情。关于上下文推荐的研究，可以参考Alexander Tuzhilin教授的一篇综述“Context Aware Recommender Systems”</p>
+<h3 id="5-1-时间上下文信息"><a href="#5-1-时间上下文信息" class="headerlink" title="5.1 时间上下文信息"></a>5.1 时间上下文信息</h3><ul>
+<li>时间效应包括：<ol>
+<li>用户随着年龄的增长，对动画片的兴趣降低。或者随着工作经验的增长，从阅读入门书籍到阅读专业书籍。</li>
+<li>考虑到物品也是具有生命周期的，比如新闻的生命周期较短。</li>
+<li>季节效应。</li>
+</ol>
+</li>
+<li>在给定时间信息后，推荐系统从一个静态系统变成了一个时变的系统，而用户行为数据也变成了时间序列。研究一个时变系统，需要首先研究这个系统的时间特性。</li>
+<li>推荐算法的实时性</li>
+<li>推荐算法的时间多样性：很多推荐系统的研究人员经常遇到一个问题，就是每天给用户的推荐结果都差不多，没有什么变化。推荐系统每天推荐结果的变化程度被定义为推荐系统的时间多样性。时间多样性高的推荐系统中用户会经常看到不同的推荐结果。提高推荐结果的时间多样性需要分两步解决：首先，需要保证推荐系统能够在用户有了新的行为后及时调整推荐结果，使推荐结果满足用户最近的兴趣；其次，需要保证推荐系统在用户没有新的行为时也能够经常变化一下结果，具有一定的时间多样性。<ol>
+<li>在生成推荐结果时加入一定的随机性。比如从推荐列表前20个结果中随机挑选10个结果展示给用户，或者按照推荐物品的权重采样10个结果展示给用户。</li>
+<li>记录用户每天看到的推荐结果，然后在每天给用户进行推荐时，对他前几天看到过很多次的推荐结果进行适当地降权。</li>
+<li>每天给用户使用不同的推荐算法。可以设计很多推荐算法，比如协同过滤算法、内容过滤算法等，然后在每天用户访问推荐系统时随机挑选一种算法给他进行推荐。</li>
+</ol>
+</li>
+<li>时间上下文相关的ItemCF：<ol>
+<li>ItemCF两个核心步骤：利用用户行为离线计算物品之间的相似度；以及，根据用户的历史行为和物品相似度矩阵，给用户做在线个性化推荐。</li>
+<li>时间信息在上面两个核心部分中都有重要的应用，这体现在两种时间效应上。对于前者是体现在<strong>物品相似度</strong>上，用户在相隔很短的时间内喜欢的物品具有更高相似度。以电影推荐为例，用户今天看的电影和用户昨天看的电影其相似度在统计意义上应该大于用户今天看的电影和用户一年前看的电影的相似度。对于后者体现在<strong>在线推荐</strong>上，用户近期行为相比用户很久之前的行为，更能体现用户现在的兴趣。因此在预测用户现在的兴趣时，应该加重用户近期行为的权重，优先给用户推荐那些和他近期喜欢的物品相似的物品。</li>
+</ol>
+</li>
+<li>时间上下文相关的UserCF：<ol>
+<li>与ItemCF类似，可以在以下两个方面利用时间信息改进UserCF算法。第一，同样是喜欢两种物品的两个用户，喜欢物品的先后次序影响两个用户的相似度。第二，相似用户群的最近行为更接近目标用户的最近兴趣。</li>
+</ol>
+</li>
+<li>时间段图模型</li>
+<li>对于一些时效性很强的物品，比如新闻，往往是直接推送热点的效果就不错。</li>
+</ul>
+<h3 id="5-2-地点上下文信息"><a href="#5-2-地点上下文信息" class="headerlink" title="5.2 地点上下文信息"></a>5.2 地点上下文信息</h3><ul>
+<li>LARS：树模型</li>
+</ul>
+<h2 id="第六章-利用社交网络数据"><a href="#第六章-利用社交网络数据" class="headerlink" title="第六章 利用社交网络数据"></a>第六章 利用社交网络数据</h2><ul>
+<li>比如基于好友信息的Feeds流的广告效果棒棒。</li>
+</ul>
+<h3 id="6-1-获取社交网络数据的途径"><a href="#6-1-获取社交网络数据的途径" class="headerlink" title="6.1 获取社交网络数据的途径"></a>6.1 获取社交网络数据的途径</h3><ul>
+<li>电子邮件：</li>
+<li>注册信息：可能获知同一所学校同一个学院同一个公司等信息。</li>
+<li>位置数据：GPS可以精确到一栋楼， 用Keep时有这种体验的。</li>
+<li>论坛：如果两个用户同时加入了很多不同的小组，我们可以认为这两个用户很可能互相了解或者具有相似的兴趣。</li>
+<li>即时聊天工具：存在隐私问题。</li>
+<li>社交网站：一般认为， Facebook中的绝大多数用户联系基于社交图谱，而Twitter中的绝大多数用户联系基于兴趣图谱。</li>
+</ul>
+<h3 id="6-2-社交网络数据简介"><a href="#6-2-社交网络数据简介" class="headerlink" title="6.2 社交网络数据简介"></a>6.2 社交网络数据简介</h3><ul>
+<li>业界有两种著名的社交网络。一种以Facebook为代表，它的朋友关系是需要双向确认的，因此在这种社交网络上可以用无向边连接有社交网络关系的用户。另一种以Twitter为代表，它的朋友关系是单向的，因此可以用有向边代表这种社交网络上的用户关系</li>
+<li>节点的度满足长尾分布</li>
+</ul>
+<h3 id="6-3-基于社交网络的推荐"><a href="#6-3-基于社交网络的推荐" class="headerlink" title="6.3 基于社交网络的推荐"></a>6.3 基于社交网络的推荐</h3><ul>
+<li>社会化推荐的优点：<ol>
+<li><strong>好友推荐可以增加推荐的信任度</strong>：好友往往是用户最信任的。用户往往不一定信任计算机的智能，但会信任好朋友的推荐。</li>
+<li><strong>社交网络可以解决冷启动问题</strong>：当一个新用户通过微博或者Facebook账号登录网站时，我们可以从社交网站中获取用户的好友列表，然后给用户推荐好友在网站上喜欢的物品。从而我们可以在没有用户行为记录时就给用户提供较高质量的推荐结果，部分解决了推荐系统的冷启动问题。</li>
+</ol>
+</li>
+<li>社会化推荐的缺点：<ol>
+<li>不一定可以提高推荐算法的离线精度，尤其是社交图谱中好友不一定和自己有共同爱好。</li>
+</ol>
+</li>
+<li>基于邻域的社会化推荐算法</li>
+<li>基于图的社会化推荐算法：在二分图中加入好友关系，然后使用PersonalRank。这一种社交网络关系称为friendship，除此之外membership也是一种社交关系就是加入一个社团。那么可以在用户左边加上一层社团图，将社团与用户连接起来，继续使用PersonalRank。</li>
+<li>社会化推荐系统的效果往往很难通过离线实验评测，因为社会化推荐的优势不在于增加预测准确度，而是在于通过用户的好友增加用户对推荐结果的信任度，从而让用户单击那些很冷门的推荐结果。</li>
+<li>信息流推荐：我们并不关心我们关注的好友的所有言论，而只关心他们的言论中和自己相关的部分。虽然我们在选择关注时已经考虑了关注对象和自己兴趣的相似度，但显然我们无法找到和自己兴趣完全一致的人。因此，信息流的个性化推荐要解决的问题就是如何进一步帮助用户从信息墙上挑选有用的信息。EdgeRank。</li>
+</ul>
+<h3 id="6-4-给用户推荐好友"><a href="#6-4-给用户推荐好友" class="headerlink" title="6.4 给用户推荐好友"></a>6.4 给用户推荐好友</h3><ul>
+<li>好友推荐算法在社交网络上被称为链接预测（link prediction）。关于链接预测算法研究的代表文章是Jon Kleinberg的“Link Prediction in Social Network”。</li>
+<li>社交网络研究中有两个最著名的问题。第一个是如何度量人的重要性，也就是社交网络顶点的中心度（centrality），第二个问题是如何度量社交网络中人和人之间的关系，也就是链接预测。</li>
+</ul>
+<h2 id="第七章-推荐系统实例"><a href="#第七章-推荐系统实例" class="headerlink" title="第七章 推荐系统实例"></a>第七章 推荐系统实例</h2><h3 id="7-1-外围架构"><a href="#7-1-外围架构" class="headerlink" title="7.1 外围架构"></a>7.1 外围架构</h3><h3 id="7-2-推荐系统架构"><a href="#7-2-推荐系统架构" class="headerlink" title="7.2 推荐系统架构"></a>7.2 推荐系统架构</h3><ul>
+<li><p>如果认为用户的相似用户是该用户的特征，用户喜欢的物品是该用户的特征，用户喜欢的隐语义也是用户的特征，用户打过的标签也是用户的特征。根据上面的抽象，可以设计一种基于特征的推荐系统架构。因此，当用户到来之后，推荐系统需要为用户生成特征，然后对每个特征找到和特征相关的物品，从而最终生成用户的推荐列表。因而，推荐系统的核心任务就被拆解成两部分，一个是如何为给定用户生成特征，另一个是如何根据特征找到物品。<br><img src="/img/RS4.png" alt></p>
+</li>
+<li><p>用户的特征包括：</p>
+<ol>
+<li><strong>人口统计学特征</strong> 包括用户的年龄、性别、国籍和民族等用户在注册时提供的信息。</li>
+<li><strong>用户的行为特征</strong> 包括用户浏览过什么物品、收藏过什么物品、给什么物品打过什么样的分数等用户行为相关的特征。同时，用户行为从时间上也可以分为用户近期的行为和长期的行为。</li>
+<li><strong>用户的话题特征</strong> 可以根据用户的历史行为利用话题模型（topic model）将电视剧和电影聚合成不同的话题，并且计算出每个用户对什么话题感兴趣。</li>
+</ol>
+</li>
+<li><p>推荐系统需要由多个推荐引擎组成，每个推荐引擎负责一类特征和一种任务，而推荐系统的任务只是将推荐引擎的结果按照一定权重或者优先级合并、排序然后返回。那么，推荐引擎的设计就成了一个一个推荐系统的核心部分。<br><img src="/img/RS5.png" alt></p>
+</li>
+</ul>
+<h3 id="7-3-推荐引擎的架构"><a href="#7-3-推荐引擎的架构" class="headerlink" title="7.3 推荐引擎的架构"></a>7.3 推荐引擎的架构</h3><p><img src="/img/RS6.png" alt></p>
+<h4 id="7-3-1-生成用户特征向量"><a href="#7-3-1-生成用户特征向量" class="headerlink" title="7.3.1 生成用户特征向量"></a>7.3.1 生成用户特征向量</h4><ul>
+<li>一种是用户的注册信息，针对这种信息的推荐引擎如果内存够，可以将存储这些特征的信息直接缓存在内存中，在推荐时直接拿到用户的特征数据并生成特征向量。</li>
+<li>更重要的一种是用户的行为信息，这种信心对于个性化推家引擎更加重要。种类有评论、购买、收藏、打分等等；另外用户行为产生的时间也很重要；另外还有行为的次数；物品的热门程度。</li>
+<li></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2018/08/22/机器学习-2018-08-22-RecommenderSystemsInAction/" data-id="cjxo5e6sy004ez16dlxyqf9jm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/bigdata/">bigdata</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../24/程序员的玩具-2018-08-24-LC-Stack/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          LeetCode刷题记录——Stack
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../17/机器学习-2018-08-17-point/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">统计机器学习要点总结</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

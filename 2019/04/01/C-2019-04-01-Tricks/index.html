@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>仓鼠一般搜集到的C++技巧 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="通常不应该出现两个头文件循环包含的情况，若两个头文件包含，则说明两个头文件中包含的两个类之间关系高度耦合。即A 需要 B ， B 需要 A。依照《重构》中的思想，这种情况属于代码臭味，需要考虑将这两个类中的内容合并为一个类，之后将不存在循环包含的情况。类之间通常是单向依赖关系。    当前阶段先学会自己写出makefile。    类的静态成员要在类外进行初始化。    左值表达式表示对象的">
+<meta name="keywords" content="C++,trick">
+<meta property="og:type" content="article">
+<meta property="og:title" content="仓鼠一般搜集到的C++技巧">
+<meta property="og:url" content="https://protao.github.io/2019/04/01/C-2019-04-01-Tricks/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="通常不应该出现两个头文件循环包含的情况，若两个头文件包含，则说明两个头文件中包含的两个类之间关系高度耦合。即A 需要 B ， B 需要 A。依照《重构》中的思想，这种情况属于代码臭味，需要考虑将这两个类中的内容合并为一个类，之后将不存在循环包含的情况。类之间通常是单向依赖关系。    当前阶段先学会自己写出makefile。    类的静态成员要在类外进行初始化。    左值表达式表示对象的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/cover/hamster.jpeg">
+<meta property="og:updated_time" content="2019-07-04T04:18:10.888Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="仓鼠一般搜集到的C++技巧">
+<meta name="twitter:description" content="通常不应该出现两个头文件循环包含的情况，若两个头文件包含，则说明两个头文件中包含的两个类之间关系高度耦合。即A 需要 B ， B 需要 A。依照《重构》中的思想，这种情况属于代码臭味，需要考虑将这两个类中的内容合并为一个类，之后将不存在循环包含的情况。类之间通常是单向依赖关系。    当前阶段先学会自己写出makefile。    类的静态成员要在类外进行初始化。    左值表达式表示对象的">
+<meta name="twitter:image" content="https://protao.github.io/img/cover/hamster.jpeg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-C-2019-04-01-Tricks" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2019-03-31T16:00:00.000Z" itemprop="datePublished">2019-04-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/C/">C++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      仓鼠一般搜集到的C++技巧
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/hamster.jpeg" alt></p>
+<ul>
+<li><ol>
+<li>通常不应该出现两个头文件循环包含的情况，若两个头文件包含，则说明两个头文件中包含的两个类之间关系高度耦合。即A 需要 B ， B 需要 A。依照《重构》中的思想，这种情况属于代码臭味，需要考虑将这两个类中的内容合并为一个类，之后将不存在循环包含的情况。类之间通常是单向依赖关系。</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>当前阶段先学会自己写出makefile。</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>类的静态成员要在类外进行初始化。</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>左值表达式表示对象的身份，右值表达式表示对象的值。返回左值引用的函数，连同赋值、下标、解引用、和前置递增递减运算符都是返回左值表达式的，因此可以将左值引用绑定其上。返回非引用类型的函数、算术运算符、关系运算符、位运算符、以及后置递增递减运算符，都生成右值，我们可以将一个const左值引用或者一个右值引用绑定其上。<em>右值表示一种短暂的临时的引用。</em></li>
+</ol>
+</li>
+<li><ol start="5">
+<li>移动构造函数不创建任何新内存，而是接管旧对象的成员，因此在移动构造函数中需要使得旧对象失去对其成员的所有权。</li>
+</ol>
+</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li><ol start="6">
+<li>头文件中只写声明，不写定义，定义写在C文件中，这个挺好理解的。我把全部的定义写在头文件中，然后cpp文件只include一下，main.cpp不改动，然后依次编译出obj文件，没有问题，但是链接时显示函数重复定义。而改回头文件中只写声明的方式，把类外定义全部移到c文件中是没有问题的，好像理解这个出错的原因，但是又觉得头文件加了保护符不应该会这样啊。先记下这个问题。已经解决了，定义可以重复，但是定义不可以重复，都写在头文件中是，与处理步骤会把头文件替换到两个CPP文件中，然后编译时各自的符号都可以找到没有问题，但是在链接步骤就会发现重复的函数定义。而两个CPP文件分属两个编译单元，头文件保护符不管用。</li>
+</ol>
+</li>
+<li><ol start="7">
+<li>对于上面的问题还有一种解决办法，就是也可以把类外定义全部写在头文件中，然后cpp文件只include一下（实际上此时的cpp文件可以不要），然后把头文件中的类外定义全部使用inline方式，这样也没有问题了。因为内联函数在实际调用时进行代码替换而不是函数定义的查找，inline实际上是c++中对宏定义的一种替代。这样也就使得不会在链接阶段出现重定义的错误。类中定义的实际上都是inline方法，而且inline也必须写在头文件里，因为需要随处展开的原因，声明处必须要看得见定义，如果非要写在cpp文件里，那就在头文件里include对应的cpp文件。</li>
+</ol>
+</li>
+<li><ol start="8">
+<li>在map中使用下标访问不存在的元素将导致在map容器中添加一个新的元素。</li>
+</ol>
+</li>
+<li><ol start="9">
+<li>在循环内可以声明变量，每次变量的生命周期只有一次循环，结束了变量就释放了，下一个循环又是定义一个新的变量，没有问题。</li>
+</ol>
+</li>
+<li><ol start="10">
+<li>偶然看到的“菜鸟级”编程规范，h文件只包含在cpp文件里，包含在h文件中会导致层层递归，依赖很深。而且，不然在头文件中使用using namesapce，由于头文件会在预处理阶段进行代码替换，这可能导致这个namespace的影响被扩散的很远。参考<a href="https://blog.csdn.net/dj0379/article/details/11565387" target="_blank" rel="noopener">别再让头文件中出现‘using namespace’</a></li>
+</ol>
+</li>
+<li><ol start="11">
+<li>编译过程形成的目标文件会提供三张表：导出符号表、未解决符号表、地址重定向表。很多知识点可以映射到这三张表上去，比如头文件中的inline函数被多次包含不会有符号冲突，是因为内联是进行替换，不形成外部符号表，对外不可见；再比如extern关键词，其实就是告诉编译器，要把这个变量符号放到未解决符号表中，去找别的obj文件链接。</li>
+</ol>
+</li>
+<li><ol start="12">
+<li>只有一个实参的构造函数可以进行隐式的类型转换，explicit关键字使得这种构造函数不能隐式的调用。</li>
+</ol>
+</li>
+<li><ol start="13">
+<li>不知道怎么声明友元是最佳实践，但是C++Primer中给出的示例代码是在头文件中，类内给出友元函数的声明，这部分是权限说明；然后再类外进行友元函数自己的函数声明；然后在具体的CPP文件中给出函数定义。可以是头文件对应的CPP文件，也可以是单独的工具函数CPP文件。这个具体问题具体分析。</li>
+</ol>
+</li>
+<li><ol start="14">
+<li>析构函数不能显式调用。</li>
+</ol>
+</li>
+<li><ol start="15">
+<li>sizeof是在编译的时候求值的，如果是一个对象，那么sizeof返回该对象的的数据成员所占的空间大小。string是一个类，真正的内容是在堆中的，然后string对象有指针指向真正的字符串，所以对string进行sizeof的话得到的就是string类的数据成员占得空间大小。在我的机器上就是32。实际取得字符串的字节长度要用size方法或者length方法。</li>
+</ol>
+</li>
+<li><ol start="16">
+<li>stack上的对象的析构函数自动调用，heap上的对象的析构函数需要手动delete来调用。</li>
+</ol>
+</li>
+<li><ol start="17">
+<li>不要返回函数内的局部变量的引用或者指针，除非这个变量指向的是堆中的内存。</li>
+</ol>
+</li>
+<li><ol start="18">
+<li>构造函数中不能加虚函数，因此构造过程中vtable还没有建好，虚函数不能动态绑定，只能执行基类自己的虚函数。</li>
+</ol>
+</li>
+<li><ol start="19">
+<li>union 中的元素共享内存。</li>
+</ol>
+</li>
+<li><ol start="20">
+<li>如果一个函数接受const类型的参数，但是传入的是非const的，会发生什么？</li>
+</ol>
+</li>
+<li><ol start="21">
+<li>对有基类的对象来说,基类的成员初始化和构造函数体的执行发生在派生类的成员初始化和构造函数体的执行之前。</li>
+</ol>
+</li>
+<li><ol start="22">
+<li>请注意 static 类成员永远也不会在类的构造函数初始化。静态成员在程序运行的过程中只被初始化一次,所以每当类的对象创建时都去“初始化”它们没有任何意义。</li>
+</ol>
+</li>
+<li><ol start="23">
+<li>对一个对象的所有成员来说,它们的析构函数被调用的顺序总是和它们在构造函数里被创建的顺序相反。</li>
+</ol>
+</li>
+<li><ol start="24">
+<li>numeric_limits(和标准库中其它东西一样,numeric_limits 存在于名字空间 std 中; numeric_limits 本身在头文件<limits>中)。</limits></li>
+</ol>
+</li>
+<li><ol start="25">
+<li>在定义派生类时， 派生类并没有把基类的构造函数继承下来。因此， 派生类的构造函数同时需要对继承的基类成员进行初始化。派生类并没有继承基类的析构函数， 在执行派生类的析构函数时， 编译器会自动调用基类的析构函数。核心原则是构造顺序和析构顺序相反。</li>
+</ol>
+</li>
+<li><ol start="26">
+<li>关于“指针常量”和“常量指针”很好区分：const 在星号左边，则被指物是常量；const 在星号右边，则指针自身是常量（此时const关键字和类型关键字的顺序不重要）。</li>
+</ol>
+</li>
+<li><ol start="27">
+<li>声明只是告诉编译器这个变量会被使用，编译器不（保证）为其分配内存；而定义是一定会有内存被分配的。因此，extern关键字一定是声明，带有初始化的一定是定义。参考<a href="https://www.cnblogs.com/douzi2/p/5044870.html" target="_blank" rel="noopener">你可能不知道的定义、声明和初始化</a></li>
+</ol>
+</li>
+<li><ol start="28">
+<li>编译单元就是产出单一目标文件的所有源码。</li>
+</ol>
+</li>
+<li><ol start="29">
+<li>static对象，其寿命从构造出来直到程序结束为止，因此这种对象不是堆和栈中存放的对象。这种对象包括global对象，namespace中定义的对象以及使用static关键字的对象。在函数内定义的静态对象是局部静态对象，其他的（包括类内的）静态对象都是非局部的。</li>
+</ol>
+</li>
+<li><ol start="30">
+<li>空类的大小是1。原因是C++标准要求类的大小必须为正，这是为了保证实例化得到的不同对象的地址不能相同。（这句话还不太明白）</li>
+</ol>
+</li>
+<li><ol start="31">
+<li>对于类内的 const 类型和 static 对象的初始化：const 类型可以在声明处初始化，也可以在成员初始列中初始化，后者会覆盖前者。static 类型必须在类的声明体外定义。而 const static 对象支持在声明处初始化，也可以像普通的 static 变量一样，在类外定义与初始化。</li>
+</ol>
+</li>
+<li><ol start="32">
+<li>当执行<code>new</code>的时候，发生了两件事：一块内存被分配出来，然后一个或多个构造函数被调用。析构函数同理。</li>
+</ol>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2019/04/01/C-2019-04-01-Tricks/" data-id="cjxo5e6ok002hz16d0puh1mbx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/trick/">trick</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../11/Python-2019-05-08-SICP5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          SICP5
+        
+      </div>
+    </a>
+  
+  
+    <a href="../生活-2019-04-01-2019-DiaryOfInvestment/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">2019 投资日记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>RIOT文档四 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. Scope, Audience and Purpose1.1 Scope本文档描述了典型的物联网的安全使用情况和应用TCG技术这些用例提供指导。 由于物联网设备在成本、使用和功能上有很大的差异，所以没有万能的解决方案来解决物联网安全问题。不同设备和系统的实际安全要求会有所不同。因此，该解决方案列表应被视为一个菜单，实现者可以选择最适合自己的产品或服务。 这个文件不是一个TCG规范，因此不规范">
+<meta name="keywords" content="security,hash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RIOT文档四">
+<meta property="og:url" content="https://protao.github.io/2017/08/06/信息安全-2017-8-6-doc4/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="1. Scope, Audience and Purpose1.1 Scope本文档描述了典型的物联网的安全使用情况和应用TCG技术这些用例提供指导。 由于物联网设备在成本、使用和功能上有很大的差异，所以没有万能的解决方案来解决物联网安全问题。不同设备和系统的实际安全要求会有所不同。因此，该解决方案列表应被视为一个菜单，实现者可以选择最适合自己的产品或服务。 这个文件不是一个TCG规范，因此不规范">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-10T14:46:06.851Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RIOT文档四">
+<meta name="twitter:description" content="1. Scope, Audience and Purpose1.1 Scope本文档描述了典型的物联网的安全使用情况和应用TCG技术这些用例提供指导。 由于物联网设备在成本、使用和功能上有很大的差异，所以没有万能的解决方案来解决物联网安全问题。不同设备和系统的实际安全要求会有所不同。因此，该解决方案列表应被视为一个菜单，实现者可以选择最适合自己的产品或服务。 这个文件不是一个TCG规范，因此不规范">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-信息安全-2017-8-6-doc4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2017-08-06T08:35:28.000Z" itemprop="datePublished">2017-08-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/信息安全/">信息安全</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      RIOT文档四
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-Scope-Audience-and-Purpose"><a href="#1-Scope-Audience-and-Purpose" class="headerlink" title="1. Scope, Audience and Purpose"></a>1. Scope, Audience and Purpose</h1><h2 id="1-1-Scope"><a href="#1-1-Scope" class="headerlink" title="1.1 Scope"></a>1.1 Scope</h2><p>本文档描述了典型的物联网的安全使用情况和应用TCG技术这些用例提供指导。</p>
+<p>由于物联网设备在成本、使用和功能上有很大的差异，所以没有万能的解决方案来解决物联网安全问题。不同设备和系统的实际安全要求会有所不同。因此，该解决方案列表应被视为一个菜单，实现者可以选择最适合自己的产品或服务。</p>
+<p>这个文件不是一个TCG规范，因此不规范。此外，只看本文档不能得到一个实现产品的细节或者解决方案。因此必须权衡许多其他方面和设计问题来得到一个好的解决方案</p>
+<h2 id="1-2-Audience-and-Propose"><a href="#1-2-Audience-and-Propose" class="headerlink" title="1.2 Audience and Propose"></a>1.2 Audience and Propose</h2><p>本文档的目标受众是物联网设备、软件和服务提供商。该文件是一个介绍了TCG技术如何应用于解决物联网市场空间的安全问题的高抽象层次的文档。作为一个高层次的文件，这篇文档很适合为商务人员和技术人员作为初始起点去调查TCG技术是否适合自己的安全需求的解决方案。</p>
+<h1 id="2-Preface"><a href="#2-Preface" class="headerlink" title="2. Preface"></a>2. Preface</h1><p>大多数计算机安全都是在软件堆栈中实现的：例如，操作系统使用加密技术来确保静止和运动中的数据，而操作系统和应用程序则经过精心设计和配置，以保护用户的隐私和对恶意输入的鲁棒性。尽管在构建安全系统的科学和实践方面已经取得了很大的进展，但大多数不平凡的软件系统仍然存在可利用的缺陷。传统的受感染和被漏洞利用的系统的恢复是耗费时间和昂贵的：例如，需要重新安装操作系统和应用程序，需要更改密码和机器证书。这通常意味着物理访问（例如从DVD安装）和访问重要凭证（例如向生产商注册设备）。</p>
+<p>再一次，大多数下一代物联网软件和服务机器的浪潮将在软件堆栈中实现，但面对软件缺陷，有些事情根本不可能在没有硬件支持的情况下实现。例如，只有软件解决方案，攻击者可能能够不可逆转的将设备变砖。另外的一些攻击会窃取装置秘密（Device Secret）使得设备不能安全地重新配置，永远允许攻击者冒充一个设备或窃听通信。这些问题不是物联网系统的新的或独特的，但他们在物联网系统中会变得更麻烦，因为物联网系统繁多，安全特征极少，基本不可能手动管理，而且被攻击后有可能很危险。简言之，只通过软件的解决方案是脆弱的，容易发生不可挽回的损失。</p>
+<p>脆弱的软件唯一的解决方案对消费者和设备和服务提供商都有风险。设备供应商对无法在现场修理的系统保证保修。客户冒着数据、隐私和时间的风险，而且在最糟糕的情况下，客户的健康和财富都可能被置于风险之中。</p>
+<p>TCG技术不能提供一个应用于所有的物联网设备和服务的即时生效的解决方案，但他们可以使现有的和将来的物联网解决方案从根本上远比今天更鲁棒。本文档定义了一套安全相关的用例，并描述了TCG技术可以应用到的问题。</p>
+<h1 id="3-Use-Case"><a href="#3-Use-Case" class="headerlink" title="3. Use Case"></a>3. Use Case</h1><a id="more"></a>
+<p>在本节中，我们描述了一组需要许多物联网设备的基本的安全功能。在物联网框架部分（4节），我们描述了如何TCG技术可以解决这些问题。</p>
+<p>这些基本的安全功能包括：</p>
+<ul>
+<li><p><strong>建立和保护设备标识（Device Identity）</strong></p>
+<p>  <em>物联网设备应该能够通过物联网服务或与其他物联网设备进行相互认证。双方都可以利用该认证结果确定授权和登录其他各方的身份。这样可以防止未经授权的物联网设备获得的物联网服务和防止未经授权的人伪装成物联网服务。此外，它促进问责制并且是使forensic analyse成为可能。</em></p>
+</li>
+<li><p><strong>防止恶意软件感染</strong></p>
+<p>  <em>物联网设备应该能够抵御恶意软件感染，无论是在易失性方面或持久性方面。如果发生恶意软件感染，这些设备应最小化收到的影响并能够恢复。</em></p>
+<ul>
+<li><p><strong>保护设备健康</strong></p>
+<p>  <em>物联网设备应该包括一种安全确定软件/固件版本和安全的软件/固件更新机制的机制。这有助于设备快速、安全地安装更新已知漏洞的更新。</em></p>
+</li>
+<li><p><strong>检测恶意软件感染</strong></p>
+<p>  <em>恶意软件检测需要能够最初响应，如缓解和补救措施。然而，恶意软件经常是隐身的，使用各种诡计来避免检测。因此，恶意软件检测必须同样聪明。</em></p>
+</li>
+<li><p><strong>从受感染中恢复</strong></p>
+<p>  <em>不可避免地，一些物联网设备将受到恶意软件的感染。当发生这种情况时，安全恢复应该是可行的。这包括检测受感染设备，恢复健康状态，恢复正常功能的能力。此过程不需要对设备进行物理访问。相反，恢复过程应该在网络上进行。</em></p>
+</li>
+<li><p><strong>受感染时保持秘密</strong></p>
+<p>  <em>如果物联网设备受到恶意软件的感染，如用户数据和长期密钥这种重要的数据应该受到保护，以使得恶意软件就不能访问它们。</em></p>
+</li>
+</ul>
+</li>
+<li><p><strong>防止硬件篡改</strong></p>
+<p>  <em>有些物联网设备需要保护自己不受硬件干扰。例如，电表通常给消费者无限的物理访问机会，并鼓励黑客窃取设备并窃取服务。在这种情况下，完全不受篡改的保护通常是不可能的。但是，有可能提高篡改的成本，以便它需要专门的设备或限制这种篡改造成的损害的范围。</em></p>
+<ul>
+<li><p><strong>保护数据机密性</strong></p>
+<p>  <em>某些数据必须防止泄露。例如，攻击者可以从一个物联网设备拷贝秘密密钥，然后就可以模拟该装置或获取用户机密数据。</em></p>
+</li>
+<li><p><strong>保护数据完整性</strong></p>
+<p>  <em>某些数据必须受到保护，防止未经授权和未被发现的修改。例如，攻击者可以修改电表上的读数，从而能够窃取电力。</em></p>
+</li>
+<li><p><strong>保护计算免收篡改</strong></p>
+<p>  <em>如果计算受到干扰，可以跳过安全检查，并破坏物联网设备的可靠性。</em></p>
+</li>
+</ul>
+</li>
+<li><p><strong>静止数据的机密性、完整性和可用性</strong></p>
+<p>  <em>存储在IoT设备上的机密数据需要保护</em></p>
+</li>
+<li><p><strong>设备的转售和退役</strong></p>
+<p>  <em>转售和退役是设备生命周期中不可避免的阶段，特别是对于那些很有可能具有重大转售价值的昂贵设备而言。在设备的转售或退役，任何敏感的数据属于以前的主人应该是安全擦除。然后，该设备可以安全地转移到新的所有者或准备拆卸和回收。</em></p>
+</li>
+<li><p><strong>加密算法</strong></p>
+<p>  <em>所有的物联网设备都在某种程度上连接到一个不可信的网络。加密协议保证了该网络上的通信的安全性，必须被支持。可能需要很好的熵源、安全密钥存储和加密算法加速。由于加密算法最终变得脆弱，然后过时，因此需要加密的灵活性，特别是对于长寿命的物联网设备。</em></p>
+</li>
+<li><p><strong>支持多种配置方式</strong></p>
+<p>  <em>物联网技术必须支持实用的、通用的配置证书、政策和其他一些需要用户配置生效的服务。一些物联网设备在制造过程中被配置完成，另一些则在首次使用的时候。一些设备在配置的时候是出于物理安全状态的，但是还有一部分是在终端用户。在某些情况下，客户可能希望使用匿名远程认证和其他技术来保护他们的隐私。</em></p>
+</li>
+<li><p><strong>维护审计（Audit）日志</strong> </p>
+<p>  <em>安全日志对于维持问责制和进行forensic analysis至关重要。</em></p>
+</li>
+<li><p><strong>远程可管理性</strong></p>
+<p>  <em>大多数物联网设备需要安全的远程管理能力。如果只能物理访问来管理物联网设备，那么这种方式难以扩展到大量设备。</em></p>
+</li>
+<li><p><strong>保护遗留设备</strong></p>
+<p>  <em>目前世界上到处都是不支持这些用例的遗留设备。幸运的是，可以使用网关设备来改进这些设备的安全性。</em></p>
+</li>
+</ul>
+<p>本文档的内容旨在涵盖这些用例，但不打算仅限于这些用例。</p>
+<h1 id="4-IoT-Framework"><a href="#4-IoT-Framework" class="headerlink" title="4. IoT Framework"></a>4. IoT Framework</h1><p>本节提供了关于如何使用可信计算组的技术和标准来解决第3节中定义的用例的一般性指导，但是并没有实现细节。</p>
+<p>由于物联网设备在成本、使用和功能上有很大的差异，所以没有万能的解决方案来解决物联网安全问题。不同设备和系统的实际安全要求会有所不同。因此，该解决方案列表应被视为一个菜单，实现者可以选择最适合自己的产品和服务。</p>
+<h2 id="4-1-Establishing-and-Protecting-Device-Identity"><a href="#4-1-Establishing-and-Protecting-Device-Identity" class="headerlink" title="4.1 Establishing and Protecting Device Identity"></a>4.1 Establishing and Protecting Device Identity</h2><p>几乎所有的物联网的情况需要可靠的认证使用得设备，但不幸的是互联网并不提供可靠的端点认证。所以设备必须自己认证自己。常用的设备标识符有很多种类型：最简单的，可能是最不安全的，是公共名称或全局唯一标识符（GUID）。然而，一个公共的名称或GUID本身不能提供认证功能，因为只要对手获得了名称或GUID就可以冒充这台设备。</p>
+<p>另一个常见的方法是使用一个加密的标识符。然而，即使使用加密设备标识符，许多设备也只使用软件来管理密钥。不幸的是，如果软件管理密钥是脆弱的，那么密钥泄漏的话敌手就可以冒充设备。如果这种事发生，设备可能只有在物理安全的条件下才可以安全地重新配置，这可能需要对设备的物理访问，甚至送回制造商。这是昂贵的，甚至可能是不可能的。因此，物联网设备应该配备加密的标识，并且强健到足以抵挡各种可能遭受到的攻击。</p>
+<p>TPM提供加密的设备标识符并且足够鲁棒以面对恶意软件的攻击，许多TPMS还提供良好的密钥保护来抵抗复杂的硬件攻击。因此，TPM是一种高度灵活的用于物联网设备标识的技术基础。TPM可以用来提供设备标识，包括对称密钥加密、HMAC、和非对称密码。</p>
+<p>TPM还支持各种供应流，包括芯片制造过程中的密钥配置、设备组装、物联网管理服务的注册、或所有者个性化。在TPM配置期间，可以使用“密钥认证”允许一个基于TPM的密钥来证明另一个基于TPM的密钥是受硬件保护的，从而为密钥存储的安全性提供更多的信任。或者，可以使用安全密钥导入在不信任的网络上安装新的标识。</p>
+<blockquote>
+<p>我们注意到，有涉及隐私的加密身份固有的使用，和解决方案提供商应该仔细考虑是否采用TCG技术物联网的设备便于用户隐私风险。例如，它通常不被认为是一个隐私风险允许提供公共服务设备明确密码识别（说一个交通摄像头。）在这种情况下，所有的用户都可以依靠同样的设备身份的关键–例如，钥匙或其他TPM TPM的认可，关键是联系在一起的装置。另一方面，使用第三方Web服务（如天气饲料、流量饲料等）的TPM配备的个人设备不应显示任何允许不必要跟踪的长寿命密钥。如果安全的匿名身份的要求，基于TPM的身份证明密钥或直接匿名认证可以采用。</p>
+</blockquote>
+<p>解决方案开发人员可以使用TPM软件堆栈（TSS）库来构建库和工具来提供和使用基于TPM的物联网设备标识。供应商提供了在TSS之上或作为TSS专有实例的各种专有API。这些专有产品可能支持设备制造商所需的特性。</p>
+<h2 id="4-2-Protection-Against-Malware-Infection"><a href="#4-2-Protection-Against-Malware-Infection" class="headerlink" title="4.2 Protection Against Malware Infection"></a>4.2 Protection Against Malware Infection</h2><p>一些TCG技术提供保护免受恶意软件感染，这些内容在在本节的后续部分描述。</p>
+<h3 id="4-2-1-Protecting-Device-Health"><a href="#4-2-1-Protecting-Device-Health" class="headerlink" title="4.2.1 Protecting Device Health"></a>4.2.1 Protecting Device Health</h3><p>许多的TCG标准提供强大的构建块（building block），可以用来实现或补充物联网系统安全。</p>
+<p>一种常用的限制恶意软件的损害程度的方法阻止对安全关键程序和数据的未经授权的写入。TCG的自加密驱动器（如常用的“猫眼”驱动），固件和操作系统可以对部分或全部的物联网设备进行写保护。[OPAL]</p>
+<p>TNC（Trusted Network Communication）标准[tnc-arch]中有一个标准的方法来检查软件或固件是否是在一个特定的设备上运行（包括版本号）。它们还提供了一种补救机制，可用于执行获取和应用软件和固件更新的指令。</p>
+<p>检查软件或固件是否运行在一个特定的设备或进行其他健康检查，使用IF-M协议查询端点。应用到IOT上，这种检查一般会在TLS的基础上使用IF-TNCCS和IFT/TLS标准。</p>
+<p>如果想对软件或固件版本检查的准确性的有更大的信心信心，可以使用TPM的Measured Boot和Remote Attestation能力。详情请见TCG的白皮书“Trusted Network Connect: Open Standards for Integrity-based Network Access Control”。 [INTEGRITY]</p>
+<p>传统上，运行时健康验证由大型系统中的反恶意软件产品处理。白名单和只允许制造商签名的特定的二进制代码是两个确保在特定设备上执行的两个不错的技术。使用TPM辅助的软件更新、静态代码分析、运行时堆栈保护、数据执行预防、遵从性验证（compliance verification）和策略更新都是设备制造商可以考虑使用的，以确保运行时环境的完整性。这些技术中的一些可能在一些特别小的设备上不可行。在这种情况下，唯一的选择可能是定期重启并使用启动时间保护。</p>
+<p>如果一个设备需要修复，修复指令属性包含在IF-M可以采用。这个属性现在通常用于人工（人工辅助）修复，但是可以通过修复URI或特定于供应商的修复参数类型来实现自动化修复。</p>
+<p>我们注意到有实践意义的安全安全需要在软件维护中进行不间断的投资，因为补丁是安全系统的核心。如果设备供应商退出业务，或有限时间的服务合同到期，更新不再可用，那么随着漏洞的披露，设备的安全性将开始降低。鉴于此，一些客户可能希望完全控制物联网客户机软件和相关的网络服务。</p>
+<h3 id="4-2-2-Detecting-Malware-Infections"><a href="#4-2-2-Detecting-Malware-Infections" class="headerlink" title="4.2.2 Detecting Malware Infections"></a>4.2.2 Detecting Malware Infections</h3><p>一般来说，恶意软件的检测和修复是一个困难的问题，因为恶意软件的特权与想要检测和隔离的系统的特权相同或是更高。安全引导通过在允许运行之前检查每个模块来缓解这个问题。然而，安全引导系统策略往往是相对粗糙的定义，可能允许坏的或易受攻击的软件加载。</p>
+<p>如果 <del>更多的细粒或运行恶意软件或安全政策</del>需要执行，TCG技术提供了一个替代的模型称为认证（Attestation），即使涉及到大量的软件模块也能够保证整个系统可管理。认证是一种平台功能，允许对平台的软件或安全配置进行权威性报告。认证可以提供非常详细的安全态势报告，依赖方可以选择是否进一步沟通、隔离或要求补救。良好的基于认证的系统极大地提高了系统安全性，因为已知的坏的或已知的易受攻击的系统不能再通信了。</p>
+<p>该结构采用TPM的Measured Boot和Romote Attestation功能，详见TCG的白皮书“Trusted Network Connect: Open Standards for Integrity-based Network Access Control”。这种技术甚至可以检测到BIOS或其他固件的更改。一些片上系统（SoC）供应商也可以提供具有认证功能的基本的硬件。</p>
+<h3 id="4-2-3-Recovering-from-Infections"><a href="#4-2-3-Recovering-from-Infections" class="headerlink" title="4.2.3 Recovering from Infections"></a>4.2.3 Recovering from Infections</h3><p>一旦恶意软件已经被发现，如前文所述，可以用IF-PEP协议来隔离受感染的机器来防止感染。</p>
+<p>可能的修复方法有很多。现在常见的有：</p>
+<ul>
+<li><p><strong>自我验证与自我补救</strong> 。在该模型中，设备在只读保护存储中保存一组“黄金”测量值（golden measurements），并将该值与在引导期间进行的测量值进行比较。如果模块有验证失败，则设备可以删除受影响的模块，并从最后一个已知好代码的本地库中重新安装该模块的保存副本。然后系统在一个迭代过程中重新启动，直到所有模块验证为止。</p>
+</li>
+<li><p><strong>远程验证</strong>。在这个模型中，设备将其完整性作为启动的一部分来度量，但并不验证这些度量。当设备准备连接网络时，发送远程验证的完整性报告。如果验证失败，则该终端被转移到补救网络进行后续处理。</p>
+</li>
+<li><p><strong>运行时的完整性</strong>。实现这种模式的几种商业产品是可用的。它们都执行执行时的代码运行时检查。当发现问题时，受影响系统上的客户机代码以不同的方式处理问题。可能是用干净的副本替换受感染代码，可能通过P2P请求一份干净的副本，或者可能向PDP宣布，现在自己不能被信任并等待修复。</p>
+</li>
+</ul>
+<p>受感染的设备可能表现出任意行为，因此一般来说，其他设备和服务有责任隔离或拒绝无法证明自己的设备的通信。使用本地或基于云的集线器通信的设备为了能够安全评估和隔离必须有统一的单点控制。如果系统采用点对点通信，那么这个功能必须分布在所有设备上。</p>
+<p>鉴于这种复杂性，系统设计者应考虑采用保护和补救技术的频谱（？spectrum），以增加系统的恢复力。</p>
+<p>架构师也应该考虑隔离造成的更深层的影响：比如可以如果该设备提供了一个生命攸关的服务信息。那么我们最好允许它运行。</p>
+<p>最后，系统供应商应建立一个系统，它能够在不丢失用户数据和系统配置的条件下恢复。</p>
+<h3 id="4-2-4-Maintaining-Secrets-while-Infected"><a href="#4-2-4-Maintaining-Secrets-while-Infected" class="headerlink" title="4.2.4 Maintaining Secrets while Infected"></a>4.2.4 Maintaining Secrets while Infected</h3><p>物联网设备往往无人值守，并可能在较长时间内非托管操作。这些设备可以存储机密或隐私敏感信息，如消费者习惯或制造参数。这就引起了人们对无人值守设备继续按设计运行的能力的关注，包括在恶意软件成功感染的情况下保持设备机密。</p>
+<p>在恶意软件感染的情况下，保持机密性的能力是一个需要分层解决的问题。分层方法首先从设备的软件架构和架构实现为起点。</p>
+<p>这种安全体系结构将依赖于技术构件来创建保护设备机密的安全信封。一些现代处理器包括为保护安全关键子系统而设计的执行模式。这些子系统允许高速执行应用程序代码，但可能容易受到软件bug的影响。TPM的功能可以使用这些子系统实现。专用TPM硬件可以提供更安全的加密操作和完整性检查。当与这些子系统和执行模式一起使用时，专用TPM可以证明应用程序代码和支持软件的完整性，同时为加密密钥和操作提供强大的安全性。</p>
+<h2 id="4-3-Protecting-Against-Hardware-Tampering"><a href="#4-3-Protecting-Against-Hardware-Tampering" class="headerlink" title="4.3 Protecting Against Hardware Tampering"></a>4.3 Protecting Against Hardware Tampering</h2><p>硬件篡改意味着攻击者在一段时间内对该设备进行物理控制。从广义上讲，硬件篡改可能发生在设备生命周期的三个不同时期中的任何一个时期：</p>
+<ol>
+<li><p><strong>在制造过程中</strong>。在这个模型中，攻击者可以在设计或制造过程中访问该设备。其结果是，该设备有了设备制造商和购买设备的客户所未知的特性和功能。这也应该包括这样一种可能性：攻击者将损害设备制造商供应商构建的组件，以损害目标设备。</p>
+</li>
+<li><p><strong>送货阶段</strong>。在这个模型中，当设备通过传递到客户所在地时，该攻击拦截该设备。其结果是该设备可能具有新的功能，预期的功能现在可能以未知的方式运行，并且可能已经从设备中添加、更改或删除了机密。</p>
+</li>
+<li><p><strong>在依照用户要求的部署和使用期间</strong>。在这个模型中，攻击者在设备的生产周期中获得对设备的访问权。再次，结果可能是设备不再像预期的那样工作，而且它的秘密可能被窃取或改变。</p>
+</li>
+</ol>
+<p>关于在设计和制造过程中的损害，客户应该与供应商就产品的安全设计生命周期和供应链安全这一主题进行认真的对话。在运输过程中的损害，这也是一个供应链的问题，但客户将不得不自行处理设备制造商和他的接货点之间的分销链。关于设备部署在客户网络时发生的侵害，客户有责任进行成本、业务和安全性之间的风险评估。并非所有的安全措施都是平等的。低风险评估授权的安全措施可以不那么健壮，但也不那么昂贵。高风险评估授权更安全、更昂贵的安全措施。</p>
+<p>是否适当的风险评估已经完成，通过4.3.1到4.3.3节回答。有效的数据安全的使命是使攻击者完成目标的成本大于收益。</p>
+<p>在这种常见的常识方法中考虑的一个复杂因素是设备在部署中的生命周期。工业控制系统可以在50年或更长时间内继续使用。汽车制造商计划汽车寿命30年。网络基础设施设备可以使用15年。从安全的角度来看，几年前天衣无缝的安全措施在今天看来今天可能漏洞百出。一个安全工程师实现安全的最佳方法就是使用模块化、可升级和可替代的方式。这使得设备制造商可以随着时间的推移替换过时的安全组件。</p>
+<p>OEMs（原始设备制造商）应该把这几个安全实践最佳准则牢记于心：</p>
+<ul>
+<li><p>禁止在设备文件或代码中硬编码秘密信息</p>
+</li>
+<li><p>禁止在发行产品中留后门或者是管理员账号</p>
+</li>
+<li><p>在发行产品中删除所有debug代码</p>
+</li>
+<li><p>禁止使用所有产品共享的秘密的安全设计。</p>
+</li>
+</ul>
+<p>下列一般性意见适用于4.3.1到4.3.3</p>
+<p>我们这里关注的是硬件篡改的问题，这意味着客户应该考虑在安全硬件中实现安全封装的解决方案，其中包括反篡改的安全措施。</p>
+<p>风险分析应提供必要的定义HSM（硬件安全模块）的大小和能力的信息。HS是屏蔽的NVRAM，用于为平台的保护一个或多个信任根。可能是安全信封必须大得多，更有能力。这种风险分析需要花费时间和资源来完成，但在不过度消费或在安全上花费不足的情况下，回报可能是可观的，同时还可以保护品牌免受作为安全实施失败的一部分的损害。</p>
+<p>基于硬件的安全信封可能只不过是一个通用的微处理器，它与设备中的其他处理隔离。安全信封是通过隔离设备上其他处理机密数据的处理来创建的。对于拥有该设备的攻击者来说，这是一个微不足道的阻碍。</p>
+<p>除了使用通用处理器之外，还有一些支持各种硬件特性的处理器，这些特性使攻击者更难在拥有物理设备的条件下破坏设备。使用硬件作为主要工具来抵抗篡改的特点使得HSM成为了对抗物理攻击的中流砥柱。大多数TPM芯片属于这一类。</p>
+<p>一些比较高端的防御手段可以使用一些吧硬件、固件和软件安全机制结合起来的HSM。这种保护方法是为了保护个人财务数据在智能卡上的存储和使用，以及保护机顶盒上的机密信息。</p>
+<h3 id="4-3-1-Protecting-the-Confidentiality-of-Data"><a href="#4-3-1-Protecting-the-Confidentiality-of-Data" class="headerlink" title="4.3.1 Protecting the Confidentiality of Data"></a>4.3.1 Protecting the Confidentiality of Data</h3><p>在这种情况下，安全设计的目标是：</p>
+<ul>
+<li><p>通过加密数据并用安全封装（security envelope）存储加密密钥，以保护静态的机密数据。</p>
+</li>
+<li><p>通过在安全信封内解密和处理机密数据来保护进程中的机密数据。一旦处理完成，机密数据必须重新加密，然后才能写入存储。</p>
+</li>
+</ul>
+<p>THSM旨在保护特定的小型机密，TPM就是一个实例，这包括一个密钥和一套具体使用这些密钥进行加密操作的一个指令集（如数字签名）。它不是为批量数据加密而设计的。尽管安全处理器模式可用于保护密钥和进行中的计算，但是如果大型子系统在隔离容器中运行，则实际安全性会降低，因为软件系统本身可能包含可利用的错误。</p>
+<p>为了保护静态的数据，客户应该考虑使用自加密存储硬件或基于软件的加密。自加密存储硬件具有高速加密批量数据的特定，并集成到存储设备控制器中。写入存储介质的数据在通过硬件加密引擎时被加密。当通过硬件加密引擎时，从设备读取的数据被解密。加密引擎以总线速度运行，用于加密和加密数据的密钥(called the Media Encryption Key or MEK)是不能从存储设备控制器导出。</p>
+<h3 id="4-3-2-Protecting-the-Integrity-of-Data"><a href="#4-3-2-Protecting-the-Integrity-of-Data" class="headerlink" title="4.3.2 Protecting the Integrity of Data"></a>4.3.2 Protecting the Integrity of Data</h3><p>有几种方法可以保护数据不受攻击，这种攻击意图执行未经授权的更改。一种是使用一次写入或只读存储保护。这种方法可以保证静止数据的完整性不可更改（取决于强制执行一次写入的硬件机制）。TPM支持少量的非易失性RAM，其特点是一次写。 <del>在TPM的NVRAM可以改变从一个到另一个芯片制造商。</del>它通常很小（10K字节）。</p>
+<p>对于更大容量的数据（例如可执行代码或文档存档），另一种保护机制是使用标准加密散列作为一种机制来验证感兴趣数据的持续完整性。在这个模型中，一组已知的善意文件会被计算哈希并被存储作为黄金准则（golden measurements）。在未来，该文件可以在任何时候重新哈希并和存储值比较。如果它们匹配，则数据的完整性没有改变。</p>
+<p>这种机制是识别未经授权的更改可执行文件和配置文件的一种方法。它还可以用来验证文档的完整性，它是保证数字签名文档完整性的基础。</p>
+<h3 id="4-3-3-Protecting-Computation-from-Tampering"><a href="#4-3-3-Protecting-Computation-from-Tampering" class="headerlink" title="4.3.3 Protecting Computation from Tampering"></a>4.3.3 Protecting Computation from Tampering</h3><p>恶意软件经常使用两种技术将自己插入目标平台。一个是修改内存中的代码。这种技术只能持续到重新启动系统。为了能在重启后存活下来，恶意软件必须使用第二种技术：修改文件。在上述4.3.2小节中，TPM可对重要文件和数据生成一个哈希测度并对其保护，然后生成一个数字签名报告（所谓完整性引用 [integrity <strong>quote</strong>]）的测量。完整性引用上的数字签名使用一个不能从TPM导出的密钥，因此他可以举证是哪个TPM（以及哪个设备）生成的报告。可以访问原始测度的外部实体可以将这些测度与所提供的报告进行比较，并确定有关设备上的代码是否已更改。</p>
+<p>检测设备中可执行代码的篡改的另一种方法是使用TPM作为创建软件完整性审计日志的一种方法。建立日志的方法是代码中的问题进行定期或散列。每个新的测量都被扩展到日志中。可以预测此历史日志的值（如果未作任何更改或已作出授权更改）。如果日志的当前值与预期值不匹配，则软件已被篡改。</p>
+<p>最后，对于在TPM中进行的计算攻击，不同供应商提供的TPM设备之间存在差异。一些供应商为TPM提供保护，这是对它们竞争的一种区分。如果防止篡改TPM所做的计算是很重要的，请与TPM供应商联系，看看他们能为产品提供什么帮助。</p>
+<h2 id="4-4-Confidentiality-Integrity-and-Availability-of-Data-at-Rest"><a href="#4-4-Confidentiality-Integrity-and-Availability-of-Data-at-Rest" class="headerlink" title="4.4 Confidentiality, Integrity, and Availability of Data at Rest"></a>4.4 Confidentiality, Integrity, and Availability of Data at Rest</h2><h3 id="4-4-1-Availability"><a href="#4-4-1-Availability" class="headerlink" title="4.4.1 Availability"></a>4.4.1 Availability</h3><p>物联网设备将采用只读和读写存储技术的混合，以存储对于操作至关重要的程序和数据。破坏性的恶意软件将试图破坏或删除可写状态，因此必须采取保护措施。简单的解决方案就是将所有物联网设备代码放入ROM中，但这将妨碍设备更新，一般不被接受。</p>
+<p>TCG定义了多种技术，寻求限制暴露于攻击对可写状态的可用性。一个关键的概念是RTU（更新信任根）。RTU是执行设备安全更新所需的最小功能。虽然没有明确说明在TCG规范，但是一个安全的minimal RTU都实现了检验加载软件的证书的RTU。NIST的文件[800-147]介绍了PC平台的固件更新，也适用于物联网设备的要求。</p>
+<p>平台还必须实现保护，确保只有RTU才能执行更新。TCG定义了一个家庭的存储控制器的技术称为” <strong>OPAL</strong> “，只有实体可以提供适当的认证写访问（如密码），存储区域才允许被解锁。 <del>一个支持OPAL的方案允许在早期引导区域写入操作，但允许RTU在将控件传递给（潜在的）不受信任的软件之前写入存储区域。</del> 密码如何管理不在TCG的规范中，但一种可能的技术是通过TPM确保只有正当的RTU才访问到正确的密码。</p>
+<h3 id="4-4-2-Confidentiality-and-Integrity"><a href="#4-4-2-Confidentiality-and-Integrity" class="headerlink" title="4.4.2 Confidentiality and Integrity"></a>4.4.2 Confidentiality and Integrity</h3><p>许多物联网设备将存储机密数据。其中一些数据可能是客户数据，有些可能是设备数据（例如确保更新安全的密钥）。这些数据受到来自两个来源的威胁：一个是恶意软件，它破坏了该设备，另一个是设备物理上的丢失、被盗或攻击。</p>
+<p>TCG提供许多技术允许设备制造商建立一些系统，可以对机密信息建立强有力的保护。上述的OPAL存储技术允许存储区不仅是写保护，而且可以配置，这样一来只有经授权的实体可以解锁读访问的存储区。常见实例是提供一个存储区，只能访问到操作系统启动之前（因为早期启动代码通常较小，比最后的运行系统更简单、更容易出现bug）。</p>
+<blockquote>
+<p>TPM是一个功能强大的设备，可以对设备数据进行保护。其中一种能力是一种非易失性存储功能：TPM实现复杂的授权模型的实体的情况下，数据可以被读取或写入。授权实体可以通过程序的哈希确定，第二秘密知识证明（可能是低熵，像针）、时间、软件配置等不幸的是大多数TPMS NV存储容量不大（也许千字节），但它通常是足够的保护认证证书（自加密驱动器）或加密键（软件FDE）。</p>
+</blockquote>
+<h2 id="4-5-Reselling-or-Decommissioning-a-Device"><a href="#4-5-Reselling-or-Decommissioning-a-Device" class="headerlink" title="4.5 Reselling or Decommissioning a Device"></a>4.5 Reselling or Decommissioning a Device</h2><p>由于转售或退役是设备生命周期的一个自然组成部分，设备制造商应该在设备设计中支持这些用例。一般来说，两个步骤是必要的：安全地删除任何敏感的用户数据，并重置设备回工厂设置，以便它可以配置新的所有者。如果使用TPM，可以利用TPM2_CLEAR命令释放所有权进行TPM。如果所有敏感数据都是用TPM中存储的密钥加密的，那么这些数据将不再可访问。现在市场上的所有自加密存储解决方案都支持一个命令来删除当前的MEK（主加密密钥）并生成一个新的密钥存储密钥。执行此命令时，存储设备上的所有数据都将永久丢失(所谓“加密擦除”）。该装置的新主人可以验证适当的软件加载使用4.2.1节中描述的技术设备，可以验证该装置已被重置该软件使用命令。然后，新的所有者将获得TPM的所有权，然后个性化设备。</p>
+<p>除了敏感的用户数据，许多物联网设备还将配备制造商或服务提供商的密钥。根据设备和服务的行为，这些密钥可能需要在物联网设备所有者的变化中幸存下来。TPM定义了不同的数据家族和相关的控件，以便用户可以授权清除所有用户数据，但只有设备制造商可以清除或重新提供表示基本设备标识的密钥。</p>
+<h2 id="4-6-Meeting-Cryptographic-Protocol-Requirements"><a href="#4-6-Meeting-Cryptographic-Protocol-Requirements" class="headerlink" title="4.6 Meeting Cryptographic Protocol Requirements"></a>4.6 Meeting Cryptographic Protocol Requirements</h2><p>如果设备制造商打算生产能够加密的设备，目标市场包括国家政府，那么就有被政府要求遵守有关如何进行加密的指导方针。这包括如何生成随机数，如何生成密钥，使用什么加密算法，密钥如何管理和保护，以及关于加密的许多其他细节。在许多情况下，不遵守这些指导方针意味着设备制造商的产品不会被国家政府购买。TPM 2规范包括支持真正的随机数生成、加密密钥生成、安全密钥存储、加密散列以及选择加密算法的非对称和对称加密。由于TPM 2是一个库规范，所以每个TPM平台概要文件都指定了这些特性中的哪些是必需的和可选的。TPM 2规范还支持一些可以在TPM中运行的算法的灵活性。参阅TPM算法注册[ algreg ]的选择范围。感兴趣的OEM厂商再次直接向TPM供应商社区了解TPM供应商已经进行了哪些安全性测试。一般来说，设备制造商仍然需要对设备进行合规性测试，其中一个兼容的TPM是一个部分。TPM在设备中的存在并不一定使设备安全。</p>
+<h2 id="4-7-Supporting-Multiple-Models-of-Provisioning"><a href="#4-7-Supporting-Multiple-Models-of-Provisioning" class="headerlink" title="4.7 Supporting Multiple Models of Provisioning"></a>4.7 Supporting Multiple Models of Provisioning</h2><p>物联网设备可以通过各种供应步骤在最终操作的过程中流动。步骤可以包括硅制造（包括TPMS），由设备制造商组装，（可能）的厂商设备的个性化，和终端客户的最终配置。有些设备还可以支持退役时清除配置和重新出售。并不是所有的物联网设备都有本地UI，这限制了设备注册和配置的策略。</p>
+<p>在本节中，我们只讨论设备密钥的提供和管理。一般来说，一旦一个key被提供出来了，那么这个key可以用来引导任意复杂的配置软件和状态。TPM可以是设备安全注册的强大设备，即使在外包设备生产线甚至远程物理位置等条件较差的情况下也是如此。</p>
+<p>TPMS称一个长时间存活的设备标识符为Endorsement Key。一个TPM的EK通常与TPM共存亡，并且可以作为一个物联网设备的身份基础。EK通常是公私密钥对，通常由TPM制造商认证。一旦管理机构知道设备的公钥，它就可以安全地执行各种各样的软件部署和配置步骤。TPM公共密钥与制造设备的关联通常是最具挑战性的步骤，但安全管理公钥数据库（可能具有证书以确保密钥的准确性）通常比秘密密钥的安全部署和管理容易得多。</p>
+<p>通常，原始设备制造商希望在设备制造过程中在每一个物联网设备中添加一个设备密钥，使授权设备能够在现场识别。如果没有TPM，这可能是一个痛苦的过程，需要在生产线的关键生产和插入过程的物理安全性。在每个设备上使用TPM，这个过程可以大大简化。每个TPM可以生成其装置的关键，利用TPM的EK来保证设备的安全性和有效性的关键。通过使用这一机制，同时控制发放设备的证书和许可证，可以防止生产线上的生产过剩和其他形式的欺诈。更详细的指导，对这一重要而复杂的课题将很快由TCG公布。</p>
+<p>TPM还可以用于安全地建立初始（或者晚些时候）固件/软件映像。如果一个器件实现measured boot，然后配置服务可以安全地建立设备的配置，然后装载该设备需要运行的软件。</p>
+<p>设备配置的最后步骤可能包括建立用户/客户特定的密钥。钥匙可以由最终客户提供加密密钥来保护客户数据的共享密钥，或提供共享密钥来允许所有客户的物联网设备和协调中心彼此识别和安全通信。TPM通过控制他们的生命周期的权威来区分用户和平台密钥。平台密钥生命周期由平台制造商控制，制造商可以选择永久密钥。TPM提供了额外的功能来为设备所有者创建密钥，只有所有者可以删除密钥。如果物联网设备启用了这种行为，则TPM支持用户控制的设备安全的个性化设置，以便安全地出售或退休。</p>
+<h2 id="4-8-Maintaining-Audit-Logs"><a href="#4-8-Maintaining-Audit-Logs" class="headerlink" title="4.8 Maintaining Audit Logs"></a>4.8 Maintaining Audit Logs</h2><p>物联网设备将越来越多地利用数据传感器，我们会发现我们越来越依赖于他们将产生的数据。由于物联网设备在不信任的Internet上进行通信，必须使用加密技术来保护设备所做的报告和声明。</p>
+<p>TPM可以用于签署设备statement，也可以用来创建像SSL这样的安全信道，在这个信道上可以进行statement流。TPM还集成了各种更先进的安全签名技术，可以防止网络或设备本身的其他攻击。例如，TPMS包括单调计数器。一个单调的计数器只能越来越大。物联网设备可以将单调计数值纳入其报告中，以防止重放和删除设备语句。</p>
+<p>TPM还包括一个安全时钟：虽然TPM上的时钟有着所有时钟通常都有的视线上的限制（例如是否总供电），但是在一个测量报告包含签名的时钟仍然保护TPM面授许多针对设备或数据流的攻击。</p>
+<p>最后，在实现measured boot的设备中的TPM也允许软件的标识使报告包含在有签名的报告中。这种能力被称为认证（ <strong>Attestation</strong> ），可以用来防止在一个对手的控制下运行的旧的和不可靠的软件，模仿新的和无bug的版本所做的报告。</p>
+<p>除了在线数据报告外，TPM还支持安全本地记录数据和信息。同样地，时钟/计时器和单调计数器可用于保护这些报告。</p>
+<h2 id="4-9-Remote-Manageability"><a href="#4-9-Remote-Manageability" class="headerlink" title="4.9 Remote Manageability"></a>4.9 Remote Manageability</h2><p>TPM规范的一个重点是定义保护机密的能力。原则上，任何小的数据单元都可以使用TPM进行保护。实际上，我们所说的秘密通常是密钥，无论是对称的还是非对称的。处理密钥的机构已经有一个管理基础设施来管理这些密钥。执行密钥管理有很多种方法。通常，这些工具都是基于中心的。当涉及到终端机的密钥管理时，我们通常谈论的是某种类型的客户机，而客户机依靠某种保护机制来确保该机密在设备上静止地存储时的机密性。</p>
+<p>密钥管理客户端或用户实现这种保护机制有几种常用方法：</p>
+<ul>
+<li>RSA的PKCS#11标准是常用的Linux中通过HSM保护与数字证书相关密钥的一种标准方法。PKCS也支持在Windows。</li>
+</ul>
+<ul>
+<li><p>微软的Cryptographic API（CAPI）及其后续人员在Windows环境下。</p>
+</li>
+<li><p>java的加密库包括加密服务提供程序（CSP）的支持，CSPs可以提供关键保护硬件安全模块的访问。</p>
+</li>
+</ul>
+<p>来自HSM（在这里指的就是TPM），我们有以下的堆栈：</p>
+<ul>
+<li>TPM规范定义了一个API，可以用来从TPM中请求保护服务。一个实体可以使用这个API来定义一个密码和访问控制，限制访问一个秘密的TPM规则保护。</li>
+</ul>
+<ul>
+<li><p>TCG定义TPM软件为“吧TPM的复杂性抽象化的API”。在Windows世界中，许多独立软件开发商提供的TSS专有的实现，包括可通过Windows CAPI访问TPM的一组接口。在Linux，IBM公开了一个Linux的TSS称为“Trousers”的实现。</p>
+</li>
+<li><p>对于PKCS#11用户，开放源码社区包括几个模块，可以调用Trousers。</p>
+</li>
+</ul>
+<h2 id="4-10-Securing-Legacy-Hardware"><a href="#4-10-Securing-Legacy-Hardware" class="headerlink" title="4.10 Securing Legacy Hardware"></a>4.10 Securing Legacy Hardware</h2><p>（略）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2017/08/06/信息安全-2017-8-6-doc4/" data-id="cjxo5e6ql003fz16d2pbxa88z" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/hash/">hash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/security/">security</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../25/大数据-2017-08-25-hadoopinaction/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          hadoop实战
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../05/信息安全-2017-8-5-doc3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">RIOT文档三</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2019/06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2019/05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

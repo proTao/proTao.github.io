@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>《Effective C++》第二部分：构造、析构、赋值运算 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="条款5：了解 C++ 默默编写并调用哪些函数提要 编译器可以暗自为 class 创建 default 构造函数、copy 构造函数、copy assignment 操作符、以及析构函数。  解释如果你自己没声明，编译器会为你声明拷贝构造函数、拷贝赋值运算符、默认构造函数和一个析构函数，所有这些函数都是 public 且 inline 的。 首先对于默认构造函数和析构，编译器生成他们其实主要是为了">
+<meta name="keywords" content="reading,C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Effective C++》第二部分：构造、析构、赋值运算">
+<meta property="og:url" content="https://protao.github.io/2019/05/07/C-2019-05-07-Effective-CPP-II/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="条款5：了解 C++ 默默编写并调用哪些函数提要 编译器可以暗自为 class 创建 default 构造函数、copy 构造函数、copy assignment 操作符、以及析构函数。  解释如果你自己没声明，编译器会为你声明拷贝构造函数、拷贝赋值运算符、默认构造函数和一个析构函数，所有这些函数都是 public 且 inline 的。 首先对于默认构造函数和析构，编译器生成他们其实主要是为了">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/cover/effcpp_cover.jpg">
+<meta property="og:updated_time" content="2019-07-04T04:09:43.696Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Effective C++》第二部分：构造、析构、赋值运算">
+<meta name="twitter:description" content="条款5：了解 C++ 默默编写并调用哪些函数提要 编译器可以暗自为 class 创建 default 构造函数、copy 构造函数、copy assignment 操作符、以及析构函数。  解释如果你自己没声明，编译器会为你声明拷贝构造函数、拷贝赋值运算符、默认构造函数和一个析构函数，所有这些函数都是 public 且 inline 的。 首先对于默认构造函数和析构，编译器生成他们其实主要是为了">
+<meta name="twitter:image" content="https://protao.github.io/img/cover/effcpp_cover.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-C-2019-05-07-Effective-CPP-II" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2019-05-07T07:23:51.000Z" itemprop="datePublished">2019-05-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/C/">C++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《Effective C++》第二部分：构造、析构、赋值运算
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/cover/effcpp_cover.jpg" alt></p>
+<h3 id="条款5：了解-C-默默编写并调用哪些函数"><a href="#条款5：了解-C-默默编写并调用哪些函数" class="headerlink" title="条款5：了解 C++ 默默编写并调用哪些函数"></a>条款5：了解 C++ 默默编写并调用哪些函数</h3><h4 id="提要"><a href="#提要" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>编译器可以暗自为 class 创建 <em>default</em> 构造函数、<em>copy</em> 构造函数、<em>copy assignment</em> 操作符、以及析构函数。</li>
+</ol>
+<h4 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h4><p>如果你自己没声明，编译器会为你声明拷贝构造函数、拷贝赋值运算符、默认构造函数和一个析构函数，所有这些函数都是 public 且 inline 的。</p>
+<p>首先对于默认构造函数和析构，编译器生成他们其实主要是为了自己使用。比如类含有虚函数时，自身的虚表要初始化，因此当程序员不写的时候，编译器需要自己弄出一个默认构造函数完成虚表的初始化。（其实在四种情况下编译器会声明默认构造函数，能不声明是编译器是不会干活的，比如当这些函数不会被调用的话，编译器就不会生成。但是这四种情况在这里不细说了，这个属于更高级的东西，我自己也没搞明白。）默认构造函数和析构函数还会调用自身的基类和非静态成员的构造和析构函数。</p>
+<a id="more"></a>
+<p>另外，编译器生成的析构函数是non-virtual的，除非基类中有 virtual 析构函数。【$$$\Rightarrow Item7$$$】</p>
+<p>对于拷贝构造函数，编译器版本单纯的对每一个非静态成员拷贝到目标对象。对于有构造函数的成员，比如<code>string</code>类型或者自定义类型，会调用其拷贝构造函数，而对于内置基本类型，会按位拷贝。</p>
+<p>对于拷贝赋值运算符，其行为与拷贝构造函数基本一样，但是要符合某些条件的时候，编译器才会生成。这里的条件指的是，如果类含有 reference 成员或者是 const 成员的话，编译器不会生成拷贝赋值运算符。原因在于，假设执行了<code>obj1 = obj2</code>，而对象内含有引用类型的话，编译器不知道该怎么处理引用类型的成员，C++ 不允许“让引用指向不同对象”，那不让obj1的引用转而去引用obj2中引用的对象，而是让obj1直接修改呢？也不合适，因为可能会影响其他该对象的引用或者指向该对象的指针，所以编译器索性不干这个麻烦事。另外，如果基类的拷贝赋值运算符是私有的，编译器也不会生成默认版本的拷贝赋值运算符。</p>
+<h3 id="条款6：若不想使用编译器自动生成的函数，就该明确拒绝"><a href="#条款6：若不想使用编译器自动生成的函数，就该明确拒绝" class="headerlink" title="条款6：若不想使用编译器自动生成的函数，就该明确拒绝"></a>条款6：若不想使用编译器自动生成的函数，就该明确拒绝</h3><h4 id="提要-1"><a href="#提要-1" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>为驳回编译器（暗中）自动提供的机能，可将相应的成员函数声明为 private 并且不予实现。使用 Uncopyable 这样的基类也是一种做法。</li>
+</ol>
+<h4 id="解释-1"><a href="#解释-1" class="headerlink" title="解释"></a>解释</h4><p>有的时候我们定义一些类，并希望其对象不能被复制，那么最好的情况就是让编译器检测是否有对象的复制行为发生，如果存在的话报告给我们。如果仅仅是放任不管是不能做到这一点的，因为如果有人调用拷贝构造，编译器会“自觉地把它生成出来”。因此我们要做的是，手动以 private 方式声明拷贝构造函数（以及拷贝赋值运算符），这样的话没有默认版本，而手动声明的版本又不能使用，漂亮！但是，还有一种情况我们没有考虑。因为，私有并不代表不可以使用，友元函数和成员函数是不受此限制的，那怎么办！？我们可以用一个小技巧，就是只声明，不定义，那么如果在友元或者成员函数中使用拷贝的话，就会得到一个“连接错误”。这个小 trick 甚至被用到了 C++ 自己的源码中，你想的到是哪里吗？答案是：<code>ios_base</code>、<code>basic_ios</code>还有<code>sentry</code>。</p>
+<p>但是，我们希望尽可能早的发现问题，有没有可能把上面的连接错误也放到编译期完成？答案是肯定的，这里给出了一种解法，就是使用 <strong>Uncopyable</strong> 的基类。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Uncopyable</span> &#123;</span></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	Uncopyable();</span><br><span class="line">	~Uncopyable();</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	Uncopyable(<span class="keyword">const</span> Uncopyable&amp;);</span><br><span class="line">	Uncopyable&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Uncopyable&amp;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Someclass</span> :</span> <span class="keyword">private</span> Uncopyable&#123;</span><br><span class="line">	<span class="comment">/*...*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后把它作为一个混入类就可以使其派生类完全不允许进行复制，并在编译期检测可能的错误，这会因为当编译器尝试对派生类手动生成拷贝构造函数的时候，会尝试使用基类的对应函数，然后被 private 标识符阻止。</p>
+<p>对于<code>Uncopyable</code>，有着“empty base class optimization”资格【$$$\Rightarrow Item7$$$】。它不一定要使用公有继承【$$$\Rightarrow Item32;39$$$】。而且他的析构函数不一定要是虚的【$$$\Rightarrow Item7$$$】。这些如果看不懂没关系，我们只需要记住，这个玩意通常可以很好的、符合我们预期的工作就行了。最后，<code>Boost</code>库中有个类似的东西叫<code>noncopyable</code>，我们也可以使用它。【$$$\Rightarrow Item55$$$】</p>
+<h3 id="条款7：为多态基类声明-virtual-析构函数"><a href="#条款7：为多态基类声明-virtual-析构函数" class="headerlink" title="条款7：为多态基类声明 virtual 析构函数"></a>条款7：为多态基类声明 virtual 析构函数</h3><h4 id="提要-2"><a href="#提要-2" class="headerlink" title="提要"></a>提要</h4><ol>
+<li><strong>polymorphic</strong>(多态的) base classes应该声明一个<strong>虚</strong>析构函数。如果一个类带有任何<strong>虚</strong>函数，他就应该拥有一个<strong>虚</strong>析构函数。</li>
+<li>类的设计目的如果不是作为基类使用，或不是为了具备多态性，就不该声明<strong>虚</strong>析构函数。</li>
+</ol>
+<h4 id="解释-2"><a href="#解释-2" class="headerlink" title="解释"></a>解释</h4><p>出于设计的角度考虑，我们定义基类来表现多态性是很常见的手段，具体使用时，经常用<code>Base* p = new Derived();</code>这种形式出现，即基类指针指向派生类对象。或者我们可能不是明确的 new 一个派生类对象，因为这样耦合性较强，我们可能使用一个工厂方法，比如<code>Base* p = Factory(some_param);</code>。【$$$\Rightarrow Item13;18$$$】</p>
+<p>这时我们就要注意了，这个基类已经有了多态性，多态性在 C++ 不出意外就是通过虚函数表现的，因此<code>Base</code>类中会有虚函数。这时就要注意了，如果我们是<code>Base</code>类的实现者，要确保<code>Base</code>类中存在虚析构函数。因为，在 C++ 标准中明确指出，当派生类对象通过基类指针删除的时候，如果基类不存在虚析构函数，那么结果未定义。通常会发生的情况就是，基类部分的资源可以正常释放，而派生类的析构函数不会执行，派生类的资源也不会释放。因此我们记住一个原则：<strong>任何类只要带有虚函数，就<em>几乎</em>确定应同时具有虚析构函数。</strong></p>
+<p>考虑到，如果基类不含有虚函数，通常表示它不意图用做基类，此时其析构函数最好不要是虚的。因为虚函数会使基类带有一个虚指针<code>vptr</code>指向虚表<code>vtbl</code>，这使得一些小类的体积会大幅增加。这带来两个问题：一、可能本来小类可以放入寄存器，体积增大后就不行了；二、此时 C++ 中该对象的结构和 C 中的声明不具有相同结构（虚表）了，可移植性也就没了。</p>
+<p>这个原则很简单，我们自己可能会不犯这个错误，但是使用别人的代码甚至标准库时，也要考虑到这些问题。比如，可能有些情况会继承 STL 中的 vector 得到自己的UserVector 类，此时如果我们用一个 vector 指针指向 UserVector，就会出现和上面一样的析构问题了。这里的分析不仅仅适用于 vector，所有不带虚析构函数的类都一样，包括所有的 STL 容器。这需要我们自己克制自己，因为 C++ 不像 Java 一样带有<code>final</code>关键字。</p>
+<p>有时我们只想定义接口的时候，会用到抽象类，即包含纯虚函数的类。如果没有合适的用于纯虚函数的候选函数，可以让虚析构函数成为纯虚的。注意此时，必须在实现时为该基类的纯虚函数提供一份定义。这是因为，派生类在析构的时候是自底向上的，编译器会自动在派生类的析构函数中调用基类的析构函数，因此要为纯虚函数加上一个定义，否则会链接失败。</p>
+<p>记住！带虚函数的类才要加上虚析构函数，因为本质上我们考虑的是多态性，这种类的目的就是“用基类的指针处理派生类”。如果不是用于多态的目的的基类就不要考虑本原则了，比如标准<code>string</code>和 STL 容器。还有一些混入类被设计用于基类，但不是用于多态，比如上一个条款中提到的<code>Uncopyable</code>，这种类也不需要虚析构函数。</p>
+<h3 id="条款8：别让异常逃离析构函数"><a href="#条款8：别让异常逃离析构函数" class="headerlink" title="条款8：别让异常逃离析构函数"></a>条款8：别让异常逃离析构函数</h3><h4 id="提要-3"><a href="#提要-3" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>析构函数绝对不要吐出异常。如果一个被析构函数调用的函数可能抛出异常，析构函数应该捕捉任何异常，然后吞下他们或者结束程序。</li>
+<li>如果客户需要对某个操作函数运行期间抛出的异常作反应，那么类应该提供一个普通函数（而非在析构函数中）执行该操作。</li>
+</ol>
+<h4 id="解释-3"><a href="#解释-3" class="headerlink" title="解释"></a>解释</h4><p>C++ 本身不禁止析构函数抛出异常，但是却不鼓励这么做。考虑这种情况，一个自定义类的析构函数假设可能抛出异常，那么如果我们有一个 vector 中存放了十个该类实例化出来的对象，那么在程序退出的时候或者退出作用域的时候，可能这些对象在析构时会一起抛出异常，程序此时会提前结束或者出现未定义行为。不只是 vector 其他标准库中的容器或者 TR1 中的容器甚至数组都有类似的问题。因此，不要在析构函数中抛出异常。【$$$\Rightarrow Item54$$$】</p>
+<p>那怎么办呢，假设我们在自己的类中维护了一个数据库连接<code>dbconn</code>作为自身的成员，这种涉及到资源的操作，总会有一些可能抛出异常，比如<code>close</code>操作。我们考虑到使用者可能忘记关闭，因此我们尝试在自定义类的析构函数中为用户<code>dbconn</code>的关闭。这其实就出现了上面的问题。解决的方式（其实也不算解决，只是一种处理思路），就是吧可能抛出异常的操作单独拿出来给用户，也就是说在自己的类中再写一个<code>close</code>函数，该函数负责对<code>dbconn</code>进行关闭，然后析构函数检查是否正确关闭，如果没有关闭再尝试关闭。哎！这不又在析构函数中处理了吗？没错，重点是析构函数不能抛出异常，但是析构函数自身是可以处理异常的，析构函数在执行<code>dbconn.close</code>时如果发生异常，就对其进行处理或者直接终止程序，只要不抛出就行。</p>
+<p>这么做的想法就是，我们把<code>close</code>的责任交给用户，用户如果不做，那么析构时我们就不管这么多了。</p>
+<p>说到这里，考虑一下 python 怎么处理类似的资源管理？我在之前做数据库相关的项目的时候就是对管理数据库连接的类实现了上下文管理协议，没有考虑在<code>__exit__</code>方法中出现异常怎么办……又看了一下<code>__exit__</code>自身会处理<code>with</code>语句块中发生的异常，但是在<code>__exit__</code>中发生的异常仍然需要自己处理。</p>
+<h3 id="条款9：决不在构造和析构过程中调用虚函数"><a href="#条款9：决不在构造和析构过程中调用虚函数" class="headerlink" title="条款9：决不在构造和析构过程中调用虚函数"></a>条款9：决不在构造和析构过程中调用虚函数</h3><h4 id="提要-4"><a href="#提要-4" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>在构造和析构期间不要调用虚函数，因为基类构造和析构期间，C++从不下降到派生类中。</li>
+</ol>
+<h4 id="解释-4"><a href="#解释-4" class="headerlink" title="解释"></a>解释</h4><p>当基类的目标是实现多态性时，自身一定具有虚函数，并且自身的派生类中含有该虚函数的不同版本。那么可能如果在基类的构造函数中执行这个虚函数（举例来说，这个虚函数是一个日志函数），然后执行<code>Base* p = new Derive1();</code>会怎么样呢？我们是实际构造的是派生类对象，在派生类中我们会先执行基类的构造函数，也就是说，当基类开始构造的时候，派生类特有的部分还没有初始化，假设此时虚函数动态的去执行派生类版本，那么就有可能使用到这些未经初始化的内容，这就违反了条款4。因此 C++ 索性在此时就放弃虚函数的能力，只执行基类自身的版本。说的正式一点就是：基类构造期间，虚函数不会下降到派生层。或者我们可以这么理解：基类构造的时候，虚函数不是虚的。</p>
+<p>除了派生成员未经初始化，更根本的原因在于，基类构造期间，对象的类型就是基类类型！这是因为此时派生类还没有构造，因此 C++ 就当做派生类不存在，此时及时使用动态类型检查<code>typeid</code>，也会得到对象类型是基类类型的结果。析构函数与此顺序相反，但是原因是一致的。</p>
+<p>如果基类的虚函数是纯虚的还好，因为执行时就会发生链接错误，但是如果是普通虚函数，就可能使程序正常运行并导致难以调试的错误。另外之前我们提到过，在多个构造函数中可以用一个自定义的<code>init</code>函数完成大部分重复工作，因此想<code>init</code>这种在构造期间执行的函数也要遵守本原则的约定。</p>
+<p>但是如果我们真的想在基类构造期间执行一点与派生类类型相关的动作怎么办！我们此时被限制了“在基类构造期间，C++不会下降到虚函数”，那么我们只好手动将信息从派生类送上基类所在的层。也就是让基类构造函数接受一些额外的参数，在派生类调用基类构造函数时，把参数送进去。这个参数可以使派生类通过函数生成的，那么这个信息生成函数必须是static的，因为此时派生类自身的成员还没有初始化，依旧不可以使用。</p>
+<h3 id="条款10：令-operator-返回一个-reference-to-this"><a href="#条款10：令-operator-返回一个-reference-to-this" class="headerlink" title="条款10：令 operator= 返回一个 reference to *this"></a>条款10：令 <code>operator=</code> 返回一个 <code>reference to *this</code></h3><h4 id="提要-5"><a href="#提要-5" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>令赋值操作符返回一个自身的引用。</li>
+</ol>
+<h4 id="解释-5"><a href="#解释-5" class="headerlink" title="解释"></a>解释</h4><p>赋值通常可以写为<code>a = b = c</code>的连锁形式，由于赋值运算符符合右结合律，因此前式被解释为<code>a = (b = c)</code>。因此为了让我们的赋值运算符也支持这种形式，赋值运算符要返回<code>*this</code>，因此后面假设还有赋值操作，他们接受的参数类型通常是<code>const T&amp;</code>。除了单纯的<code>operator=</code>，还有<code>operator+=</code>等非标准赋值操作符也要考虑到。</p>
+<p>这是一个 C++ 设计的协议，但不是标准。虽然没有强制性，我们依旧应该遵守他们。因为这份协议被所有的内置类型和标准程序库提供的类型如<code>string</code>、<code>vector</code>、<code>complex</code>、<code>tr1::shared_ptr</code>或即将提供的类型共同遵守。【$$$\Rightarrow Item54$$$】</p>
+<h3 id="条款11：在-operator-中处理“自我赋值”"><a href="#条款11：在-operator-中处理“自我赋值”" class="headerlink" title="条款11：在 operator= 中处理“自我赋值”"></a>条款11：在 <code>operator=</code> 中处理“自我赋值”</h3><h4 id="提要-6"><a href="#提要-6" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>确保当前对象“自我赋值”时，operator= 有良好行为。其中技术包括比较来源对象和目标对象的地址、精心周到的语句顺序以及“copy-and-swap”。</li>
+<li>确定任何函数如果操作一个以上的对象，而其中多个对象其实是同一个对象时，其行为仍然正确。</li>
+</ol>
+<h4 id="解释-6"><a href="#解释-6" class="headerlink" title="解释"></a>解释</h4><p>通常我们不会手动执行“自己等于自己”的这种奇葩操作的，但是，由于引用和指针的存在，我们可能无意间执行这种操作。</p>
+<p>如果遵守资源管理相关条款，我们会通过对象来管理资源，而且在可以确定“资源管理对象”在copy时有正确的举措时，那么我们的赋值操作符对于自赋值应该没问题。但是如果不通过对象来管理，而是自己管理的话，我们就要注意了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> &#123;</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;* p;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Widget&amp;</span><br><span class="line">Widget::<span class="keyword">operator</span>=(<span class="keyword">const</span> Widget&amp; rhs) &#123;</span><br><span class="line">	<span class="keyword">delete</span> p;</span><br><span class="line">	p = <span class="keyword">new</span> <span class="built_in">vector</span>(*rhs.p)</span><br><span class="line">	<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我也不需要解释，大家都能看明白这样的赋值操作符在自赋值发生时有什么问题：经过自赋值后，该对象的指针指向一个被删除的对象。为了解决该问题，方法大家也都可以想到，就是加上一个额外的测试<code>if(this = &amp;rhs) return *this;</code>即可。</p>
+<p>此时我们处理了“自赋值安全性”，但是没有处理“异常安全性”，异常安全性就是指当代码发生问题的时候，代码可以对异常进行很好的处理。这里会发生异常的地方就是<code>new</code>操作了（比如内存不足）。如果<code>new</code>操作异常，那么我们又把持有的指针指向的内存删除了，结果就是指针又指向了一块被删除的内存。解决方法就是，在获得新的指针之前不要删除旧的。通常我们集中精力解决了“异常安全性”，就会发现此时的代码已经可以带有“自赋值安全性”了。【$$$\Rightarrow Item29$$$】</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Widget&amp;</span><br><span class="line">Widget::<span class="keyword">operator</span>=(<span class="keyword">const</span> Widget&amp; rhs) &#123;</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;* old = p;	</span><br><span class="line">	p = <span class="keyword">new</span> <span class="built_in">vector</span>(*rhs.p)</span><br><span class="line">	<span class="keyword">delete</span> old;</span><br><span class="line">	<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，这段代码没有使用单独的测试语句依旧可以解决自赋值问题。我们可以考虑一下“自赋值”发生的可能性有多少，如果经常发生的话，我们依旧可以加上“自赋值测试”，因为此时的代码在自赋值时的无用操作很多，比如无用的拷贝构造与内存释放。但是如果发生的频率很小，那就不要加上单独的测试了，因为开头的“自赋值测试”，不但会使代码稍微大上一些，还会引入一个新的控制流，这会影响prefetching、caching 和 pipeline 的效率。</p>
+<p>这里对于自赋值的处理已经结束了，但是再提一句一个替代方案：“copy and swap”。该技术和“异常安全性”联系紧密。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Widget&amp;</span><br><span class="line">Widget::<span class="keyword">operator</span>=(<span class="keyword">const</span> Widget&amp; rhs) &#123;</span><br><span class="line">	Widget temp(rhs);	<span class="comment">// 如果该operator=的参数不是引用，而是直接传值，那么这句话都省了，因为传值会自动创建局部副本</span></span><br><span class="line">	swap(<span class="keyword">this</span>, temp);	<span class="comment">// 假装有这种交换函数</span></span><br><span class="line">	<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="条款12：复制对象时勿忘其每一个成分"><a href="#条款12：复制对象时勿忘其每一个成分" class="headerlink" title="条款12：复制对象时勿忘其每一个成分"></a>条款12：复制对象时勿忘其每一个成分</h3><h4 id="提要-7"><a href="#提要-7" class="headerlink" title="提要"></a>提要</h4><ol>
+<li>copy函数应该确保复制“对象内的所有成员变量”以及“所有的基类成分”。</li>
+<li>不要尝试以某个 copy 函数实现另一个 copy 函数。应该讲共同机能放到第三个函数中，并由两个 copy 函数共同调用。</li>
+</ol>
+<h4 id="解释-7"><a href="#解释-7" class="headerlink" title="解释"></a>解释</h4><p>有时我们觉得这些原则好简单啊，会觉得“我写拷贝构造函数时当然会每一个成员都进行拷贝了”。但是有时问题发生的场景是我们不经意的一些地方。举个例子，我们写好了一个类，然后我们突然接到需求，然后我们要加一个数据成员，注意了，即使之前的类都做得很棒，但是此时可能会有很多的条款被违背了。我们需要一一检查，如构造函数，拷贝构造函数、所有版本的赋值操作符（如<code>+=</code>）。假如忘了，编译器通常不会对这种问题进行警告。【$$$\Rightarrow Item53；4；45；10$$$】</p>
+<p>单纯的忘记修改拷贝构造函数会导致局部拷贝问题。然而该问题还有更隐蔽的版本：即被修改的类中继承了别的类。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span>:</span> <span class="keyword">public</span> A &#123;</span><br><span class="line">	B(<span class="keyword">const</span> B&amp; rhs);</span><br><span class="line">	B&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> B&amp; rhs);</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于一个这样的类，对于其拷贝构造函数，一定要手动调用其基类的构造函数（记住派生类的构造要手动处理基类部分的构造），否则编译器会自动调用基类的默认构造函数，这样对于基类部分就没有进行拷贝。对于<code>operator=</code>也是同理，要显式的调用基类的<code>operator=</code>，否则基类部分的成员会保持不变。对<code>operator=</code>的实现给出参考。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">B&amp;</span><br><span class="line">B::<span class="keyword">operator</span>=(<span class="keyword">const</span> B&amp; rhs) &#123;</span><br><span class="line">	A::<span class="keyword">operator</span>(rhs);	<span class="comment">//对基类部分进行赋值</span></span><br><span class="line">	a = rhs.a;		<span class="comment">//对派生类部分进行处理</span></span><br><span class="line">	<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>顺便提一下很简单的一点，就是派生类是访问不了基类的私有成员的，只有通过基类自己的函数才可以。因此，派生类要做的就是别忘了调用基类的函数，基类部分的正确性由基类自己保证。</p>
+<p>在写拷贝构造函数和拷贝赋值运算符的时候，可能会发现大部分的代码会有重复，那我们又会闻到“坏味道”了。但是此处不能用条款三中使用到的“代理技巧”来应用到这里。因为拷贝构造函数的目的是“构建一个新的对象”，而拷贝赋值运算符的目的是修改一个已有的变量，二者的应用场景不同，因此不可以混用。解决方法和条款四中用到的小技巧类似：将二者共有部分移至一个新的函数中，并由二者共同调用。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2019/05/07/C-2019-05-07-Effective-CPP-II/" data-id="cjxo5e6ou002lz16d63nuhi69" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../08/Python-2019-05-08-SICP3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用python制作logo解释器
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../04/17/Python-2019-04-17-PythonCookbook12/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python Cookbook3 (12) 并发编程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

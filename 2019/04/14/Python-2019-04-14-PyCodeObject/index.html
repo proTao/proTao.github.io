@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>python中的字节码对象初探 | proTao的大脑具现</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一.代码对象每个初学python的人都会认为python是一种解释型语言，这个不能说错。但是python并不是真的对执行的python代码的每一行进行解释，虽然我们有一个所谓的“解释器”。实际上对于运行的文件，python会使用虚拟机对运行的文件编译成字节码，然后虚拟机会对产生的字节码进行解释。而编译语言则会编译出适用于x86、ARM等的指令2（作用于真正的机器）的语言。“解释性”语言不是根本就">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python中的字节码对象初探">
+<meta property="og:url" content="https://protao.github.io/2019/04/14/Python-2019-04-14-PyCodeObject/index.html">
+<meta property="og:site_name" content="proTao的大脑具现">
+<meta property="og:description" content="一.代码对象每个初学python的人都会认为python是一种解释型语言，这个不能说错。但是python并不是真的对执行的python代码的每一行进行解释，虽然我们有一个所谓的“解释器”。实际上对于运行的文件，python会使用虚拟机对运行的文件编译成字节码，然后虚拟机会对产生的字节码进行解释。而编译语言则会编译出适用于x86、ARM等的指令2（作用于真正的机器）的语言。“解释性”语言不是根本就">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://protao.github.io/img/python_cover1.jpg">
+<meta property="og:updated_time" content="2019-05-09T12:06:29.104Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python中的字节码对象初探">
+<meta name="twitter:description" content="一.代码对象每个初学python的人都会认为python是一种解释型语言，这个不能说错。但是python并不是真的对执行的python代码的每一行进行解释，虽然我们有一个所谓的“解释器”。实际上对于运行的文件，python会使用虚拟机对运行的文件编译成字节码，然后虚拟机会对产生的字节码进行解释。而编译语言则会编译出适用于x86、ARM等的指令2（作用于真正的机器）的语言。“解释性”语言不是根本就">
+<meta name="twitter:image" content="https://protao.github.io/img/python_cover1.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <meta name="baidu-site-verification" content="xerEdoxBbf">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['\\(','\\)'],['$$$','$$$'],['$','$']]}
+});
+</script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">proTao的大脑具现</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">home</a>
+        
+          <a class="main-nav-link" href="../../../../archives">archives</a>
+        
+          <a class="main-nav-link" href="../../../../about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://protao.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+
+<article id="post-Python-2019-04-14-PyCodeObject" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2019-04-13T16:00:00.000Z" itemprop="datePublished">2019-04-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/python/">python</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      python中的字节码对象初探
+    </h1>
+  
+ 
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/python_cover1.jpg" alt></p>
+<h2 id="一-代码对象"><a href="#一-代码对象" class="headerlink" title="一.代码对象"></a>一.代码对象</h2><p>每个初学python的人都会认为python是一种解释型语言，这个不能说错。但是python并不是真的对执行的python代码的每一行进行解释，虽然我们有一个所谓的“解释器”。实际上对于运行的文件，python会使用虚拟机对运行的文件编译成字节码，然后虚拟机会对产生的字节码进行解释。而编译语言则会编译出适用于x86、ARM等的指令2（作用于真正的机器）的语言。“解释性”语言不是根本就没有编译器，而只编译成一个中间表示，比如字节码。字节码的指令不是作用于任何硬件的，而是虚拟机。</p>
+<p>其实更准确的说法应该是“python是一种动态语言”。而这种动态性也是难以优化Python的原因之一：在编译代码对象和生成字节码的时候，你并不知道会有怎样的结果。编译器根本不关心结果如何。由于不用声明类型信息，几乎每个指令都要像INVOKE_ARBITRARY_METHOD一样来执行。尽管“编译”和“解释”的定义在通常情况下是很难区分的，但是对于Python来说却很简单。编译工作就是生成代码对象，包括字节码。而翻译的工作就是翻译字节码，执行指令。Python保持“动态”特性的原因之一就是同样的字节码能够有不同的作用。更普遍的说法就是Python解释器的工作比编译器的多一些。</p>
+<a id="more"></a>
+<p>这个编译出的字节码是静态分析的结果，因此只要代码相同编译出的字节码就会相同，因此如果对于同样的字节码，重复编译是没有必要的，因此python会对符合一定规则的python文件（通常可以认为是被import的文件）编译出字节码并缓存下来，这个就是pyc文件。而pyc文件中存放的就是字节码，准确的说是编译出的<code>PyCodeObject</code>。</p>
+<p><strong>python是的作用域规则是静态作用域</strong>。这个一定要好好理解，所谓的静态作用域其实就是<strong>词法作用域</strong>，这个是作用域规则是导致闭包的根本原因，简单地说，静态作用域就是指变量的作用域只与其出现在代码的位置有关，是可以静态判断的，与运行时环境没有关系。体现在代码对象中，这个规则反映为每一个Code Block都会编译为一个<code>PyCodeObject</code>。</p>
+<p>这里的疑问是，我们已经知道，python的for循环不会导致局部作用域的产生，控制流产生的代码块会产生单独的<code>PyCodeObject</code>吗？这个问题容易回答，控制流是不会导致局部作用域生成的，那么控制流也不会导致新的<code>PyCodeObject</code>的生成。只需要记住一个简单的规则，只有进入一个新的名字空间的时候，才算进入一个新的Code Block，才会导致一个<code>PyCodeObject</code>的生成。比如一个类或者一个函数，都会导致生成一个新的<code>PyCodeObject</code>。</p>
+<p>而结合上面的说法，我们应该可以理解，所谓的一个作用域对应一个名字空间的说法。名字空间是符号的<strong>上下文环境</strong>，名字空间持有名字与值的绑定，而作用域是一块代码区域，代码区域引用名字、访问变量时，作用域与命名空间之间就有了联系。名字的作用域是指名字可以影响到的代码文本区域，名字空间的作用域就是这个名字空间可以影响到的代码文本区域。那么也存在这样一个代码文本区域，多个命名空间可以影响到它。作用域只是文本区域，其定义是静态的；而名字空间却是动态的，只有随着解释器的执行，命名空间才会产生。那么，在静态的作用域中访问动态命名空间中的名字，造成了作用域使用的动态性。在一定程度上，可以认为动态的作用域就是命名空间。</p>
+<p>每一个Code Block都对应一个名字空间，并存在于一个<code>PyCodeObject</code>中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Bytecode object */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    PyObject_HEAD</span><br><span class="line">    <span class="keyword">int</span> co_argcount;        <span class="comment">/* #arguments, except *args */</span></span><br><span class="line">    <span class="keyword">int</span> co_nlocals;     <span class="comment">/* #local variables */</span></span><br><span class="line">    <span class="keyword">int</span> co_stacksize;       <span class="comment">/* #entries needed for evaluation stack */</span></span><br><span class="line">    <span class="keyword">int</span> co_flags;       <span class="comment">/* CO_..., see below */</span></span><br><span class="line">    PyObject *co_code;      <span class="comment">/* 字节码指令序列 */</span></span><br><span class="line">    PyObject *co_consts;    <span class="comment">/* Code Block中的所有常量元组 */</span></span><br><span class="line">    PyObject *co_names;     <span class="comment">/* Code Block中的所有符号元组 */</span></span><br><span class="line">    PyObject *co_varnames;  <span class="comment">/* 局部变量名集合 */</span></span><br><span class="line">    PyObject *co_freevars;  <span class="comment">/* tuple of strings (free variable names) */</span></span><br><span class="line">    PyObject *co_cellvars;      <span class="comment">/* 内部嵌套函数引用的局部变量名集合 */</span></span><br><span class="line">    <span class="comment">/* The rest doesn't count for hash/cmp */</span></span><br><span class="line">    PyObject *co_filename;  <span class="comment">/* py文件的路径 */</span></span><br><span class="line">    PyObject *co_name;      <span class="comment">/* Code Block的名字，通常是函数名或者类名 */</span></span><br><span class="line">    <span class="keyword">int</span> co_firstlineno;     <span class="comment">/* 在对应的py文件中的起始行号 */</span></span><br><span class="line">    PyObject *co_lnotab;    <span class="comment">/* 字节码指令与py文件中的源码行号之间的关系 */</span></span><br><span class="line">    <span class="keyword">void</span> *co_zombieframe;     <span class="comment">/* for optimization only (see frameobject.c) */</span></span><br><span class="line">    PyObject *co_weakreflist;   <span class="comment">/* to support weakrefs to code objects */</span></span><br><span class="line">&#125; PyCodeObject;</span><br></pre></td></tr></table></figure>
+<p>PyCodeObject是C级别的对象，对该对象也提供了python实现级别的对象，可以使用如下方式使用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">filename = <span class="string">"xxx.py"</span></span><br><span class="line"><span class="keyword">with</span> open(filename) <span class="keyword">as</span> f:</span><br><span class="line">    source = f.read()</span><br><span class="line">co = compile(source, filename, <span class="string">"exec"</span>)</span><br><span class="line">type(co)</span><br><span class="line">dir(co)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> dis</span><br><span class="line">dis.dis(co) <span class="comment"># 编译为字节码</span></span><br></pre></td></tr></table></figure>
+<p>上述代码展示了如果在python解释器中获取指定文件编译出的字节码对象。一个源码文件中通常会定义多个函数，前面我们提到一个函数会产生一个新的<code>PyCodeObject</code>，但是上述代码显示我们只拿到了一个<code>PyCodeObject</code>对象，那么这个Python文件中的函数对应的其他<code>PyCodeObject</code>对象在哪？我们很容易想到<code>PyCodeObject</code>对象是一个嵌套结构，因为代码的Code Block本身就是嵌套结构的，而子<code>PyCodeObject</code>对象就嵌套在父<code>PyCodeObject</code>的<code>co_consts</code>属性中。此时的<code>PyCodeObject</code>中并没有存储名字和值的对应，因为这种对应是属于“动态信息”。在<code>co_consts</code>和<code>co_names</code>中存储的都是名字和常量构成的元组。</p>
+<p>假设我们有一个文件真的叫<code>xxx.py</code>，文件的内容如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># xxx.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    a = <span class="number">5</span></span><br><span class="line">    b = <span class="number">2</span></span><br><span class="line">    print(<span class="string">'hello'</span>, a, b)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = A()</span><br><span class="line">func()</span><br></pre></td></tr></table></figure></p>
+<p>对这一段代码运行上述生成<code>PyCodeObject</code>与编译的代码片，可以得到结果如下。要知道的是<code>dis</code>模块是反汇编工具，这个工具是python自己用不到的，因为反汇编是面向程序员的，机器只需要读取字节码的字节表示的数字就可以，程序员才需要将其转换为可读的指令名称。在下面展示的结果中，第一列是源码对应的行号，第二列是字节码的偏移量，然后是字节指令的名称。第四列是参数本身，举例来说，下面代码中的第一个<code>LOAD_CONST</code>会在当前字节码对象的<code>co_consts</code>表中搜索第0个元素，然后读取到的结果展示在后面的括号中，是一个code对象，然后这个LOAD指令会将读取到的内容压栈。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"> 1           0 LOAD_BUILD_CLASS</span><br><span class="line">             1 LOAD_CONST               0 (&lt;code object A at 0x7fae201a7300, file <span class="string">"test.py"</span>, line 1&gt;)</span><br><span class="line">             4 LOAD_CONST               1 (<span class="string">'A'</span>)</span><br><span class="line">             7 MAKE_FUNCTION            0</span><br><span class="line">            10 LOAD_CONST               1 (<span class="string">'A'</span>)</span><br><span class="line">            13 CALL_FUNCTION            2 (2 positional, 0 keyword pair)</span><br><span class="line">            16 STORE_NAME               0 (A)</span><br><span class="line"></span><br><span class="line"> 5          19 LOAD_CONST               2 (&lt;code object func at 0x7fae201a7150, file <span class="string">"test.py"</span>, line 5&gt;)</span><br><span class="line">            22 LOAD_CONST               3 (<span class="string">'func'</span>)</span><br><span class="line">            25 MAKE_FUNCTION            0</span><br><span class="line">            28 STORE_NAME               1 (func)</span><br><span class="line"></span><br><span class="line">11          31 LOAD_NAME                0 (A)</span><br><span class="line">            34 CALL_FUNCTION            0 (0 positional, 0 keyword pair)</span><br><span class="line">            37 STORE_NAME               2 (a)</span><br><span class="line"></span><br><span class="line">12          40 LOAD_NAME                1 (func)</span><br><span class="line">            43 CALL_FUNCTION            0 (0 positional, 0 keyword pair)</span><br><span class="line">            46 POP_TOP</span><br><span class="line">            47 LOAD_CONST               4 (None)</span><br><span class="line">            50 RETURN_VALUE</span><br></pre></td></tr></table></figure>
+<p>可以发现对于<code>class A</code>和<code>def func</code>这两行代码生成的字节码，都是在最后通过<code>STORE_NAME</code>将类名或者函数名进行存储。</p>
+<hr>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li>Python源码剖析（陈孺）</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://protao.github.io/2019/04/14/Python-2019-04-14-PyCodeObject/" data-id="cjxo5e6pz0035z16d491l18u1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../16/Python-2019-04-16-PyEval/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          python虚拟机中的一般表达式
+        
+      </div>
+    </a>
+  
+  
+    <a href="../Python-2019-04-15-PyFrameObject/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python中的字节码对象初探</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C++</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/python/">python</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/信息安全/">信息安全</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/大数据/">大数据</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/数学/">数学</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/机器学习/">机器学习</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/生活/">生活</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/程序员的玩具/">程序员的玩具</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/读书笔记/">读书笔记</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/C/">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/algorithm/">algorithm</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/bigdata/">bigdata</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/database/">database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/dataprocessing/">dataprocessing</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/deeplearning/">deeplearning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/financing/">financing</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/generative/">generative</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hadoop/">hadoop</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hash/">hash</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/linux/">linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/machinelearning/">machinelearning</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/maths/">maths</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/model/">model</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/nlp/">nlp</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/python/">python</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/reading/">reading</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/security/">security</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/shell/">shell</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spark/">spark</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/spider/">spider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/tools/">tools</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/translation/">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/trick/">trick</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/web/">web</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/C/" style="font-size: 17.69px;">C++</a> <a href="../../../../tags/algorithm/" style="font-size: 19.23px;">algorithm</a> <a href="../../../../tags/bigdata/" style="font-size: 15.38px;">bigdata</a> <a href="../../../../tags/database/" style="font-size: 10px;">database</a> <a href="../../../../tags/dataprocessing/" style="font-size: 12.31px;">dataprocessing</a> <a href="../../../../tags/deeplearning/" style="font-size: 13.85px;">deeplearning</a> <a href="../../../../tags/financing/" style="font-size: 11.54px;">financing</a> <a href="../../../../tags/generative/" style="font-size: 12.31px;">generative</a> <a href="../../../../tags/hadoop/" style="font-size: 12.31px;">hadoop</a> <a href="../../../../tags/hash/" style="font-size: 12.31px;">hash</a> <a href="../../../../tags/hbase/" style="font-size: 10px;">hbase</a> <a href="../../../../tags/linux/" style="font-size: 13.85px;">linux</a> <a href="../../../../tags/machinelearning/" style="font-size: 16.92px;">machinelearning</a> <a href="../../../../tags/maths/" style="font-size: 16.15px;">maths</a> <a href="../../../../tags/model/" style="font-size: 11.54px;">model</a> <a href="../../../../tags/mysql/" style="font-size: 10px;">mysql</a> <a href="../../../../tags/nlp/" style="font-size: 14.62px;">nlp</a> <a href="../../../../tags/numpy/" style="font-size: 10px;">numpy</a> <a href="../../../../tags/python/" style="font-size: 18.46px;">python</a> <a href="../../../../tags/reading/" style="font-size: 20px;">reading</a> <a href="../../../../tags/scala/" style="font-size: 10px;">scala</a> <a href="../../../../tags/security/" style="font-size: 13.85px;">security</a> <a href="../../../../tags/shell/" style="font-size: 13.08px;">shell</a> <a href="../../../../tags/spark/" style="font-size: 10.77px;">spark</a> <a href="../../../../tags/spider/" style="font-size: 10px;">spider</a> <a href="../../../../tags/tools/" style="font-size: 17.69px;">tools</a> <a href="../../../../tags/translation/" style="font-size: 10.77px;">translation</a> <a href="../../../../tags/trick/" style="font-size: 12.31px;">trick</a> <a href="../../../../tags/web/" style="font-size: 11.54px;">web</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/05/">五月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/04/">四月 2019</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/03/">三月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/02/">二月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/11/">十一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/10/">十月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/09/">九月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/08/">八月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/07/">七月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">六月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">五月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/04/">四月 2018</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/11/">十一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/10/">十月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/08/">八月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/07/">七月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/06/">六月 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2017/03/">三月 2017</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../06/17/生活-2019-06-17-GTD/">《搞定I——无压工作的艺术》</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/26/C-2019-05-26-Effective-CPP-IV/">《Effective C++》第四部分：设计和声明</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/17/C-2019-05-17-Effective-CPP-III/">《Effective C++》第三部分：资源管理</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/10/机器学习-2019-05-10-alchemy-trick/">仓鼠一般搜集到的炼丹技巧</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/08/Python-2019-05-08-SICP2/">Python中使用函数构建对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+
+  </span>
+</aside>
+
+        
+      </div>
+      <footer id="footer">
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Yongtao Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
