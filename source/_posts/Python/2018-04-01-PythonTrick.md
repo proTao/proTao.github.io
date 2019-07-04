@@ -1,13 +1,16 @@
 ---
 layout: post
 date: 2018-04-01
-title: Python Trick
+title: 仓鼠一样收集到的python技巧
 category: python
 tags: 
 - python
+- trick
 keywords:
 description:
 ---
+
+![](/img/cover/hamster3.jpeg)
 
 ### 1. format_map函数
 print("我叫{name},我今年{age}岁了".format_map(dict(name="张勇涛",age=15)))
@@ -20,6 +23,8 @@ flush=False(对文件有用，默认在文件关闭时flush)
 
 ### 3. 协程
 TODO
+
+<!-- more -->
 
 ### 4. python的字典键
 a={True:'a',1:'b',1.0:'c'}
@@ -107,7 +112,7 @@ class A:
 
 
 ### 7. 区分函数作用域与闭包
-参考[Python五个知识点搞定作用域](python.jobbole.com/86465)
+参考[Python五个知识点搞定作用域](http://python.jobbole.com/86465)
 ```python
 a = 1
 def f1():

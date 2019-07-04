@@ -87,4 +87,5 @@ deploy:
   repo: git@github.com:protao/protao.github.io.git #github仓库地址
   branch: master # github分支
 
-
+# bonus
+busuanzi: true

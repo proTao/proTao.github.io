@@ -39,7 +39,9 @@ description:
 这二者的效率均不能满足在基于游走的图表示学习方法中的优化需求,实际的随机游走算法中使用的是Alias Method。Alias Method结合了上述两种方法的各自优势。最终的效果是，使用一次离散均匀分布采样级联一次伯努利分布采样来等效进行一次多项（Multinoulli）分布的采样。基本思路是，首先进行一次均匀多项分布采样决定本次测试取值，由于各个可能的取值等概率，因此这一操作的时间复杂度是常数级。然后进行一个有偏的伯努利分布采样来决定被测试的取值是否生成。
 
 
-![](/img/alias_method3.png)![](/img/alias_method4.png)
+![](/img/alias_method3.png)!
+
+[](/img/alias_method4.png)
 
 该步操作的时间复杂度同样是常数级。如上图所示，图（a）是Alias Method的基本思想，根据图示在此实际举例说明生成过程。第一步在 $$$O\left(1\right)$$$的时间复杂度内“掷出骰子”随机选择了B，然后“翻转不规则硬币”得到反面，则意味着本次生成失败，沿图中“If Get Negative Bernoulli”的路径返回，重复上述过程。假设本次“掷骰子”选择了C并且“扔硬币”步骤得到正面，那么生成成功，则另随机变量取值C，结束算法。注意，直观的观察图（a）中的概率表则发现大部分区域为代表Bernoulli分布Nagetive的区域，这会导致采样失败的概率很高。注意到每次Bernoulli采样中的参数是相对值，不一定要等于原始多项分布的概率，因此可以对其进行缩放，如图（b）所示。最佳的缩放因子是多项分布中的最大的概率值，本例以0.4作为缩放因子。改进后成功概率大幅提高，对于可能取值越多的多项分布越明显，然而，依然存在持续失败的可能行。我们可以计算其成功的概率。
 
@@ -82,3 +84,6 @@ $$
 2. [alias method](https://en.wikipedia.org/wiki/Alias_method)
 3. [Darts, Dice, and Coins: Sampling from a Discrete Distribution](http://www.keithschwarz.com/darts-dice-coins/)
 4. [Alias Method离散分布随机取样（带python实现）](http://shomy.top/2017/05/09/alias-method-sampling/)
+5. [OpenNE中的实现](https://github.com/thunlp/OpenNE/blob/master/src/openne/walker.py)
+6. [【数学】时间复杂度O(1)的离散采样算法—— Alias method/别名采样方法](https://blog.csdn.net/haolexiao/article/details/65157026)
+7. [The Alias Method: Efficient Sampling with Many Discrete Outcomes](http://lips.cs.princeton.edu/the-alias-method-efficient-sampling-with-many-discrete-outcomes/)
