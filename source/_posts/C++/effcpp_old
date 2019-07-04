@@ -1,3 +1,21 @@
+<<<<<<< HEAD:source/_posts/C++/effcpp_old
+=======
+
+---
+layout: post
+date: 2019-01-07 15:23:51
+title: 《Effective C++》备忘录
+category: 读书笔记
+tags:
+- reading
+- C++
+keywords:
+description:
+---
+
+## 从 C 转向 C++。
+C 是一种简单的语言。它真正提供的只有有宏、指针、结构、数组和函数。不管什么问题,C 都靠宏、指针、结构、数组和函数来解决。而 C++不是这样。
+>>>>>>> 0510612538e1dc6dbbed379149fa49f5f720aae2:source/_posts/Reading/2019-01-07-Effective-CPP.md
 
 
 - 条款 2 : 尽量用`<iostream>`而不用`<stdio.h>`
