@@ -52,7 +52,7 @@ f(ill_m, 0.01)
 f(ill_m, 0.001)
 ```
 对于 Hessian 矩阵，它的条件数衡量了这些二阶导数的变化范围当 Hessian 的条件数很差时，梯度下降法也会表现得很差。这是因为一个方向上的导数增加得很快,而在另一个方向上增加得很慢,可是梯度下降却不知道导数的这种变化，所以它不知道应该优先探索导数长期为负的方向，而不是梯度当前最小但是却会快速增加的方向。病态条件也导致很难选择合适的步长。步长必须足够小,以免冲过最小而向具有较强正曲率的方向上升。这通常意味着步长太小,以致于在其他较小曲率的方向上进展不明显。
-![](../img/BadGD.png)
+![](/img/BadGD.png)
 在上图中，就是经典的GD算法表现不好的“峡谷场景”，如果可以利用Hessian矩阵，我们会得到$$$g^THg$$$是一个较大的正数，这意味着一阶拟合的效果很不好，二阶项告诉我们在当前方向上函数要比一阶项预测的大，所以Hessian可以告诉我们当前方向不是最好的方向。
 
 ### 1.3 基于梯度的优化方法
@@ -108,15 +108,15 @@ $$L(x,\lambda)=\frac12||Ax-b||^2+\lambda(x^Tx-1)$$
 
 #### 2.2.1 病态
 Hessian矩阵的病态性之前也提到，这里再次进行详细说明，Hessian如果条件数很大，即使不考虑误差，这样的Hessian矩阵也意味着梯度下降会卡在峡谷区域。为了解决这个问题，我们分别检测代价函数泰勒展开的一阶项 $$$\epsilon g^Tg$$$ 和二阶项 $$$\frac12\epsilon^2g^THg$$$ 。当二阶项超过一阶项的时候，意味着可能会出现问题，因为目标函数可能不降反增。很多情况下，梯度的范数不会显著缩小，但是 $$$g^THg$$$ 的增长会超过一个量级。其结果是尽管梯度很强,学习会变得非常缓慢,因为学习率必须收缩以弥补更强的曲率。
-![](../img/GradientNorm.png)
-![](../img/SaddleGradient.png)
+![](/img/GradientNorm.png)
+![](/img/SaddleGradient.png)
 
 #### 2.2.2 局部极小
 对于深度学习，我们会说模型的函数是非凸函数，可能存在局部极小的问题。这个问题是这样的，对于深度学习，一定存在局部极小值，因为**模型的可辨识性问题**，我们简单的交换隐层变量可以得到一个完全一样的模型，这种不可辨识性称为**权重空间对称性**，这意味着我们的特征变化函数其实具有高度的**高维对称结构**。
 
 但是这种局部极小不是困扰我们的问题，因为这些局部极小具有一样的函数值。而且对于超高维空间来说，局部极小意味着Hessian正定，这通常非常困难，我们即使找到梯度为零的点，也基本上是遇到了鞍点。但是每一个特征值为正的概率不是固定的，当我们的损失函数值越小的时候，我们的Hessian中约有较大的可能有正的特征值。
 
-![](../img/ErrorAndEigenvalues.png)
+![](/img/ErrorAndEigenvalues.png)
 
 而且一些Paper在某些方向上对随时函数进行可视化，比如初始点和最终点连接的方向上，发现损失函数在这些方向上性质很好，通常是表现为凸的。	
 
@@ -131,17 +131,17 @@ Hessian矩阵的病态性之前也提到，这里再次进行详细说明，Hess
 ### 3.1 基本算法
 
 #### 3.1.1 SGD
-![](../img/Optimization-SGD.png)
+![](/img/Optimization-SGD.png)
 
 #### 3.1.2 Momentum
 
 动量方法 (Polyak, 1964) 旨在加速学习,特别是处理高曲率、小但一致的梯度,或是带噪声的梯度。动量算法积累了之前梯度指数级衰减的移动平均,并且继续沿该方向移动。
 
-![](../img/Optimization-Momentum.png)
+![](/img/Optimization-Momentum.png)
 
 #### 3.1.3 Nesterov
 
-![](../img/Optimization-Nesterov.png)
+![](/img/Optimization-Nesterov.png)
 在凸批量梯度的情况下，Nesterov动量将额外误差收敛率降低到$$$O(1/k^2)$$$，可惜在随机梯度下，该算法没有明显改进收敛率。
 
 ### 3.2 自适应学习率
@@ -149,20 +149,20 @@ Hessian矩阵的病态性之前也提到，这里再次进行详细说明，Hess
 #### 3.2.1 Adagrad
 独立地适应所有模型参数的学习率,缩放每个参数反比于其所有梯度历史平方值总和的平方根 (Duchi et al., 2011)。具有损失最大偏导的参数相应地有一个快速下降的学习率,而具有小偏导的参数在学习率上有相对较小的下降。净效果是在参数空间中更为平缓的倾斜方向会取得更大的进步。
 
-![](../img/Optimization-Adagrad.png)
+![](/img/Optimization-Adagrad.png)
 
 
 #### 3.2.2 RMSProp
 RMSProp修改Adagrad以在非凸条件下效果更好，改变梯度累计为指数加权移动平均。因此相比于后者，RMSProp引入一个新的超参数控制指数加权移动平均的窗口大小。
 当应用于非凸函数训练神经网络时,学习轨迹可能穿过了很多不同的结构,最终到达一个局部是凸碗的区域。AdaGrad 根据平方梯度的整个历史收缩学习率,可能使得学习率在达到这样的凸结构前就变得太小了。RMSProp 使用指数衰减平均以丢弃遥远过去的历史,使其能够在找到凸碗状结构后快速收敛，最终结果就像一个初始化于该碗附近的AdaGrad算法。
 
-![](../img/Optimization-RMSProp.png)
-![](../img/Optimization-RMSProp2.png)
+![](/img/Optimization-RMSProp.png)
+![](/img/Optimization-RMSProp2.png)
 
 
 #### 3.2.3 Adam
 
-![](../img/Optimization-Adam.png)
+![](/img/Optimization-Adam.png)
 
 
 ## 参考
@@ -170,6 +170,5 @@ RMSProp修改Adagrad以在非凸条件下效果更好，改变梯度累计为指
 2. [当我们在谈论数据挖掘](https://zhuanlan.zhihu.com/data-miner)
 3. [“斗大的熊猫”的博客](http://blog.topspeedsnail.com/)
 4. [莫烦小哥的blog](https://morvanzhou.github.io/)
-5. [DeepLearning](http://homepages.math.uic.edu/~julius/
-saddle.html)
+5. [DeepLearning](http://homepages.math.uic.edu/~julius/saddle.html)
 
